@@ -203,7 +203,7 @@ def _pygame_loop(
     program_path: str | None,
     *,
     rom_path: str | None = None,
-    enable_audio: bool = False,
+    enable_audio: bool | None = None,
     enable_joystick: bool = False,
     joystick_config_path: str | None = None,
     joystick_index: int | None = None,
@@ -752,7 +752,19 @@ def main(argv: Iterable[str] | None = None) -> None:
         "--rom",
         help="Path to the JR-100 BASIC ROM (PROG format). Defaults to datas/jr100rom.prg if omitted",
     )
-    parser.add_argument("--audio", action="store_true", help="Enable square-wave audio output (requires pygame mixer)")
+    parser.add_argument(
+        "--audio",
+        dest="audio",
+        action="store_true",
+        help="Enable square-wave audio output (requires pygame mixer)",
+    )
+    parser.add_argument(
+        "--no-audio",
+        dest="audio",
+        action="store_false",
+        help="Force audio output off even if ROM/default settings enable it",
+    )
+    parser.set_defaults(audio=None)
     parser.add_argument("--joystick", action="store_true", help="Enable pygame joystick input mapping to the JR-100 gamepad port")
     parser.add_argument(
         "--joystick-config",

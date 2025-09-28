@@ -65,7 +65,10 @@ class JR100Computer(Computer):
         keyboard = JR100Keyboard()
         if enable_audio is None:
             env_audio = os.getenv(self.ENV_AUDIO)
-            enable_audio = env_audio.lower() in {"1", "true", "yes"} if env_audio else False
+            if env_audio is not None:
+                enable_audio = env_audio.lower() in {"1", "true", "yes", "on"}
+            else:
+                enable_audio = True
         sound = JR100SoundProcessor(enable_audio=enable_audio)
         hardware = JR100Hardware(
             memory=memory,
