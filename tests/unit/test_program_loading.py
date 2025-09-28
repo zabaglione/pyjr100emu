@@ -18,8 +18,11 @@ from jr100emu.app import (
     _write_snapshot_to_file,
     _write_history_snapshot,
     _delete_snapshot_files,
+    Snapshot,
+    _make_preview_lines,
 )
 from jr100emu.frontend import snapshot_db
+from jr100emu.frontend.snapshot_db import HistoryEntry
 
 BASIC_START = 0x0246
 BASIC_TERMINATOR = 0xDF
@@ -315,3 +318,55 @@ def test_load_program_invalid_extension(tmp_path, monkeypatch) -> None:
         pass
     else:
         raise AssertionError("ProgramLoadError not raised")
+
+
+def test_make_preview_lines_diff() -> None:
+    base_memory = [0] * 0x10000
+    target_memory = base_memory.copy()
+    target_memory[0x0246] = 0x42
+    current_snapshot = Snapshot(
+        memory=base_memory,
+        cpu_registers={
+            "program_counter": 0xE000,
+            "stack_pointer": 0x0100,
+            "index": 0x0000,
+            "acc_a": 0x10,
+            "acc_b": 0x20,
+        },
+        cpu_flags={
+            "carry_h": False,
+            "carry_i": False,
+            "carry_n": False,
+            "carry_z": False,
+            "carry_v": False,
+            "carry_c": False,
+        },
+        cpu_status={},
+        via_state={},
+        clock_count=0,
+    )
+    target_snapshot = Snapshot(
+        memory=target_memory,
+        cpu_registers={
+            "program_counter": 0xE100,
+            "stack_pointer": 0x0100,
+            "index": 0x0001,
+            "acc_a": 0x10,
+            "acc_b": 0x21,
+        },
+        cpu_flags={
+            "carry_h": False,
+            "carry_i": True,
+            "carry_n": False,
+            "carry_z": False,
+            "carry_v": False,
+            "carry_c": False,
+        },
+        cpu_status={},
+        via_state={},
+        clock_count=0,
+    )
+    entry = HistoryEntry(slot="slot0", timestamp=1.0, comment="hist", path=Path("dummy"))
+    lines = _make_preview_lines(entry, target_snapshot, current_snapshot)
+    assert any("PC" in line and "->" in line for line in lines)
+    assert any("Memory bytes differ" in line for line in lines)

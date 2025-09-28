@@ -280,7 +280,10 @@ def _pygame_loop(scale: int, fps: int, program_path: str | None) -> None:
                             if preview_snapshot is None:
                                 overlay.set_status("History snapshot unreadable")
                             else:
-                                overlay.set_preview_lines(_make_preview_lines(entry, preview_snapshot))
+                                current_snapshot = _snapshot_current_state(computer)
+                                overlay.set_preview_lines(
+                                    _make_preview_lines(entry, preview_snapshot, current_snapshot)
+                                )
                                 overlay.set_status("History preview")
                         continue
                     if event.key == pygame.K_l:
@@ -432,6 +435,10 @@ def _take_snapshot(computer: JR100Computer) -> Optional[Snapshot]:
     return snapshot
 
 
+def _snapshot_current_state(computer: JR100Computer) -> Optional[Snapshot]:
+    return _take_snapshot(computer)
+
+
 def _restore_snapshot(computer: JR100Computer, snapshot: Snapshot) -> None:
     cpu = computer.cpu_core
     via = computer.via
@@ -529,7 +536,7 @@ def _delete_snapshot_files(slot: str) -> None:
             path.unlink()
 
 
-def _make_preview_lines(entry, snapshot: Snapshot) -> List[str]:
+def _make_preview_lines(entry, snapshot: Snapshot, current: Optional[Snapshot] = None) -> List[str]:
     regs = snapshot.cpu_registers
     pc = int(regs.get("program_counter", 0)) & 0xFFFF
     sp = int(regs.get("stack_pointer", 0)) & 0xFFFF
@@ -544,7 +551,51 @@ def _make_preview_lines(entry, snapshot: Snapshot) -> List[str]:
     lines.append(
         "FLAGS:" + " ".join(f"{name.upper()}={int(value)}" for name, value in flags.items())
     )
+    if current is not None:
+        diff_lines = _snapshot_diff_lines(current, snapshot)
+        lines.append("Diff:")
+        lines.extend(diff_lines)
     return lines
+
+
+def _snapshot_diff_lines(current: Snapshot, target: Snapshot) -> List[str]:
+    diffs: List[str] = []
+    reg_specs = [
+        ("program_counter", "PC", 4),
+        ("stack_pointer", "SP", 4),
+        ("index", "IX", 4),
+        ("acc_a", "A", 2),
+        ("acc_b", "B", 2),
+    ]
+    for key, label, width in reg_specs:
+        curr_val = int(current.cpu_registers.get(key, 0)) & 0xFFFF
+        tgt_val = int(target.cpu_registers.get(key, 0)) & 0xFFFF
+        if curr_val != tgt_val:
+            fmt = f"0{width}X"
+            diffs.append(f"  {label}: {format(curr_val, fmt)} -> {format(tgt_val, fmt)}")
+
+    flag_order = ["carry_h", "carry_i", "carry_n", "carry_z", "carry_v", "carry_c"]
+    for flag in flag_order:
+        curr_flag = bool(current.cpu_flags.get(flag, False))
+        tgt_flag = bool(target.cpu_flags.get(flag, False))
+        if curr_flag != tgt_flag:
+            diffs.append(f"  Flag {flag.upper()}: {int(curr_flag)} -> {int(tgt_flag)}")
+
+    memory_diffs = []
+    diff_count = 0
+    for addr, (curr_byte, tgt_byte) in enumerate(zip(current.memory, target.memory)):
+        if curr_byte != tgt_byte:
+            if len(memory_diffs) < 4:
+                memory_diffs.append((addr, curr_byte, tgt_byte))
+            diff_count += 1
+    if diff_count:
+        diffs.append(f"  Memory bytes differ: {diff_count}")
+        for addr, curr_byte, tgt_byte in memory_diffs:
+            diffs.append(f"    {addr:04X}: {curr_byte:02X}->{tgt_byte:02X}")
+
+    if not diffs:
+        diffs.append("  (no differences)")
+    return diffs
 
 
 def main(argv: Iterable[str] | None = None) -> None:
