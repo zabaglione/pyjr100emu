@@ -16,6 +16,7 @@ from jr100emu.app import (
     _restore_snapshot,
     _take_snapshot,
     _write_snapshot_to_file,
+    _write_history_snapshot,
     _delete_snapshot_files,
 )
 from jr100emu.frontend import snapshot_db
@@ -270,13 +271,17 @@ def test_snapshot_file_roundtrip(tmp_path, monkeypatch) -> None:
     slot = SNAPSHOT_SLOTS[1]
     db = snapshot_db.SnapshotDatabase()
     db.set_slot(slot, comment="test")
-    _write_snapshot_to_file(slot, snapshot, comment="test")
+    data = _write_snapshot_to_file(slot, snapshot, comment="test")
+    history_path = _write_history_snapshot(slot, data)
+    db.record_history(data, history_path)
 
     loaded = _read_snapshot_from_file(slot)
     assert loaded is not None
     assert loaded.cpu_registers == snapshot.cpu_registers
     meta = snapshot_db.SnapshotDatabase().get(slot)
     assert meta is not None and meta.comment == "test"
+    history = snapshot_db.SnapshotDatabase().list_history()
+    assert history and history[0].slot == slot
 
     _delete_snapshot_files(slot)
     snapshot_db.SnapshotDatabase().clear_slot(slot)

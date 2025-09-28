@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 from collections import deque
-from typing import Iterable, Optional
+from typing import Iterable, Optional, List
 
 from jr100emu.memory import MemorySystem
 from jr100emu.frontend.snapshot_db import SnapshotDatabase, SNAPSHOT_SLOTS, DEFAULT_SLOT
@@ -23,6 +23,9 @@ class DebugOverlay:
         "C: edit comment",
         "D: delete snapshot",
         "1-4 / UP/DOWN: select slot",
+        "[/]: history nav",
+        "P: preview history",
+        "L: load history",
         "Q: quit",
     ]
 
@@ -40,8 +43,11 @@ class DebugOverlay:
         self._snapshot_available: bool = False
         self._slot_name: str = DEFAULT_SLOT
         self._meta_db = SnapshotDatabase()
+        self._history_entries: List[HistoryEntry] = self._meta_db.list_history()
         self._selected_index = SNAPSHOT_SLOTS.index(DEFAULT_SLOT)
+        self._history_index: int = 0
         self._comment_buffer: Optional[str] = None
+        self._preview_lines: List[str] = []
 
     # ------------------------------------------------------------------
     # Public API
@@ -73,6 +79,11 @@ class DebugOverlay:
         self._ensure_font()
         self.capture_state()
         self._meta_db = SnapshotDatabase()
+        self._history_entries = self._meta_db.list_history()
+        if self._history_entries:
+            self._history_index %= len(self._history_entries)
+        else:
+            self._history_index = 0
 
         overlay = pygame.Surface(screen.get_size(), pygame.SRCALPHA)
         overlay.fill((0, 0, 0, 196))
@@ -111,6 +122,21 @@ class DebugOverlay:
         slots_y = help_y + column_gap + len(self.INSTRUCTIONS) * self._line_height
         self._render_section(overlay, help_x, slots_y, "Slots", slots_lines)
 
+        history_lines: List[str] = []
+        for idx, entry in enumerate(self._history_entries[:10]):
+            marker = "*" if idx == self._history_index else " "
+            history_lines.append(
+                f"{marker} {entry.slot} {entry.format_timestamp()} {entry.comment}"
+            )
+        history_y = slots_y + column_gap + max(len(slots_lines), 1) * self._line_height
+        self._render_section(
+            overlay,
+            help_x,
+            history_y,
+            "History",
+            history_lines or ["(no history)"]
+        )
+
         vram_preview = self._render_vram_preview()
         if vram_preview is not None:
             screen_rect = screen.get_rect()
@@ -121,6 +147,20 @@ class DebugOverlay:
             overlay.blit(label, (pos_x, pos_y + vram_preview.get_height() + 8))
 
         screen.blit(overlay, (0, 0))
+
+        if self._preview_lines:
+            import pygame  # type: ignore
+
+            width = screen.get_width() - 80
+            height = self._line_height * (len(self._preview_lines) + 1)
+            x = 40
+            y = history_y + column_gap + max(len(history_lines), 1) * self._line_height
+            panel = pygame.Surface((width, height), pygame.SRCALPHA)
+            panel.fill((30, 30, 30, 200))
+            screen.blit(panel, (x, y))
+            for idx, line in enumerate(self._preview_lines):
+                rendered = self._font.render(line, True, (200, 240, 255))
+                screen.blit(rendered, (x + 12, y + 6 + idx * self._line_height))
 
         if self._comment_buffer is not None:
             import pygame  # type: ignore
@@ -172,6 +212,23 @@ class DebugOverlay:
         slot = SNAPSHOT_SLOTS[self._selected_index]
         self.set_slot_name(slot)
         return slot
+
+    def move_history(self, direction: int) -> Optional[HistoryEntry]:
+        if not self._history_entries:
+            return None
+        self._history_index = (self._history_index + direction) % len(self._history_entries)
+        return self._history_entries[self._history_index]
+
+    def current_history_entry(self) -> Optional[HistoryEntry]:
+        if not self._history_entries:
+            return None
+        return self._history_entries[self._history_index]
+
+    def set_preview_lines(self, lines: List[str]) -> None:
+        self._preview_lines = lines
+
+    def clear_preview(self) -> None:
+        self._preview_lines = []
 
     # ------------------------------------------------------------------
     # Internal helpers

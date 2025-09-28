@@ -6,6 +6,7 @@ import argparse
 from dataclasses import dataclass
 import json
 from pathlib import Path
+import time
 from typing import Dict, Iterable, List, Optional, Tuple
 
 from jr100emu.jr100.computer import JR100Computer
@@ -13,7 +14,13 @@ from jr100emu.jr100.display import JR100Display
 from jr100emu.jr100.keyboard import JR100Keyboard
 from jr100emu.emulator.file import ProgramInfo, ProgramLoadError
 from jr100emu.frontend.debug_overlay import DebugOverlay
-from jr100emu.frontend.snapshot_db import SnapshotDatabase, SNAPSHOT_SLOTS, DEFAULT_SLOT, SNAPSHOT_DIR
+from jr100emu.frontend.snapshot_db import (
+    SnapshotDatabase,
+    SNAPSHOT_SLOTS,
+    DEFAULT_SLOT,
+    SNAPSHOT_DIR,
+    SNAPSHOT_HISTORY_DIR,
+)
 
 # Mapping from pygame key constants to (row, bit) in the keyboard matrix.
 KEY_MATRIX_MAP: Dict[int, Tuple[int, int]] = {
@@ -215,10 +222,13 @@ def _pygame_loop(scale: int, fps: int, program_path: str | None) -> None:
                         if snapshot is not None:
                             if not comment_buffer:
                                 comment_buffer = "Snapshot"
-                            _write_snapshot_to_file(snapshot_slot, snapshot, comment=comment_buffer)
+                            data = _write_snapshot_to_file(snapshot_slot, snapshot, comment=comment_buffer)
+                            history_path = _write_history_snapshot(snapshot_slot, data)
                             snapshot_db.set_slot(snapshot_slot, comment=comment_buffer)
+                            snapshot_db.record_history(data, history_path)
                             snapshot_db = SnapshotDatabase()
                             overlay.update_metadata(snapshot_slot, comment_buffer)
+                            overlay.clear_preview()
                         overlay.capture_state()
                         continue
                     if event.key == pygame.K_r:
@@ -236,6 +246,7 @@ def _pygame_loop(scale: int, fps: int, program_path: str | None) -> None:
                                 comment_buffer = slot_meta.comment if slot_meta else comment_buffer
                                 overlay.update_metadata(snapshot_slot, comment_buffer)
                                 overlay.set_status("Snapshot restored (file)")
+                                overlay.clear_preview()
                                 overlay.capture_state()
                             else:
                                 overlay.set_status("No snapshot")
@@ -249,6 +260,53 @@ def _pygame_loop(scale: int, fps: int, program_path: str | None) -> None:
                             overlay.set_status(f"Editing comment: {comment_buffer}")
                             overlay.set_comment_buffer(comment_buffer)
                             editing_comment = True
+                        continue
+                    if event.key in (pygame.K_LEFTBRACKET, pygame.K_RIGHTBRACKET):
+                        direction = -1 if event.key == pygame.K_LEFTBRACKET else 1
+                        entry = overlay.move_history(direction)
+                        snapshot_db = SnapshotDatabase()
+                        overlay.clear_preview()
+                        if entry is not None:
+                            overlay.set_status(f"History selected: {entry.slot} {entry.format_timestamp()}")
+                        else:
+                            overlay.set_status("No history")
+                        continue
+                    if event.key == pygame.K_p:
+                        entry = overlay.current_history_entry()
+                        if entry is None:
+                            overlay.set_status("No history to preview")
+                        else:
+                            preview_snapshot = _read_snapshot_path(entry.path)
+                            if preview_snapshot is None:
+                                overlay.set_status("History snapshot unreadable")
+                            else:
+                                overlay.set_preview_lines(_make_preview_lines(entry, preview_snapshot))
+                                overlay.set_status("History preview")
+                        continue
+                    if event.key == pygame.K_l:
+                        entry = overlay.current_history_entry()
+                        if entry is None:
+                            overlay.set_status("No history to load")
+                        else:
+                            restored = _read_snapshot_path(entry.path)
+                            if restored is None:
+                                overlay.set_status("History snapshot unreadable")
+                            else:
+                                _restore_snapshot(computer, restored)
+                                data = _snapshot_to_dict(entry.slot, restored, entry.comment, entry.timestamp)
+                                _write_snapshot_to_file(entry.slot, restored, comment=entry.comment, timestamp=entry.timestamp)
+                                history_path = _write_history_snapshot(entry.slot, data)
+                                snapshot_db.set_slot(entry.slot, comment=entry.comment)
+                                snapshot_db.record_history(data, history_path)
+                                snapshot_db = SnapshotDatabase()
+                                snapshot_slot = entry.slot
+                                snapshot = restored
+                                comment_buffer = entry.comment
+                                overlay.set_slot_name(snapshot_slot)
+                                overlay.update_metadata(snapshot_slot, comment_buffer)
+                                overlay.set_snapshot_available(True)
+                                overlay.clear_preview()
+                                overlay.set_status("History snapshot loaded")
                         continue
                     if event.key in (pygame.K_UP, pygame.K_DOWN):
                         direction = -1 if event.key == pygame.K_UP else 1
@@ -404,29 +462,21 @@ def _restore_snapshot(computer: JR100Computer, snapshot: Snapshot) -> None:
     computer.clock_count = snapshot.clock_count
 
 
-def _write_snapshot_to_file(slot: str, snapshot: Snapshot, *, comment: str = "") -> None:
-    SNAPSHOT_DIR.mkdir(parents=True, exist_ok=True)
-    path = SNAPSHOT_DIR / f"{slot}.json"
-    serializable = {
+def _snapshot_to_dict(slot: str, snapshot: Snapshot, comment: str, timestamp: Optional[float] = None) -> dict:
+    return {
+        "slot": slot,
+        "timestamp": timestamp if timestamp is not None else time.time(),
+        "comment": comment,
         "memory": snapshot.memory,
         "cpu_registers": snapshot.cpu_registers,
         "cpu_flags": snapshot.cpu_flags,
         "cpu_status": snapshot.cpu_status,
         "via_state": snapshot.via_state,
         "clock_count": snapshot.clock_count,
-        "comment": comment,
     }
-    path.write_text(json.dumps(serializable))
 
 
-def _read_snapshot_from_file(slot: str) -> Optional[Snapshot]:
-    path = SNAPSHOT_DIR / f"{slot}.json"
-    if not path.exists():
-        return None
-    try:
-        data = json.loads(path.read_text())
-    except json.JSONDecodeError:
-        return None
+def _snapshot_from_dict(data: dict) -> Snapshot:
     return Snapshot(
         memory=list(data.get("memory", [])),
         cpu_registers=dict(data.get("cpu_registers", {})),
@@ -437,12 +487,64 @@ def _read_snapshot_from_file(slot: str) -> Optional[Snapshot]:
     )
 
 
+def _write_snapshot_to_file(slot: str, snapshot: Snapshot, *, comment: str = "", timestamp: Optional[float] = None) -> dict:
+    SNAPSHOT_DIR.mkdir(parents=True, exist_ok=True)
+    data = _snapshot_to_dict(slot, snapshot, comment, timestamp)
+    path = SNAPSHOT_DIR / f"{slot}.json"
+    path.write_text(json.dumps(data))
+    return data
+
+
+def _write_history_snapshot(slot: str, data: dict) -> Path:
+    SNAPSHOT_HISTORY_DIR.mkdir(parents=True, exist_ok=True)
+    timestamp = data.get("timestamp", time.time())
+    history_path = SNAPSHOT_HISTORY_DIR / f"{slot}-{int(timestamp * 1000)}.json"
+    history_path.write_text(json.dumps(data))
+    return history_path
+
+
+def _read_snapshot_from_file(slot: str) -> Optional[Snapshot]:
+    path = SNAPSHOT_DIR / f"{slot}.json"
+    return _read_snapshot_path(path)
+
+
+def _read_snapshot_path(path: Path) -> Optional[Snapshot]:
+    if not path.exists():
+        return None
+    try:
+        data = json.loads(path.read_text())
+    except json.JSONDecodeError:
+        return None
+    return _snapshot_from_dict(data)
+
+
 def _delete_snapshot_files(slot: str) -> None:
     json_path = SNAPSHOT_DIR / f"{slot}.json"
     meta_path = SNAPSHOT_DIR / f"{slot}.meta.json"
     for path in (json_path, meta_path):
         if path.exists():
             path.unlink()
+    if SNAPSHOT_HISTORY_DIR.exists():
+        for path in SNAPSHOT_HISTORY_DIR.glob(f"{slot}-*.json"):
+            path.unlink()
+
+
+def _make_preview_lines(entry, snapshot: Snapshot) -> List[str]:
+    regs = snapshot.cpu_registers
+    pc = int(regs.get("program_counter", 0)) & 0xFFFF
+    sp = int(regs.get("stack_pointer", 0)) & 0xFFFF
+    ix = int(regs.get("index", 0)) & 0xFFFF
+    lines = [
+        f"Slot: {entry.slot}",
+        f"Time: {entry.format_timestamp()}",
+        f"Comment: {entry.comment}",
+        f"PC:{pc:04X} SP:{sp:04X} IX:{ix:04X}",
+    ]
+    flags = snapshot.cpu_flags
+    lines.append(
+        "FLAGS:" + " ".join(f"{name.upper()}={int(value)}" for name, value in flags.items())
+    )
+    return lines
 
 
 def main(argv: Iterable[str] | None = None) -> None:
