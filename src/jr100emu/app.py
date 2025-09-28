@@ -705,8 +705,24 @@ def _snapshot_diff_lines(current: Snapshot, target: Snapshot) -> List[str]:
     return diffs
 
 
+def _write_joystick_template(path: Path) -> None:
+    template = {
+        "left": ["axis", 0, -0.5],
+        "right": ["axis", 0, 0.5],
+        "up": ["axis", 1, -0.5],
+        "down": ["axis", 1, 0.5],
+        "switch": ["button", 0, 0.5],
+    }
+    path.write_text(json.dumps(template, indent=2), encoding="utf-8")
+
+
 def main(argv: Iterable[str] | None = None) -> None:
     parser = argparse.ArgumentParser(description="JR-100 emulator demo")
+    parser.add_argument(
+        "--write-joystick-template",
+        metavar="PATH",
+        help="Write a JSON joystick mapping template to the given path and exit",
+    )
     parser.add_argument("--scale", type=int, default=2, help="Integer scaling factor for display (default: 2)")
     parser.add_argument("--fps", type=int, default=30, help="Target frames per second for the demo loop")
     parser.add_argument("--program", "-p", help="Path to a PROG/BASIC file to load at startup")
@@ -717,6 +733,10 @@ def main(argv: Iterable[str] | None = None) -> None:
         help="Path to JSON file that defines axis/button mappings for the gamepad",
     )
     args = parser.parse_args(list(argv) if argv is not None else None)
+
+    if args.write_joystick_template:
+        _write_joystick_template(Path(args.write_joystick_template))
+        return
 
     if args.scale <= 0:
         raise SystemExit("scale must be positive")
