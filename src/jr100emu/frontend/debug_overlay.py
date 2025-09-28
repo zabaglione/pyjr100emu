@@ -126,16 +126,21 @@ class DebugOverlay:
             import pygame  # type: ignore
 
             width = screen.get_width() - 80
-            height = self._line_height * 3
+            lines = self._comment_buffer.split("\n") or [""]
+            max_lines = 4
+            render_lines = lines[-max_lines:]
+            height = self._line_height * (len(render_lines) + 2)
             x = 40
             y = screen.get_height() - height - 40
             panel = pygame.Surface((width, height), pygame.SRCALPHA)
             panel.fill((20, 20, 20, 220))
             screen.blit(panel, (x, y))
-            prompt = self._font.render("Comment:", True, (255, 215, 0))
+            prompt = self._font.render("Comment (Shift+Enter newline):", True, (255, 215, 0))
             screen.blit(prompt, (x + 12, y + 6))
-            text_surface = self._font.render(self._comment_buffer + "_", True, (230, 230, 230))
-            screen.blit(text_surface, (x + 12, y + 6 + self._line_height))
+            for idx, line in enumerate(render_lines):
+                suffix = "_" if idx == len(render_lines) - 1 else ""
+                text_surface = self._font.render(line + suffix, True, (230, 230, 230))
+                screen.blit(text_surface, (x + 12, y + 6 + self._line_height * (idx + 1)))
 
     def get_trace(self) -> list[int]:
         """Expose a copy of the recent trace for tests."""

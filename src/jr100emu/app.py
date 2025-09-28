@@ -169,6 +169,11 @@ def _pygame_loop(scale: int, fps: int, program_path: str | None) -> None:
                     continue
                 if debug_mode:
                     if editing_comment:
+                        if event.key == pygame.K_RETURN and (event.mod & pygame.KMOD_SHIFT):
+                            comment_buffer += "\n"
+                            overlay.set_status("Editing comment")
+                            overlay.set_comment_buffer(comment_buffer)
+                            continue
                         if event.key == pygame.K_RETURN:
                             snapshot_db.set_slot(snapshot_slot, comment=comment_buffer)
                             snapshot_db = SnapshotDatabase()
