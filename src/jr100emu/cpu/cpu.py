@@ -140,6 +140,18 @@ class MB8861(CPU):
     OP_LDAB_EXT = 0xF6
     OP_LSRA_IMP = 0x44
     OP_LSRB_IMP = 0x54
+    OP_ASLA_IMP = 0x48
+    OP_ASLB_IMP = 0x58
+    OP_ASRA_IMP = 0x47
+    OP_ASRB_IMP = 0x57
+    OP_ROLA_IMP = 0x49
+    OP_ROLB_IMP = 0x59
+    OP_RORA_IMP = 0x46
+    OP_RORB_IMP = 0x56
+    OP_PSHA_IMP = 0x36
+    OP_PSHB_IMP = 0x37
+    OP_PULA_IMP = 0x32
+    OP_PULB_IMP = 0x33
     OP_NEGA_IMP = 0x40
     OP_NEGB_IMP = 0x50
     OP_ORAA_IMM = 0x8A
@@ -201,6 +213,36 @@ class MB8861(CPU):
     OP_STS_EXT = 0xBF
     OP_TXS_IMP = 0x35
     OP_TSX_IMP = 0x30
+    OP_ASL_IND = 0x68
+    OP_ASL_EXT = 0x78
+    OP_ASR_IND = 0x67
+    OP_ASR_EXT = 0x77
+    OP_CLR_IND = 0x6F
+    OP_CLR_EXT = 0x7F
+    OP_COM_IND = 0x63
+    OP_COM_EXT = 0x73
+    OP_DEC_IND = 0x6A
+    OP_DEC_EXT = 0x7A
+    OP_INC_IND = 0x6C
+    OP_INC_EXT = 0x7C
+    OP_LSR_IND = 0x64
+    OP_LSR_EXT = 0x74
+    OP_NEG_IND = 0x60
+    OP_NEG_EXT = 0x70
+    OP_ROL_IND = 0x69
+    OP_ROL_EXT = 0x79
+    OP_ROR_IND = 0x66
+    OP_ROR_EXT = 0x76
+    OP_TST_IND = 0x6D
+    OP_TST_EXT = 0x7D
+    OP_CLC_IMP = 0x0C
+    OP_CLI_IMP = 0x0E
+    OP_CLV_IMP = 0x0A
+    OP_SEC_IMP = 0x0D
+    OP_SEI_IMP = 0x0F
+    OP_SEV_IMP = 0x0B
+    OP_TAP_IMP = 0x06
+    OP_TPA_IMP = 0x07
     OP_NOP_IMP = 0x01
     OP_ADX_IMM = 0xEC
     OP_ADX_EXT = 0xFC
@@ -228,6 +270,8 @@ class MB8861(CPU):
     OP_OIM_IND = 0x72
     OP_XIM_IND = 0x75
     OP_TMM_IND = 0x7B
+
+    STATE_PREFIX = "MB8861."
 
     def __init__(self, computer: object) -> None:
         super().__init__(computer)
@@ -382,6 +426,65 @@ class MB8861(CPU):
         self.registers.program_counter = self._load16((sp - 1) & 0xFFFF)
         self.registers.stack_pointer = sp
 
+    def _push8(self, value: int) -> None:
+        address = self.registers.stack_pointer & 0xFFFF
+        self._store8(address, value & 0xFF)
+        self.registers.stack_pointer = (address - 1) & 0xFFFF
+
+    def _pull8(self) -> int:
+        sp = (self.registers.stack_pointer + 1) & 0xFFFF
+        self.registers.stack_pointer = sp
+        return self._load8(sp)
+
+    # ------------------------------------------------------------------
+    # State serialization helpers
+    # ------------------------------------------------------------------
+    def save_state(self, out: dict[str, object]) -> None:
+        prefix = self.STATE_PREFIX
+        out[f"{prefix}A"] = self.registers.acc_a & 0xFF
+        out[f"{prefix}B"] = self.registers.acc_b & 0xFF
+        out[f"{prefix}IX"] = self.registers.index & 0xFFFF
+        out[f"{prefix}SP"] = self.registers.stack_pointer & 0xFFFF
+        out[f"{prefix}PC"] = self.registers.program_counter & 0xFFFF
+        out[f"{prefix}CH"] = self.flags.carry_h
+        out[f"{prefix}CI"] = self.flags.carry_i
+        out[f"{prefix}CN"] = self.flags.carry_n
+        out[f"{prefix}CZ"] = self.flags.carry_z
+        out[f"{prefix}CV"] = self.flags.carry_v
+        out[f"{prefix}CC"] = self.flags.carry_c
+        out[f"{prefix}resetStatus"] = self.status.reset_requested
+        out[f"{prefix}nmiStatus"] = self.status.nmi_requested
+        out[f"{prefix}irqStatus"] = self.status.irq_requested
+        out[f"{prefix}haltStatus"] = self.status.halt_requested
+        out[f"{prefix}haltProcessed"] = self.status.halt_processed
+        out[f"{prefix}fetchWai"] = self.status.fetch_wai
+
+    def load_state(self, data: dict[str, object]) -> None:
+        prefix = self.STATE_PREFIX
+
+        def _get(key: str, default: object) -> object:
+            return data.get(f"{prefix}{key}", default)
+
+        self.registers.acc_a = int(_get("A", 0)) & 0xFF
+        self.registers.acc_b = int(_get("B", 0)) & 0xFF
+        self.registers.index = int(_get("IX", 0)) & 0xFFFF
+        self.registers.stack_pointer = int(_get("SP", 0)) & 0xFFFF
+        self.registers.program_counter = int(_get("PC", 0)) & 0xFFFF
+
+        self.flags.carry_h = bool(_get("CH", False))
+        self.flags.carry_i = bool(_get("CI", False))
+        self.flags.carry_n = bool(_get("CN", False))
+        self.flags.carry_z = bool(_get("CZ", False))
+        self.flags.carry_v = bool(_get("CV", False))
+        self.flags.carry_c = bool(_get("CC", False))
+
+        self.status.reset_requested = bool(_get("resetStatus", False))
+        self.status.nmi_requested = bool(_get("nmiStatus", False))
+        self.status.irq_requested = bool(_get("irqStatus", False))
+        self.status.halt_requested = bool(_get("haltStatus", False))
+        self.status.halt_processed = bool(_get("haltProcessed", False))
+        self.status.fetch_wai = bool(_get("fetchWai", False))
+
     def _load16(self, address: int) -> int:
         if not hasattr(self.memory, "load16"):
             raise AttributeError("Memory system must provide load16")
@@ -514,6 +617,14 @@ class MB8861(CPU):
         self._register_opcode(self.OP_LDAB_EXT, self._opcode_ldab_ext, 4)
         self._register_opcode(self.OP_LSRA_IMP, self._opcode_lsra, 2)
         self._register_opcode(self.OP_LSRB_IMP, self._opcode_lsrb, 2)
+        self._register_opcode(self.OP_ASLA_IMP, self._opcode_asla, 2)
+        self._register_opcode(self.OP_ASLB_IMP, self._opcode_aslb, 2)
+        self._register_opcode(self.OP_ASRA_IMP, self._opcode_asra, 2)
+        self._register_opcode(self.OP_ASRB_IMP, self._opcode_asrb, 2)
+        self._register_opcode(self.OP_ROLA_IMP, self._opcode_rola, 2)
+        self._register_opcode(self.OP_ROLB_IMP, self._opcode_rolb, 2)
+        self._register_opcode(self.OP_RORA_IMP, self._opcode_rora, 2)
+        self._register_opcode(self.OP_RORB_IMP, self._opcode_rorb, 2)
         self._register_opcode(self.OP_NEGA_IMP, self._opcode_nega, 2)
         self._register_opcode(self.OP_NEGB_IMP, self._opcode_negb, 2)
         self._register_opcode(self.OP_ORAA_IMM, self._opcode_oraa_imm, 2)
@@ -524,6 +635,10 @@ class MB8861(CPU):
         self._register_opcode(self.OP_ORAB_DIR, self._opcode_orab_dir, 3)
         self._register_opcode(self.OP_ORAB_IND, self._opcode_orab_ind, 5)
         self._register_opcode(self.OP_ORAB_EXT, self._opcode_orab_ext_buggy, 4)
+        self._register_opcode(self.OP_PSHA_IMP, self._opcode_psha, 4)
+        self._register_opcode(self.OP_PSHB_IMP, self._opcode_pshb, 4)
+        self._register_opcode(self.OP_PULA_IMP, self._opcode_pula, 4)
+        self._register_opcode(self.OP_PULB_IMP, self._opcode_pulb, 4)
         self._register_opcode(self.OP_SBA_IMP, self._opcode_sba, 2)
         self._register_opcode(self.OP_SUBA_IMM, self._opcode_suba_imm, 2)
         self._register_opcode(self.OP_SUBA_DIR, self._opcode_suba_dir, 3)
@@ -575,7 +690,37 @@ class MB8861(CPU):
         self._register_opcode(self.OP_STS_EXT, self._opcode_sts_ext, 6)
         self._register_opcode(self.OP_TXS_IMP, self._opcode_txs, 4)
         self._register_opcode(self.OP_TSX_IMP, self._opcode_tsx, 4)
+        self._register_opcode(self.OP_ASL_IND, self._opcode_asl_ind, 7)
+        self._register_opcode(self.OP_ASL_EXT, self._opcode_asl_ext, 6)
+        self._register_opcode(self.OP_ASR_IND, self._opcode_asr_ind, 7)
+        self._register_opcode(self.OP_ASR_EXT, self._opcode_asr_ext, 6)
+        self._register_opcode(self.OP_CLR_IND, self._opcode_clr_ind, 7)
+        self._register_opcode(self.OP_CLR_EXT, self._opcode_clr_ext, 6)
+        self._register_opcode(self.OP_COM_IND, self._opcode_com_ind, 7)
+        self._register_opcode(self.OP_COM_EXT, self._opcode_com_ext, 6)
+        self._register_opcode(self.OP_DEC_IND, self._opcode_dec_ind, 7)
+        self._register_opcode(self.OP_DEC_EXT, self._opcode_dec_ext, 6)
+        self._register_opcode(self.OP_INC_IND, self._opcode_inc_ind, 7)
+        self._register_opcode(self.OP_INC_EXT, self._opcode_inc_ext, 6)
+        self._register_opcode(self.OP_LSR_IND, self._opcode_lsr_ind, 7)
+        self._register_opcode(self.OP_LSR_EXT, self._opcode_lsr_ext, 6)
+        self._register_opcode(self.OP_NEG_IND, self._opcode_neg_ind, 7)
+        self._register_opcode(self.OP_NEG_EXT, self._opcode_neg_ext, 6)
+        self._register_opcode(self.OP_ROL_IND, self._opcode_rol_ind, 7)
+        self._register_opcode(self.OP_ROL_EXT, self._opcode_rol_ext, 6)
+        self._register_opcode(self.OP_ROR_IND, self._opcode_ror_ind, 7)
+        self._register_opcode(self.OP_ROR_EXT, self._opcode_ror_ext, 6)
+        self._register_opcode(self.OP_TST_IND, self._opcode_tst_ind, 7)
+        self._register_opcode(self.OP_TST_EXT, self._opcode_tst_ext, 6)
         self._register_opcode(self.OP_NOP_IMP, self._opcode_nop, 2)
+        self._register_opcode(self.OP_CLC_IMP, self._opcode_clc, 2)
+        self._register_opcode(self.OP_CLI_IMP, self._opcode_cli, 2)
+        self._register_opcode(self.OP_CLV_IMP, self._opcode_clv, 2)
+        self._register_opcode(self.OP_SEC_IMP, self._opcode_sec, 2)
+        self._register_opcode(self.OP_SEI_IMP, self._opcode_sei, 2)
+        self._register_opcode(self.OP_SEV_IMP, self._opcode_sev, 2)
+        self._register_opcode(self.OP_TAP_IMP, self._opcode_tap, 2)
+        self._register_opcode(self.OP_TPA_IMP, self._opcode_tpa, 2)
         self._register_opcode(self.OP_BRA_REL, self._opcode_bra, 4)
         self._register_opcode(self.OP_BCC_REL, self._opcode_bcc, 4)
         self._register_opcode(self.OP_BCS_REL, self._opcode_bcs, 4)
@@ -938,6 +1083,30 @@ class MB8861(CPU):
     def _opcode_lsrb(self) -> None:
         self.registers.acc_b = self._lsr(self.registers.acc_b)
 
+    def _opcode_asla(self) -> None:
+        self.registers.acc_a = self._asl(self.registers.acc_a)
+
+    def _opcode_aslb(self) -> None:
+        self.registers.acc_b = self._asl(self.registers.acc_b)
+
+    def _opcode_asra(self) -> None:
+        self.registers.acc_a = self._asr(self.registers.acc_a)
+
+    def _opcode_asrb(self) -> None:
+        self.registers.acc_b = self._asr(self.registers.acc_b)
+
+    def _opcode_rola(self) -> None:
+        self.registers.acc_a = self._rol(self.registers.acc_a)
+
+    def _opcode_rolb(self) -> None:
+        self.registers.acc_b = self._rol(self.registers.acc_b)
+
+    def _opcode_rora(self) -> None:
+        self.registers.acc_a = self._ror(self.registers.acc_a)
+
+    def _opcode_rorb(self) -> None:
+        self.registers.acc_b = self._ror(self.registers.acc_b)
+
     def _opcode_nega(self) -> None:
         self.registers.acc_a = self._neg(self.registers.acc_a)
 
@@ -983,6 +1152,18 @@ class MB8861(CPU):
         address = self._fetch_operand16()
         value = self._load8(address)
         self.registers.acc_b = self._add8(self.registers.acc_b, value)
+
+    def _opcode_psha(self) -> None:
+        self._push8(self.registers.acc_a)
+
+    def _opcode_pshb(self) -> None:
+        self._push8(self.registers.acc_b)
+
+    def _opcode_pula(self) -> None:
+        self.registers.acc_a = self._pull8() & 0xFF
+
+    def _opcode_pulb(self) -> None:
+        self.registers.acc_b = self._pull8() & 0xFF
 
     def _opcode_sba(self) -> None:
         self.registers.acc_a = self._sub8(self.registers.acc_a, self.registers.acc_b)
@@ -1217,6 +1398,165 @@ class MB8861(CPU):
 
     def _opcode_nop(self) -> None:
         pass
+
+    def _opcode_asl_ind(self) -> None:
+        offset = self._fetch_operand8()
+        address = self._calc_indexed_address(offset)
+        value = self._load8(address)
+        self._store8(address, self._asl(value))
+
+    def _opcode_asl_ext(self) -> None:
+        address = self._fetch_operand16()
+        value = self._load8(address)
+        self._store8(address, self._asl(value))
+
+    def _opcode_asr_ind(self) -> None:
+        offset = self._fetch_operand8()
+        address = self._calc_indexed_address(offset)
+        value = self._load8(address)
+        self._store8(address, self._asr(value))
+
+    def _opcode_asr_ext(self) -> None:
+        address = self._fetch_operand16()
+        value = self._load8(address)
+        self._store8(address, self._asr(value))
+
+    def _opcode_clr_ind(self) -> None:
+        offset = self._fetch_operand8()
+        address = self._calc_indexed_address(offset)
+        self._store8(address, self._clr())
+
+    def _opcode_clr_ext(self) -> None:
+        address = self._fetch_operand16()
+        self._store8(address, self._clr())
+
+    def _opcode_com_ind(self) -> None:
+        offset = self._fetch_operand8()
+        address = self._calc_indexed_address(offset)
+        value = self._load8(address)
+        self._store8(address, self._com(value))
+
+    def _opcode_com_ext(self) -> None:
+        address = self._fetch_operand16()
+        value = self._load8(address)
+        self._store8(address, self._com(value))
+
+    def _opcode_dec_ind(self) -> None:
+        offset = self._fetch_operand8()
+        address = self._calc_indexed_address(offset)
+        value = self._load8(address)
+        self._store8(address, self._dec(value))
+
+    def _opcode_dec_ext(self) -> None:
+        address = self._fetch_operand16()
+        value = self._load8(address)
+        self._store8(address, self._dec(value))
+
+    def _opcode_inc_ind(self) -> None:
+        offset = self._fetch_operand8()
+        address = self._calc_indexed_address(offset)
+        value = self._load8(address)
+        self._store8(address, self._inc(value))
+
+    def _opcode_inc_ext(self) -> None:
+        address = self._fetch_operand16()
+        value = self._load8(address)
+        self._store8(address, self._inc(value))
+
+    def _opcode_lsr_ind(self) -> None:
+        offset = self._fetch_operand8()
+        address = self._calc_indexed_address(offset)
+        value = self._load8(address)
+        self._store8(address, self._lsr(value))
+
+    def _opcode_lsr_ext(self) -> None:
+        address = self._fetch_operand16()
+        value = self._load8(address)
+        self._store8(address, self._lsr(value))
+
+    def _opcode_neg_ind(self) -> None:
+        offset = self._fetch_operand8()
+        address = self._calc_indexed_address(offset)
+        value = self._load8(address)
+        self._store8(address, self._neg(value))
+
+    def _opcode_neg_ext(self) -> None:
+        address = self._fetch_operand16()
+        value = self._load8(address)
+        self._store8(address, self._neg(value))
+
+    def _opcode_rol_ind(self) -> None:
+        offset = self._fetch_operand8()
+        address = self._calc_indexed_address(offset)
+        value = self._load8(address)
+        self._store8(address, self._rol(value))
+
+    def _opcode_rol_ext(self) -> None:
+        address = self._fetch_operand16()
+        value = self._load8(address)
+        self._store8(address, self._rol(value))
+
+    def _opcode_ror_ind(self) -> None:
+        offset = self._fetch_operand8()
+        address = self._calc_indexed_address(offset)
+        value = self._load8(address)
+        self._store8(address, self._ror(value))
+
+    def _opcode_ror_ext(self) -> None:
+        address = self._fetch_operand16()
+        value = self._load8(address)
+        self._store8(address, self._ror(value))
+
+    def _opcode_tst_ind(self) -> None:
+        value = self._load8(self._calc_indexed_address(self._fetch_operand8()))
+        self._tst(value)
+
+    def _opcode_tst_ext(self) -> None:
+        value = self._load8(self._fetch_operand16())
+        self._tst(value)
+
+    def _opcode_clc(self) -> None:
+        self.flags.carry_c = False
+
+    def _opcode_cli(self) -> None:
+        self.flags.carry_i = False
+
+    def _opcode_clv(self) -> None:
+        self.flags.carry_v = False
+
+    def _opcode_sec(self) -> None:
+        self.flags.carry_c = True
+
+    def _opcode_sei(self) -> None:
+        self.flags.carry_i = True
+
+    def _opcode_sev(self) -> None:
+        self.flags.carry_v = True
+
+    def _opcode_tap(self) -> None:
+        value = self.registers.acc_a & 0xFF
+        self.flags.carry_h = bool(value & 0x20)
+        self.flags.carry_i = bool(value & 0x10)
+        self.flags.carry_n = bool(value & 0x08)
+        self.flags.carry_z = bool(value & 0x04)
+        self.flags.carry_v = bool(value & 0x02)
+        self.flags.carry_c = bool(value & 0x01)
+
+    def _opcode_tpa(self) -> None:
+        value = 0xC0
+        if self.flags.carry_h:
+            value |= 0x20
+        if self.flags.carry_i:
+            value |= 0x10
+        if self.flags.carry_n:
+            value |= 0x08
+        if self.flags.carry_z:
+            value |= 0x04
+        if self.flags.carry_v:
+            value |= 0x02
+        if self.flags.carry_c:
+            value |= 0x01
+        self.registers.acc_a = value & 0xFF
 
     def _opcode_bra(self) -> None:
         offset = self._fetch_operand8()
@@ -1456,6 +1796,24 @@ class MB8861(CPU):
         self.flags.carry_v = (sx > 0 and sy < 0 and cn) or (sx < 0 and sy > 0 and not cn)
         self.flags.carry_c = result & 0x100 != 0
 
+    def _asl(self, x: int) -> int:
+        value = (x & 0xFF) << 1
+        result = value & 0xFF
+        self.flags.carry_n = result & 0x80 != 0
+        self.flags.carry_z = result == 0
+        self.flags.carry_c = value & 0x100 != 0
+        self.flags.carry_v = self.flags.carry_n != self.flags.carry_c
+        return result
+
+    def _asr(self, x: int) -> int:
+        x &= 0xFF
+        result = ((x >> 1) | (x & 0x80)) & 0xFF
+        self.flags.carry_n = result & 0x80 != 0
+        self.flags.carry_z = result == 0
+        self.flags.carry_c = (x & 0x01) != 0
+        self.flags.carry_v = self.flags.carry_n != self.flags.carry_c
+        return result
+
     def _clr(self) -> int:
         self.flags.carry_n = False
         self.flags.carry_z = True
@@ -1515,6 +1873,25 @@ class MB8861(CPU):
         self.flags.carry_v = value == 0x80
         self.flags.carry_c = value == 0x00
         return value
+
+    def _rol(self, x: int) -> int:
+        value = ((x & 0xFF) << 1) | (1 if self.flags.carry_c else 0)
+        result = value & 0xFF
+        self.flags.carry_n = result & 0x80 != 0
+        self.flags.carry_z = result == 0
+        self.flags.carry_c = value & 0x100 != 0
+        self.flags.carry_v = self.flags.carry_n != self.flags.carry_c
+        return result
+
+    def _ror(self, x: int) -> int:
+        x &= 0xFF
+        value = (x >> 1) | (0x80 if self.flags.carry_c else 0)
+        result = value & 0xFF
+        self.flags.carry_n = result & 0x80 != 0
+        self.flags.carry_z = result == 0
+        self.flags.carry_c = (x & 0x01) != 0
+        self.flags.carry_v = self.flags.carry_n != self.flags.carry_c
+        return result
 
     def _ora(self, x: int, y: int) -> int:
         result = (x | y) & 0xFF

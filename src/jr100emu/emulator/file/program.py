@@ -168,11 +168,17 @@ def _load_prog_v2(stream: BinaryIO, info: ProgramInfo) -> None:
     seen_sections: set[int] = set()
     pbin_count = 0
     while True:
-        try:
-            section_id = _read_u32(stream)
-        except ProgramLoadError:
+        header = stream.read(8)
+        if not header:
             break
-        section_length = _read_u32(stream)
+        if len(header) != 8:
+            if all(byte == 0 for byte in header):
+                break
+            raise ProgramLoadError("unexpected end of file")
+        section_id = int.from_bytes(header[:4], "little", signed=False)
+        section_length = int.from_bytes(header[4:], "little", signed=False)
+        if section_length < 0:
+            raise ProgramLoadError("negative section length")
         payload = _read_bytes(stream, section_length)
         if section_id == SECTION_PNAM:
             if SECTION_PNAM in seen_sections:
@@ -201,7 +207,7 @@ def _load_prog_v2(stream: BinaryIO, info: ProgramInfo) -> None:
             if pbin_count >= PROG_MAX_BINARY_SECTIONS:
                 continue
             pbin_count += 1
-            if section_length < 12:
+            if section_length < 8:
                 raise ProgramLoadError("invalid PBIN section length")
             start = int.from_bytes(payload[0:4], "little", signed=False)
             data_length = int.from_bytes(payload[4:8], "little", signed=False)
@@ -212,14 +218,24 @@ def _load_prog_v2(stream: BinaryIO, info: ProgramInfo) -> None:
                 raise ProgramLoadError("invalid PBIN data length")
             data = payload[8:data_end]
             comment_offset = data_end
-            if comment_offset + 4 > section_length:
+            remaining = section_length - comment_offset
+            if remaining == 0:
+                comment = ""
+            elif remaining >= 4:
+                comment_length = int.from_bytes(
+                    payload[comment_offset:comment_offset + 4], "little", signed=False
+                )
+                if comment_length > PROG_MAX_COMMENT_LENGTH:
+                    raise ProgramLoadError("invalid PBIN comment")
+                comment_start = comment_offset + 4
+                comment_end = comment_start + comment_length
+                if comment_end > section_length:
+                    raise ProgramLoadError("invalid PBIN comment")
+                comment = (
+                    payload[comment_start:comment_end].decode("utf-8") if comment_length else ""
+                )
+            else:
                 raise ProgramLoadError("invalid PBIN comment length")
-            comment_length = int.from_bytes(payload[comment_offset:comment_offset + 4], "little", signed=False)
-            comment_start = comment_offset + 4
-            comment_end = comment_start + comment_length
-            if comment_end > section_length or comment_length > PROG_MAX_COMMENT_LENGTH:
-                raise ProgramLoadError("invalid PBIN comment")
-            comment = payload[comment_start:comment_end].decode("utf-8") if comment_length else ""
             _write_prog_block(memory, start, data)
             info.add_region(start, start + data_length - 1, comment)
         elif section_id == SECTION_CMNT:

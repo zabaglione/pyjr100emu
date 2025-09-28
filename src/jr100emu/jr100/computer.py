@@ -20,6 +20,7 @@ from jr100emu.jr100.memory import (
 )
 from jr100emu.jr100.r6522 import JR100R6522
 from jr100emu.jr100.sound import JR100SoundProcessor
+from jr100emu.emulator.device import GamepadDevice
 from jr100emu.emulator.file import ProgramInfo, ProgramLoadError, load_basic_text, load_prog
 from jr100emu.memory import MemorySystem
 from jr100emu.system.computer import Computer
@@ -33,6 +34,7 @@ class JR100Computer(Computer):
     via: JR100R6522
     cpu_core: MB8861
     program_info: Optional[ProgramInfo] = None
+    basic_rom: Optional[BasicRom] = None
 
     MEMORY_CAPACITY = 0x10000
     MAIN_RAM_STANDARD = 0x4000
@@ -79,6 +81,9 @@ class JR100Computer(Computer):
         self.program_info = None
 
         self._install_memory_map(memory)
+        self.gamepad = GamepadDevice(port=self.ext_port)
+        hardware.gamepad = self.gamepad
+        self.add_device(self.gamepad)
         self.cpu_core = MB8861(self)
         self.set_cpu(self.cpu_core)
         self.cpu_core.reset()
@@ -87,6 +92,9 @@ class JR100Computer(Computer):
         self.via = JR100R6522(self, self.VIA_START)
         memory.register_memory(self.via)
         self.add_device(self.via)
+
+        self._running_status = self.STATUS_RUNNING
+        self._start_periodic_tasks()
 
     # ------------------------------------------------------------------
     # Memory installation
@@ -111,6 +119,8 @@ class JR100Computer(Computer):
         rom_path = str(self._rom_path) if self._rom_path is not None else ""
         basic_rom = BasicRom(rom_path, self.BASIC_ROM_START, self.BASIC_ROM_LENGTH)
         memory.register_memory(basic_rom)
+        self.basic_rom = basic_rom
+        self._load_display_rom_from_basic()
 
     # ------------------------------------------------------------------
     # Accessors mirroring Java behaviour
@@ -131,6 +141,8 @@ class JR100Computer(Computer):
     def load_basic_rom(self, path: str) -> None:
         rom = BasicRom(path, self.BASIC_ROM_START, self.BASIC_ROM_LENGTH)
         self.hardware.memory.register_memory(rom)
+        self.basic_rom = rom
+        self._load_display_rom_from_basic()
 
     def has_extended_ram(self) -> bool:
         return self._extended_ram
@@ -158,6 +170,14 @@ class JR100Computer(Computer):
     @property
     def rom_path(self) -> Optional[Path]:
         return self._rom_path
+
+    def _load_display_rom_from_basic(self) -> None:
+        if self.basic_rom is None:
+            return
+        display = self.hardware.display
+        expected = display.PPC * 256  # 256 glyphs x 8 bytes
+        if len(self.basic_rom.data) >= expected:
+            display.load_character_rom(self.basic_rom.data[:expected])
 
     # ------------------------------------------------------------------
     # User program loading

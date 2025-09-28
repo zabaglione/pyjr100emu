@@ -5,6 +5,7 @@ from __future__ import annotations
 import argparse
 from dataclasses import dataclass
 import json
+import os
 from pathlib import Path
 import time
 from typing import Dict, Iterable, List, Optional, Tuple
@@ -24,51 +25,109 @@ from jr100emu.frontend.snapshot_db import (
 
 # Mapping from pygame key constants to (row, bit) in the keyboard matrix.
 KEY_MATRIX_MAP: Dict[int, Tuple[int, int]] = {
-    # Simplified mapping for demonstration.
-    # Rows/bits chosen arbitrarily; they do not match the real JR-100 yet.
-    97: (1, 0),   # a
-    115: (1, 1),  # s
-    100: (1, 2),  # d
-    102: (1, 3),  # f
-    106: (2, 0),  # j
-    107: (2, 1),  # k
-    108: (2, 2),  # l
-    59: (2, 3),   # ;
-    273: (3, 0),  # up
-    274: (3, 1),  # down
-    276: (3, 2),  # left
-    275: (3, 3),  # right
+    ord("c"): (0, 4),
+    ord("x"): (0, 3),
+    ord("z"): (0, 2),
+    1073742049: (0, 1),  # pygame.K_LSHIFT
+    1073742053: (0, 1),  # pygame.K_RSHIFT
+    1073742048: (0, 0),  # pygame.K_LCTRL
+    1073742052: (0, 0),  # pygame.K_RCTRL
+    ord("g"): (1, 4),
+    ord("f"): (1, 3),
+    ord("d"): (1, 2),
+    ord("s"): (1, 1),
+    ord("a"): (1, 0),
+    ord("t"): (2, 4),
+    ord("r"): (2, 3),
+    ord("e"): (2, 2),
+    ord("w"): (2, 1),
+    ord("q"): (2, 0),
+    ord("5"): (3, 4),
+    ord("4"): (3, 3),
+    ord("3"): (3, 2),
+    ord("2"): (3, 1),
+    ord("1"): (3, 0),
+    ord("0"): (4, 4),
+    ord("9"): (4, 3),
+    ord("8"): (4, 2),
+    ord("7"): (4, 1),
+    ord("6"): (4, 0),
+    ord("p"): (5, 4),
+    ord("o"): (5, 3),
+    ord("i"): (5, 2),
+    ord("u"): (5, 1),
+    ord("y"): (5, 0),
+    59: (6, 4),  # ';'
+    ord("l"): (6, 3),
+    ord("k"): (6, 2),
+    ord("j"): (6, 1),
+    ord("h"): (6, 0),
+    44: (7, 4),  # ','
+    ord("m"): (7, 3),
+    ord("n"): (7, 2),
+    ord("b"): (7, 1),
+    ord("v"): (7, 0),
+    45: (8, 4),  # '-'
+    13: (8, 3),  # RETURN
+    58: (8, 2),  # ':'
+    ord(" "): (8, 1),
+    46: (8, 0),  # '.'
 }
 
 KEY_LABELS: Dict[int, str] = {
-    97: "A",
-    115: "S",
-    100: "D",
-    102: "F",
-    106: "J",
-    107: "K",
-    108: "L",
+    ord("a"): "A",
+    ord("b"): "B",
+    ord("c"): "C",
+    ord("d"): "D",
+    ord("e"): "E",
+    ord("f"): "F",
+    ord("g"): "G",
+    ord("h"): "H",
+    ord("i"): "I",
+    ord("j"): "J",
+    ord("k"): "K",
+    ord("l"): "L",
+    ord("m"): "M",
+    ord("n"): "N",
+    ord("o"): "O",
+    ord("p"): "P",
+    ord("q"): "Q",
+    ord("r"): "R",
+    ord("s"): "S",
+    ord("t"): "T",
+    ord("u"): "U",
+    ord("v"): "V",
+    ord("w"): "W",
+    ord("x"): "X",
+    ord("y"): "Y",
+    ord("z"): "Z",
+    ord("1"): "1",
+    ord("2"): "2",
+    ord("3"): "3",
+    ord("4"): "4",
+    ord("5"): "5",
+    ord("6"): "6",
+    ord("7"): "7",
+    ord("8"): "8",
+    ord("9"): "9",
+    ord("0"): "0",
     59: ";",
-    273: "UP",
-    274: "DOWN",
-    276: "LEFT",
-    275: "RIGHT",
+    58: ":",
+    45: "-",
+    44: ",",
+    46: ".",
+    32: "SPACE",
+    13: "ENTER",
+    1073742049: "SHIFT",
+    1073742053: "SHIFT",
+    1073742048: "CTRL",
+    1073742052: "CTRL",
 }
-
-DEFAULT_JOYSTICK_MAPPING = {
-    "left": ("axis", 0, -0.5),
-    "right": ("axis", 0, 0.5),
-    "up": ("axis", 1, -0.5),
-    "down": ("axis", 1, 0.5),
-    "switch": ("button", 0, 0.5),
-}
-
 
 STEP_CYCLES = 256
 SNAPSHOT_DIR = Path("snapshots")
 SNAPSHOT_SLOTS = ["slot0", "slot1", "slot2", "slot3"]
 DEFAULT_SLOT = SNAPSHOT_SLOTS[0]
-
 
 @dataclass
 class Snapshot:
@@ -80,7 +139,13 @@ class Snapshot:
     clock_count: int
 
 
-def _generate_character_rom(display: JR100Display) -> List[int]:
+def _generate_character_rom(
+    display: JR100Display,
+    *,
+    allow_background_events: bool = False,
+) -> List[int]:
+    if allow_background_events:
+        os.environ.setdefault("SDL_JOYSTICK_ALLOW_BACKGROUND_EVENTS", "1")
     import pygame  # type: ignore
 
     pygame.font.init()
@@ -105,8 +170,15 @@ def _generate_character_rom(display: JR100Display) -> List[int]:
     return rom
 
 
-def _handle_key_event(keyboard: JR100Keyboard, key: int, pressed: bool) -> None:
+def _handle_key_event(
+    keyboard: JR100Keyboard,
+    key: int,
+    pressed: bool,
+    *,
+    shift_active: bool = False,
+) -> None:
     mapping = KEY_MATRIX_MAP.get(key)
+    colon_mapping = KEY_MATRIX_MAP.get(58) if key == 59 else None
     if mapping is None:
         return
     row, bit = mapping
@@ -114,6 +186,13 @@ def _handle_key_event(keyboard: JR100Keyboard, key: int, pressed: bool) -> None:
         keyboard.press(row, bit)
     else:
         keyboard.release(row, bit)
+    if key == 59 and colon_mapping is not None:
+        colon_row, colon_bit = colon_mapping
+        if pressed:
+            if shift_active:
+                keyboard.press(colon_row, colon_bit)
+        else:
+            keyboard.release(colon_row, colon_bit)
 
 
 def _load_program_for_demo(computer: JR100Computer, program_path: str | None) -> Tuple[str, Optional[ProgramInfo]]:
@@ -133,19 +212,29 @@ def _pygame_loop(
     fps: int,
     program_path: str | None,
     *,
+    rom_path: str | None = None,
     enable_audio: bool = False,
     enable_joystick: bool = False,
     joystick_config_path: str | None = None,
+    joystick_index: int | None = None,
+    joystick_name: str | None = None,
 ) -> None:
     import pygame  # type: ignore
 
-    computer = JR100Computer(enable_audio=enable_audio)
+    computer = JR100Computer(rom_path=rom_path, enable_audio=enable_audio)
     base_caption, program_info = _load_program_for_demo(computer, program_path)
     if program_info is not None and program_info.comment:
         print(f"Loaded program: {program_info.name} -- {program_info.comment}")
 
     display = computer.hardware.display
-    display.load_character_rom(_generate_character_rom(display))
+    if computer.basic_rom is not None:
+        glyph_bytes = computer.basic_rom.data[: display.PPC * 256]
+        if len(glyph_bytes) == display.PPC * 256:
+            display.load_character_rom(glyph_bytes)
+    else:
+        display.load_character_rom(
+            _generate_character_rom(display, allow_background_events=enable_joystick)
+        )
 
     keyboard = computer.hardware.keyboard
     overlay = DebugOverlay(computer)
@@ -157,38 +246,25 @@ def _pygame_loop(
     pygame.display.set_caption(base_caption)
     clock = pygame.time.Clock()
 
-    joysticks: list[object] = []
-    joystick_mapping = DEFAULT_JOYSTICK_MAPPING.copy()
-    if enable_joystick:
-        try:
-            pygame.joystick.init()
-            for index in range(pygame.joystick.get_count()):
-                joystick = pygame.joystick.Joystick(index)
-                joystick.init()
-                joysticks.append(joystick)
-        except Exception:
-            joysticks = []
-            enable_joystick = False
-        if enable_joystick and joystick_config_path:
-            import json
-
+    gamepad_device = getattr(computer, "gamepad", None)
+    if enable_joystick and gamepad_device is not None:
+        if joystick_config_path:
             try:
-                with open(joystick_config_path, "r", encoding="utf-8") as handle:
-                    data = json.load(handle)
-                for direction in ["left", "right", "up", "down", "switch"]:
-                    if direction in data:
-                        entry = data[direction]
-                        if isinstance(entry, list) and len(entry) == 3:
-                            joystick_mapping[direction] = tuple(entry)
-            except (OSError, ValueError):
-                pass
-
-    ext_port = getattr(computer, "ext_port", None)
-    gamepad_state = {"left": False, "right": False, "up": False, "down": False, "switch": False}
-
-    def apply_gamepad_state() -> None:
-        if ext_port is not None:
-            ext_port.set_gamepad_state(**gamepad_state)
+                gamepad_device.load_mapping(joystick_config_path)
+            except Exception as exc:
+                print(f"ジョイスティックマッピングの読み込みに失敗しました: {exc}")
+        gamepad_device.enable_pygame_backend(
+            device_index=joystick_index,
+            name_filter=joystick_name,
+        )
+        backend = gamepad_device.backend
+        if backend is not None:
+            try:
+                backend.initialize()
+            except Exception:
+                enable_joystick = False
+    else:
+        enable_joystick = False
 
     running = True
     debug_mode = False
@@ -201,26 +277,6 @@ def _pygame_loop(
     comment_buffer = slot_meta.comment if slot_meta else ""
     editing_comment = False
 
-    axis_values = {"x": 0.0, "y": 0.0}
-    hat_values = {"x": 0, "y": 0}
-    button_switch = False
-
-    def recompute_gamepad_state() -> None:
-        for direction, (kind, index, threshold) in joystick_mapping.items():
-            if kind == "axis":
-                value = axis_values["x"] if index == 0 else axis_values["y"]
-                if direction in ("left", "up"):
-                    gamepad_state[direction] = value < threshold
-                elif direction in ("right", "down"):
-                    gamepad_state[direction] = value > threshold
-            elif kind == "hat":
-                value = hat_values["x"] if index == 0 else hat_values["y"]
-                gamepad_state[direction] = value == int(threshold)
-            elif kind == "button":
-                gamepad_state[direction] = button_switch
-        apply_gamepad_state()
-
-    recompute_gamepad_state()
 
     while running:
         for event in pygame.event.get():
@@ -423,46 +479,19 @@ def _pygame_loop(
                         overlay.capture_state()
                         continue
                 else:
-                    _handle_key_event(keyboard, event.key, True)
+                    _handle_key_event(
+                        keyboard,
+                        event.key,
+                        True,
+                        shift_active=bool(event.mod & pygame.KMOD_SHIFT),
+                    )
             elif event.type == pygame.KEYUP and not debug_mode:
-                _handle_key_event(keyboard, event.key, False)
-            elif enable_joystick and event.type == pygame.JOYAXISMOTION:
-                if event.axis == 0:
-                    axis_values["x"] = event.value
-                elif event.axis == 1:
-                    axis_values["y"] = event.value
-                recompute_gamepad_state()
-            elif enable_joystick and event.type == pygame.JOYHATMOTION:
-                hat_values["x"], hat_values["y"] = event.value
-                recompute_gamepad_state()
-            elif enable_joystick and event.type == pygame.JOYBUTTONDOWN:
-                if event.button == 0:
-                    button_switch = True
-                    recompute_gamepad_state()
-            elif enable_joystick and event.type == pygame.JOYBUTTONUP:
-                if event.button == 0:
-                    button_switch = False
-                    recompute_gamepad_state()
-            elif enable_joystick and event.type == getattr(pygame, "JOYDEVICEADDED", None):
-                try:
-                    joystick = pygame.joystick.Joystick(event.device_index)
-                    joystick.init()
-                    joysticks.append(joystick)
-                except Exception:
-                    pass
-            elif enable_joystick and event.type == getattr(pygame, "JOYDEVICEREMOVED", None):
-                removed_id = getattr(event, "instance_id", None)
-                filtered: list[object] = []
-                for joystick in joysticks:
-                    get_id = getattr(joystick, "get_instance_id", None) or getattr(joystick, "get_id", None)
-                    if callable(get_id) and get_id() == removed_id:
-                        continue
-                    filtered.append(joystick)
-                joysticks = filtered
-                axis_values["x"] = axis_values["y"] = 0.0
-                hat_values["x"] = hat_values["y"] = 0
-                button_switch = False
-                recompute_gamepad_state()
+                _handle_key_event(
+                    keyboard,
+                    event.key,
+                    False,
+                    shift_active=bool(event.mod & pygame.KMOD_SHIFT),
+                )
 
         surface = display.render_pygame_surface(scale)
         screen.blit(surface, (0, 0))
@@ -473,7 +502,20 @@ def _pygame_loop(
             clock.tick(fps)
             continue
 
-        pressed_keys = [KEY_LABELS[k] for k in KEY_MATRIX_MAP if pygame.key.get_pressed()[k]]
+        pressed_state = pygame.key.get_pressed()
+        mods = pygame.key.get_mods()
+        pressed_keys: List[str] = []
+        for key_code, label in KEY_LABELS.items():
+            if key_code in (1073742049, 1073742053):
+                if mods & pygame.KMOD_SHIFT and label not in pressed_keys:
+                    pressed_keys.append(label)
+                continue
+            if key_code in (1073742048, 1073742052):
+                if mods & pygame.KMOD_CTRL and label not in pressed_keys:
+                    pressed_keys.append(label)
+                continue
+            if key_code < len(pressed_state) and pressed_state[key_code]:
+                pressed_keys.append(label)
         keys_summary = " ".join(pressed_keys) if pressed_keys else "-"
         pygame.display.set_caption(f"{base_caption} | Keys: {keys_summary}")
 
@@ -726,11 +768,27 @@ def main(argv: Iterable[str] | None = None) -> None:
     parser.add_argument("--scale", type=int, default=2, help="Integer scaling factor for display (default: 2)")
     parser.add_argument("--fps", type=int, default=30, help="Target frames per second for the demo loop")
     parser.add_argument("--program", "-p", help="Path to a PROG/BASIC file to load at startup")
+    parser.add_argument(
+        "--rom",
+        help="Path to the JR-100 BASIC ROM (PROG format). Defaults to datas/jr100rom.prg if omitted",
+    )
     parser.add_argument("--audio", action="store_true", help="Enable square-wave audio output (requires pygame mixer)")
     parser.add_argument("--joystick", action="store_true", help="Enable pygame joystick input mapping to the JR-100 gamepad port")
     parser.add_argument(
         "--joystick-config",
         help="Path to JSON file that defines axis/button mappings for the gamepad",
+    )
+    parser.add_argument(
+        "--joystick-index",
+        type=int,
+        default=None,
+        help="Select a specific pygame joystick device index when multiple controllers are present",
+    )
+    parser.add_argument(
+        "--joystick-name",
+        type=str,
+        default=None,
+        help="Select joysticks whose OS name contains the given substring",
     )
     args = parser.parse_args(list(argv) if argv is not None else None)
 
@@ -748,9 +806,16 @@ def main(argv: Iterable[str] | None = None) -> None:
             args.scale,
             args.fps,
             args.program,
+            rom_path=args.rom,
             enable_audio=args.audio,
-            enable_joystick=args.joystick,
+            enable_joystick=(
+                args.joystick
+                or args.joystick_index is not None
+                or args.joystick_name is not None
+            ),
             joystick_config_path=args.joystick_config,
+            joystick_index=args.joystick_index,
+            joystick_name=args.joystick_name,
         )
     except RuntimeError as exc:
         raise SystemExit(str(exc))
