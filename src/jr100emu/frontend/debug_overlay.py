@@ -46,6 +46,7 @@ class DebugOverlay:
         self._history_entries: List[HistoryEntry] = self._meta_db.list_history()
         self._selected_index = SNAPSHOT_SLOTS.index(DEFAULT_SLOT)
         self._history_index: int = 0
+        self._history_offset: int = 0
         self._comment_buffer: Optional[str] = None
         self._preview_lines: List[str] = []
 
@@ -122,8 +123,9 @@ class DebugOverlay:
         slots_y = help_y + column_gap + len(self.INSTRUCTIONS) * self._line_height
         self._render_section(overlay, help_x, slots_y, "Slots", slots_lines)
 
+        history_window = self._history_entries[self._history_offset:self._history_offset + 10]
         history_lines: List[str] = []
-        for idx, entry in enumerate(self._history_entries[:10]):
+        for idx, entry in enumerate(history_window):
             marker = "*" if idx == self._history_index else " "
             history_lines.append(
                 f"{marker} {entry.slot} {entry.format_timestamp()} {entry.comment}"
@@ -216,8 +218,25 @@ class DebugOverlay:
     def move_history(self, direction: int) -> Optional[HistoryEntry]:
         if not self._history_entries:
             return None
-        self._history_index = (self._history_index + direction) % len(self._history_entries)
-        return self._history_entries[self._history_index]
+        new_index = self._history_index + direction
+        window_size = min(len(self._history_entries) - self._history_offset, 10)
+        max_index = max(0, window_size - 1)
+        if new_index < 0:
+            if self._history_offset > 0:
+                self._history_offset -= 1
+                new_index = 0
+            else:
+                new_index = 0
+        elif new_index > max_index:
+            if self._history_offset + window_size < len(self._history_entries):
+                self._history_offset += 1
+                window_size = min(len(self._history_entries) - self._history_offset, 10)
+                max_index = max(0, window_size - 1)
+                new_index = max_index
+            else:
+                new_index = max_index
+        self._history_index = new_index
+        return self.current_history_entry()
 
     def current_history_entry(self) -> Optional[HistoryEntry]:
         if not self._history_entries:
