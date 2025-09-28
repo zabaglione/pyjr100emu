@@ -69,7 +69,9 @@ KEY_MATRIX_MAP: Dict[int, Tuple[int, int]] = {
     ord("v"): (7, 0),
     45: (8, 4),  # '-'
     13: (8, 3),  # RETURN
-    43: (8, 2),  # '+'
+    58: (8, 2),  # ':' key (JIS dedicated)
+    42: (8, 2),  # '*' (shift + ':' on JIS)
+    43: (8, 2),  # '+' (shift + ';' on ANSI)
     ord(" "): (8, 1),
     46: (8, 0),  # '.'
 }
@@ -112,6 +114,8 @@ KEY_LABELS: Dict[int, str] = {
     ord("9"): "9",
     ord("0"): "0",
     59: ";",
+    58: ":",
+    42: "*",
     43: "+",
     45: "-",
     44: ",",
@@ -170,15 +174,8 @@ def _generate_character_rom(
     return rom
 
 
-def _handle_key_event(
-    keyboard: JR100Keyboard,
-    key: int,
-    pressed: bool,
-    *,
-    shift_active: bool = False,
-) -> None:
+def _handle_key_event(keyboard: JR100Keyboard, key: int, pressed: bool) -> None:
     mapping = KEY_MATRIX_MAP.get(key)
-    colon_mapping = KEY_MATRIX_MAP.get(58) if key == 59 else None
     if mapping is None:
         return
     row, bit = mapping
@@ -186,13 +183,6 @@ def _handle_key_event(
         keyboard.press(row, bit)
     else:
         keyboard.release(row, bit)
-    if key == 59 and colon_mapping is not None:
-        colon_row, colon_bit = colon_mapping
-        if pressed:
-            if shift_active:
-                keyboard.press(colon_row, colon_bit)
-        else:
-            keyboard.release(colon_row, colon_bit)
 
 
 def _load_program_for_demo(computer: JR100Computer, program_path: str | None) -> Tuple[str, Optional[ProgramInfo]]:
@@ -479,19 +469,9 @@ def _pygame_loop(
                         overlay.capture_state()
                         continue
                 else:
-                    _handle_key_event(
-                        keyboard,
-                        event.key,
-                        True,
-                        shift_active=bool(event.mod & pygame.KMOD_SHIFT),
-                    )
+                    _handle_key_event(keyboard, event.key, True)
             elif event.type == pygame.KEYUP and not debug_mode:
-                _handle_key_event(
-                    keyboard,
-                    event.key,
-                    False,
-                    shift_active=bool(event.mod & pygame.KMOD_SHIFT),
-                )
+                _handle_key_event(keyboard, event.key, False)
 
         surface = display.render_pygame_surface(scale)
         screen.blit(surface, (0, 0))
