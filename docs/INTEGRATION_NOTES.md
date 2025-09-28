@@ -26,6 +26,8 @@
 - `D`: 選択中スロットのスナップショットとメタデータを削除。
 - `--audio`: デモ起動時に指定すると pygame.mixer を使用したスクエア波出力を有効化。
 - `--joystick`: pygame の Joystick API を利用してゲームパッド入力を JR-100 拡張 I/O にマッピング。
+- `--joystick-config PATH`: JSON ファイルで軸/ボタン割り当てを定義可能。`python -m jr100emu.app --write-joystick-template template.json` でテンプレートを生成できる。
+- `python -m jr100emu.tools.joystick_monitor`: ジョイスティックの軸・ボタン値をリアルタイム表示する校正ツール。
 - `--audio`: デモ起動時に指定すると pygame.mixer を使用したスクエア波出力を有効化。
 - `Q`: デバッグメニュー表示中にアプリケーションを終了。
 
