@@ -120,7 +120,14 @@ def _load_program_for_demo(computer: JR100Computer, program_path: str | None) ->
     return caption, info
 
 
-def _pygame_loop(scale: int, fps: int, program_path: str | None, *, enable_audio: bool = False) -> None:
+def _pygame_loop(
+    scale: int,
+    fps: int,
+    program_path: str | None,
+    *,
+    enable_audio: bool = False,
+    enable_joystick: bool = False,
+) -> None:
     import pygame  # type: ignore
 
     computer = JR100Computer(enable_audio=enable_audio)
@@ -141,6 +148,25 @@ def _pygame_loop(scale: int, fps: int, program_path: str | None, *, enable_audio
     pygame.display.set_caption(base_caption)
     clock = pygame.time.Clock()
 
+    joysticks: list[object] = []
+    if enable_joystick:
+        try:
+            pygame.joystick.init()
+            for index in range(pygame.joystick.get_count()):
+                joystick = pygame.joystick.Joystick(index)
+                joystick.init()
+                joysticks.append(joystick)
+        except Exception:
+            joysticks = []
+            enable_joystick = False
+
+    ext_port = getattr(computer, "ext_port", None)
+    gamepad_state = {"left": False, "right": False, "up": False, "down": False, "switch": False}
+
+    def apply_gamepad_state() -> None:
+        if ext_port is not None:
+            ext_port.set_gamepad_state(**gamepad_state)
+
     running = True
     debug_mode = False
     snapshot_slot = DEFAULT_SLOT
@@ -151,6 +177,20 @@ def _pygame_loop(scale: int, fps: int, program_path: str | None, *, enable_audio
     slot_meta = snapshot_db.get(snapshot_slot)
     comment_buffer = slot_meta.comment if slot_meta else ""
     editing_comment = False
+
+    axis_values = {"x": 0.0, "y": 0.0}
+    hat_values = {"x": 0, "y": 0}
+    button_switch = False
+
+    def recompute_gamepad_state() -> None:
+        gamepad_state["left"] = hat_values["x"] < 0 or axis_values["x"] < -0.5
+        gamepad_state["right"] = hat_values["x"] > 0 or axis_values["x"] > 0.5
+        gamepad_state["up"] = hat_values["y"] > 0 or axis_values["y"] < -0.5
+        gamepad_state["down"] = hat_values["y"] < 0 or axis_values["y"] > 0.5
+        gamepad_state["switch"] = button_switch
+        apply_gamepad_state()
+
+    recompute_gamepad_state()
 
     while running:
         for event in pygame.event.get():
@@ -356,6 +396,43 @@ def _pygame_loop(scale: int, fps: int, program_path: str | None, *, enable_audio
                     _handle_key_event(keyboard, event.key, True)
             elif event.type == pygame.KEYUP and not debug_mode:
                 _handle_key_event(keyboard, event.key, False)
+            elif enable_joystick and event.type == pygame.JOYAXISMOTION:
+                if event.axis == 0:
+                    axis_values["x"] = event.value
+                elif event.axis == 1:
+                    axis_values["y"] = event.value
+                recompute_gamepad_state()
+            elif enable_joystick and event.type == pygame.JOYHATMOTION:
+                hat_values["x"], hat_values["y"] = event.value
+                recompute_gamepad_state()
+            elif enable_joystick and event.type == pygame.JOYBUTTONDOWN:
+                if event.button == 0:
+                    button_switch = True
+                    recompute_gamepad_state()
+            elif enable_joystick and event.type == pygame.JOYBUTTONUP:
+                if event.button == 0:
+                    button_switch = False
+                    recompute_gamepad_state()
+            elif enable_joystick and event.type == getattr(pygame, "JOYDEVICEADDED", None):
+                try:
+                    joystick = pygame.joystick.Joystick(event.device_index)
+                    joystick.init()
+                    joysticks.append(joystick)
+                except Exception:
+                    pass
+            elif enable_joystick and event.type == getattr(pygame, "JOYDEVICEREMOVED", None):
+                removed_id = getattr(event, "instance_id", None)
+                filtered: list[object] = []
+                for joystick in joysticks:
+                    get_id = getattr(joystick, "get_instance_id", None) or getattr(joystick, "get_id", None)
+                    if callable(get_id) and get_id() == removed_id:
+                        continue
+                    filtered.append(joystick)
+                joysticks = filtered
+                axis_values["x"] = axis_values["y"] = 0.0
+                hat_values["x"] = hat_values["y"] = 0
+                button_switch = False
+                recompute_gamepad_state()
 
         surface = display.render_pygame_surface(scale)
         screen.blit(surface, (0, 0))
@@ -604,6 +681,7 @@ def main(argv: Iterable[str] | None = None) -> None:
     parser.add_argument("--fps", type=int, default=30, help="Target frames per second for the demo loop")
     parser.add_argument("--program", "-p", help="Path to a PROG/BASIC file to load at startup")
     parser.add_argument("--audio", action="store_true", help="Enable square-wave audio output (requires pygame mixer)")
+    parser.add_argument("--joystick", action="store_true", help="Enable pygame joystick input mapping to the JR-100 gamepad port")
     args = parser.parse_args(list(argv) if argv is not None else None)
 
     if args.scale <= 0:
@@ -612,7 +690,13 @@ def main(argv: Iterable[str] | None = None) -> None:
         raise SystemExit("fps must be positive")
 
     try:
-        _pygame_loop(args.scale, args.fps, args.program, enable_audio=args.audio)
+        _pygame_loop(
+            args.scale,
+            args.fps,
+            args.program,
+            enable_audio=args.audio,
+            enable_joystick=args.joystick,
+        )
     except RuntimeError as exc:
         raise SystemExit(str(exc))
 if __name__ == "__main__":

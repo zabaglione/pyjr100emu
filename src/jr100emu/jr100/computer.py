@@ -106,6 +106,7 @@ class JR100Computer(Computer):
 
         ext_port = ExtendedIOPort(self.EXT_IO_START)
         memory.register_memory(ext_port)
+        self.ext_port = ext_port
 
         rom_path = str(self._rom_path) if self._rom_path is not None else ""
         basic_rom = BasicRom(rom_path, self.BASIC_ROM_START, self.BASIC_ROM_LENGTH)

@@ -100,6 +100,28 @@ class ExtendedIOPort(Addressable):
         if (address & 0xFFFF) == (self.start + 0x02):
             self.gamepad_status = value & 0xFF
 
+    def set_gamepad_state(
+        self,
+        *,
+        left: bool = False,
+        right: bool = False,
+        up: bool = False,
+        down: bool = False,
+        switch: bool = False,
+    ) -> None:
+        status = 0x00
+        if right:
+            status |= 0x01
+        if left:
+            status |= 0x02
+        if up:
+            status |= 0x04
+        if down:
+            status |= 0x08
+        if switch:
+            status |= 0x10
+        self.gamepad_status = status
+
     def store16(self, address: int, value: int) -> None:
         return
 
