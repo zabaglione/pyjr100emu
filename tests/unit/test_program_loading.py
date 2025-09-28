@@ -16,6 +16,7 @@ from jr100emu.app import (
     _restore_snapshot,
     _take_snapshot,
     _write_snapshot_to_file,
+    _delete_snapshot_files,
 )
 from jr100emu.frontend import snapshot_db
 

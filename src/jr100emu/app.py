@@ -157,10 +157,12 @@ def _pygame_loop(scale: int, fps: int, program_path: str | None) -> None:
                         overlay.set_status("Debug paused")
                         slot_meta = snapshot_db.get(snapshot_slot)
                         comment_buffer = slot_meta.comment if slot_meta else comment_buffer
+                        overlay.set_comment_buffer(None)
                     else:
                         pygame.display.set_caption(base_caption)
                         overlay.set_status("")
                         editing_comment = False
+                        overlay.set_comment_buffer(None)
                     continue
                 if debug_mode and event.key == pygame.K_q:
                     running = False
@@ -169,21 +171,26 @@ def _pygame_loop(scale: int, fps: int, program_path: str | None) -> None:
                     if editing_comment:
                         if event.key == pygame.K_RETURN:
                             snapshot_db.set_slot(snapshot_slot, comment=comment_buffer)
+                            snapshot_db = SnapshotDatabase()
                             if snapshot is not None:
                                 _write_snapshot_to_file(snapshot_slot, snapshot, comment=comment_buffer)
                             overlay.update_metadata(snapshot_slot, comment_buffer)
                             overlay.set_status("Comment saved")
                             editing_comment = False
+                            overlay.set_comment_buffer(None)
                         elif event.key == pygame.K_ESCAPE:
                             overlay.set_status("Comment edit cancelled")
                             editing_comment = False
+                            overlay.set_comment_buffer(None)
                         elif event.key == pygame.K_BACKSPACE:
                             comment_buffer = comment_buffer[:-1]
                             overlay.set_status(f"Editing comment: {comment_buffer}")
+                            overlay.set_comment_buffer(comment_buffer)
                         else:
                             if event.unicode and event.unicode.isprintable():
                                 comment_buffer += event.unicode
                                 overlay.set_status(f"Editing comment: {comment_buffer}")
+                                overlay.set_comment_buffer(comment_buffer)
                         continue
                     if event.key == pygame.K_SPACE:
                         debug_mode = False
@@ -205,6 +212,7 @@ def _pygame_loop(scale: int, fps: int, program_path: str | None) -> None:
                                 comment_buffer = "Snapshot"
                             _write_snapshot_to_file(snapshot_slot, snapshot, comment=comment_buffer)
                             snapshot_db.set_slot(snapshot_slot, comment=comment_buffer)
+                            snapshot_db = SnapshotDatabase()
                             overlay.update_metadata(snapshot_slot, comment_buffer)
                         overlay.capture_state()
                         continue
@@ -234,13 +242,28 @@ def _pygame_loop(scale: int, fps: int, program_path: str | None) -> None:
                             slot_meta = snapshot_db.get(snapshot_slot)
                             comment_buffer = slot_meta.comment if slot_meta else comment_buffer
                             overlay.set_status(f"Editing comment: {comment_buffer}")
+                            overlay.set_comment_buffer(comment_buffer)
                             editing_comment = True
+                        continue
+                    if event.key in (pygame.K_UP, pygame.K_DOWN):
+                        direction = -1 if event.key == pygame.K_UP else 1
+                        snapshot_slot = overlay.move_selection(direction)
+                        snapshot_db = SnapshotDatabase()
+                        snapshot = _read_snapshot_from_file(snapshot_slot)
+                        overlay.set_snapshot_available(snapshot is not None)
+                        slot_meta = snapshot_db.get(snapshot_slot)
+                        comment_buffer = slot_meta.comment if slot_meta else ""
+                        overlay.update_metadata(snapshot_slot, comment_buffer or "")
+                        overlay.set_status(f"Slot switched to {snapshot_slot}")
+                        overlay.set_comment_buffer(None)
+                        overlay.capture_state()
                         continue
                     if event.key in (pygame.K_1, pygame.K_2, pygame.K_3, pygame.K_4):
                         index = event.key - pygame.K_1
                         if 0 <= index < len(SNAPSHOT_SLOTS):
                             snapshot_slot = SNAPSHOT_SLOTS[index]
                             overlay.set_slot_name(snapshot_slot)
+                            snapshot_db = SnapshotDatabase()
                             loaded = _read_snapshot_from_file(snapshot_slot)
                             snapshot = loaded
                             overlay.set_snapshot_available(snapshot is not None)
@@ -248,16 +271,19 @@ def _pygame_loop(scale: int, fps: int, program_path: str | None) -> None:
                             comment_buffer = slot_meta.comment if slot_meta else ""
                             overlay.update_metadata(snapshot_slot, comment_buffer or "")
                             overlay.set_status(f"Slot switched to {snapshot_slot}")
+                            overlay.set_comment_buffer(None)
                             overlay.capture_state()
                         continue
                     if event.key == pygame.K_d:
                         _delete_snapshot_files(snapshot_slot)
                         snapshot_db.clear_slot(snapshot_slot)
+                        snapshot_db = SnapshotDatabase()
                         snapshot = None
                         comment_buffer = ""
                         overlay.set_snapshot_available(False)
                         overlay.set_slot_name(snapshot_slot)
                         overlay.set_status("Snapshot deleted")
+                        overlay.set_comment_buffer(None)
                         overlay.capture_state()
                         continue
                 else:

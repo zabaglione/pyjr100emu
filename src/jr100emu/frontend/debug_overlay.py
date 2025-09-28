@@ -3,10 +3,10 @@
 from __future__ import annotations
 
 from collections import deque
-from typing import Iterable
+from typing import Iterable, Optional
 
 from jr100emu.memory import MemorySystem
-from jr100emu.frontend.snapshot_db import SnapshotDatabase
+from jr100emu.frontend.snapshot_db import SnapshotDatabase, SNAPSHOT_SLOTS, DEFAULT_SLOT
 
 
 class DebugOverlay:
@@ -22,7 +22,7 @@ class DebugOverlay:
         "R: restore",
         "C: edit comment",
         "D: delete snapshot",
-        "1-4: select slot",
+        "1-4 / UP/DOWN: select slot",
         "Q: quit",
     ]
 
@@ -38,8 +38,10 @@ class DebugOverlay:
         self._vram_surface = None
         self._status_message: str = ""
         self._snapshot_available: bool = False
-        self._slot_name: str = "slot0"
+        self._slot_name: str = DEFAULT_SLOT
         self._meta_db = SnapshotDatabase()
+        self._selected_index = SNAPSHOT_SLOTS.index(DEFAULT_SLOT)
+        self._comment_buffer: Optional[str] = None
 
     # ------------------------------------------------------------------
     # Public API
@@ -101,10 +103,11 @@ class DebugOverlay:
         help_y = trace_y + column_gap + max(len(trace_lines), 1) * self._line_height
         self._render_section(overlay, help_x, help_y, "Controls", self.INSTRUCTIONS)
 
-        slots_lines = [
-            f"{meta.slot}: {meta.comment} @ {meta.format_timestamp() if meta.timestamp else '(empty)'}"
-            for meta in self._meta_db.list_slots()
-        ]
+        slots_lines = []
+        for idx, meta in enumerate(self._meta_db.list_slots()):
+            marker = ">" if idx == self._selected_index else " "
+            timestamp = meta.format_timestamp() if meta.timestamp else "(empty)"
+            slots_lines.append(f"{marker} {meta.slot}: {meta.comment} @ {timestamp}")
         slots_y = help_y + column_gap + len(self.INSTRUCTIONS) * self._line_height
         self._render_section(overlay, help_x, slots_y, "Slots", slots_lines)
 
@@ -118,6 +121,21 @@ class DebugOverlay:
             overlay.blit(label, (pos_x, pos_y + vram_preview.get_height() + 8))
 
         screen.blit(overlay, (0, 0))
+
+        if self._comment_buffer is not None:
+            import pygame  # type: ignore
+
+            width = screen.get_width() - 80
+            height = self._line_height * 3
+            x = 40
+            y = screen.get_height() - height - 40
+            panel = pygame.Surface((width, height), pygame.SRCALPHA)
+            panel.fill((20, 20, 20, 220))
+            screen.blit(panel, (x, y))
+            prompt = self._font.render("Comment:", True, (255, 215, 0))
+            screen.blit(prompt, (x + 12, y + 6))
+            text_surface = self._font.render(self._comment_buffer + "_", True, (230, 230, 230))
+            screen.blit(text_surface, (x + 12, y + 6 + self._line_height))
 
     def get_trace(self) -> list[int]:
         """Expose a copy of the recent trace for tests."""
@@ -133,11 +151,22 @@ class DebugOverlay:
     def set_slot_name(self, slot: str) -> None:
         self._slot_name = slot
         self._meta_db = SnapshotDatabase()
+        if slot in SNAPSHOT_SLOTS:
+            self._selected_index = SNAPSHOT_SLOTS.index(slot)
 
     def update_metadata(self, slot: str, comment: str) -> None:
         self._meta_db.set_slot(slot, comment=comment)
         self.set_slot_name(slot)
         self.set_snapshot_available(True)
+
+    def set_comment_buffer(self, buffer: Optional[str]) -> None:
+        self._comment_buffer = buffer
+
+    def move_selection(self, direction: int) -> str:
+        self._selected_index = (self._selected_index + direction) % len(SNAPSHOT_SLOTS)
+        slot = SNAPSHOT_SLOTS[self._selected_index]
+        self.set_slot_name(slot)
+        return slot
 
     # ------------------------------------------------------------------
     # Internal helpers
