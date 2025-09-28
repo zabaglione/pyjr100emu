@@ -20,6 +20,8 @@ class DebugOverlay:
         "N: step",
         "S: snapshot",
         "R: restore",
+        "C: edit comment",
+        "D: delete snapshot",
         "1-4: select slot",
         "Q: quit",
     ]
@@ -68,6 +70,7 @@ class DebugOverlay:
 
         self._ensure_font()
         self.capture_state()
+        self._meta_db = SnapshotDatabase()
 
         overlay = pygame.Surface(screen.get_size(), pygame.SRCALPHA)
         overlay.fill((0, 0, 0, 196))

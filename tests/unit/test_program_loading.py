@@ -277,6 +277,11 @@ def test_snapshot_file_roundtrip(tmp_path, monkeypatch) -> None:
     meta = snapshot_db.SnapshotDatabase().get(slot)
     assert meta is not None and meta.comment == "test"
 
+    _delete_snapshot_files(slot)
+    snapshot_db.SnapshotDatabase().clear_slot(slot)
+    assert _read_snapshot_from_file(slot) is None
+    assert snapshot_db.SnapshotDatabase().get(slot) is None
+
 
 def test_load_program_invalid_extension(tmp_path, monkeypatch) -> None:
     rom_bytes = bytearray(0x2000)

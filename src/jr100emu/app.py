@@ -13,6 +13,7 @@ from jr100emu.jr100.display import JR100Display
 from jr100emu.jr100.keyboard import JR100Keyboard
 from jr100emu.emulator.file import ProgramInfo, ProgramLoadError
 from jr100emu.frontend.debug_overlay import DebugOverlay
+from jr100emu.frontend.snapshot_db import SnapshotDatabase, SNAPSHOT_SLOTS, DEFAULT_SLOT, SNAPSHOT_DIR
 
 # Mapping from pygame key constants to (row, bit) in the keyboard matrix.
 KEY_MATRIX_MAP: Dict[int, Tuple[int, int]] = {
@@ -140,6 +141,9 @@ def _pygame_loop(scale: int, fps: int, program_path: str | None) -> None:
     snapshot: Optional[Snapshot] = _read_snapshot_from_file(snapshot_slot)
     overlay.set_snapshot_available(snapshot is not None)
     overlay.set_slot_name(snapshot_slot)
+    slot_meta = snapshot_db.get(snapshot_slot)
+    comment_buffer = slot_meta.comment if slot_meta else ""
+    editing_comment = False
 
     while running:
         for event in pygame.event.get():
@@ -151,18 +155,41 @@ def _pygame_loop(scale: int, fps: int, program_path: str | None) -> None:
                     if debug_mode:
                         overlay.capture_state()
                         overlay.set_status("Debug paused")
+                        slot_meta = snapshot_db.get(snapshot_slot)
+                        comment_buffer = slot_meta.comment if slot_meta else comment_buffer
                     else:
                         pygame.display.set_caption(base_caption)
                         overlay.set_status("")
+                        editing_comment = False
                     continue
                 if debug_mode and event.key == pygame.K_q:
                     running = False
                     continue
                 if debug_mode:
+                    if editing_comment:
+                        if event.key == pygame.K_RETURN:
+                            snapshot_db.set_slot(snapshot_slot, comment=comment_buffer)
+                            if snapshot is not None:
+                                _write_snapshot_to_file(snapshot_slot, snapshot, comment=comment_buffer)
+                            overlay.update_metadata(snapshot_slot, comment_buffer)
+                            overlay.set_status("Comment saved")
+                            editing_comment = False
+                        elif event.key == pygame.K_ESCAPE:
+                            overlay.set_status("Comment edit cancelled")
+                            editing_comment = False
+                        elif event.key == pygame.K_BACKSPACE:
+                            comment_buffer = comment_buffer[:-1]
+                            overlay.set_status(f"Editing comment: {comment_buffer}")
+                        else:
+                            if event.unicode and event.unicode.isprintable():
+                                comment_buffer += event.unicode
+                                overlay.set_status(f"Editing comment: {comment_buffer}")
+                        continue
                     if event.key == pygame.K_SPACE:
                         debug_mode = False
                         overlay.set_status("Resumed")
                         pygame.display.set_caption(base_caption)
+                        editing_comment = False
                         continue
                     if event.key == pygame.K_n:
                         _execute_step(computer, overlay)
@@ -174,10 +201,11 @@ def _pygame_loop(scale: int, fps: int, program_path: str | None) -> None:
                         overlay.set_snapshot_available(snapshot is not None)
                         overlay.set_status("Snapshot saved" if snapshot else "Snapshot failed")
                         if snapshot is not None:
-                            comment = "Paused snapshot"
-                            _write_snapshot_to_file(snapshot_slot, snapshot, comment=comment)
-                            snapshot_db.set_slot(snapshot_slot, comment=comment)
-                            overlay.update_metadata(snapshot_slot, comment)
+                            if not comment_buffer:
+                                comment_buffer = "Snapshot"
+                            _write_snapshot_to_file(snapshot_slot, snapshot, comment=comment_buffer)
+                            snapshot_db.set_slot(snapshot_slot, comment=comment_buffer)
+                            overlay.update_metadata(snapshot_slot, comment_buffer)
                         overlay.capture_state()
                         continue
                     if event.key == pygame.K_r:
@@ -191,11 +219,22 @@ def _pygame_loop(scale: int, fps: int, program_path: str | None) -> None:
                                 snapshot = loaded
                                 _restore_snapshot(computer, snapshot)
                                 overlay.set_snapshot_available(True)
+                                slot_meta = snapshot_db.get(snapshot_slot)
+                                comment_buffer = slot_meta.comment if slot_meta else comment_buffer
+                                overlay.update_metadata(snapshot_slot, comment_buffer)
                                 overlay.set_status("Snapshot restored (file)")
-                                overlay.update_metadata(snapshot_slot, snapshot_db.get(snapshot_slot).comment if snapshot_db.get(snapshot_slot) else "")
                                 overlay.capture_state()
                             else:
                                 overlay.set_status("No snapshot")
+                        continue
+                    if event.key == pygame.K_c:
+                        if snapshot is None and _read_snapshot_from_file(snapshot_slot) is None:
+                            overlay.set_status("No snapshot to comment")
+                        else:
+                            slot_meta = snapshot_db.get(snapshot_slot)
+                            comment_buffer = slot_meta.comment if slot_meta else comment_buffer
+                            overlay.set_status(f"Editing comment: {comment_buffer}")
+                            editing_comment = True
                         continue
                     if event.key in (pygame.K_1, pygame.K_2, pygame.K_3, pygame.K_4):
                         index = event.key - pygame.K_1
@@ -206,10 +245,20 @@ def _pygame_loop(scale: int, fps: int, program_path: str | None) -> None:
                             snapshot = loaded
                             overlay.set_snapshot_available(snapshot is not None)
                             slot_meta = snapshot_db.get(snapshot_slot)
-                            comment = slot_meta.comment if slot_meta else ""
-                            overlay.update_metadata(snapshot_slot, comment)
+                            comment_buffer = slot_meta.comment if slot_meta else ""
+                            overlay.update_metadata(snapshot_slot, comment_buffer or "")
                             overlay.set_status(f"Slot switched to {snapshot_slot}")
                             overlay.capture_state()
+                        continue
+                    if event.key == pygame.K_d:
+                        _delete_snapshot_files(snapshot_slot)
+                        snapshot_db.clear_slot(snapshot_slot)
+                        snapshot = None
+                        comment_buffer = ""
+                        overlay.set_snapshot_available(False)
+                        overlay.set_slot_name(snapshot_slot)
+                        overlay.set_status("Snapshot deleted")
+                        overlay.capture_state()
                         continue
                 else:
                     _handle_key_event(keyboard, event.key, True)
@@ -355,6 +404,14 @@ def _read_snapshot_from_file(slot: str) -> Optional[Snapshot]:
         via_state=dict(data.get("via_state", {})),
         clock_count=int(data.get("clock_count", 0)),
     )
+
+
+def _delete_snapshot_files(slot: str) -> None:
+    json_path = SNAPSHOT_DIR / f"{slot}.json"
+    meta_path = SNAPSHOT_DIR / f"{slot}.meta.json"
+    for path in (json_path, meta_path):
+        if path.exists():
+            path.unlink()
 
 
 def main(argv: Iterable[str] | None = None) -> None:
