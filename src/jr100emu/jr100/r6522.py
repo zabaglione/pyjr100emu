@@ -11,10 +11,12 @@ class JR100R6522(R6522):
     """JR-100 oriented VIA implementation mirroring the Java subclass."""
 
     DEFAULT_CPU_CLOCK = 894_000.0
+    PB7_FREQUENCY_SCALE = 0.5
 
     def __init__(self, computer: object, start_address: int) -> None:
         super().__init__(computer, start_address)
         self._previous_frequency: float = 0.0
+        self._last_beep_clock: int | None = None
 
     # ------------------------------------------------------------------
     # Utilities
@@ -100,7 +102,7 @@ class JR100R6522(R6522):
             divisor = self._state.timer1 + 2
             if divisor <= 0:
                 return
-            frequency = 894_886.25 / divisor / 2.0
+            frequency = (894_886.25 / divisor / 2.0) * self.PB7_FREQUENCY_SCALE
             if abs(frequency - self._previous_frequency) < 1e-6:
                 self._call(sound, "set_line_on")
                 return
@@ -108,18 +110,35 @@ class JR100R6522(R6522):
             timestamp = (self._state.current_clock * 1_000_000_000) / self._cpu_clock_frequency() + self._get_base_time()
             self._call(sound, "set_frequency", timestamp, frequency)
             self._call(sound, "set_line_on")
+            self._last_beep_clock = self._state.current_clock
         else:
             self._call(sound, "set_line_off")
-
+            self._last_beep_clock = None
+            
     def timer1_timeout_mode0_option(self) -> None:
         sound = self._hardware_component("sound_processor")
         self._call(sound, "set_line_off")
+        self._last_beep_clock = None
 
     def timer1_timeout_mode2_option(self) -> None:
         self._jumper_pb7_pb6()
+        self._last_beep_clock = None
 
     def timer1_timeout_mode3_option(self) -> None:
         self._jumper_pb7_pb6()
+        sound = self._hardware_component("sound_processor")
+        if sound is None:
+            return
+        current = self._state.current_clock
+        if self._last_beep_clock is not None:
+            delta = current - self._last_beep_clock
+            if delta > 0:
+                frequency = (self._cpu_clock_frequency() / (delta * 2.0)) * self.PB7_FREQUENCY_SCALE
+                self._previous_frequency = frequency
+                timestamp = (current * 1_000_000_000) / self._cpu_clock_frequency() + self._get_base_time()
+                self._call(sound, "set_frequency", timestamp, frequency)
+                self._call(sound, "set_line_on")
+        self._last_beep_clock = current
 
     # ------------------------------------------------------------------
     # IRQ wiring
