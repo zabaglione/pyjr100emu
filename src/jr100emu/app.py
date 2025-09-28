@@ -55,6 +55,14 @@ KEY_LABELS: Dict[int, str] = {
     275: "RIGHT",
 }
 
+DEFAULT_JOYSTICK_MAPPING = {
+    "left": ("axis", 0, -0.5),
+    "right": ("axis", 0, 0.5),
+    "up": ("axis", 1, -0.5),
+    "down": ("axis", 1, 0.5),
+    "switch": ("button", 0, 0.5),
+}
+
 
 STEP_CYCLES = 256
 SNAPSHOT_DIR = Path("snapshots")
@@ -127,6 +135,7 @@ def _pygame_loop(
     *,
     enable_audio: bool = False,
     enable_joystick: bool = False,
+    joystick_config_path: str | None = None,
 ) -> None:
     import pygame  # type: ignore
 
@@ -149,6 +158,7 @@ def _pygame_loop(
     clock = pygame.time.Clock()
 
     joysticks: list[object] = []
+    joystick_mapping = DEFAULT_JOYSTICK_MAPPING.copy()
     if enable_joystick:
         try:
             pygame.joystick.init()
@@ -159,6 +169,19 @@ def _pygame_loop(
         except Exception:
             joysticks = []
             enable_joystick = False
+        if enable_joystick and joystick_config_path:
+            import json
+
+            try:
+                with open(joystick_config_path, "r", encoding="utf-8") as handle:
+                    data = json.load(handle)
+                for direction in ["left", "right", "up", "down", "switch"]:
+                    if direction in data:
+                        entry = data[direction]
+                        if isinstance(entry, list) and len(entry) == 3:
+                            joystick_mapping[direction] = tuple(entry)
+            except (OSError, ValueError):
+                pass
 
     ext_port = getattr(computer, "ext_port", None)
     gamepad_state = {"left": False, "right": False, "up": False, "down": False, "switch": False}
@@ -183,11 +206,18 @@ def _pygame_loop(
     button_switch = False
 
     def recompute_gamepad_state() -> None:
-        gamepad_state["left"] = hat_values["x"] < 0 or axis_values["x"] < -0.5
-        gamepad_state["right"] = hat_values["x"] > 0 or axis_values["x"] > 0.5
-        gamepad_state["up"] = hat_values["y"] > 0 or axis_values["y"] < -0.5
-        gamepad_state["down"] = hat_values["y"] < 0 or axis_values["y"] > 0.5
-        gamepad_state["switch"] = button_switch
+        for direction, (kind, index, threshold) in joystick_mapping.items():
+            if kind == "axis":
+                value = axis_values["x"] if index == 0 else axis_values["y"]
+                if direction in ("left", "up"):
+                    gamepad_state[direction] = value < threshold
+                elif direction in ("right", "down"):
+                    gamepad_state[direction] = value > threshold
+            elif kind == "hat":
+                value = hat_values["x"] if index == 0 else hat_values["y"]
+                gamepad_state[direction] = value == int(threshold)
+            elif kind == "button":
+                gamepad_state[direction] = button_switch
         apply_gamepad_state()
 
     recompute_gamepad_state()
@@ -682,6 +712,10 @@ def main(argv: Iterable[str] | None = None) -> None:
     parser.add_argument("--program", "-p", help="Path to a PROG/BASIC file to load at startup")
     parser.add_argument("--audio", action="store_true", help="Enable square-wave audio output (requires pygame mixer)")
     parser.add_argument("--joystick", action="store_true", help="Enable pygame joystick input mapping to the JR-100 gamepad port")
+    parser.add_argument(
+        "--joystick-config",
+        help="Path to JSON file that defines axis/button mappings for the gamepad",
+    )
     args = parser.parse_args(list(argv) if argv is not None else None)
 
     if args.scale <= 0:
@@ -696,6 +730,7 @@ def main(argv: Iterable[str] | None = None) -> None:
             args.program,
             enable_audio=args.audio,
             enable_joystick=args.joystick,
+            joystick_config_path=args.joystick_config,
         )
     except RuntimeError as exc:
         raise SystemExit(str(exc))
