@@ -120,10 +120,10 @@ def _load_program_for_demo(computer: JR100Computer, program_path: str | None) ->
     return caption, info
 
 
-def _pygame_loop(scale: int, fps: int, program_path: str | None) -> None:
+def _pygame_loop(scale: int, fps: int, program_path: str | None, *, enable_audio: bool = False) -> None:
     import pygame  # type: ignore
 
-    computer = JR100Computer()
+    computer = JR100Computer(enable_audio=enable_audio)
     base_caption, program_info = _load_program_for_demo(computer, program_path)
     if program_info is not None and program_info.comment:
         print(f"Loaded program: {program_info.name} -- {program_info.comment}")
@@ -603,6 +603,7 @@ def main(argv: Iterable[str] | None = None) -> None:
     parser.add_argument("--scale", type=int, default=2, help="Integer scaling factor for display (default: 2)")
     parser.add_argument("--fps", type=int, default=30, help="Target frames per second for the demo loop")
     parser.add_argument("--program", "-p", help="Path to a PROG/BASIC file to load at startup")
+    parser.add_argument("--audio", action="store_true", help="Enable square-wave audio output (requires pygame mixer)")
     args = parser.parse_args(list(argv) if argv is not None else None)
 
     if args.scale <= 0:
@@ -611,7 +612,7 @@ def main(argv: Iterable[str] | None = None) -> None:
         raise SystemExit("fps must be positive")
 
     try:
-        _pygame_loop(args.scale, args.fps, args.program)
+        _pygame_loop(args.scale, args.fps, args.program, enable_audio=args.audio)
     except RuntimeError as exc:
         raise SystemExit(str(exc))
 if __name__ == "__main__":

@@ -47,14 +47,24 @@ class JR100Computer(Computer):
     BASIC_ROM_LENGTH = 0x2000
 
     ENV_ROM_PATH = "JR100EMU_ROM"
+    ENV_AUDIO = "JR100EMU_AUDIO"
 
-    def __init__(self, rom_path: str | os.PathLike[str] | None = None, *, extended_ram: bool = False) -> None:
+    def __init__(
+        self,
+        rom_path: str | os.PathLike[str] | None = None,
+        *,
+        extended_ram: bool = False,
+        enable_audio: bool | None = None,
+    ) -> None:
         memory = MemorySystem()
         memory.allocate_space(self.MEMORY_CAPACITY)
 
         display = JR100Display()
         keyboard = JR100Keyboard()
-        sound = JR100SoundProcessor()
+        if enable_audio is None:
+            env_audio = os.getenv(self.ENV_AUDIO)
+            enable_audio = env_audio.lower() in {"1", "true", "yes"} if env_audio else False
+        sound = JR100SoundProcessor(enable_audio=enable_audio)
         hardware = JR100Hardware(
             memory=memory,
             display=display,
