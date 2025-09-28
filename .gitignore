@@ -49,3 +49,6 @@ Thumbs.db
 
 # Private data assets
 datas/
+
+# Reference sources (local clones only)
+reference/
