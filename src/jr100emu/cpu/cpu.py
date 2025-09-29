@@ -358,7 +358,9 @@ class MB8861(CPU):
                 self._increment_clock(cycles)
                 continue
 
-            raise NotImplementedError("Opcode execution dispatch is not ported yet: 0x%02X" % opcode)
+            # Java 実装では未定義オペコードを 1 クロックの NOP として扱う
+            self._opcode_nop()
+            self._increment_clock(1)
 
         return self._get_clock_count() - target_clock
 
@@ -634,7 +636,7 @@ class MB8861(CPU):
         self._register_opcode(self.OP_ORAB_IMM, self._opcode_orab_imm, 2)
         self._register_opcode(self.OP_ORAB_DIR, self._opcode_orab_dir, 3)
         self._register_opcode(self.OP_ORAB_IND, self._opcode_orab_ind, 5)
-        self._register_opcode(self.OP_ORAB_EXT, self._opcode_orab_ext_buggy, 4)
+        self._register_opcode(self.OP_ORAB_EXT, self._opcode_orab_ext, 4)
         self._register_opcode(self.OP_PSHA_IMP, self._opcode_psha, 4)
         self._register_opcode(self.OP_PSHB_IMP, self._opcode_pshb, 4)
         self._register_opcode(self.OP_PULA_IMP, self._opcode_pula, 4)
@@ -1148,10 +1150,10 @@ class MB8861(CPU):
         value = self._load8(address)
         self.registers.acc_b = self._ora(self.registers.acc_b, value)
 
-    def _opcode_orab_ext_buggy(self) -> None:
+    def _opcode_orab_ext(self) -> None:
         address = self._fetch_operand16()
         value = self._load8(address)
-        self.registers.acc_b = self._add8(self.registers.acc_b, value)
+        self.registers.acc_b = self._ora(self.registers.acc_b, value)
 
     def _opcode_psha(self) -> None:
         self._push8(self.registers.acc_a)
