@@ -91,7 +91,14 @@ class DebugOverlay:
 
         x_cursor = 24
         y_cursor = 24
-        column_gap = 18
+        column_gap = max(12, self._line_height // 2)
+
+        left_sections = [
+            ("CPU", self._cached_cpu_lines),
+            ("Stack", self._cached_stack_lines),
+            ("Program", self._cached_program),
+        ]
+        left_width = self._measure_sections(left_sections) + 32
 
         if self._font is not None and self._status_message:
             status_surface = self._font.render(self._status_header(), True, (173, 216, 230))
@@ -103,7 +110,7 @@ class DebugOverlay:
         y_cursor = self._render_section(overlay, x_cursor, y_cursor + column_gap, "Program", self._cached_program)
 
         via_y = 24
-        via_x = 360
+        via_x = x_cursor + left_width
         via_y = self._render_section(overlay, via_x, via_y, "VIA", self._cached_via_lines)
 
         trace_x = via_x
@@ -258,7 +265,8 @@ class DebugOverlay:
         import pygame  # type: ignore
 
         pygame.font.init()
-        self._font = pygame.font.SysFont("Courier", 16)
+        size = 12
+        self._font = pygame.font.SysFont("Courier", size)
         self._line_height = self._font.get_linesize()
 
     def _render_section(self, surface, x: int, y: int, title: str, lines: Iterable[str]) -> int:
@@ -274,6 +282,16 @@ class DebugOverlay:
             surface.blit(rendered, (x, cursor_y))
             cursor_y += self._line_height
         return cursor_y
+
+    def _measure_sections(self, sections: Iterable[tuple[str, Iterable[str]]]) -> int:
+        if self._font is None:
+            return 0
+        max_width = 0
+        for title, lines in sections:
+            max_width = max(max_width, self._font.size(title)[0])
+            for line in lines:
+                max_width = max(max_width, self._font.size(line)[0])
+        return max_width
 
     def _snapshot_cpu(self, cpu) -> list[str]:
         if cpu is None:
