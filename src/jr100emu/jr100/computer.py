@@ -85,6 +85,7 @@ class JR100Computer(Computer):
 
         self._install_memory_map(memory)
         self.gamepad = GamepadDevice(port=self.ext_port)
+        self.gamepad.attach_keyboard(self.hardware.keyboard)
         hardware.gamepad = self.gamepad
         self.add_device(self.gamepad)
         self.cpu_core = MB8861(self)
@@ -203,3 +204,8 @@ class JR100Computer(Computer):
             # Ensure reset vector is fetched before returning.
             self.cpu_core.execute(1)
         return info
+
+    def load_joystick_keymap(self, path: str | os.PathLike[str]) -> None:
+        if self.gamepad is None:
+            return
+        self.gamepad.load_keyboard_mapping(str(path))

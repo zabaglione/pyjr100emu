@@ -72,10 +72,12 @@ class VideoRam(RAM):
 class ExtendedIOPort(Addressable):
     """Handles the JR-100 expansion port mapped at 0xCC00-0xCFFF."""
 
+    DEFAULT_STATUS = 0x1F  # bit4: switch, bit3..0: directions (active low)
+
     def __init__(self, start: int) -> None:
         self.start = start & 0xFFFF
         self.end = (self.start + 0x3FF) & 0xFFFF
-        self.gamepad_status = 0x00
+        self.gamepad_status = self.DEFAULT_STATUS
 
     def get_start_address(self) -> int:
         return self.start
@@ -109,21 +111,24 @@ class ExtendedIOPort(Addressable):
         down: bool = False,
         switch: bool = False,
     ) -> None:
-        status = 0x00
+        status = self.DEFAULT_STATUS
         if right:
-            status |= 0x01
+            status &= ~0x01
         if left:
-            status |= 0x02
+            status &= ~0x02
         if up:
-            status |= 0x04
+            status &= ~0x04
         if down:
-            status |= 0x08
+            status &= ~0x08
         if switch:
-            status |= 0x10
-        self.gamepad_status = status
+            status &= ~0x10
+        self.gamepad_status = status & 0xFF
 
     def store16(self, address: int, value: int) -> None:
         return
+
+    def get_gamepad_status(self) -> int:
+        return self.gamepad_status & 0xFF
 
 
 class BasicRom(ROM):

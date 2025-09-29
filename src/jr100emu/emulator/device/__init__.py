@@ -2,9 +2,10 @@
 
 from __future__ import annotations
 
+import json
 import os
 from dataclasses import dataclass, field
-from typing import Dict, Iterable, Mapping, Optional, Protocol
+from typing import Dict, Iterable, List, Mapping, Optional, Protocol, Sequence, Set, Tuple
 
 from jr100emu.io.joystick import (
     DEFAULT_JOYSTICK_MAPPING,
@@ -248,6 +249,15 @@ class PygameGamepadBackend:
         return id(joystick)
 
 
+DEFAULT_DIRECTION_KEY_MATRIX: Dict[str, Optional[Sequence[int]]] = {
+    "left": (6, 1),   # J
+    "right": (6, 3),  # L
+    "up": (5, 2),     # I
+    "down": (6, 2),   # K
+    "switch": (8, 1),  # SPACE
+}
+
+
 @dataclass
 class GamepadDevice:
     """JR-100 の拡張 I/O ポートへゲームパッド状態を書き込むデバイス。"""
@@ -256,12 +266,18 @@ class GamepadDevice:
     mapping: Mapping[str, object] = field(default_factory=lambda: DEFAULT_JOYSTICK_MAPPING)
     deadzone: float = 0.15
     backend: Optional[GamepadBackend] = None
+    keyboard: Optional[object] = None
+    keyboard_mapping: Optional[Mapping[str, Optional[Sequence[int]]]] = None
 
     def __post_init__(self) -> None:
         self._deadzone = max(self.deadzone, 0.0)
         self._adapter = JoystickAdapter(self.mapping, deadzone=self._deadzone)
         self._backend_ready = False
         self._poll_count = 0
+        self._pressed_keys: Dict[Tuple[int, int], str] = {}
+        mapping = self.keyboard_mapping or DEFAULT_DIRECTION_KEY_MATRIX
+        self.keyboard_mapping = mapping
+        self._keyboard_mapping = self._normalize_keyboard_mapping(mapping)
         if self.port is not None:
             self._adapter.apply_to_port(self.port)
 
@@ -271,6 +287,17 @@ class GamepadDevice:
     def attach_port(self, port: object) -> None:
         self.port = port
         self._adapter.apply_to_port(port)
+
+    def attach_keyboard(self, keyboard: object) -> None:
+        self.keyboard = keyboard
+        self._pressed_keys.clear()
+        self._sync_keyboard_state(self._adapter.current_state())
+
+    def set_keyboard_mapping(self, mapping: Mapping[str, Optional[Sequence[int]]]) -> None:
+        self.keyboard_mapping = mapping
+        self._keyboard_mapping = self._normalize_keyboard_mapping(mapping)
+        self._pressed_keys.clear()
+        self._sync_keyboard_state(self._adapter.current_state())
 
     def set_backend(self, backend: Optional[GamepadBackend]) -> None:
         if self.backend is backend:
@@ -307,16 +334,34 @@ class GamepadDevice:
         if self.port is not None:
             self._adapter.apply_to_port(self.port)
         self._backend_ready = False
+        self._sync_keyboard_state(self._adapter.current_state())
 
     def set_mapping(self, mapping: Mapping[str, object]) -> None:
         self.mapping = mapping
         self._adapter = JoystickAdapter(mapping, deadzone=self._deadzone)
         if self.port is not None:
             self._adapter.apply_to_port(self.port)
+        self._sync_keyboard_state(self._adapter.current_state())
 
     def load_mapping(self, path: str) -> None:
         mapping = load_mapping_file(path, fallback=DEFAULT_JOYSTICK_MAPPING)
         self.set_mapping(mapping)
+
+    def load_keyboard_mapping(self, path: str) -> None:
+        try:
+            with open(path, "r", encoding="utf-8") as handle:
+                data = json.load(handle)
+        except OSError as exc:
+            raise RuntimeError(f"ジョイスティックキーマップの読み込みに失敗しました: {exc}") from exc
+        except json.JSONDecodeError as exc:
+            raise RuntimeError(f"ジョイスティックキーマップが不正な JSON です: {exc}") from exc
+
+        if not isinstance(data, dict):
+            raise RuntimeError("ジョイスティックキーマップは JSON オブジェクトで指定してください")
+        normalized: Dict[str, Optional[Sequence[int]]] = {}
+        for label, value in data.items():
+            normalized[label] = value
+        self.set_keyboard_mapping(normalized)
 
     def current_state(self):
         return self._adapter.current_state()
@@ -332,6 +377,8 @@ class GamepadDevice:
         changed = self.backend.poll(self._adapter)
         if changed and self.port is not None:
             self._adapter.apply_to_port(self.port)
+        if changed:
+            self._sync_keyboard_state(self._adapter.current_state())
         return changed
 
     def reset(self) -> None:
@@ -344,10 +391,114 @@ class GamepadDevice:
             except Exception:
                 pass
         self._backend_ready = False
+        if self.keyboard is not None:
+            self._release_all_keyboard()
 
     @property
     def poll_count(self) -> int:
         return self._poll_count
+
+    # ------------------------------------------------------------------
+    # Keyboard mirroring helpers
+    # ------------------------------------------------------------------
+    def _sync_keyboard_state(self, state) -> None:
+        if self.keyboard is None or not self._keyboard_mapping:
+            return
+
+        desired_keys: Dict[Tuple[int, int], str] = {}
+        for label in self._active_labels(state):
+            entries = self._keyboard_mapping.get(label)
+            if not entries:
+                continue
+            for row, bit in entries:
+                desired_keys[(row, bit)] = label
+
+        # Press new keys
+        for key, label in desired_keys.items():
+            if key not in self._pressed_keys:
+                row, bit = key
+                self.keyboard.press(row, bit)
+                self._pressed_keys[key] = label
+
+        # Release keys no longer required
+        for key in list(self._pressed_keys.keys()):
+            if key not in desired_keys:
+                row, bit = key
+                self.keyboard.release(row, bit)
+                self._pressed_keys.pop(key, None)
+
+    def _release_all_keyboard(self) -> None:
+        if self.keyboard is None:
+            self._pressed_keys.clear()
+            return
+        for row, bit in list(self._pressed_keys.keys()):
+            self.keyboard.release(row, bit)
+        self._pressed_keys.clear()
+
+    # ------------------------------------------------------------------
+    # Mapping helpers
+    # ------------------------------------------------------------------
+    def _normalize_keyboard_mapping(
+        self, mapping: Mapping[str, Optional[Sequence[int]]]
+    ) -> Dict[str, Optional[List[Tuple[int, int]]]]:
+        normalized: Dict[str, Optional[List[Tuple[int, int]]]] = {}
+        for label, value in mapping.items():
+            if value is None:
+                normalized[label] = None
+                continue
+            entries: List[Tuple[int, int]] = []
+            if isinstance(value, (list, tuple)) and value and isinstance(value[0], (list, tuple)):
+                iterable = value
+            else:
+                iterable = [value]
+            for entry in iterable:  # type: ignore[assignment]
+                row, bit = self._coerce_row_bit(entry)
+                entries.append((row, bit))
+            normalized[label] = entries if entries else None
+        return normalized
+
+    @staticmethod
+    def _coerce_row_bit(value: Sequence[int]) -> Tuple[int, int]:
+        if not isinstance(value, (list, tuple)) or len(value) != 2:
+            raise RuntimeError(f"row/bit ペアは 2 要素の配列で指定してください: {value}")
+        row = int(value[0])
+        bit = int(value[1])
+        if not (0 <= row <= 8 and 0 <= bit <= 4):
+            raise RuntimeError(f"row/bit の値が不正です: {value}")
+        return row, bit
+
+    def _active_labels(self, state) -> List[str]:
+        labels: List[str] = []
+        mapping = self._keyboard_mapping
+        if not mapping:
+            return labels
+
+        suppressed: Set[str] = set()
+        diagonal_specs = [
+            ("up_left", state.up and state.left, ("up", "left")),
+            ("up_right", state.up and state.right, ("up", "right")),
+            ("down_left", state.down and state.left, ("down", "left")),
+            ("down_right", state.down and state.right, ("down", "right")),
+        ]
+        for label, condition, components in diagonal_specs:
+            if condition and mapping.get(label):
+                labels.append(label)
+                suppressed.update(components)
+
+        cardinal_specs = [
+            ("up", state.up),
+            ("down", state.down),
+            ("left", state.left),
+            ("right", state.right),
+        ]
+        for label, condition in cardinal_specs:
+            if condition and label not in suppressed and mapping.get(label):
+                labels.append(label)
+
+        if getattr(state, "switch", False) and mapping.get("switch"):
+            labels.append("switch")
+
+        return labels
 
 
 __all__ = [

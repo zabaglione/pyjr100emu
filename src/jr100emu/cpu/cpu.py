@@ -326,9 +326,10 @@ class MB8861(CPU):
 
             if self.status.fetch_wai:
                 handled_interrupt = self._service_pending_interrupts(in_wai=True)
+                # Java 実装では割り込みを受け付けた場合でも WAI ループの最後で 1 クロック消費する。
+                self._increment_clock(1)
                 if handled_interrupt:
                     continue
-                self._increment_clock(1)
                 continue
 
             if self._service_pending_interrupts(in_wai=False):

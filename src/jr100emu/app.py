@@ -76,58 +76,6 @@ KEY_MATRIX_MAP: Dict[int, Tuple[int, int]] = {
     46: (8, 0),  # '.'
 }
 
-KEY_LABELS: Dict[int, str] = {
-    ord("a"): "A",
-    ord("b"): "B",
-    ord("c"): "C",
-    ord("d"): "D",
-    ord("e"): "E",
-    ord("f"): "F",
-    ord("g"): "G",
-    ord("h"): "H",
-    ord("i"): "I",
-    ord("j"): "J",
-    ord("k"): "K",
-    ord("l"): "L",
-    ord("m"): "M",
-    ord("n"): "N",
-    ord("o"): "O",
-    ord("p"): "P",
-    ord("q"): "Q",
-    ord("r"): "R",
-    ord("s"): "S",
-    ord("t"): "T",
-    ord("u"): "U",
-    ord("v"): "V",
-    ord("w"): "W",
-    ord("x"): "X",
-    ord("y"): "Y",
-    ord("z"): "Z",
-    ord("1"): "1",
-    ord("2"): "2",
-    ord("3"): "3",
-    ord("4"): "4",
-    ord("5"): "5",
-    ord("6"): "6",
-    ord("7"): "7",
-    ord("8"): "8",
-    ord("9"): "9",
-    ord("0"): "0",
-    59: ";",
-    58: ":",
-    42: "*",
-    43: "+",
-    45: "-",
-    44: ",",
-    46: ".",
-    32: "SPACE",
-    13: "ENTER",
-    1073742049: "SHIFT",
-    1073742053: "SHIFT",
-    1073742048: "CTRL",
-    1073742052: "CTRL",
-}
-
 STEP_CYCLES = 256
 SNAPSHOT_DIR = Path("snapshots")
 SNAPSHOT_SLOTS = ["slot0", "slot1", "slot2", "slot3"]
@@ -208,10 +156,16 @@ def _pygame_loop(
     joystick_config_path: str | None = None,
     joystick_index: int | None = None,
     joystick_name: str | None = None,
+    joystick_keymap_path: str | None = None,
 ) -> None:
     import pygame  # type: ignore
 
     computer = JR100Computer(rom_path=rom_path, enable_audio=enable_audio)
+    if joystick_keymap_path:
+        try:
+            computer.load_joystick_keymap(joystick_keymap_path)
+        except Exception as exc:
+            print(f"ジョイスティックキーマップの読み込みに失敗しました: {exc}")
     base_caption, program_info = _load_program_for_demo(computer, program_path)
     if program_info is not None and program_info.comment:
         print(f"Loaded program: {program_info.name} -- {program_info.comment}")
@@ -483,22 +437,31 @@ def _pygame_loop(
             clock.tick(fps)
             continue
 
-        pressed_state = pygame.key.get_pressed()
-        mods = pygame.key.get_mods()
-        pressed_keys: List[str] = []
-        for key_code, label in KEY_LABELS.items():
-            if key_code in (1073742049, 1073742053):
-                if mods & pygame.KMOD_SHIFT and label not in pressed_keys:
-                    pressed_keys.append(label)
-                continue
-            if key_code in (1073742048, 1073742052):
-                if mods & pygame.KMOD_CTRL and label not in pressed_keys:
-                    pressed_keys.append(label)
-                continue
-            if key_code < len(pressed_state) and pressed_state[key_code]:
-                pressed_keys.append(label)
-        keys_summary = " ".join(pressed_keys) if pressed_keys else "-"
-        pygame.display.set_caption(f"{base_caption} | Keys: {keys_summary}")
+        joy_caption = "off"
+        joy_raw = None
+        gamepad = getattr(computer, "gamepad", None)
+        ext_port = getattr(computer, "ext_port", None)
+        if gamepad is not None:
+            state = gamepad.current_state()
+            active: List[str] = []
+            if state.left:
+                active.append("L")
+            if state.right:
+                active.append("R")
+            if state.up:
+                active.append("U")
+            if state.down:
+                active.append("D")
+            if state.switch:
+                active.append("S")
+            joy_caption = "".join(active) if active else "-"
+        if ext_port is not None and hasattr(ext_port, "get_gamepad_status"):
+            joy_raw = ext_port.get_gamepad_status()
+
+        caption = f"{base_caption} | Joy: {joy_caption}"
+        if joy_raw is not None:
+            caption += f" ({joy_raw:02X})"
+        pygame.display.set_caption(caption)
 
         cycles_per_frame = max(int(computer.get_clock_frequency() / fps), 1000)
         executed = 0
@@ -810,6 +773,12 @@ def main(argv: Iterable[str] | None = None) -> None:
         default=None,
         help="Select joysticks whose OS name contains the given substring",
     )
+    parser.add_argument(
+        "--joystick-keymap",
+        type=str,
+        default=None,
+        help="Path to JSON file mapping joystick directions to JR-100 keyboard matrix keys",
+    )
     args = parser.parse_args(list(argv) if argv is not None else None)
 
     if args.write_joystick_template:
@@ -836,6 +805,7 @@ def main(argv: Iterable[str] | None = None) -> None:
             joystick_config_path=args.joystick_config,
             joystick_index=args.joystick_index,
             joystick_name=args.joystick_name,
+            joystick_keymap_path=args.joystick_keymap,
         )
     except RuntimeError as exc:
         raise SystemExit(str(exc))
