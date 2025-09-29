@@ -256,6 +256,7 @@ def _pygame_loop(
     else:
         enable_joystick = False
 
+    trace_pc_vram = os.getenv("JR100EMU_TRACE_PC_VRAM") is not None
     running = True
     debug_mode = False
     snapshot_slot = DEFAULT_SLOT
@@ -507,7 +508,34 @@ def _pygame_loop(
             computer.tick(step)
             executed += step
             if computer.cpu_core is not None:
-                overlay.record_execution(computer.cpu_core.registers.program_counter)
+                pc_value = computer.cpu_core.registers.program_counter
+                overlay.record_execution(pc_value)
+                if trace_pc_vram:
+                    if pc_value >= 0xC000:
+                        status = computer.cpu_core.status
+                        via = getattr(computer, "via", None)
+                        if via is not None:
+                            ifr = getattr(via, "_state").IFR
+                            ier = getattr(via, "_state").IER
+                        else:
+                            ifr = ier = -1
+                        print(
+                            f"TRACE-PC pc={pc_value:04X} wai={int(status.fetch_wai)} "
+                            f"irq_req={int(status.irq_requested)} IF R={ifr:02X} IER={ier:02X} "
+                            f"clock={computer.clock_count}",
+                            flush=True,
+                        )
+                    else:
+                        via = getattr(computer, "via", None)
+                        if via is not None:
+                            state = getattr(via, "_state")
+                            if state.IER == 0 and state.IFR != 0:
+                                status = computer.cpu_core.status
+                                print(
+                                    f"TRACE-IFR pc={pc_value:04X} wai={int(status.fetch_wai)} "
+                                    f"IFR={state.IFR:02X} clock={computer.clock_count}",
+                                    flush=True,
+                                )
         overlay.capture_state()
 
         pygame.display.flip()

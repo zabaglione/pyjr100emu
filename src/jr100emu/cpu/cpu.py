@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
+import os
 from typing import Dict, Optional, Tuple, Callable
 
 
@@ -272,6 +273,8 @@ class MB8861(CPU):
     OP_TMM_IND = 0x7B
 
     STATE_PREFIX = "MB8861."
+    TRACE_WAI_ENV = "JR100EMU_TRACE_CPU_WAI"
+    TRACE_WAI = os.getenv(TRACE_WAI_ENV) is not None
 
     def __init__(self, computer: object) -> None:
         super().__init__(computer)
@@ -377,6 +380,11 @@ class MB8861(CPU):
             self._push_all_registers()
             self.registers.program_counter = self._load16(self.VECTOR_NMI)
             self._increment_clock(12)
+            if self.TRACE_WAI and in_wai:
+                print(
+                    f"TRACE-WAI exit via NMI pc={self.registers.program_counter:04X}",
+                    flush=True,
+                )
             return True
 
         if self.status.irq_requested and not self.flags.carry_i:
@@ -386,7 +394,27 @@ class MB8861(CPU):
             self._push_all_registers()
             self.registers.program_counter = self._load16(self.VECTOR_IRQ)
             self._increment_clock(12)
+            if self.TRACE_WAI and in_wai:
+                via = getattr(self.computer, "via", None)
+                via_state = getattr(via, "_state", None) if via is not None else None
+                if via_state is not None:
+                    print(
+                        f"TRACE-WAI exit via IRQ pc={self.registers.program_counter:04X} "
+                        f"IFR={via_state.IFR:02X} IER={via_state.IER:02X}",
+                        flush=True,
+                    )
             return True
+
+        if in_wai and self.status.fetch_wai and self.TRACE_WAI:
+            via = getattr(self.computer, "via", None)
+            via_state = getattr(via, "_state", None) if via is not None else None
+            if via_state is not None:
+                print(
+                    f"TRACE-WAI idle pc={self.registers.program_counter:04X} "
+                    f"IFR={via_state.IFR:02X} IER={via_state.IER:02X} "
+                    f"I-flag={int(self.flags.carry_i)}",
+                    flush=True,
+                )
 
         return False
 
@@ -547,6 +575,14 @@ class MB8861(CPU):
 
     def _wai(self) -> None:
         self.status.fetch_wai = True
+        if self.TRACE_WAI:
+            sp = self.registers.stack_pointer & 0xFFFF
+            print(
+                f"TRACE-WAI enter pc={self.registers.program_counter:04X} "
+                f"sp={sp:04X} A={self.registers.acc_a:02X} B={self.registers.acc_b:02X} "
+                f"IX={self.registers.index:04X}",
+                flush=True,
+            )
 
     def _init_opcode_table(self) -> None:
         self._opcode_table.clear()

@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
+import os
 from typing import Optional
 
 
@@ -85,6 +86,9 @@ class R6522:
     VIA_REG_IER = 0x0E
     VIA_REG_IORANH = 0x0F
 
+    TRACE_IFR_ENV = "JR100EMU_TRACE_VIA_IFR"
+    TRACE_IFR = os.getenv(TRACE_IFR_ENV) is not None
+
     IFR_BIT_CA2 = 0x01
     IFR_BIT_CA1 = 0x02
     IFR_BIT_SR = 0x04
@@ -136,21 +140,43 @@ class R6522:
     def process_irq(self) -> None:
         if (self._state.IER & self._state.IFR & 0x7F) != 0:
             if (self._state.IFR & self.IFR_BIT_IRQ) == 0:
+                if self.TRACE_IFR:
+                    print(
+                        f"TRACE-IFR irq-assert IFR={self._state.IFR:02X} IER={self._state.IER:02X}",
+                        flush=True,
+                    )
                 self._state.IFR |= self.IFR_BIT_IRQ
                 self.handler_irq(1)
         else:
             if (self._state.IFR & self.IFR_BIT_IRQ) != 0:
+                if self.TRACE_IFR:
+                    print(
+                        f"TRACE-IFR irq-clear IFR={self._state.IFR:02X} IER={self._state.IER:02X}",
+                        flush=True,
+                    )
                 self._state.IFR &= ~self.IFR_BIT_IRQ
                 self.handler_irq(0)
 
     def set_interrupt(self, value: int) -> None:
         if (self._state.IFR & value) == 0:
             self._state.IFR |= value
+            if self.TRACE_IFR:
+                print(
+                    f"TRACE-IFR set bits={value:02X} -> IFR={self._state.IFR:02X} "
+                    f"IER={self._state.IER:02X}",
+                    flush=True,
+                )
             self.process_irq()
 
     def clear_interrupt(self, value: int) -> None:
         if (self._state.IFR & value) != 0:
             self._state.IFR &= ~value
+            if self.TRACE_IFR:
+                print(
+                    f"TRACE-IFR clear bits={value:02X} -> IFR={self._state.IFR:02X} "
+                    f"IER={self._state.IER:02X}",
+                    flush=True,
+                )
             self.process_irq()
 
     def is_set_in_interrupts(self, value: int) -> bool:
