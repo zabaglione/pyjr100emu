@@ -25,6 +25,7 @@ def run_program(
     events: Sequence[KeyEvent] | None = None,
     step_cycles: int = 512,
     rom_path: str = "datas/jr100rom.prg",
+    warmup_cycles: int = 0,
 ) -> tuple[JR100Computer, List[int]]:
     """Execute a JR-100 program headlessly and capture PC history."""
 
@@ -35,6 +36,10 @@ def run_program(
     keyboard = computer.hardware.keyboard
     scheduled = sorted(events or [], key=lambda evt: evt.clock)
     index = 0
+
+    if warmup_cycles:
+        while computer.clock_count < warmup_cycles:
+            computer.tick(step_cycles)
 
     target_clock = computer.clock_count + total_cycles
     while computer.clock_count < target_clock:
@@ -50,4 +55,3 @@ def run_program(
         pc_history.append(computer.cpu_core.registers.program_counter)
 
     return computer, pc_history
-
