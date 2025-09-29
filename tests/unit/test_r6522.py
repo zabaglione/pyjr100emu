@@ -93,18 +93,6 @@ def test_timer2_pulse_count_requires_pb6_edges() -> None:
     assert via._state.IFR & R6522.IFR_BIT_T2
 
 
-def test_ier_set_clear_semantics() -> None:
-    via, computer = make_via()
-
-    base = via.get_start_address()
-    # Enable bits using set semantic
-    via.store8(base + R6522.VIA_REG_IER, 0x80 | R6522.IFR_BIT_T1)
-    assert via._state.IER & R6522.IFR_BIT_T1
-    # Clear bits using clear semantic
-    via.store8(base + R6522.VIA_REG_IER, R6522.IFR_BIT_T1)
-    assert (via._state.IER & R6522.IFR_BIT_T1) == 0
-
-
 def test_jr100_font_switch_tracks_portb5() -> None:
     via, computer, display, _, _ = make_jr100_via()
     base = via.get_start_address()

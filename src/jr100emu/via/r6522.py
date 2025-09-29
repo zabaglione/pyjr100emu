@@ -490,11 +490,7 @@ class R6522:
             self.clear_interrupt(value)
             self.store_ifr_option()
         elif offset == self.VIA_REG_IER:
-            if value & 0x80:
-                self._state.IER |= value & 0x7F
-            else:
-                self._state.IER &= ~(value & 0x7F)
-            self.process_irq()
+            self._state.IER = value
             self.store_ier_option()
         elif offset == self.VIA_REG_IORANH:
             self._state.ORA = value

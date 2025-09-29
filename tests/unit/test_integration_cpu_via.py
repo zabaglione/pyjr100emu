@@ -35,7 +35,7 @@ def test_timer1_irq_asserts_cpu_line() -> None:
 
     base = via.get_start_address()
     # Enable timer1 interrupt and configure continuous square wave
-    memory.store8(base + R6522.VIA_REG_IER, 0x80 | R6522.IFR_BIT_T1)
+    memory.store8(base + R6522.VIA_REG_IER, R6522.IFR_BIT_T1)
     memory.store8(base + R6522.VIA_REG_ACR, 0xC0)
     memory.store8(base + R6522.VIA_REG_T1CL, 0x02)
     memory.store8(base + R6522.VIA_REG_T1CH, 0x00)
