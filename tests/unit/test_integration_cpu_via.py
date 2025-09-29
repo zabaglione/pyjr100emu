@@ -19,13 +19,13 @@ def test_memory_access_reaches_via_registers() -> None:
     computer.hardware.keyboard.press(1, 0)
     memory.store8(base + R6522.VIA_REG_IORA, 0x01)
     value = memory.load8(base + R6522.VIA_REG_IORB)
-    assert (value & 0x01) == 1
+    assert (value & 0x01) == 0
 
     # Release key and confirm matrix returns high
     computer.hardware.keyboard.release(1, 0)
     memory.store8(base + R6522.VIA_REG_IORA, 0x01)
     value = memory.load8(base + R6522.VIA_REG_IORB)
-    assert (value & 0x01) == 0
+    assert (value & 0x01) == 1
 
 
 def test_timer1_irq_asserts_cpu_line() -> None:

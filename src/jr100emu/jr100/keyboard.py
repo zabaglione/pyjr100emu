@@ -10,14 +10,14 @@ ROW_MASK = 0x1F
 
 
 def _default_matrix() -> List[int]:
-    """Return the idle keyboard matrix (all keys released)."""
+    """Return the idle keyboard matrix (no key pressed)."""
 
-    return [ROW_MASK] * KEY_MATRIX_ROWS
+    return [0x00] * KEY_MATRIX_ROWS
 
 
 @dataclass
 class JR100Keyboard:
-    """JR-100 の 9×5 キーマトリクスをアクティブローで表現する。"""
+    """JR-100 の 9×5 キーマトリクスを保持する。"""
 
     _matrix: List[int] = field(default_factory=_default_matrix)
 
@@ -34,14 +34,13 @@ class JR100Keyboard:
         if not (0 <= row < KEY_MATRIX_ROWS and 0 <= bit < 5):
             raise ValueError("row/bit out of range")
         mask = 1 << bit
-        self._matrix[row] &= ~mask & ROW_MASK
+        self._matrix[row] = (self._matrix[row] | mask) & ROW_MASK
 
     def release(self, row: int, bit: int) -> None:
         if not (0 <= row < KEY_MATRIX_ROWS and 0 <= bit < 5):
             raise ValueError("row/bit out of range")
-        mask = 1 << bit
-        self._matrix[row] |= mask
-        self._matrix[row] &= ROW_MASK
+        mask = ~(1 << bit)
+        self._matrix[row] = (self._matrix[row] & mask) & ROW_MASK
 
     def clear(self) -> None:
         self._matrix = _default_matrix()
