@@ -1189,7 +1189,8 @@ class MB8861(CPU):
     def _opcode_orab_ext(self) -> None:
         address = self._fetch_operand16()
         value = self._load8(address)
-        self.registers.acc_b = self._ora(self.registers.acc_b, value)
+        # Java MB8861.java uses add(B, value) for OP_ORAB_EXT; mirror that behaviour faithfully.
+        self.registers.acc_b = self._add8(self.registers.acc_b, value)
 
     def _opcode_psha(self) -> None:
         self._push8(self.registers.acc_a)
@@ -1665,7 +1666,8 @@ class MB8861(CPU):
     def _opcode_jmp_ind(self) -> None:
         offset = self._fetch_operand8()
         address = self._calc_indexed_address(offset)
-        self.registers.program_counter = self._load16(address)
+        # Java MB8861.java sets PC = IX + offset directly for indexed JMP.
+        self.registers.program_counter = address
 
     def _opcode_jmp_ext(self) -> None:
         address = self._fetch_operand16()
@@ -1676,7 +1678,8 @@ class MB8861(CPU):
         address = self._calc_indexed_address(offset)
         self.registers.stack_pointer = (self.registers.stack_pointer - 2) & 0xFFFF
         self._store16((self.registers.stack_pointer + 1) & 0xFFFF, self.registers.program_counter)
-        self.registers.program_counter = self._load16(address)
+        # Java MB8861.java jumps to the computed IX+offset without fetching an indirect target.
+        self.registers.program_counter = address
 
     def _opcode_jsr_ext(self) -> None:
         address = self._fetch_operand16()
