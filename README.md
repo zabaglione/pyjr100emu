@@ -1,6 +1,6 @@
 # JR-100 Emulator (Python Edition)
 
-Python で動作する JR-100 エミュレーターです。Java 版をもとに実機挙動を再現し、Pygame を利用したデモアプリを同梱しています。ROM/BASIC/PROG を読み込んで実行でき、ゲームパッド対応やデバッグオーバーレイなども備えています。
+Python で動作する JR-100 エミュレーターです。[Java 版 JR-100 Emulator v2](https://github.com/kemusiro/jr100-emulator-v2) をベースに、実機挙動を忠実に移植しました。Pygame を利用したデモアプリを同梱し、ROM/BASIC/PROG の実行やゲームパッド対応、デバッグオーバーレイなどを備えています。
 
 ## すぐに試す
 
@@ -53,3 +53,8 @@ Java 版から Python 版へ移植した際の注意点や CPU/VIA の差分調�
 ## ライセンス
 
 このプロジェクトは [MIT License](LICENSE) のもとで公開されています。
+
+## 謝辞
+
+- Java 版 JR-100 Emulator v2 を公開し詳細な実装を提供してくださった Kenichi Miyata 氏をはじめとする関係者の皆さま。
+- Python 版移植に協力いただいたコミュニティの皆さま。
