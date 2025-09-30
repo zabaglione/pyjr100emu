@@ -10,6 +10,7 @@ from pathlib import Path
 import time
 from typing import Dict, Iterable, List, Optional, Tuple
 
+from jr100emu.basic_loader import BasicLoader
 from jr100emu.jr100.computer import JR100Computer
 from jr100emu.jr100.display import JR100Display
 from jr100emu.jr100.keyboard import JR100Keyboard
