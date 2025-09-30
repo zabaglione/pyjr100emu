@@ -5,7 +5,7 @@ from __future__ import annotations
 from dataclasses import dataclass, field
 import math
 from array import array
-from typing import List, Optional, Tuple
+from typing import Dict, List, Optional, Tuple
 
 
 @dataclass
@@ -28,11 +28,10 @@ class JR100SoundProcessor:
         self._delta: float = 0.0
         self._phase: float = 0.0
         self._status: int = 0
-        self._chunk_samples = 2048
-        self._needs_refresh = False
-        self._live_sounds: List[object] = []
+        self._sounds: Dict[Tuple[int, int], object] = {}
+        self._current_rank = 0
         self._amplitude = self._calculate_amplitude(self.volume)
-        self._channel_volume = 1.0 if self.volume > 0 else 0.0
+        self._channel_volume = self._calculate_channel_volume(self.volume)
 
     # ------------------------------------------------------------------
     # VIA callbacks
@@ -41,28 +40,18 @@ class JR100SoundProcessor:
     def set_frequency(self, timestamp: float, frequency: float) -> None:
         self.history.append(("set_frequency", (timestamp, frequency)))
         self._current_frequency = frequency
-        rank = self._rank_for_frequency(frequency)
-        if frequency > 0.0:
-            self._delta = (self._table_length * frequency) / float(self.sample_rate)
-        else:
-            self._delta = 0.0
-        self._current_table = self._tables[rank]
-        self._needs_refresh = True
+        self._current_rank = self._rank_for_frequency(frequency)
+        self._update_playback()
 
     def set_line_on(self) -> None:
         self.history.append(("set_line_on", tuple()))
         self._status = 1
-        self._needs_refresh = True
+        self._start_playback()
 
     def set_line_off(self) -> None:
         self.history.append(("set_line_off", tuple()))
         self._status = 0
-        self._needs_refresh = False
-        if self._channel is not None:
-            try:
-                self._channel.stop()
-            except Exception:
-                pass
+        self._stop_playback()
 
     # ------------------------------------------------------------------
     # Audio control helpers
@@ -114,108 +103,75 @@ class JR100SoundProcessor:
             tables.append(table)
         return tables
 
-    def pump(self) -> None:
-        if not self.enable_audio:
-            return
-        if not self._ensure_mixer():
-            return
-        if self._channel is None:
-            return
+    def _sound_for_frequency(self, frequency: float) -> Optional[object]:
+        if not self.enable_audio or frequency <= 0.0:
+            return None
         try:
             import pygame  # type: ignore
         except Exception:
-            return
-
-        channel = self._channel
-        busy = channel.get_busy()
-        queued = None
-        if hasattr(channel, "get_queue"):
-            try:
-                queued = channel.get_queue()
-            except Exception:
-                queued = None
-
-        if self._needs_refresh:
-            if self._status == 0:
-                self._needs_refresh = False
-                self._trim_live_sounds()
-                return
-            chunk = self._render_chunk()
-            if chunk is None:
-                return
-            sound = pygame.mixer.Sound(buffer=chunk)
-            self._retain_sound(sound)
-            try:
-                channel.play(sound)
-            except Exception:
-                return
-            channel.set_volume(self._channel_volume if self._status else 0.0)
-            self._needs_refresh = False
-            return
-
-        if not busy:
-            if self._status == 0:
-                self._trim_live_sounds()
-                return
-            chunk = self._render_chunk()
-            if chunk is None:
-                return
-            sound = pygame.mixer.Sound(buffer=chunk)
-            self._retain_sound(sound)
-            try:
-                channel.play(sound)
-            except Exception:
-                return
-            channel.set_volume(self._channel_volume if self._status else 0.0)
-            return
-
-        if queued in (None, False) and self._status != 0:
-            chunk = self._render_chunk()
-            if chunk is None:
-                return
-            sound = pygame.mixer.Sound(buffer=chunk)
-            self._retain_sound(sound)
-            try:
-                channel.queue(sound)
-            except Exception:
-                return
-        self._trim_live_sounds()
-
-    def _render_chunk(self) -> Optional[array]:
-        table = self._current_table
-        delta = self._delta
-        phase = self._phase
-        status = self._status
-
-        table_len = self._table_length
-        if table_len <= 0:
             return None
 
+        period_samples = max(int(self.sample_rate / frequency), 8)
+        cache_key = (self._current_rank, period_samples)
+        if cache_key in self._sounds:
+            return self._sounds[cache_key]
+
         amplitude = int(self._amplitude * ((1 << 15) - 1))
-        gain = amplitude if status else 0
+        table = self._tables[self._current_rank]
+        buffer = array("h")
+        for index in range(period_samples):
+            phase = (index / period_samples) * self._table_length
+            table_index = int(phase) % self._table_length
+            sample = int(table[table_index] * amplitude)
+            buffer.append(sample)
 
-        buffer = array("h", [0] * self._chunk_samples)
-        for index in range(self._chunk_samples):
-            table_index = int(phase)
-            if table_index >= table_len:
-                table_index %= table_len
-            sample = int(table[table_index] * gain) if gain else 0
-            buffer[index] = sample
-            phase += delta
-            if phase >= table_len:
-                phase -= table_len
+        try:
+            sound = pygame.mixer.Sound(buffer=buffer)
+        except Exception:
+            return None
+        self._sounds[cache_key] = sound
+        return sound
 
-        self._phase = phase
-        return buffer
+    def _start_playback(self) -> None:
+        if self._status == 0:
+            return
+        if not self._ensure_mixer():
+            return
+        channel = self._channel
+        if channel is None:
+            return
+        sound = self._sound_for_frequency(self._current_frequency)
+        if sound is None:
+            return
+        try:
+            channel.play(sound, loops=-1)
+            channel.set_volume(self._channel_volume)
+        except Exception:
+            pass
 
-    def _retain_sound(self, sound: object) -> None:
-        self._live_sounds.append(sound)
-        if len(self._live_sounds) > 8:
-            self._live_sounds = self._live_sounds[-8:]
+    def _update_playback(self) -> None:
+        if self._status == 0:
+            return
+        channel = self._channel
+        if channel is None or not self._audio_initialized:
+            return
+        sound = self._sound_for_frequency(self._current_frequency)
+        if sound is None:
+            return
+        try:
+            channel.play(sound, loops=-1)
+            channel.set_volume(self._channel_volume)
+        except Exception:
+            pass
 
-    def _trim_live_sounds(self) -> None:
-        if len(self._live_sounds) > 8:
-            self._live_sounds = self._live_sounds[-8:]
+    def _stop_playback(self) -> None:
+        channel = self._channel
+        if channel is None:
+            return
+        try:
+            channel.stop()
+        except Exception:
+            pass
 
     # ------------------------------------------------------------------
     # Volume helpers (mirrors Java implementation)
@@ -226,3 +182,11 @@ class JR100SoundProcessor:
         coeff = 19.36708871
         db = coeff * (math.log10(volume) - 2.0)
         return math.pow(10.0, (math.log10(2.0) / 3.0) * db) * 0.8
+
+    def _calculate_channel_volume(self, volume: int) -> float:
+        if volume <= 0:
+            return 0.0
+        if volume >= 50:
+            return 1.0
+        # scale roughly to pygame channel volume (0.0 - 1.0)
+        return min(1.0, max(0.0, volume / 30.0))

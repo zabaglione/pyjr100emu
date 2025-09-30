@@ -187,7 +187,6 @@ def _pygame_loop(
 
     keyboard = computer.hardware.keyboard
     overlay = DebugOverlay(computer)
-    sound_processor = getattr(computer.hardware, "sound_processor", None)
 
     pygame.init()
     screen = pygame.display.set_mode(
@@ -553,8 +552,6 @@ def _pygame_loop(
                                     f"IFR={state.IFR:02X} clock={computer.clock_count}",
                                     flush=True,
                                 )
-            if sound_processor is not None:
-                sound_processor.pump()
         overlay.capture_state()
 
         pygame.display.flip()
