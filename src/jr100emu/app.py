@@ -166,9 +166,16 @@ def _pygame_loop(
             computer.load_joystick_keymap(joystick_keymap_path)
         except Exception as exc:
             print(f"ジョイスティックキーマップの読み込みに失敗しました: {exc}")
-    base_caption, program_info = _load_program_for_demo(computer, program_path)
-    if program_info is not None and program_info.comment:
-        print(f"Loaded program: {program_info.name} -- {program_info.comment}")
+
+    program_info = None
+    if program_path not in (None, ""):
+        # Allow BASIC ROM to finish initialization (sign-on message etc.).
+        computer.tick(80_000)
+        base_caption, program_info = _load_program_for_demo(computer, program_path)
+        if program_info is not None and program_info.comment:
+            print(f"Loaded program: {program_info.name} -- {program_info.comment}")
+    else:
+        base_caption = "JR-100 Emulator Demo"
 
     display = computer.hardware.display
     if computer.basic_rom is not None:
