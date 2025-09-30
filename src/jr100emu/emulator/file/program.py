@@ -262,6 +262,10 @@ def _finalize_basic(memory: MemorySystem, final_data_address: int) -> None:
         final_data_address = BASIC_START_ADDRESS - 1
     for offset in range(1, 4):
         memory.store8(final_data_address + offset, BASIC_TERMINATOR)
+
+    # BASIC ワークエリアの先頭ポインタ（TXTTOP）を BASIC 開始位置に合わせる
+    memory.store8(BASIC_POINTER_BASE - 2, (BASIC_START_ADDRESS >> 8) & 0xFF)
+    memory.store8(BASIC_POINTER_BASE - 1, BASIC_START_ADDRESS & 0xFF)
     pointer = final_data_address
     for index in range(BASIC_POINTER_COUNT):
         addr = BASIC_POINTER_BASE + index * 2

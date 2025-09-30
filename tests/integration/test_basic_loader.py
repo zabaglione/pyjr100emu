@@ -23,6 +23,10 @@ def test_load_basic_text_sample(tmp_path: Path) -> None:
     rem_text = bytes(header_bytes[2:2 + 16]).decode("ascii", errors="ignore")
     assert rem_text.startswith("REM")
 
+    # BASIC ワークエリア先頭 (0x0004) が BASIC 開始番地を指していること
+    assert memory.load8(0x0004) == (0x0246 >> 8) & 0xFF
+    assert memory.load8(0x0005) == 0x0246 & 0xFF
+
     # BASIC ポインタテーブル (0x0006〜0x000D) が終端を示す値で更新されていること
     pointers = [memory.load8(0x0006 + i) & 0xFF for i in range(8)]
     assert any(value != 0x00 for value in pointers)
