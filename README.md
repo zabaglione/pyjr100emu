@@ -8,14 +8,15 @@ Python で動作する JR-100 エミュレーターです。[Java 版 JR-100 Emu
 python -m venv .venv
 source .venv/bin/activate
 pip install -r requirements.txt
-PYTHONPATH=src python -m jr100emu.app --rom datas/jr100rom.prg --program datas/STARFIRE.prg --joystick --audio
+PYTHONPATH=src python -m jr100emu.app --rom datas/jr100rom.prg --joystick --audio
 ```
+
+起動後に `F1` キーで簡易ロードメニューを開き、`datas/` 内の BASIC (`.bas`) や PROG (`.prg`) ファイルを選択します。矢印キーやジョイスティックで項目を移動し、`ENTER` もしくはジョイスティックの決定ボタンで読み込みを実行してください。読み込みが完了すると READY プロンプトから `LIST` や `RUN` を利用できるようになります。
 
 主なオプション:
 
 | オプション | 説明 |
 | --- | --- |
-| `--program` | PROG/BAS ファイルを読み込んで実行する |
 | `--joystick` | ゲームパッド入力のポーリングを有効化 |
 | `--joystick-config` | 軸/ボタンのマッピング JSON（`io/joystick.py` 準拠） |
 | `--joystick-keymap` | ゲーム内キーに紐づくキーマトリクス JSON（例: `datas/joystick_keymaps/starfire.json`） |
