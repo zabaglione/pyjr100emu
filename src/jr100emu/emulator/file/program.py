@@ -111,6 +111,8 @@ def load_basic_text(memory: MemorySystem, path: str | Path, *, encoding: str = "
             addr += 1
 
     last_data_address = addr - 1
+    if addr + 3 > end_addr_limit:
+        raise ProgramLoadError("basic program does not fit in memory")
     _finalize_basic(memory, last_data_address)
     info.add_region(BASIC_START_ADDRESS, last_data_address)
     return info
@@ -260,18 +262,21 @@ def _write_prog_block(memory: MemorySystem, start: int, data: Sequence[int]) -> 
 def _finalize_basic(memory: MemorySystem, final_data_address: int) -> None:
     if final_data_address < BASIC_START_ADDRESS - 1:
         final_data_address = BASIC_START_ADDRESS - 1
-    for offset in range(1, 4):
-        memory.store8(final_data_address + offset, BASIC_TERMINATOR)
+
+    addr_after_zero = (final_data_address + 1) & 0xFFFF
+    for offset in range(3):
+        memory.store8((addr_after_zero + offset) & 0xFFFF, BASIC_TERMINATOR)
 
     # BASIC ワークエリアの先頭ポインタ（TXTTOP）を BASIC 開始位置に合わせる
     memory.store8(BASIC_POINTER_BASE - 2, (BASIC_START_ADDRESS >> 8) & 0xFF)
     memory.store8(BASIC_POINTER_BASE - 1, BASIC_START_ADDRESS & 0xFF)
-    pointer = final_data_address
+
+    pointer = (addr_after_zero + 1) & 0xFFFF
     for index in range(BASIC_POINTER_COUNT):
         addr = BASIC_POINTER_BASE + index * 2
         memory.store8(addr, (pointer >> 8) & 0xFF)
         memory.store8(addr + 1, pointer & 0xFF)
-        pointer += 1
+        pointer = (pointer + 1) & 0xFFFF
 
 
 def _canonicalize_basic_line(line: str) -> str:
