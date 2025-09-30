@@ -267,12 +267,11 @@ def _finalize_basic(memory: MemorySystem, final_data_address: int) -> None:
     for offset in range(3):
         memory.store8((addr_after_zero + offset) & 0xFFFF, BASIC_TERMINATOR)
 
-    pointer = (addr_after_zero + 1) & 0xFFFF
+    # TXTTOP (0x0004/0x0005) points to the start of BASIC text.
+    memory.store8(BASIC_POINTER_BASE - 2, (BASIC_START_ADDRESS >> 8) & 0xFF)
+    memory.store8(BASIC_POINTER_BASE - 1, BASIC_START_ADDRESS & 0xFF)
 
-    # TXTTOP 0x0004/0x0005 should point to the first free byte after BASIC text.
-    memory.store8(BASIC_POINTER_BASE - 2, (pointer >> 8) & 0xFF)
-    memory.store8(BASIC_POINTER_BASE - 1, pointer & 0xFF)
-
+    pointer = final_data_address & 0xFFFF
     for index in range(BASIC_POINTER_COUNT):
         addr = BASIC_POINTER_BASE + index * 2
         memory.store8(addr, (pointer >> 8) & 0xFF)
