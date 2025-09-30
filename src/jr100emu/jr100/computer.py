@@ -199,10 +199,6 @@ class JR100Computer(Computer):
             info.name = file_path.stem.upper()
         info.path = file_path
         self.program_info = info
-        if self.cpu_core is not None:
-            self.cpu_core.reset()
-            # Ensure reset vector is fetched before returning.
-            self.cpu_core.execute(1)
         return info
 
     def load_joystick_keymap(self, path: str | os.PathLike[str]) -> None:
