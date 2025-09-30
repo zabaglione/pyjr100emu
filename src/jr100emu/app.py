@@ -16,6 +16,7 @@ from jr100emu.jr100.display import JR100Display
 from jr100emu.jr100.keyboard import JR100Keyboard
 from jr100emu.emulator.file import ProgramInfo, ProgramLoadError
 from jr100emu.frontend.debug_overlay import DebugOverlay
+from jr100emu.frontend.file_menu import FileMenu
 from jr100emu.frontend.snapshot_db import (
     SnapshotDatabase,
     SNAPSHOT_SLOTS,
@@ -25,6 +26,7 @@ from jr100emu.frontend.snapshot_db import (
 )
 
 # Mapping from pygame key constants to (row, bit) in the keyboard matrix.
+BASE_CAPTION = "JR-100 Emulator Demo"
 KEY_MATRIX_MAP: Dict[int, Tuple[int, int]] = {
     ord("c"): (0, 4),
     ord("x"): (0, 3),
@@ -137,7 +139,6 @@ def _handle_key_event(keyboard: JR100Keyboard, key: int, pressed: bool) -> None:
 def _pygame_loop(
     scale: int,
     fps: int,
-    program_path: str | None,
     *,
     rom_path: str | None = None,
     enable_audio: bool | None = None,
@@ -149,6 +150,11 @@ def _pygame_loop(
 ) -> None:
     import pygame  # type: ignore
 
+    def _build_base_caption(info: Optional[ProgramInfo]) -> str:
+        if info is None:
+            return BASE_CAPTION
+        return f"{BASE_CAPTION} | Program: {info.name}"
+
     computer = JR100Computer(rom_path=rom_path, enable_audio=enable_audio)
     if joystick_keymap_path:
         try:
@@ -156,23 +162,18 @@ def _pygame_loop(
         except Exception as exc:
             print(f"ジョイスティックキーマップの読み込みに失敗しました: {exc}")
 
-    base_caption = "JR-100 Emulator Demo"
     program_info: Optional[ProgramInfo] = None
+    base_caption = BASE_CAPTION
 
     loader = BasicLoader(computer)
-    if program_path not in (None, ""):
-        computer.tick(80_000)
-        loader.queue(program_path)
-        try:
-            program_info = loader.process()
-        except (ProgramLoadError, OSError) as exc:
-            raise SystemExit(f"プログラムの読み込みに失敗しました: {exc}")
-        if program_info is not None:
-            base_caption = f"{base_caption} | Program: {program_info.name}"
-            if program_info.comment:
-                print(f"Loaded program: {program_info.name} -- {program_info.comment}")
-    else:
-        computer.tick(80_000)
+
+    initial_menu_root = Path("datas")
+    if not initial_menu_root.exists():
+        initial_menu_root = Path.cwd()
+
+    file_menu = FileMenu(initial_menu_root)
+
+    computer.tick(80_000)
 
     display = computer.hardware.display
     if computer.basic_rom is not None:
@@ -231,7 +232,33 @@ def _pygame_loop(
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 running = False
-            elif event.type == pygame.KEYDOWN:
+                continue
+
+            if file_menu.active:
+                result = file_menu.handle_event(event)
+                if result:
+                    action, payload = result
+                    if action == "close":
+                        overlay.set_status("File menu closed")
+                    elif action == "load" and payload is not None:
+                        loader.queue(payload)
+                        overlay.set_status(f"Loading {payload.name}")
+                        base_caption = f"{BASE_CAPTION} | Loading..."
+                        file_menu.root = payload.parent
+                        file_menu.refresh()
+                        file_menu.close()
+                continue
+
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_F1 and not debug_mode:
+                    toggled = file_menu.toggle()
+                    if toggled:
+                        file_menu.refresh()
+                        overlay.set_status("File menu opened")
+                    else:
+                        overlay.set_status("File menu closed")
+                    continue
+
                 if event.key == pygame.K_ESCAPE:
                     debug_mode = not debug_mode
                     if debug_mode:
@@ -429,11 +456,33 @@ def _pygame_loop(
                         continue
                 else:
                     _handle_key_event(keyboard, event.key, True)
-            elif event.type == pygame.KEYUP and not debug_mode:
+            elif event.type == pygame.KEYUP and not debug_mode and not file_menu.active:
                 _handle_key_event(keyboard, event.key, False)
+
+        if loader.pending:
+            previous_info = program_info
+            try:
+                program_info = loader.process()
+            except (ProgramLoadError, OSError) as exc:
+                program_info = previous_info
+                overlay.set_status(f"Load failed: {exc}")
+                base_caption = _build_base_caption(program_info)
+            else:
+                if program_info is not None:
+                    base_caption = _build_base_caption(program_info)
+                    status = f"Loaded {program_info.name}"
+                    if program_info.comment:
+                        status = f"{status} ({program_info.comment})"
+                    overlay.set_status(status)
+                else:
+                    base_caption = _build_base_caption(program_info)
+                    overlay.set_status("Program cleared")
 
         surface = display.render_pygame_surface(scale)
         screen.blit(surface, (0, 0))
+
+        if file_menu.active:
+            file_menu.render(screen)
 
         if debug_mode:
             overlay.render(screen)
@@ -742,7 +791,6 @@ def main(argv: Iterable[str] | None = None) -> None:
     )
     parser.add_argument("--scale", type=int, default=2, help="Integer scaling factor for display (default: 2)")
     parser.add_argument("--fps", type=int, default=30, help="Target frames per second for the demo loop")
-    parser.add_argument("--program", "-p", help="Path to a PROG/BASIC file to load at startup")
     parser.add_argument(
         "--rom",
         help="Path to the JR-100 BASIC ROM (PROG format). Defaults to datas/jr100rom.prg if omitted",
@@ -798,7 +846,6 @@ def main(argv: Iterable[str] | None = None) -> None:
         _pygame_loop(
             args.scale,
             args.fps,
-            args.program,
             rom_path=args.rom,
             enable_audio=args.audio,
             enable_joystick=(

@@ -272,10 +272,6 @@ def _finalize_basic(memory: MemorySystem, final_data_address: int) -> None:
     # Update BASIC workspace pointers.
     memory.store8(BASIC_POINTER_BASE - 2, (start_address >> 8) & 0xFF)
     memory.store8(BASIC_POINTER_BASE - 1, start_address & 0xFF)
-    memory.store8(0x0022, (start_address >> 8) & 0xFF)
-    memory.store8(0x0023, start_address & 0xFF)
-    memory.store8(0x0026, (start_address >> 8) & 0xFF)
-    memory.store8(0x0027, start_address & 0xFF)
 
     pointer = (addr_after_zero + 1) & 0xFFFF
     for index in range(BASIC_POINTER_COUNT):
