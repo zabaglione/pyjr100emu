@@ -25,7 +25,7 @@ PYTHONPATH=src python -m jr100emu.app --rom datas/jr100rom.prg --joystick --audi
 
 ### ゲームパッドの設定
 
-標準では方向キーを I/J/K/L、トリガーを SPACE に割り当てています。8 方向を利用するタイトルでは `--joystick-keymap` を用いて JSON で上書きしてください。例: `datas/joystick_keymaps/starfire.json`
+標準では方向キーを I/J/K/L、トリガーを SPACE に割り当てています。8 方向を利用するタイトルでは `--joystick-keymap` を用いて JSON で上書きしてください。各値は `[row, bit]` 形式で JR-100 キーボード行列の行番号 (0〜8) とビット位置 (0〜4) を表します。行列に対応するキーは `src/jr100emu/app.py` の `KEY_MATRIX_MAP` を参照してください。例: `datas/joystick_keymaps/starfire.json`
 
 ```json
 {
