@@ -28,10 +28,10 @@ class JR100SoundProcessor:
         self._delta: float = 0.0
         self._phase: float = 0.0
         self._status: int = 0
-        self._chunk_samples = 256
+        self._chunk_samples = 2048
         self._needs_refresh = False
         self._live_sounds: List[object] = []
-        self._max_queue = 2
+        self._max_queue = 4
 
     # ------------------------------------------------------------------
     # VIA callbacks
