@@ -14,7 +14,7 @@ class JR100SoundProcessor:
 
     history: List[Tuple[str, Tuple[float, ...]]] = field(default_factory=list)
     sample_rate: int = 44100
-    volume: float = 0.3
+    volume: int = 30
     enable_audio: bool = False
 
     def __post_init__(self) -> None:
@@ -31,7 +31,8 @@ class JR100SoundProcessor:
         self._chunk_samples = 2048
         self._needs_refresh = False
         self._live_sounds: List[object] = []
-        self._max_queue = 4
+        self._amplitude = self._calculate_amplitude(self.volume)
+        self._channel_volume = 1.0 if self.volume > 0 else 0.0
 
     # ------------------------------------------------------------------
     # VIA callbacks
@@ -56,7 +57,12 @@ class JR100SoundProcessor:
     def set_line_off(self) -> None:
         self.history.append(("set_line_off", tuple()))
         self._status = 0
-        self._needs_refresh = True
+        self._needs_refresh = False
+        if self._channel is not None:
+            try:
+                self._channel.stop()
+            except Exception:
+                pass
 
     # ------------------------------------------------------------------
     # Audio control helpers
@@ -129,36 +135,51 @@ class JR100SoundProcessor:
             except Exception:
                 queued = None
 
-        queue_depth = 1 if busy else 0
-        if queued not in (None, False):
-            queue_depth += 1
-
-        if queue_depth >= self._max_queue and not self._needs_refresh:
-            self._trim_live_sounds()
-            return
-
-        chunk = self._render_chunk()
-        if chunk is None:
-            return
-        sound = pygame.mixer.Sound(buffer=chunk)
-        self._retain_sound(sound)
-        self._needs_refresh = False
-
-        target_volume = self.volume if self._status else 0.0
-
-        try:
-            if not busy:
-                channel.play(sound)
-                channel.set_volume(target_volume)
-            else:
-                channel.queue(sound)
-                channel.set_volume(target_volume)
-        except Exception:
+        if self._needs_refresh:
+            if self._status == 0:
+                self._needs_refresh = False
+                self._trim_live_sounds()
+                return
+            chunk = self._render_chunk()
+            if chunk is None:
+                return
+            sound = pygame.mixer.Sound(buffer=chunk)
+            self._retain_sound(sound)
             try:
                 channel.play(sound)
-                channel.set_volume(target_volume)
             except Exception:
                 return
+            channel.set_volume(self._channel_volume if self._status else 0.0)
+            self._needs_refresh = False
+            return
+
+        if not busy:
+            if self._status == 0:
+                self._trim_live_sounds()
+                return
+            chunk = self._render_chunk()
+            if chunk is None:
+                return
+            sound = pygame.mixer.Sound(buffer=chunk)
+            self._retain_sound(sound)
+            try:
+                channel.play(sound)
+            except Exception:
+                return
+            channel.set_volume(self._channel_volume if self._status else 0.0)
+            return
+
+        if queued in (None, False) and self._status != 0:
+            chunk = self._render_chunk()
+            if chunk is None:
+                return
+            sound = pygame.mixer.Sound(buffer=chunk)
+            self._retain_sound(sound)
+            try:
+                channel.queue(sound)
+            except Exception:
+                return
+        self._trim_live_sounds()
 
     def _render_chunk(self) -> Optional[array]:
         table = self._current_table
@@ -170,7 +191,7 @@ class JR100SoundProcessor:
         if table_len <= 0:
             return None
 
-        amplitude = int(self.volume * 32767)
+        amplitude = int(self._amplitude * ((1 << 15) - 1))
         gain = amplitude if status else 0
 
         buffer = array("h", [0] * self._chunk_samples)
@@ -195,3 +216,13 @@ class JR100SoundProcessor:
     def _trim_live_sounds(self) -> None:
         if len(self._live_sounds) > 8:
             self._live_sounds = self._live_sounds[-8:]
+
+    # ------------------------------------------------------------------
+    # Volume helpers (mirrors Java implementation)
+    # ------------------------------------------------------------------
+    def _calculate_amplitude(self, volume: int) -> float:
+        if volume <= 0:
+            return 0.0
+        coeff = 19.36708871
+        db = coeff * (math.log10(volume) - 2.0)
+        return math.pow(10.0, (math.log10(2.0) / 3.0) * db) * 0.8
