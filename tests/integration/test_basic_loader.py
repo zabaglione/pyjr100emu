@@ -27,6 +27,12 @@ def test_load_basic_text_sample(tmp_path: Path) -> None:
     txttop = (memory.load8(0x0004) << 8) | (memory.load8(0x0005) & 0xFF)
     assert txttop == 0x0246
 
+    # BASIC ワークエリア関連ポインタが更新されていること
+    txttop = (memory.load8(0x0004) << 8) | (memory.load8(0x0005) & 0xFF)
+    assert txttop == 0x0246
+    prog_ptr = (memory.load8(0x0022) << 8) | (memory.load8(0x0023) & 0xFF)
+    assert prog_ptr == 0x0246
+
     # BASIC ポインタテーブル (0x0006〜0x000D) が終端を示す値で更新されていること
     pointers = [memory.load8(0x0006 + i) & 0xFF for i in range(8)]
     assert any(value != 0x00 for value in pointers)
