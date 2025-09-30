@@ -133,18 +133,6 @@ def _handle_key_event(keyboard: JR100Keyboard, key: int, pressed: bool) -> None:
         keyboard.release(row, bit)
 
 
-def _load_program_for_demo(computer: JR100Computer, program_path: str | None) -> Tuple[str, Optional[ProgramInfo]]:
-    base_caption = "JR-100 Emulator Demo"
-    if program_path in (None, ""):
-        return base_caption, None
-    try:
-        info = computer.load_user_program(program_path)
-    except (ProgramLoadError, OSError) as exc:
-        raise SystemExit(f"プログラムの読み込みに失敗しました: {exc}")
-    caption = f"{base_caption} | Program: {info.name}"
-    return caption, info
-
-
 def _pygame_loop(
     scale: int,
     fps: int,
@@ -167,15 +155,23 @@ def _pygame_loop(
         except Exception as exc:
             print(f"ジョイスティックキーマップの読み込みに失敗しました: {exc}")
 
-    program_info = None
+    base_caption = "JR-100 Emulator Demo"
+    program_info: Optional[ProgramInfo] = None
+
+    loader = BasicLoader(computer)
     if program_path not in (None, ""):
-        # Allow BASIC ROM to finish initialization (sign-on message etc.).
         computer.tick(80_000)
-        base_caption, program_info = _load_program_for_demo(computer, program_path)
-        if program_info is not None and program_info.comment:
-            print(f"Loaded program: {program_info.name} -- {program_info.comment}")
+        loader.queue(program_path)
+        try:
+            program_info = loader.process()
+        except (ProgramLoadError, OSError) as exc:
+            raise SystemExit(f"プログラムの読み込みに失敗しました: {exc}")
+        if program_info is not None:
+            base_caption = f"{base_caption} | Program: {program_info.name}"
+            if program_info.comment:
+                print(f"Loaded program: {program_info.name} -- {program_info.comment}")
     else:
-        base_caption = "JR-100 Emulator Demo"
+        computer.tick(80_000)
 
     display = computer.hardware.display
     if computer.basic_rom is not None:

@@ -11,7 +11,6 @@ from jr100emu.emulator.file import ProgramLoadError
 from jr100emu.app import (
     SNAPSHOT_SLOTS,
     SNAPSHOT_DIR,
-    _load_program_for_demo,
     _read_snapshot_from_file,
     _restore_snapshot,
     _take_snapshot,
@@ -21,6 +20,7 @@ from jr100emu.app import (
     Snapshot,
     _make_preview_lines,
 )
+from jr100emu.basic_loader import BasicLoader
 from jr100emu.frontend import snapshot_db
 from jr100emu.frontend.snapshot_db import HistoryEntry
 
@@ -116,7 +116,7 @@ def test_load_basic_text_with_escape(tmp_path, monkeypatch) -> None:
 
     last_data_addr = second_line_addr + 2 + len(line2)
     end_pointer = (memory.load8(0x0006) << 8) | memory.load8(0x0007)
-    assert end_pointer == last_data_addr
+    assert end_pointer == last_data_addr + 2  # points just past 0xDF terminators
     assert memory.load8(end_pointer + 1) == BASIC_TERMINATOR
 
 
@@ -185,9 +185,11 @@ def test_load_program_helper_caption(tmp_path, monkeypatch) -> None:
     prog_path.write_bytes(prog_bytes)
 
     computer = JR100Computer()
-    caption, info = _load_program_for_demo(computer, str(prog_path))
-
+    loader = BasicLoader(computer)
+    loader.queue(prog_path)
+    info = loader.process()
     assert info is computer.program_info
+    caption = f"JR-100 Emulator Demo | Program: {info.name}"
     assert "CAPTION" in caption
 
 
@@ -211,12 +213,14 @@ def test_load_program_helper_error(tmp_path, monkeypatch) -> None:
     invalid_path.write_bytes(b"bad")
 
     computer = JR100Computer()
+    loader = BasicLoader(computer)
+    loader.queue(invalid_path)
     try:
-        _load_program_for_demo(computer, str(invalid_path))
-    except SystemExit as exc:
-        assert "失敗" in str(exc)
+        loader.process()
+    except ProgramLoadError:
+        pass
     else:
-        raise AssertionError("SystemExit not raised for invalid program")
+        raise AssertionError("ProgramLoadError not raised for invalid program")
 
 
 def test_snapshot_roundtrip(tmp_path, monkeypatch) -> None:
