@@ -7,9 +7,11 @@ Python で動作する JR-100 エミュレーターです。[Java 版 JR-100 Emu
 ```bash
 python -m venv .venv
 source .venv/bin/activate
-pip install -r requirements.txt
+pip install pygame
 PYTHONPATH=src python -m jr100emu.app --rom datas/jr100rom.prg --joystick --audio
 ```
+
+テストや開発ツールを併用する場合は `pip install pytest` のように必要なパッケージを追加でインストールしてください。
 
 起動後に `F1` キーで簡易ロードメニューを開き、`datas/` 内の BASIC (`.bas`) や PROG (`.prg`) ファイルを選択します。矢印キーやジョイスティックで項目を移動し、`ENTER` もしくはジョイスティックの決定ボタンで読み込みを実行してください。読み込みが完了すると READY プロンプトから `LIST` や `RUN` を利用できるようになります。
 
