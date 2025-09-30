@@ -32,6 +32,7 @@ class JR100SoundProcessor:
         self._current_rank = 0
         self._amplitude = self._calculate_amplitude(self.volume)
         self._channel_volume = self._calculate_channel_volume(self.volume)
+        self._active: bool = False
 
     # ------------------------------------------------------------------
     # VIA callbacks
@@ -41,17 +42,27 @@ class JR100SoundProcessor:
         self.history.append(("set_frequency", (timestamp, frequency)))
         self._current_frequency = frequency
         self._current_rank = self._rank_for_frequency(frequency)
-        self._update_playback()
+        if frequency > 0.0:
+            self._delta = (self._table_length * frequency) / float(self.sample_rate)
+        else:
+            self._delta = 0.0
+        self._current_table = self._tables[self._current_rank]
+        if self._active:
+            self._update_playback()
 
     def set_line_on(self) -> None:
         self.history.append(("set_line_on", tuple()))
         self._status = 1
-        self._start_playback()
+        if not self._active:
+            self._active = True
+            self._start_playback()
 
     def set_line_off(self) -> None:
         self.history.append(("set_line_off", tuple()))
         self._status = 0
-        self._stop_playback()
+        if self._active:
+            self._stop_playback()
+        self._active = False
 
     # ------------------------------------------------------------------
     # Audio control helpers
