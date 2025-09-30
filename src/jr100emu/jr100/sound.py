@@ -4,8 +4,6 @@ from __future__ import annotations
 
 from dataclasses import dataclass, field
 import math
-import threading
-import time
 from array import array
 from typing import List, Optional, Tuple
 
@@ -30,10 +28,10 @@ class JR100SoundProcessor:
         self._delta: float = 0.0
         self._phase: float = 0.0
         self._status: int = 0
-        self._thread: Optional[threading.Thread] = None
-        self._thread_stop = threading.Event()
-        self._lock = threading.Lock()
-        self._chunk_samples = 512
+        self._chunk_samples = 256
+        self._needs_refresh = False
+        self._live_sounds: List[object] = []
+        self._max_queue = 2
 
     # ------------------------------------------------------------------
     # VIA callbacks
@@ -43,25 +41,22 @@ class JR100SoundProcessor:
         self.history.append(("set_frequency", (timestamp, frequency)))
         self._current_frequency = frequency
         rank = self._rank_for_frequency(frequency)
-        delta = 0.0
         if frequency > 0.0:
-            delta = (self._table_length * frequency) / float(self.sample_rate)
-        with self._lock:
-            self._current_table = self._tables[rank]
-            self._delta = delta
+            self._delta = (self._table_length * frequency) / float(self.sample_rate)
+        else:
+            self._delta = 0.0
+        self._current_table = self._tables[rank]
+        self._needs_refresh = True
 
     def set_line_on(self) -> None:
         self.history.append(("set_line_on", tuple()))
-        if not self.enable_audio:
-            return
-        if not self._ensure_mixer():
-            return
         self._status = 1
-        self._start_thread()
+        self._needs_refresh = True
 
     def set_line_off(self) -> None:
         self.history.append(("set_line_off", tuple()))
         self._status = 0
+        self._needs_refresh = True
 
     # ------------------------------------------------------------------
     # Audio control helpers
@@ -113,80 +108,90 @@ class JR100SoundProcessor:
             tables.append(table)
         return tables
 
-    def _start_thread(self) -> None:
-        if not self._audio_initialized or self._channel is None:
+    def pump(self) -> None:
+        if not self.enable_audio:
             return
-        if self._thread is not None and self._thread.is_alive():
+        if not self._ensure_mixer():
             return
-        self._thread_stop.clear()
-        self._thread = threading.Thread(target=self._audio_loop, name="JR100Sound", daemon=True)
-        self._thread.start()
-
-    def _audio_loop(self) -> None:
+        if self._channel is None:
+            return
         try:
             import pygame  # type: ignore
         except Exception:
             return
 
-        amplitude = int(self.volume * 32767)
-        while not self._thread_stop.is_set():
-            if not self._audio_initialized or self._channel is None:
-                time.sleep(0.01)
-                continue
+        channel = self._channel
+        busy = channel.get_busy()
+        queued = None
+        if hasattr(channel, "get_queue"):
+            try:
+                queued = channel.get_queue()
+            except Exception:
+                queued = None
 
-            busy = self._channel.get_busy()
-            queued = None
-            if hasattr(self._channel, "get_queue"):
-                queued = self._channel.get_queue()
+        queue_depth = 1 if busy else 0
+        if queued not in (None, False):
+            queue_depth += 1
 
-            if not busy or queued is None:
-                chunk = self._render_chunk(amplitude)
-                if chunk is None:
-                    time.sleep(0.005)
-                    continue
-                sound = pygame.mixer.Sound(buffer=chunk)
-                try:
-                    if not busy:
-                        self._channel.play(sound)
-                    else:
-                        self._channel.queue(sound)
-                except Exception:
-                    try:
-                        self._channel.play(sound)
-                    except Exception:
-                        time.sleep(0.01)
-                        continue
+        if queue_depth >= self._max_queue and not self._needs_refresh:
+            self._trim_live_sounds()
+            return
+
+        chunk = self._render_chunk()
+        if chunk is None:
+            return
+        sound = pygame.mixer.Sound(buffer=chunk)
+        self._retain_sound(sound)
+        self._needs_refresh = False
+
+        target_volume = self.volume if self._status else 0.0
+
+        try:
+            if not busy:
+                channel.play(sound)
+                channel.set_volume(target_volume)
             else:
-                # Enough data buffered; yield briefly.
-                time.sleep(0.002)
+                channel.queue(sound)
+                channel.set_volume(target_volume)
+        except Exception:
+            try:
+                channel.play(sound)
+                channel.set_volume(target_volume)
+            except Exception:
+                return
 
-    def _render_chunk(self, amplitude: int) -> Optional[array]:
-        with self._lock:
-            table = self._current_table
-            delta = self._delta
-            phase = self._phase
-            status = self._status
+    def _render_chunk(self) -> Optional[array]:
+        table = self._current_table
+        delta = self._delta
+        phase = self._phase
+        status = self._status
 
-        buffer = array("h")
-        buffer.extend([0] * self._chunk_samples)
         table_len = self._table_length
         if table_len <= 0:
-            return buffer
+            return None
 
-        # When status is zero the ring buffer still advances phase to avoid pops.
+        amplitude = int(self.volume * 32767)
         gain = amplitude if status else 0
 
+        buffer = array("h", [0] * self._chunk_samples)
         for index in range(self._chunk_samples):
             table_index = int(phase)
             if table_index >= table_len:
                 table_index %= table_len
-            sample_value = int(table[table_index] * gain) if gain else 0
-            buffer[index] = sample_value
+            sample = int(table[table_index] * gain) if gain else 0
+            buffer[index] = sample
             phase += delta
             if phase >= table_len:
                 phase -= table_len
 
-        with self._lock:
-            self._phase = phase
-
+        self._phase = phase
         return buffer
+
+    def _retain_sound(self, sound: object) -> None:
+        self._live_sounds.append(sound)
+        if len(self._live_sounds) > 8:
+            self._live_sounds = self._live_sounds[-8:]
+
+    def _trim_live_sounds(self) -> None:
+        if len(self._live_sounds) > 8:
+            self._live_sounds = self._live_sounds[-8:]
