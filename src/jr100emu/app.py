@@ -227,11 +227,31 @@ def _pygame_loop(
     comment_buffer = slot_meta.comment if slot_meta else ""
     editing_comment = False
 
+    def _perform_reset() -> None:
+        nonlocal base_caption, comment_buffer, debug_mode, editing_comment, program_info
+        if file_menu.active:
+            file_menu.close()
+        debug_mode = False
+        editing_comment = False
+        overlay.set_comment_buffer(None)
+        keyboard.clear()
+        overlay.set_status("Resetting...")
+        computer.reset()
+        computer.tick(80_000)
+        program_info = computer.program_info
+        base_caption = _build_base_caption(program_info)
+        pygame.display.set_caption(base_caption)
+        overlay.capture_state()
+        overlay.set_status("Reset complete")
 
     while running:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 running = False
+                continue
+
+            if event.type == pygame.KEYDOWN and event.key == pygame.K_F12:
+                _perform_reset()
                 continue
 
             if file_menu.active:
