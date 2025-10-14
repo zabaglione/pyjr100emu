@@ -17,6 +17,7 @@ from jr100emu.jr100.keyboard import JR100Keyboard
 from jr100emu.emulator.file import ProgramInfo, ProgramLoadError
 from jr100emu.frontend.debug_overlay import DebugOverlay
 from jr100emu.frontend.file_menu import FileMenu
+from jr100emu.frontend.hex_viewer import HexViewer
 from jr100emu.frontend.snapshot_db import (
     SnapshotDatabase,
     SNAPSHOT_SLOTS,
@@ -187,6 +188,7 @@ def _pygame_loop(
 
     keyboard = computer.hardware.keyboard
     overlay = DebugOverlay(computer)
+    hex_viewer = HexViewer(computer)
 
     pygame.init()
     screen = pygame.display.set_mode(
@@ -231,6 +233,8 @@ def _pygame_loop(
         nonlocal base_caption, comment_buffer, debug_mode, editing_comment, program_info
         if file_menu.active:
             file_menu.close()
+        if hex_viewer.active:
+            hex_viewer.close()
         debug_mode = False
         editing_comment = False
         overlay.set_comment_buffer(None)
@@ -254,6 +258,9 @@ def _pygame_loop(
                 _perform_reset()
                 continue
 
+            if hex_viewer.active and hex_viewer.handle_event(event):
+                continue
+
             if file_menu.active:
                 result = file_menu.handle_event(event)
                 if result:
@@ -270,6 +277,13 @@ def _pygame_loop(
                 continue
 
             if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_F2:
+                    toggled = hex_viewer.toggle()
+                    if toggled:
+                        overlay.set_status("Hex viewer opened")
+                    else:
+                        overlay.set_status("Hex viewer closed")
+                    continue
                 if event.key == pygame.K_F1 and not debug_mode:
                     toggled = file_menu.toggle()
                     if toggled:
@@ -476,7 +490,12 @@ def _pygame_loop(
                         continue
                 else:
                     _handle_key_event(keyboard, event.key, True)
-            elif event.type == pygame.KEYUP and not debug_mode and not file_menu.active:
+            elif (
+                event.type == pygame.KEYUP
+                and not debug_mode
+                and not file_menu.active
+                and not hex_viewer.active
+            ):
                 _handle_key_event(keyboard, event.key, False)
 
         if loader.pending:
@@ -503,6 +522,8 @@ def _pygame_loop(
 
         if file_menu.active:
             file_menu.render(screen)
+        if hex_viewer.active:
+            hex_viewer.render(screen)
 
         if debug_mode:
             overlay.render(screen)

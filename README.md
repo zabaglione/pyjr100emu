@@ -47,6 +47,24 @@ PYTHONPATH=src python -m jr100emu.app --rom datas/jr100rom.prg --joystick --audi
 
 実行中に `ESC` キーでデバッグモードへ切り替え、CPU レジスタや VRAM プレビューを確認できます。ステップ実行 (`N`)、スナップショット保存 (`S`)、読み込み (`L`) に対応しています。
 
+### ヘッドレス実行（機械語デバッグ）
+
+迷路テストなど BASIC に戻らない機械語プログラムをコマンドラインから検証したい場合は、ヘッドレスランナーを利用できます。
+
+```bash
+PYTHONPATH=src python -m jr100emu.debug_runner \
+    --program datas/jr100dev/samples/maze/tests/build/maze_init_test.prg \
+    --start 0x0300 \
+    --break-pc 0x0300 \
+    --cycles 0 \
+    --seconds 5 \
+    --dump-range 0300:037F
+```
+
+`--break-pc` を指定しない場合は `--cycles` または `--seconds` の条件で終了します。時間制限のみで制御したい場合は `--cycles 0` を指定してください。ダンプは標準出力に 16×16 バイト形式で出力されるため、ファイルへ保存したい場合は `--dump out.txt` を併用してください。詳細な仕様は [docs/HEADLESS_DEBUG_RUNNER.md](docs/HEADLESS_DEBUG_RUNNER.md) を参照してください。
+
+スタックポインタを独自に設定したい場合は `--stack-pointer 0xXXXX` を追加してください（既定値 `0x0244` は BASIC の `USR` 呼び出し時と同等です）。
+
 ## 仕組みや移植メモ
 
 Java 版から Python 版へ移植した際の注意点や CPU/VIA の差分調査は開発者向けドキュメントにまとめています。
