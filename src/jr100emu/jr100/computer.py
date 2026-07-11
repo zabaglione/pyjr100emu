@@ -96,6 +96,7 @@ class JR100Computer(Computer):
         self.via = JR100R6522(self, self.VIA_START)
         memory.register_memory(self.via)
         self.add_device(self.via)
+        self.add_device(sound)
 
         self._running_status = self.STATUS_RUNNING
         self._start_periodic_tasks()

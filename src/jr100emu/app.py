@@ -187,6 +187,7 @@ def _pygame_loop(
         )
 
     keyboard = computer.hardware.keyboard
+    sound_processor = computer.hardware.sound_processor
     overlay = DebugOverlay(computer)
     hex_viewer = HexViewer(computer)
 
@@ -598,6 +599,7 @@ def _pygame_loop(
         pygame.display.flip()
         clock.tick(fps)
 
+    sound_processor.close()
     pygame.quit()
 
 

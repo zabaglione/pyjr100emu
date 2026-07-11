@@ -2,7 +2,6 @@
 
 from __future__ import annotations
 
-import os
 from pathlib import Path
 from typing import List, Optional, Tuple
 
@@ -11,7 +10,22 @@ class FileMenu:
     """Lightweight file picker drawn with pygame."""
 
     VISIBLE_ITEMS = 12
-    SUPPORTED_SUFFIXES = (".bas", ".BAS", ".txt", ".TXT", ".prg", ".PRG", ".prog", ".PROG")
+    TOP_MARGIN = 16
+    LEFT_MARGIN = 24
+    ENTRY_INDENT = 20
+    HEADER_GAP = 8
+    ROW_GAP = 4
+    BOTTOM_MARGIN = 8
+    SUPPORTED_SUFFIXES = (
+        ".bas",
+        ".BAS",
+        ".txt",
+        ".TXT",
+        ".prg",
+        ".PRG",
+        ".prog",
+        ".PROG",
+    )
     AXIS_REPEAT_DELAY_MS = 220
     AXIS_THRESHOLD = 0.55
 
@@ -21,6 +35,7 @@ class FileMenu:
         self.entries: List[Path] = []
         self.selected_index: int = 0
         self._scroll: int = 0
+        self._visible_items: int = self.VISIBLE_ITEMS
         self._font = None
         self._line_height = 18
         self._message: str = ""
@@ -57,13 +72,11 @@ class FileMenu:
                 children = []
             if self.root.parent != self.root:
                 entries.append(self.root.parent)
-            directories = sorted((c for c in children if c.is_dir()), key=lambda p: p.name.lower())
+            directories = sorted(
+                (c for c in children if c.is_dir()), key=lambda p: p.name.lower()
+            )
             files = sorted(
-                (
-                    c
-                    for c in children
-                    if c.is_file() and c.suffix.lower() in suffixes
-                ),
+                (c for c in children if c.is_file() and c.suffix.lower() in suffixes),
                 key=lambda p: p.name.lower(),
             )
             entries.extend(directories)
@@ -79,12 +92,7 @@ class FileMenu:
         else:
             self.selected_index = 0
 
-        if self.selected_index < self._scroll:
-            self._scroll = self.selected_index
-        elif self.selected_index >= self._scroll + self.VISIBLE_ITEMS:
-            self._scroll = max(0, self.selected_index - self.VISIBLE_ITEMS + 1)
-        else:
-            self._scroll = min(self._scroll, max(0, self.selected_index - self.VISIBLE_ITEMS + 1))
+        self._ensure_selection_visible()
 
     # ------------------------------------------------------------------
     def handle_event(self, event) -> Optional[Tuple[str, Optional[Path]]]:
@@ -105,10 +113,10 @@ class FileMenu:
                 self._move_selection(-1)
                 return None
             if event.key == pygame.K_PAGEUP:
-                self._move_selection(-(self.VISIBLE_ITEMS))
+                self._move_selection(-self._visible_items)
                 return None
             if event.key == pygame.K_PAGEDOWN:
-                self._move_selection(self.VISIBLE_ITEMS)
+                self._move_selection(self._visible_items)
                 return None
             if event.key in (pygame.K_RETURN, pygame.K_KP_ENTER):
                 return self._activate_selected()
@@ -131,9 +139,9 @@ class FileMenu:
             elif y == -1:
                 self._move_selection(1)
             elif x == -1:
-                self._move_selection(-(self.VISIBLE_ITEMS))
+                self._move_selection(-self._visible_items)
             elif x == 1:
-                self._move_selection(self.VISIBLE_ITEMS)
+                self._move_selection(self._visible_items)
             return None
 
         if event.type == pygame.JOYAXISMOTION:
@@ -146,18 +154,39 @@ class FileMenu:
                 return None
             if event.axis == 0 and abs(event.value) >= self.AXIS_THRESHOLD:
                 self._last_axis_move_ms = now
-                self._move_selection(-(self.VISIBLE_ITEMS) if event.value < 0 else self.VISIBLE_ITEMS)
+                delta = -self._visible_items if event.value < 0 else self._visible_items
+                self._move_selection(delta)
                 return None
         return None
 
     def _move_selection(self, delta: int) -> None:
         if not self.entries:
             return
-        self.selected_index = max(0, min(self.selected_index + delta, len(self.entries) - 1))
+        self.selected_index = max(
+            0, min(self.selected_index + delta, len(self.entries) - 1)
+        )
+        self._ensure_selection_visible()
+
+    def _ensure_selection_visible(self) -> None:
+        max_scroll = max(0, len(self.entries) - self._visible_items)
+        self._scroll = max(0, min(self._scroll, max_scroll))
         if self.selected_index < self._scroll:
             self._scroll = self.selected_index
-        elif self.selected_index >= self._scroll + self.VISIBLE_ITEMS:
-            self._scroll = self.selected_index - self.VISIBLE_ITEMS + 1
+        elif self.selected_index >= self._scroll + self._visible_items:
+            self._scroll = self.selected_index - self._visible_items + 1
+
+    def _fit_visible_items(self, screen_height: int, start_y: int) -> None:
+        row_height = self._line_height + self.ROW_GAP
+        available_height = screen_height - start_y - self.BOTTOM_MARGIN
+        if available_height < self._line_height:
+            capacity = 1
+        else:
+            capacity = 1 + (available_height - self._line_height) // row_height
+        self._visible_items = max(1, min(self.VISIBLE_ITEMS, capacity))
+        self._ensure_selection_visible()
+
+    def _list_start_y(self) -> int:
+        return self.TOP_MARGIN + (self._line_height + self.HEADER_GAP) * 2
 
     def _activate_selected(self) -> Optional[Tuple[str, Optional[Path]]]:
         if not self.entries:
@@ -189,24 +218,44 @@ class FileMenu:
         overlay = pygame.Surface((width, height), pygame.SRCALPHA)
         overlay.fill((0, 0, 0, 200))
 
-        title = f"Load BASIC/PROG from {self.root}" if self.entries else f"No BASIC files in {self.root}"
+        title = (
+            f"Load BASIC/PROG from {self.root}"
+            if self.entries
+            else f"No BASIC files in {self.root}"
+        )
         title_surface = self._font.render(title, True, (255, 255, 180))
-        overlay.blit(title_surface, (60, 60))
+        overlay.blit(title_surface, (self.LEFT_MARGIN, self.TOP_MARGIN))
 
-        info_surface = self._font.render("ENTER: load  R: refresh  ESC/F1: close", True, (200, 200, 200))
-        overlay.blit(info_surface, (60, 60 + self._line_height + 8))
+        info_surface = self._font.render(
+            "ENTER: load  R: refresh  ESC/F1: close", True, (200, 200, 200)
+        )
+        info_y = self.TOP_MARGIN + self._line_height + self.HEADER_GAP
+        overlay.blit(info_surface, (self.LEFT_MARGIN, info_y))
 
-        start_y = 60 + (self._line_height + 8) * 2
-        visible = self.entries[self._scroll:self._scroll + self.VISIBLE_ITEMS]
+        start_y = self._list_start_y()
+        self._fit_visible_items(height, start_y)
+        visible = self.entries[self._scroll : self._scroll + self._visible_items]
         for row, path in enumerate(visible):
             display_name = self._format_entry_name(path)
-            color = (255, 255, 0) if (self._scroll + row) == self.selected_index else (220, 220, 220)
+            color = (
+                (255, 255, 0)
+                if (self._scroll + row) == self.selected_index
+                else (220, 220, 220)
+            )
             text_surface = self._font.render(display_name, True, color)
-            overlay.blit(text_surface, (80, start_y + row * (self._line_height + 4)))
+            entry_x = self.LEFT_MARGIN + self.ENTRY_INDENT
+            entry_y = start_y + row * (self._line_height + self.ROW_GAP)
+            overlay.blit(text_surface, (entry_x, entry_y))
 
         if self._message:
             msg_surface = self._font.render(self._message, True, (173, 216, 230))
-            overlay.blit(msg_surface, (60, start_y + self.VISIBLE_ITEMS * (self._line_height + 4)))
+            message_y = start_y + self._visible_items * (
+                self._line_height + self.ROW_GAP
+            )
+            overlay.blit(
+                msg_surface,
+                (self.LEFT_MARGIN, min(message_y, height - self._line_height)),
+            )
 
         screen.blit(overlay, (0, 0))
 

@@ -11,9 +11,33 @@ pip install pygame
 PYTHONPATH=src python -m jr100emu.app --rom datas/jr100rom.prg --joystick --audio
 ```
 
+## Classic Snake
+
+最小構成の Snake を同梱しています。
+
+```bash
+PYTHONPATH=src python -m jr100emu.snake_app
+```
+
+主な操作:
+
+- 矢印キー / WASD: 移動
+- SPACE: 一時停止 / 再開
+- R: リスタート
+- ESC: 終了
+
 テストや開発ツールを併用する場合は `pip install pytest` のように必要なパッケージを追加でインストールしてください。
 
 起動後に `F1` キーで簡易ロードメニューを開き、`datas/` 内の BASIC (`.bas`) や PROG (`.prg`) ファイルを選択します。矢印キーやジョイスティックで項目を移動し、`ENTER` もしくはジョイスティックの決定ボタンで読み込みを実行してください。読み込みが完了すると READY プロンプトから `LIST` や `RUN` を利用できるようになります。
+
+### BASIC 音楽サンプル
+
+ROM BASIC の READY プロンプトで `F1` を押し、次のファイルを選択してから `RUN` を入力します。
+
+- `datas/doremi_scale.bas`: C5 から C6 までのドレミ音階
+- `datas/twinkle_star.bas`: 「きらきら星」全42音
+
+各音のタイマー値は出力停止中に設定しているため、BASIC の `POKE` 実行間隔による途中の音程変化を発生させません。
 
 主なオプション:
 

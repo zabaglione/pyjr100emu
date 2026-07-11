@@ -41,7 +41,7 @@ def test_key_enter_returns_load_action(tmp_path: Path) -> None:
     pygame = _init_pygame()
     try:
         target = tmp_path / "hello.bas"
-        target.write_text("10 PRINT \"HELLO\"\n")
+        target.write_text('10 PRINT "HELLO"\n')
 
         menu = FileMenu(tmp_path)
         menu.refresh()
@@ -112,5 +112,39 @@ def test_joystick_axis_navigation(tmp_path: Path, monkeypatch) -> None:
         event = pygame.event.Event(pygame.JOYAXISMOTION, axis=0, value=1.0)
         menu.handle_event(event)
         assert menu.selected_index >= 1
+    finally:
+        pygame.quit()
+
+
+def test_last_entry_is_visible_on_standard_display(tmp_path: Path) -> None:
+    pygame = _init_pygame()
+    try:
+        for idx in range(20):
+            (tmp_path / f"file{idx:02d}.bas").write_text(f"10 REM {idx}\n")
+
+        menu = FileMenu(tmp_path)
+        menu.open()
+        screen = pygame.Surface((512, 384))
+        menu.render(screen)
+
+        menu._move_selection(len(menu.entries))
+        screen.fill((0, 0, 0))
+        menu.render(screen)
+
+        start_y = menu._list_start_y()
+        selected_row = menu.selected_index - menu._scroll
+        selected_surface = menu._font.render(
+            menu._format_entry_name(menu.entries[menu.selected_index]),
+            True,
+            (255, 255, 0),
+        )
+        selected_bottom = (
+            start_y
+            + selected_row * (menu._line_height + menu.ROW_GAP)
+            + selected_surface.get_height()
+        )
+
+        assert menu._visible_items == menu.VISIBLE_ITEMS
+        assert selected_bottom <= screen.get_height()
     finally:
         pygame.quit()

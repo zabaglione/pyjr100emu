@@ -5,6 +5,8 @@ from __future__ import annotations
 from dataclasses import dataclass
 from typing import List, Tuple
 
+import pytest
+
 from jr100emu.via.r6522 import R6522
 from jr100emu.jr100.r6522 import JR100R6522
 from jr100emu.jr100.display import JR100Display
@@ -27,14 +29,25 @@ def make_via(start_address: int = 0xC800) -> Tuple[R6522, DummyComputer]:
     return via, computer
 
 
-def make_jr100_via() -> Tuple[JR100R6522, DummyComputer, JR100Display, JR100Keyboard, JR100SoundProcessor]:
+def make_jr100_via() -> tuple[
+    JR100R6522,
+    DummyComputer,
+    JR100Display,
+    JR100Keyboard,
+    JR100SoundProcessor,
+]:
     display = JR100Display()
     keyboard = JR100Keyboard()
     keyboard.set_key_matrix([0x00, 0x12] + [0xFF] * 14)
     sound = JR100SoundProcessor()
     memory = MemorySystem()
     memory.allocate_space(0x10000)
-    hardware = JR100Hardware(memory=memory, display=display, keyboard=keyboard, sound_processor=sound)
+    hardware = JR100Hardware(
+        memory=memory,
+        display=display,
+        keyboard=keyboard,
+        sound_processor=sound,
+    )
     computer = DummyComputer(hardware=hardware)
     via = JR100R6522(computer, 0xC800)
     return via, computer, display, keyboard, sound
@@ -116,7 +129,9 @@ def test_jr100_keyboard_matrix_updates_portb() -> None:
     assert (via.input_port_b() & 0x1F) == expected_low
 
 
-def _sound_events(sound: JR100SoundProcessor, name: str) -> List[Tuple[str, Tuple[float, ...]]]:
+def _sound_events(
+    sound: JR100SoundProcessor, name: str
+) -> List[Tuple[str, Tuple[float, ...]]]:
     return [entry for entry in sound.history if entry[0] == name]
 
 
@@ -130,9 +145,26 @@ def test_jr100_sound_frequency_cached() -> None:
 
     assert len(_sound_events(sound, "set_frequency")) == 1
     assert len(_sound_events(sound, "set_line_on")) == 1
+    frequency = _sound_events(sound, "set_frequency")[0][1][1]
+    assert frequency == pytest.approx(894_886.25 / 4.0 / 2.0)
 
     via.store8(base + R6522.VIA_REG_T1CL, 0x02)
     via.store8(base + R6522.VIA_REG_T1CH, 0x00)
 
     assert len(_sound_events(sound, "set_frequency")) == 1
     assert len(_sound_events(sound, "set_line_on")) == 2
+
+
+def test_jr100_timer_timeout_does_not_retrigger_frequency() -> None:
+    via, computer, _, _, sound = make_jr100_via()
+    base = via.get_start_address()
+
+    via.store8(base + R6522.VIA_REG_ACR, 0xC0)
+    via.store8(base + R6522.VIA_REG_T1CL, 0x20)
+    via.store8(base + R6522.VIA_REG_T1CH, 0x00)
+    initial_frequency_events = len(_sound_events(sound, "set_frequency"))
+
+    computer.clock_count += 200
+    via.execute()
+
+    assert len(_sound_events(sound, "set_frequency")) == initial_frequency_events

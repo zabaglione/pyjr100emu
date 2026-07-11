@@ -51,7 +51,9 @@ Thumbs.db
 snapshots/
 
 # Private data assets
-datas/
+datas/*
+!datas/doremi_scale.bas
+!datas/twinkle_star.bas
 
 # Reference sources (local clones only)
 reference/

@@ -325,7 +325,7 @@ def test_jsr_ext_pushes_and_jumps() -> None:
     assert cpu.memory.load16(0x01FF) == 0x0003
 
 
-def test_jmp_indirect_uses_index() -> None:
+def test_jmp_indexed_jumps_to_effective_address() -> None:
     cpu = make_cpu()
     cpu.registers.index = 0x0100
     cpu.memory.store8(0x0105, 0x56)
@@ -336,7 +336,7 @@ def test_jmp_indirect_uses_index() -> None:
 
     cpu.execute(4)
 
-    assert cpu.registers.program_counter == 0x5678
+    assert cpu.registers.program_counter == 0x0105
 
 
 def test_adx_immediate_updates_ix_and_flags() -> None:
