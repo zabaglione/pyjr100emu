@@ -9,12 +9,13 @@ from typing import List, Optional, Tuple
 class FileMenu:
     """Lightweight file picker drawn with pygame."""
 
-    VISIBLE_ITEMS = 12
+    DEFAULT_VISIBLE_ITEMS = 12
     TOP_MARGIN = 16
     LEFT_MARGIN = 24
     ENTRY_INDENT = 20
     HEADER_GAP = 8
     ROW_GAP = 4
+    FOOTER_GAP = 8
     BOTTOM_MARGIN = 8
     SUPPORTED_SUFFIXES = (
         ".bas",
@@ -35,7 +36,7 @@ class FileMenu:
         self.entries: List[Path] = []
         self.selected_index: int = 0
         self._scroll: int = 0
-        self._visible_items: int = self.VISIBLE_ITEMS
+        self._visible_items: int = self.DEFAULT_VISIBLE_ITEMS
         self._font = None
         self._line_height = 18
         self._message: str = ""
@@ -177,16 +178,28 @@ class FileMenu:
 
     def _fit_visible_items(self, screen_height: int, start_y: int) -> None:
         row_height = self._line_height + self.ROW_GAP
-        available_height = screen_height - start_y - self.BOTTOM_MARGIN
+        available_height = self._footer_y(screen_height) - self.FOOTER_GAP - start_y
         if available_height < self._line_height:
             capacity = 1
         else:
             capacity = 1 + (available_height - self._line_height) // row_height
-        self._visible_items = max(1, min(self.VISIBLE_ITEMS, capacity))
+        self._visible_items = max(1, capacity)
         self._ensure_selection_visible()
 
     def _list_start_y(self) -> int:
         return self.TOP_MARGIN + (self._line_height + self.HEADER_GAP) * 2
+
+    def _footer_y(self, screen_height: int) -> int:
+        return max(
+            self._list_start_y(),
+            screen_height - self.BOTTOM_MARGIN - self._line_height,
+        )
+
+    def _footer_text(self) -> str:
+        text = f"Directory: {self.root}"
+        if self._message:
+            text = f"{text}  [{self._message}]"
+        return text
 
     def _activate_selected(self) -> Optional[Tuple[str, Optional[Path]]]:
         if not self.entries:
@@ -196,7 +209,7 @@ class FileMenu:
         if target.is_dir():
             self.root = target
             self.refresh()
-            self._message = f"Directory: {self.root}"
+            self._message = ""
             return None
         if not target.exists():
             self._message = "Missing entry"
@@ -247,15 +260,8 @@ class FileMenu:
             entry_y = start_y + row * (self._line_height + self.ROW_GAP)
             overlay.blit(text_surface, (entry_x, entry_y))
 
-        if self._message:
-            msg_surface = self._font.render(self._message, True, (173, 216, 230))
-            message_y = start_y + self._visible_items * (
-                self._line_height + self.ROW_GAP
-            )
-            overlay.blit(
-                msg_surface,
-                (self.LEFT_MARGIN, min(message_y, height - self._line_height)),
-            )
+        footer_surface = self._font.render(self._footer_text(), True, (173, 216, 230))
+        overlay.blit(footer_surface, (self.LEFT_MARGIN, self._footer_y(height)))
 
         screen.blit(overlay, (0, 0))
 

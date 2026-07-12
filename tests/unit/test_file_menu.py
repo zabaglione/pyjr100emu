@@ -21,6 +21,16 @@ def _init_pygame():
     return pygame
 
 
+class _RecordingFont:
+    def __init__(self, pygame) -> None:
+        self._pygame = pygame
+        self.texts: list[str] = []
+
+    def render(self, text, antialias, color):
+        self.texts.append(text)
+        return self._pygame.Surface((max(1, len(text)), 20), self._pygame.SRCALPHA)
+
+
 def test_refresh_lists_supported_entries(tmp_path: Path) -> None:
     (tmp_path / "alpha.bas").write_text("10 REM TEST\n")
     (tmp_path / "beta.prg").write_bytes(b"dummy")
@@ -144,7 +154,37 @@ def test_last_entry_is_visible_on_standard_display(tmp_path: Path) -> None:
             + selected_surface.get_height()
         )
 
-        assert menu._visible_items == menu.VISIBLE_ITEMS
-        assert selected_bottom <= screen.get_height()
+        assert selected_bottom <= menu._footer_y(screen.get_height()) - menu.FOOTER_GAP
+    finally:
+        pygame.quit()
+
+
+def test_open_renders_current_directory(tmp_path: Path) -> None:
+    pygame = _init_pygame()
+    try:
+        menu = FileMenu(tmp_path)
+        menu.open()
+        font = _RecordingFont(pygame)
+        menu._font = font
+        menu._line_height = 20
+
+        menu.render(pygame.Surface((768, 576)))
+
+        assert f"Directory: {tmp_path}" in font.texts
+    finally:
+        pygame.quit()
+
+
+def test_large_display_uses_available_height(tmp_path: Path) -> None:
+    pygame = _init_pygame()
+    try:
+        for idx in range(30):
+            (tmp_path / f"file{idx:02d}.bas").write_text(f"10 REM {idx}\n")
+
+        menu = FileMenu(tmp_path)
+        menu.open()
+        menu.render(pygame.Surface((768, 576)))
+
+        assert menu._visible_items > 12
     finally:
         pygame.quit()
