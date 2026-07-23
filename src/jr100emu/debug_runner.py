@@ -7,7 +7,7 @@ import sys
 import time
 from dataclasses import dataclass
 from pathlib import Path
-from typing import Iterable, List, Sequence, Tuple
+from typing import Iterable, List, Sequence, TextIO, Tuple
 
 from jr100emu.emulator.file import ProgramLoadError
 from jr100emu.jr100.computer import JR100Computer
@@ -134,12 +134,63 @@ def _initialise_cpu_state(
     cpu.registers.program_counter = start_address & ADDRESS_MASK
 
 
+def _ccr_byte(flags) -> int:
+    """Pack CPU flags into the MB8861 CCR byte (11HINZVC)."""
+    ccr = 0xC0
+    if flags.carry_h:
+        ccr |= 0x20
+    if flags.carry_i:
+        ccr |= 0x10
+    if flags.carry_n:
+        ccr |= 0x08
+    if flags.carry_z:
+        ccr |= 0x04
+    if flags.carry_v:
+        ccr |= 0x02
+    if flags.carry_c:
+        ccr |= 0x01
+    return ccr
+
+
+def _format_trace_line(computer: JR100Computer, *, sample_index: int) -> str:
+    """Format one instruction-boundary sample (docs/TRACE_FORMAT.md v1)."""
+    cpu = computer.cpu_core
+    if cpu is None:
+        raise RuntimeError("CPU core is not available")
+    regs = cpu.registers
+    via_state = computer.via._state
+    return (
+        f"S n={sample_index}"
+        f" clk={int(computer.clock_count)}"
+        f" pc={regs.program_counter & ADDRESS_MASK:04X}"
+        f" a={regs.acc_a & 0xFF:02X}"
+        f" b={regs.acc_b & 0xFF:02X}"
+        f" ix={regs.index & ADDRESS_MASK:04X}"
+        f" sp={regs.stack_pointer & ADDRESS_MASK:04X}"
+        f" cc={_ccr_byte(cpu.flags):02X}"
+        f" ora={via_state.ORA & 0xFF:02X}"
+        f" orb={via_state.ORB & 0xFF:02X}"
+        f" ddra={via_state.DDRA & 0xFF:02X}"
+        f" ddrb={via_state.DDRB & 0xFF:02X}"
+        f" acr={via_state.ACR & 0xFF:02X}"
+        f" pcr={via_state.PCR & 0xFF:02X}"
+        f" ifr={via_state.IFR & 0xFF:02X}"
+        f" ier={via_state.IER & 0xFF:02X}"
+        f" sr={via_state.SR & 0xFF:02X}"
+        f" t1={via_state.timer1 & ADDRESS_MASK:04X}"
+        f" t1l={via_state.latch1 & ADDRESS_MASK:04X}"
+        f" t2={via_state.timer2 & ADDRESS_MASK:04X}"
+        f" t2l={via_state.latch2 & ADDRESS_MASK:04X}"
+    )
+
+
 def _execute_program(
     computer: JR100Computer,
     *,
     max_cycles: int | None,
     breakpoints: Sequence[int],
     max_seconds: float | None,
+    trace_sink: TextIO | None = None,
 ) -> Tuple[int, bool, bool, bool]:
     cpu = computer.cpu_core
     if cpu is None:
@@ -153,15 +204,22 @@ def _execute_program(
     if max_seconds is not None and max_seconds >= 0:
         deadline = time.monotonic() + max_seconds
     executed_total = 0
+    sample_index = 0
+    # Tracing samples at every instruction boundary, so it steps one tick at
+    # a time; untraced runs keep the faster chunked execution.
+    chunk = 1 if trace_sink is not None else EXECUTION_CHUNK
 
     while remaining is None or remaining > 0:
-        step = EXECUTION_CHUNK if remaining is None else min(EXECUTION_CHUNK, remaining)
+        step = chunk if remaining is None else min(chunk, remaining)
         before = computer.clock_count
         computer.tick(step)
         after = computer.clock_count
         executed = after - before
         if executed <= 0:
             executed = step
+        elif trace_sink is not None:
+            sample_index += 1
+            print(_format_trace_line(computer, sample_index=sample_index), file=trace_sink)
         executed_total += executed
         if remaining is not None:
             remaining -= executed
@@ -234,6 +292,12 @@ def _build_argument_parser() -> argparse.ArgumentParser:
         action="store_true",
         help="Skip issuing a system reset after loading the program",
     )
+    parser.add_argument(
+        "--trace",
+        type=str,
+        default=None,
+        help="Write an instruction-boundary trace to the given file ('-' for stdout)",
+    )
     return parser
 
 
@@ -281,12 +345,29 @@ def main(argv: Sequence[str] | None = None) -> int:
 
     cycle_limit = args.cycles if args.cycles > 0 else None
 
-    executed_cycles, break_hit, timeout_hit, cycle_hit = _execute_program(
-        computer,
-        max_cycles=cycle_limit,
-        breakpoints=breakpoints,
-        max_seconds=args.seconds,
-    )
+    trace_sink: TextIO | None = None
+    trace_file: TextIO | None = None
+    if args.trace is not None:
+        if args.trace == "-":
+            trace_sink = sys.stdout
+        else:
+            trace_file = Path(args.trace).open("w", encoding="utf-8")
+            trace_sink = trace_file
+        print("# jr100-trace v1", file=trace_sink)
+        print("# generator: pyjr100emu debug_runner", file=trace_sink)
+        print(f"# program: {Path(args.program).name}", file=trace_sink)
+
+    try:
+        executed_cycles, break_hit, timeout_hit, cycle_hit = _execute_program(
+            computer,
+            max_cycles=cycle_limit,
+            breakpoints=breakpoints,
+            max_seconds=args.seconds,
+            trace_sink=trace_sink,
+        )
+    finally:
+        if trace_file is not None:
+            trace_file.close()
 
     dump_target = Path(args.dump) if args.dump is not None else None
     memory = computer.memory
