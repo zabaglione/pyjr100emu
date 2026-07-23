@@ -481,3 +481,16 @@ def test_tmm_sets_flags_per_case() -> None:
     assert cpu.flags.carry_n is True
     assert cpu.flags.carry_z is False
     assert cpu.flags.carry_v is False
+
+
+def test_extension_opcode_cycle_table_matches_hardware_spec() -> None:
+    # AGENTS.md §3.1: NIM ind=0x71/8, OIM ind=0x72/8, XIM ind=0x75/8,
+    # TMM ind=0x7B/7, ADX ext=0xFC/7, ADX imm=0xEC/4
+    cpu = make_cpu()
+    table = cpu._opcode_table  # type: ignore[attr-defined]
+    assert table[MB8861.OP_ADX_IMM][1] == 4
+    assert table[MB8861.OP_ADX_EXT][1] == 7
+    assert table[MB8861.OP_NIM_IND][1] == 8
+    assert table[MB8861.OP_OIM_IND][1] == 8
+    assert table[MB8861.OP_XIM_IND][1] == 8
+    assert table[MB8861.OP_TMM_IND][1] == 7
