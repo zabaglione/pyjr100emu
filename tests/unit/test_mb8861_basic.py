@@ -346,9 +346,10 @@ def test_adx_immediate_updates_ix_and_flags() -> None:
     cpu.memory.store8(0x0001, 0x01)
     cpu.registers.program_counter = 0x0000
 
-    cpu.execute(3)
+    assert cpu.execute(4) == 0
 
     assert cpu.registers.index == 0x8000
+    assert cpu.computer.clock_count == 4
     assert cpu.flags.carry_n is True
     assert cpu.flags.carry_z is False
     assert cpu.flags.carry_v is True
@@ -362,9 +363,10 @@ def test_adx_immediate_sets_carry_and_zero() -> None:
     cpu.memory.store8(0x0001, 0x01)
     cpu.registers.program_counter = 0x0000
 
-    cpu.execute(3)
+    assert cpu.execute(4) == 0
 
     assert cpu.registers.index == 0x0000
+    assert cpu.computer.clock_count == 4
     assert cpu.flags.carry_c is True
     assert cpu.flags.carry_z is True
     assert cpu.flags.carry_n is False

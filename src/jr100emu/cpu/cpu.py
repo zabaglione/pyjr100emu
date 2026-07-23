@@ -780,7 +780,7 @@ class MB8861(CPU):
         self._register_opcode(self.OP_JMP_EXT, self._opcode_jmp_ext, 3)
         self._register_opcode(self.OP_JSR_IND, self._opcode_jsr_ind, 8)
         self._register_opcode(self.OP_JSR_EXT, self._opcode_jsr_ext, 9)
-        self._register_opcode(self.OP_ADX_IMM, self._opcode_adx_imm, 3)
+        self._register_opcode(self.OP_ADX_IMM, self._opcode_adx_imm, 4)
         self._register_opcode(self.OP_ADX_EXT, self._opcode_adx_ext, 7)
         self._register_opcode(self.OP_NIM_IND, self._opcode_nim_ind, 8)
         self._register_opcode(self.OP_OIM_IND, self._opcode_oim_ind, 8)
