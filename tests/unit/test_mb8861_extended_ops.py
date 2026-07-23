@@ -127,8 +127,20 @@ def test_memory_negate_indexed() -> None:
     program: Sequence[Instruction] = ((MB8861.OP_NEG_IND, (offset,)),)
     _run_program(cpu, memory, program)
     assert memory.load8(target) == 0xAB
-    assert cpu.flags.carry_c is False
+    assert cpu.flags.carry_c is True
     assert cpu.flags.carry_n is True
+
+
+def test_negate_zero_clears_carry() -> None:
+    cpu, memory = _make_cpu()
+    cpu.registers.acc_a = 0x00
+    cpu.flags.carry_c = True
+
+    _run_program(cpu, memory, ((MB8861.OP_NEGA_IMP, ()),))
+
+    assert cpu.registers.acc_a == 0x00
+    assert cpu.flags.carry_c is False
+    assert cpu.flags.carry_z is True
 
 
 def test_flag_control_instructions() -> None:

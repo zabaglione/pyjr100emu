@@ -9,13 +9,30 @@ from typing import Dict, Literal, Mapping, Sequence, Tuple
 
 DirectionName = Literal["left", "right", "up", "down", "switch"]
 MappingEntry = Sequence[object]
+NormalizedBindings = Tuple["DirectionMapping", ...]
 
-DEFAULT_JOYSTICK_MAPPING: Dict[DirectionName, MappingEntry] = {
-    "left": ("axis", 0, -0.5),
-    "right": ("axis", 0, 0.5),
-    "up": ("axis", 1, -0.5),
-    "down": ("axis", 1, 0.5),
-    "switch": ("button", 0, 0.5),
+DEFAULT_JOYSTICK_MAPPING: Dict[DirectionName, Tuple[MappingEntry, ...]] = {
+    "left": (
+        ("axis", 0, -0.5),
+        ("hat", (0, "x"), -1),
+        ("button", 13, 0.5),
+    ),
+    "right": (
+        ("axis", 0, 0.5),
+        ("hat", (0, "x"), 1),
+        ("button", 14, 0.5),
+    ),
+    "up": (
+        ("axis", 1, -0.5),
+        ("hat", (0, "y"), 1),
+        ("button", 11, 0.5),
+    ),
+    "down": (
+        ("axis", 1, 0.5),
+        ("hat", (0, "y"), -1),
+        ("button", 12, 0.5),
+    ),
+    "switch": (("button", 0, 0.5),),
 }
 
 
@@ -122,14 +139,29 @@ class JoystickAdapter:
         self._state = GamepadState()
 
     @staticmethod
-    def _normalize_mapping(mapping: Mapping[DirectionName, object]) -> Dict[DirectionName, DirectionMapping]:
-        normalized: Dict[DirectionName, DirectionMapping] = {}
+    def _normalize_mapping(
+        mapping: Mapping[DirectionName, object],
+    ) -> Dict[DirectionName, NormalizedBindings]:
+        normalized: Dict[DirectionName, NormalizedBindings] = {}
         for direction in ("left", "right", "up", "down", "switch"):
             entry = mapping.get(direction)
             if entry is None:
                 entry = DEFAULT_JOYSTICK_MAPPING[direction]
-            normalized[direction] = DirectionMapping.from_entry(entry)
+            normalized[direction] = JoystickAdapter._normalize_bindings(entry)
         return normalized
+
+    @staticmethod
+    def _normalize_bindings(entry: object) -> NormalizedBindings:
+        if isinstance(entry, (DirectionMapping, Mapping)):
+            return (DirectionMapping.from_entry(entry),)
+        if not isinstance(entry, (list, tuple)) or not entry:
+            raise ValueError("direction mapping requires at least one binding")
+        if isinstance(entry[0], str):
+            return (DirectionMapping.from_entry(entry),)
+        bindings = tuple(DirectionMapping.from_entry(item) for item in entry)
+        if not bindings:
+            raise ValueError("direction mapping requires at least one binding")
+        return bindings
 
     def reset(self) -> None:
         self._axes.clear()
@@ -175,17 +207,20 @@ class JoystickAdapter:
 
     def _compute_state(self) -> GamepadState:
         states: Dict[DirectionName, bool] = {"left": False, "right": False, "up": False, "down": False, "switch": False}
-        for direction, mapping in self._mapping.items():
-            if mapping.kind == "axis":
-                if self._axis_active(mapping.index, mapping.threshold):
-                    states[direction] = True
-            elif mapping.kind == "hat":
-                if self._hat_active(mapping.index, mapping.hat_axis or "x", mapping.threshold):
-                    states[direction] = True
-            elif mapping.kind == "button":
-                if self._button_active(mapping.index):
-                    states[direction] = True
+        for direction, bindings in self._mapping.items():
+            states[direction] = any(self._binding_active(binding) for binding in bindings)
         return GamepadState(**states)
+
+    def _binding_active(self, mapping: DirectionMapping) -> bool:
+        if mapping.kind == "axis":
+            return self._axis_active(mapping.index, mapping.threshold)
+        if mapping.kind == "hat":
+            return self._hat_active(
+                mapping.index,
+                mapping.hat_axis or "x",
+                mapping.threshold,
+            )
+        return self._button_active(mapping.index)
 
     def _axis_active(self, index: int, threshold: float) -> bool:
         value = self._axes.get(index, 0.0)
@@ -208,7 +243,7 @@ def load_mapping_file(
     path: str | Path,
     *,
     fallback: Mapping[DirectionName, object] | None = None,
-) -> Dict[DirectionName, DirectionMapping]:
+) -> Dict[DirectionName, NormalizedBindings]:
     fallback_mapping = fallback or DEFAULT_JOYSTICK_MAPPING
     try:
         text = Path(path).read_text(encoding="utf-8")
@@ -218,15 +253,17 @@ def load_mapping_file(
     except (OSError, ValueError, TypeError, json.JSONDecodeError):
         return JoystickAdapter._normalize_mapping(fallback_mapping)  # type: ignore[arg-type]
 
-    normalized: Dict[DirectionName, DirectionMapping] = {}
+    normalized: Dict[DirectionName, NormalizedBindings] = {}
     for direction in ("left", "right", "up", "down", "switch"):
         entry = data.get(direction)
         if entry is None:
             entry = fallback_mapping[direction]
         try:
-            normalized[direction] = DirectionMapping.from_entry(entry)
+            normalized[direction] = JoystickAdapter._normalize_bindings(entry)
         except ValueError:
-            normalized[direction] = DirectionMapping.from_entry(fallback_mapping[direction])
+            normalized[direction] = JoystickAdapter._normalize_bindings(
+                fallback_mapping[direction]
+            )
     return normalized
 
 

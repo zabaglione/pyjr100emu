@@ -818,11 +818,27 @@ def _snapshot_diff_lines(current: Snapshot, target: Snapshot) -> List[str]:
 
 def _write_joystick_template(path: Path) -> None:
     template = {
-        "left": ["axis", 0, -0.5],
-        "right": ["axis", 0, 0.5],
-        "up": ["axis", 1, -0.5],
-        "down": ["axis", 1, 0.5],
-        "switch": ["button", 0, 0.5],
+        "left": [
+            ["axis", 0, -0.5],
+            ["hat", [0, "x"], -1],
+            ["button", 13, 0.5],
+        ],
+        "right": [
+            ["axis", 0, 0.5],
+            ["hat", [0, "x"], 1],
+            ["button", 14, 0.5],
+        ],
+        "up": [
+            ["axis", 1, -0.5],
+            ["hat", [0, "y"], 1],
+            ["button", 11, 0.5],
+        ],
+        "down": [
+            ["axis", 1, 0.5],
+            ["hat", [0, "y"], -1],
+            ["button", 12, 0.5],
+        ],
+        "switch": [["button", 0, 0.5]],
     }
     path.write_text(json.dumps(template, indent=2), encoding="utf-8")
 

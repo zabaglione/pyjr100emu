@@ -17,6 +17,7 @@
 ## ゲームパッド
 
 - `GamepadDevice` は Pygame 経由のポーリング結果を ExtendedIOPort（0xCC02）へ反映。
+  - 方向ごとに左スティック、Hat、D-padボタンなど複数の入力元をOR条件で割り当て可能。
   - キーボード行列への反映は、JSONで方向ラベルと(row, bit)ペアを指定した場合のみ有効 (`--joystick-keymap`)。
   - 斜め方向は `up_left` 等が優先され、必要に応じて `up`/`left` を抑制。
 

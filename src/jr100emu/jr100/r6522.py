@@ -130,8 +130,6 @@ class JR100R6522(R6522):
     # IRQ wiring
     # ------------------------------------------------------------------
     def handler_irq(self, state: int) -> None:
-        if state != 1:
-            return
         cpu = getattr(self.computer, "cpu", None)
         if cpu is None and hasattr(self.computer, "cpu_core"):
             cpu = getattr(self.computer, "cpu_core")
@@ -139,5 +137,7 @@ class JR100R6522(R6522):
             cpu = self.computer.get_cpu()  # type: ignore[attr-defined]
         if cpu is None:
             return
-        if hasattr(cpu, "irq"):
+        if hasattr(cpu, "set_irq_line"):
+            cpu.set_irq_line(state != 0)
+        elif state != 0 and hasattr(cpu, "irq"):
             cpu.irq()

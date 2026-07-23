@@ -99,6 +99,165 @@ def test_rti_pops_state_from_stack() -> None:
     assert cpu.flags.carry_c is True
 
 
+def test_nmi_sets_interrupt_mask_after_stacking_previous_ccr() -> None:
+    cpu = make_cpu()
+    cpu.registers.program_counter = 0x2345
+    cpu.flags.carry_i = False
+    cpu.memory.store16(MB8861.VECTOR_NMI, 0x4567)
+
+    cpu.nmi()
+    cpu.execute(12)
+
+    assert cpu.registers.program_counter == 0x4567
+    assert cpu.flags.carry_i is True
+    assert cpu.memory.load8(0x01F9) & 0x10 == 0
+
+
+def test_irq_sets_interrupt_mask_after_stacking_previous_ccr() -> None:
+    cpu = make_cpu()
+    cpu.registers.program_counter = 0x2345
+    cpu.flags.carry_i = False
+    cpu.memory.store16(MB8861.VECTOR_IRQ, 0x5678)
+
+    cpu.irq()
+    cpu.execute(12)
+
+    assert cpu.registers.program_counter == 0x5678
+    assert cpu.flags.carry_i is True
+    assert cpu.memory.load8(0x01F9) & 0x10 == 0
+
+
+def test_asserted_irq_line_is_serviced_again_after_rti() -> None:
+    cpu = make_cpu()
+    cpu.registers.program_counter = 0x1000
+    cpu.flags.carry_i = False
+    cpu.memory.store8(0x1000, 0x01)
+    cpu.memory.store16(MB8861.VECTOR_IRQ, 0x2000)
+    cpu.memory.store8(0x2000, MB8861.OP_RTI_IMP)
+
+    cpu.set_irq_line(True)
+    cpu.execute(12)
+    assert cpu.registers.program_counter == 0x2000
+
+    cpu.execute(10)
+    assert cpu.registers.program_counter == 0x1000
+    assert cpu.flags.carry_i is False
+
+    cpu.execute(12)
+
+    assert cpu.registers.program_counter == 0x2000
+    assert cpu.registers.stack_pointer == 0x01F8
+
+
+def test_wai_stacks_cpu_state_before_waiting() -> None:
+    cpu = make_cpu()
+    cpu.registers.program_counter = 0x1000
+    cpu.registers.index = 0x3456
+    cpu.registers.acc_a = 0x78
+    cpu.registers.acc_b = 0x9A
+    cpu.flags.carry_h = True
+    cpu.flags.carry_i = False
+    cpu.flags.carry_z = True
+    cpu.flags.carry_c = True
+    cpu.memory.store8(0x1000, MB8861.OP_WAI_IMP)
+
+    cpu.execute(9)
+
+    assert cpu.status.fetch_wai is True
+    assert cpu.registers.program_counter == 0x1001
+    assert cpu.registers.stack_pointer == 0x01F8
+    assert cpu.flags.carry_i is False
+    assert cpu.memory.load8(0x01F9) == 0xE5
+    assert cpu.memory.load8(0x01FA) == 0x9A
+    assert cpu.memory.load8(0x01FB) == 0x78
+    assert cpu.memory.load16(0x01FC) == 0x3456
+    assert cpu.memory.load16(0x01FE) == 0x1001
+
+
+def test_irq_resumes_wai_without_restacking_in_four_cycles() -> None:
+    cpu = make_cpu()
+    cpu.registers.program_counter = 0x1000
+    cpu.flags.carry_i = False
+    cpu.memory.store8(0x1000, MB8861.OP_WAI_IMP)
+    cpu.memory.store16(MB8861.VECTOR_IRQ, 0x2000)
+
+    assert cpu.execute(9) == 0
+    assert cpu.registers.stack_pointer == 0x01F8
+
+    cpu.irq()
+    assert cpu.execute(4) == 0
+
+    assert cpu.computer.clock_count == 13
+    assert cpu.registers.program_counter == 0x2000
+    assert cpu.registers.stack_pointer == 0x01F8
+    assert cpu.flags.carry_i is True
+    assert cpu.status.fetch_wai is False
+    assert cpu.memory.load8(0x01F9) & 0x10 == 0
+
+
+def test_rti_after_wai_irq_restores_pre_wait_state() -> None:
+    cpu = make_cpu()
+    cpu.registers.program_counter = 0x1000
+    cpu.registers.index = 0x3456
+    cpu.registers.acc_a = 0x78
+    cpu.registers.acc_b = 0x9A
+    cpu.flags.carry_i = False
+    cpu.memory.store8(0x1000, MB8861.OP_WAI_IMP)
+    cpu.memory.store16(MB8861.VECTOR_IRQ, 0x2000)
+    cpu.memory.store8(0x2000, MB8861.OP_RTI_IMP)
+
+    cpu.execute(9)
+    cpu.irq()
+    cpu.execute(4)
+    cpu.execute(10)
+
+    assert cpu.registers.program_counter == 0x1001
+    assert cpu.registers.index == 0x3456
+    assert cpu.registers.acc_a == 0x78
+    assert cpu.registers.acc_b == 0x9A
+    assert cpu.registers.stack_pointer == 0x01FF
+    assert cpu.flags.carry_i is False
+
+
+def test_masked_irq_does_not_resume_wai() -> None:
+    cpu = make_cpu()
+    cpu.registers.program_counter = 0x1000
+    cpu.flags.carry_i = True
+    cpu.memory.store8(0x1000, MB8861.OP_WAI_IMP)
+    cpu.memory.store16(MB8861.VECTOR_IRQ, 0x2000)
+
+    cpu.execute(9)
+    cpu.irq()
+    cpu.execute(4)
+
+    assert cpu.computer.clock_count == 13
+    assert cpu.registers.program_counter == 0x1001
+    assert cpu.registers.stack_pointer == 0x01F8
+    assert cpu.status.fetch_wai is True
+    assert cpu.status.irq_requested is True
+
+
+def test_nmi_resumes_wai_without_restacking_in_four_cycles() -> None:
+    cpu = make_cpu()
+    cpu.registers.program_counter = 0x1000
+    cpu.flags.carry_i = True
+    cpu.memory.store8(0x1000, MB8861.OP_WAI_IMP)
+    cpu.memory.store16(MB8861.VECTOR_NMI, 0x3000)
+
+    assert cpu.execute(9) == 0
+    assert cpu.registers.stack_pointer == 0x01F8
+
+    cpu.nmi()
+    assert cpu.execute(4) == 0
+
+    assert cpu.computer.clock_count == 13
+    assert cpu.registers.program_counter == 0x3000
+    assert cpu.registers.stack_pointer == 0x01F8
+    assert cpu.flags.carry_i is True
+    assert cpu.status.fetch_wai is False
+    assert cpu.memory.load8(0x01F9) & 0x10 == 0x10
+
+
 def test_adcb_uses_existing_carry_flag() -> None:
     cpu = make_cpu()
     cpu.registers.acc_b = 0x10
@@ -170,18 +329,18 @@ def test_daa_matches_java_logic() -> None:
     assert cpu.flags.carry_c is True
 
 
-def test_orab_ext_preserves_java_bug_behavior() -> None:
+def test_orab_extended_performs_bitwise_or() -> None:
     cpu = make_cpu()
-    cpu.registers.acc_b = 0x10
+    cpu.registers.acc_b = 0x81
     cpu.memory.store8(0x0000, MB8861.OP_ORAB_EXT)
     cpu.memory.store8(0x0001, 0x12)
     cpu.memory.store8(0x0002, 0x34)
-    cpu.memory.store8(0x1234, 0x20)
+    cpu.memory.store8(0x1234, 0x80)
     cpu.registers.program_counter = 0x0000
 
     cpu.execute(4)
 
-    assert cpu.registers.acc_b == 0x30
+    assert cpu.registers.acc_b == 0x81
     assert cpu.flags.carry_c is False
 
 

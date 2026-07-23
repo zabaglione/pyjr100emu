@@ -137,25 +137,22 @@ class R6522:
     # -------------------------------------------------------------------------
     # IRQ handling
     # -------------------------------------------------------------------------
-    def process_irq(self) -> None:
-        if (self._state.IER & self._state.IFR & 0x7F) != 0:
-            if (self._state.IFR & self.IFR_BIT_IRQ) == 0:
-                if self.TRACE_IFR:
-                    print(
-                        f"TRACE-IFR irq-assert IFR={self._state.IFR:02X} IER={self._state.IER:02X}",
-                        flush=True,
-                    )
-                self._state.IFR |= self.IFR_BIT_IRQ
-                self.handler_irq(1)
+    def process_irq(self, *, force_notify: bool = False) -> None:
+        asserted = (self._state.IER & self._state.IFR & 0x7F) != 0
+        was_asserted = (self._state.IFR & self.IFR_BIT_IRQ) != 0
+        if asserted:
+            self._state.IFR |= self.IFR_BIT_IRQ
         else:
-            if (self._state.IFR & self.IFR_BIT_IRQ) != 0:
-                if self.TRACE_IFR:
-                    print(
-                        f"TRACE-IFR irq-clear IFR={self._state.IFR:02X} IER={self._state.IER:02X}",
-                        flush=True,
-                    )
-                self._state.IFR &= ~self.IFR_BIT_IRQ
-                self.handler_irq(0)
+            self._state.IFR &= ~self.IFR_BIT_IRQ
+
+        if force_notify or asserted != was_asserted:
+            if self.TRACE_IFR:
+                action = "assert" if asserted else "clear"
+                print(
+                    f"TRACE-IFR irq-{action} IFR={self._state.IFR:02X} IER={self._state.IER:02X}",
+                    flush=True,
+                )
+            self.handler_irq(1 if asserted else 0)
 
     def set_interrupt(self, value: int) -> None:
         if (self._state.IFR & value) == 0:
@@ -413,6 +410,7 @@ class R6522:
         elif offset == self.VIA_REG_T2CH:
             result = (self._state.timer2 >> 8) & 0xFF
         elif offset == self.VIA_REG_SR:
+            self.clear_interrupt(self.IFR_BIT_SR)
             mode = self._state.ACR & 0x1C
             if mode in {0x00}:
                 pass
@@ -474,6 +472,7 @@ class R6522:
         elif offset == self.VIA_REG_T1CH:
             self._state.latch1 = _mask16((self._state.latch1 & 0x00FF) | (value << 8))
             self._state.timer1 = self._state.latch1
+            self.clear_interrupt(self.IFR_BIT_T1)
             self._state.timer1_initialized = True
             self._state.timer1_enable = True
             self.set_port_b(7, 0)
@@ -495,6 +494,7 @@ class R6522:
             self._state.timer2_enable = True
             self.store_t2ch_option()
         elif offset == self.VIA_REG_SR:
+            self.clear_interrupt(self.IFR_BIT_SR)
             mode = self._state.ACR & 0x1C
             if mode in {0x04, 0x08, 0x0C}:
                 self._initialize_shift_in()
@@ -506,17 +506,24 @@ class R6522:
             self.store_sr_option()
         elif offset == self.VIA_REG_ACR:
             self._state.ACR = value
+            if (value & 0x1C) == 0:
+                self._state.shift_started = False
+                self.clear_interrupt(self.IFR_BIT_SR)
             self.store_acr_option()
         elif offset == self.VIA_REG_PCR:
             self._state.PCR = value
             self.store_pcr_option()
         elif offset == self.VIA_REG_IFR:
-            if (value & 0x80) == 0x80:
-                value = 0x7F
-            self.clear_interrupt(value)
+            self.clear_interrupt(value & 0x7F)
             self.store_ifr_option()
         elif offset == self.VIA_REG_IER:
-            self._state.IER = value
+            selected = value & 0x7F
+            if (value & 0x80) != 0:
+                self._state.IER |= selected
+            else:
+                self._state.IER &= ~selected
+            self._state.IER &= 0x7F
+            self.process_irq()
             self.store_ier_option()
         elif offset == self.VIA_REG_IORANH:
             self._state.ORA = value
@@ -673,6 +680,7 @@ class R6522:
     # -------------------------------------------------------------------------
     def reset(self) -> None:
         state = self._state
+        irq_was_asserted = (state.IFR & self.IFR_BIT_IRQ) != 0
         state.IFR = 0
         state.IER = 0
         state.PCR = 0
@@ -708,6 +716,8 @@ class R6522:
         state.timer2_enable = False
         state.timer2_low_byte_timeout = False
         state.current_clock = 0
+        if irq_was_asserted:
+            self.handler_irq(0)
 
     def execute(self) -> None:
         self._execute(self._get_clock_count())
@@ -724,3 +734,6 @@ class R6522:
             key = f"R6522.{field}"
             if key in load:
                 setattr(self._state, field, load[key])
+        self._state.IER = int(self._state.IER) & 0x7F
+        self._state.IFR = int(self._state.IFR) & 0x7F
+        self.process_irq(force_notify=True)

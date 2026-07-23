@@ -28,6 +28,15 @@
 ## ステート保存
 - `saveState(StateSet)` / `loadState(StateSet)` で全フィールドを設定
 
+## 実機仕様を優先したJava版との差分
+- `ORAB extended` (`0xFA`) は、Java版の `add(B, ...)` ではなく他のアドレシングモードと同じ論理ORを実行する。
+- `NEG` のCフラグは、演算前の値が `0x00` 以外ならセットし、`0x00`ならクリアする。Java版はこの極性が逆である。
+- NMIとIRQは、割込み前のCCRをスタックへ退避した後、現在のIフラグをセットしてから割込みベクタへ移る。Java版はIフラグをセットしない。
+- WAIは9サイクルの命令実行中にPC、IX、A、B、CCRをスタックへ退避してから待機する。WAI後のIRQ/NMI受付では再退避せず、Iフラグ設定とベクタ取得を4サイクルで行う。Java版は退避を割込み到来時まで遅延し、通常割込みと同じ12サイクルに待機ループの1サイクルを加算する。
+- IRQ入力はイベントラッチではなくレベル信号として扱う。R6522からassertとdeassertの両方を受け取り、CPUは割込み受付時に線状態を消さない。線がassertされたままRTIでIフラグがクリアされれば、次の命令より先にIRQを再受付する。
+- R6522のIERはbit 7による選択的set/clear、IFRのbit 7は読出し専用のIRQ状態として扱う。IER変更、IFR要因の解除、T1CH/SRアクセス、SRモード0、リセット、状態復元の各経路でCPUのIRQ線を同期する。Java版の直代入・解除漏れは踏襲しない。
+- 根拠はMotorola『M6800 Programming Reference Manual』の命令定義および割込みシーケンスとする。MB8861Hで追加された5命令以外のMC6800互換命令については、Java版の誤りを互換仕様として維持しない。
+
 ## 次の作業メモ
 - Python 実装では `dataclasses` でレジスタ構造体を表現
 - `MemorySystem` 相当の API を Python 側で設計し、`load8`/`store8` 等を同名メソッドで再現
@@ -45,8 +54,10 @@
 ## テスト戦略メモ
 - pytest のフィクスチャで `Computer` ダミーと `MemorySystem` モックを提供し、`load8`/`load16` などの呼び出しを検証する。
 - 割り込みハンドリングのユニットテストを優先し、`reset`/`nmi`/`irq` 呼び出し後に PC とクロックが期待通り変化することを確認する。
+- WAIのテストでは、9サイクル完了時点のスタック内容、IRQ/NMI受付後の4サイクル応答、再退避しないSP、Iフラグ、RTIによる復帰を確認する。
+- IRQ線のテストでは、解除済み要求を後から受け付けないこと、assert継続中はRTI後に再受付すること、R6522のIFR/IER・リセット・状態復元が線状態へ即時反映されることを確認する。
 - `RTI` と `RTS` のテストでは、スタックへ事前に設定した値が正しく復帰されるか、クロックが 10 / 5 加算されるかを検証する。
-- 加算/減算・論理命令のテストでは、キャリーフラグ (CC/CH)、オーバーフローフラグ (CV)、ゼロ・ネガティブ判定が Java 版ロジックと一致するかを同じ入力で確認する。
+- 加算/減算・論理命令のテストでは、キャリーフラグ (CC/CH)、オーバーフローフラグ (CV)、ゼロ・ネガティブ判定が実機仕様と一致するかを確認する。Java版と異なる場合は一次資料を優先し、差分を本書へ記録する。
 - 16 ビット命令では Direct/Indexed/Extended 各モードのリトルエンディアン読み書きと、Java 版が持つ既知のバグ (STS のフラグ参照など) まで含めて比較する。
 - 分岐命令は条件別に PC が相対オフセットで更新されるか、BSR/JSR が PC を保存してジャンプするかを pytest で確認する。
 - 命令テーブルはデータ駆動で検証し、Java 版のテストケース (存在する場合) や実行トレースを pytest に移植して再現する。
@@ -54,5 +65,7 @@
 
 ## 参考資料
 - 元リポジトリ: https://github.com/kemusiro/jr100-emulator-v2
+- [Motorola M6800 Programming Reference Manual](https://www.bitsavers.org/components/motorola/6800/Motorola_M6800_Programming_Reference_Manual_M68PRM%28D%29_Nov76.pdf)
+- [Motorola MC6800 Microcomputer System Design Data](https://www.bitsavers.org/components/motorola/6800/MC6800_Microcomputer_System_Design_Data_1976.pdf)
 - JR-100 リファレンス: ハード仕様書、ROM ダンプ (datas/ 配下、非公開)
 - テスト戦略: t-wada さんの TDD + ゆもつよメソッド

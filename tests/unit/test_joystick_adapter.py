@@ -52,6 +52,46 @@ def test_hat_mapping_support() -> None:
     assert state.down is False
 
 
+def test_default_mapping_accepts_ps4_dpad_buttons() -> None:
+    adapter = JoystickAdapter()
+
+    adapter.update_button(13, True)
+    assert adapter.current_state().left is True
+
+    adapter.update_button(13, False)
+    assert adapter.current_state().left is False
+
+    adapter.update_button(11, True)
+    assert adapter.current_state().up is True
+
+
+def test_default_mapping_accepts_hat_and_axis_for_same_direction() -> None:
+    adapter = JoystickAdapter()
+
+    adapter.update_hat(0, (1, 0))
+    assert adapter.current_state().right is True
+
+    adapter.update_hat(0, (0, 0))
+    assert adapter.current_state().right is False
+
+    adapter.update_axis(0, 0.8)
+    assert adapter.current_state().right is True
+
+
+def test_multiple_custom_bindings_are_combined() -> None:
+    adapter = JoystickAdapter(
+        {
+            "left": [
+                ["axis", 0, -0.5],
+                ["button", 7, 0.5],
+            ],
+        }
+    )
+
+    adapter.update_button(7, True)
+    assert adapter.current_state().left is True
+
+
 def test_load_mapping_file_overrides(tmp_path: Path) -> None:
     mapping_file = tmp_path / "mapping.json"
     mapping_file.write_text("{\"left\": [\"axis\", 0, -0.75]}", encoding="utf-8")

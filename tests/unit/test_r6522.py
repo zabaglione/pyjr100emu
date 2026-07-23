@@ -70,6 +70,16 @@ def test_timer1_square_wave_sets_irq_and_toggles_pb7() -> None:
     assert via.input_port_b_bit(7) != initial_pb7
 
 
+def test_writing_timer1_high_counter_clears_timer1_interrupt() -> None:
+    via, _ = make_via()
+    base = via.get_start_address()
+    via.set_interrupt(R6522.IFR_BIT_T1)
+
+    via.store8(base + R6522.VIA_REG_T1CH, 0x12)
+
+    assert via.load8(base + R6522.VIA_REG_IFR) & R6522.IFR_BIT_T1 == 0
+
+
 def test_timer2_timed_mode_raises_interrupt() -> None:
     via, computer = make_via()
 
@@ -81,6 +91,69 @@ def test_timer2_timed_mode_raises_interrupt() -> None:
     via.execute()
 
     assert via._state.IFR & R6522.IFR_BIT_T2
+
+
+def test_ier_writes_set_and_clear_only_selected_enable_bits() -> None:
+    via, _ = make_via()
+    base = via.get_start_address()
+
+    via.store8(base + R6522.VIA_REG_IER, 0x80 | R6522.IFR_BIT_T1)
+    assert via.load8(base + R6522.VIA_REG_IER) == 0x80 | R6522.IFR_BIT_T1
+
+    via.store8(base + R6522.VIA_REG_IER, 0x80 | R6522.IFR_BIT_T2)
+    assert via.load8(base + R6522.VIA_REG_IER) == (
+        0x80 | R6522.IFR_BIT_T1 | R6522.IFR_BIT_T2
+    )
+
+    via.store8(base + R6522.VIA_REG_IER, R6522.IFR_BIT_T1)
+    assert via.load8(base + R6522.VIA_REG_IER) == 0x80 | R6522.IFR_BIT_T2
+
+    via.store8(base + R6522.VIA_REG_IER, R6522.IFR_BIT_T2)
+    assert via.load8(base + R6522.VIA_REG_IER) == 0x80
+
+
+def test_ifr_write_ignores_status_bit_and_clears_only_selected_flags() -> None:
+    via, _ = make_via()
+    base = via.get_start_address()
+    via.set_interrupt(R6522.IFR_BIT_T1 | R6522.IFR_BIT_T2)
+
+    via.store8(
+        base + R6522.VIA_REG_IFR,
+        R6522.IFR_BIT_IRQ | R6522.IFR_BIT_T1,
+    )
+
+    assert via.load8(base + R6522.VIA_REG_IFR) == R6522.IFR_BIT_T2
+
+
+def test_reading_disabled_shift_register_clears_shift_interrupt() -> None:
+    via, _ = make_via()
+    base = via.get_start_address()
+    via.set_interrupt(R6522.IFR_BIT_SR)
+
+    via.load8(base + R6522.VIA_REG_SR)
+
+    assert via.load8(base + R6522.VIA_REG_IFR) & R6522.IFR_BIT_SR == 0
+
+
+def test_writing_disabled_shift_register_clears_shift_interrupt() -> None:
+    via, _ = make_via()
+    base = via.get_start_address()
+    via.set_interrupt(R6522.IFR_BIT_SR)
+
+    via.store8(base + R6522.VIA_REG_SR, 0x5A)
+
+    assert via.load8(base + R6522.VIA_REG_IFR) & R6522.IFR_BIT_SR == 0
+
+
+def test_disabling_shift_register_mode_clears_shift_interrupt() -> None:
+    via, _ = make_via()
+    base = via.get_start_address()
+    via.store8(base + R6522.VIA_REG_ACR, 0x04)
+    via.set_interrupt(R6522.IFR_BIT_SR)
+
+    via.store8(base + R6522.VIA_REG_ACR, 0x00)
+
+    assert via.load8(base + R6522.VIA_REG_IFR) & R6522.IFR_BIT_SR == 0
 
 
 def test_timer2_pulse_count_requires_pb6_edges() -> None:

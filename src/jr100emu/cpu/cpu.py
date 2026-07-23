@@ -54,6 +54,11 @@ class CPU:
         raise NotImplementedError
 
     def irq(self) -> None:
+        """Assert the maskable IRQ input until set_irq_line(False) is called."""
+        raise NotImplementedError
+
+    def set_irq_line(self, asserted: bool) -> None:
+        """Set the current asserted state of the level-sensitive IRQ input."""
         raise NotImplementedError
 
     def execute(self, clocks: int) -> int:
@@ -301,7 +306,12 @@ class MB8861(CPU):
         self.status.nmi_requested = True
 
     def irq(self) -> None:
-        self.status.irq_requested = True
+        """Assert the IRQ input for compatibility with event-style callers."""
+        self.set_irq_line(True)
+
+    def set_irq_line(self, asserted: bool) -> None:
+        """Update the externally owned, level-sensitive IRQ input state."""
+        self.status.irq_requested = bool(asserted)
 
     def execute(self, clocks: int) -> int:
         if self.memory is None:
@@ -326,10 +336,9 @@ class MB8861(CPU):
 
             if self.status.fetch_wai:
                 handled_interrupt = self._service_pending_interrupts(in_wai=True)
-                # Java 実装では割り込みを受け付けた場合でも WAI ループの最後で 1 クロック消費する。
-                self._increment_clock(1)
                 if handled_interrupt:
                     continue
+                self._increment_clock(1)
                 continue
 
             if self._service_pending_interrupts(in_wai=False):
@@ -378,9 +387,11 @@ class MB8861(CPU):
         if self.status.nmi_requested:
             self.status.nmi_requested = False
             self.status.fetch_wai = False
-            self._push_all_registers()
+            if not in_wai:
+                self._push_all_registers()
+            self.flags.carry_i = True
             self.registers.program_counter = self._load16(self.VECTOR_NMI)
-            self._increment_clock(12)
+            self._increment_clock(4 if in_wai else 12)
             if self.TRACE_WAI and in_wai:
                 print(
                     f"TRACE-WAI exit via NMI pc={self.registers.program_counter:04X}",
@@ -389,12 +400,13 @@ class MB8861(CPU):
             return True
 
         if self.status.irq_requested and not self.flags.carry_i:
-            self.status.irq_requested = False
             if in_wai:
                 self.status.fetch_wai = False
-            self._push_all_registers()
+            else:
+                self._push_all_registers()
+            self.flags.carry_i = True
             self.registers.program_counter = self._load16(self.VECTOR_IRQ)
-            self._increment_clock(12)
+            self._increment_clock(4 if in_wai else 12)
             if self.TRACE_WAI and in_wai:
                 via = getattr(self.computer, "via", None)
                 via_state = getattr(via, "_state", None) if via is not None else None
@@ -575,6 +587,7 @@ class MB8861(CPU):
         self.registers.program_counter = self._load16(self.VECTOR_SWI)
 
     def _wai(self) -> None:
+        self._push_all_registers()
         self.status.fetch_wai = True
         if self.TRACE_WAI:
             sp = self.registers.stack_pointer & 0xFFFF
@@ -1190,8 +1203,7 @@ class MB8861(CPU):
     def _opcode_orab_ext(self) -> None:
         address = self._fetch_operand16()
         value = self._load8(address)
-        # Java MB8861.java uses add(B, value) for OP_ORAB_EXT; mirror that behaviour faithfully.
-        self.registers.acc_b = self._add8(self.registers.acc_b, value)
+        self.registers.acc_b = self._ora(self.registers.acc_b, value)
 
     def _opcode_psha(self) -> None:
         self._push8(self.registers.acc_a)
@@ -1908,12 +1920,12 @@ class MB8861(CPU):
         return result & 0xFF
 
     def _neg(self, x: int) -> int:
-        result = (- (x & 0xFF)) & 0x1FF
+        result = (-(x & 0xFF)) & 0x1FF
         value = result & 0xFF
         self.flags.carry_n = value & 0x80 != 0
         self.flags.carry_z = value == 0
         self.flags.carry_v = value == 0x80
-        self.flags.carry_c = value == 0x00
+        self.flags.carry_c = (x & 0xFF) != 0
         return value
 
     def _rol(self, x: int) -> int:
