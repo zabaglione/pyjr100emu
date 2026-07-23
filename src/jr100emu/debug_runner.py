@@ -134,6 +134,30 @@ def _initialise_cpu_state(
     cpu.registers.program_counter = start_address & ADDRESS_MASK
 
 
+def _clear_registers(computer: JR100Computer) -> None:
+    """Normalise A/B/IX and flags for reproducible lockstep runs."""
+    cpu = computer.cpu_core
+    if cpu is None:
+        raise RuntimeError("CPU core is not available")
+    cpu.registers.acc_a = 0x00
+    cpu.registers.acc_b = 0x00
+    cpu.registers.index = 0x0000
+    cpu.flags.carry_h = False
+    cpu.flags.carry_i = False
+    cpu.flags.carry_n = False
+    cpu.flags.carry_z = False
+    cpu.flags.carry_v = False
+    cpu.flags.carry_c = False
+
+
+def _save_memory_image(memory, target: Path) -> None:
+    """Write the full 64 KiB address space as a raw binary image."""
+    data = bytearray(0x10000)
+    for address in range(0x10000):
+        data[address] = memory.load8(address) & 0xFF
+    target.write_bytes(bytes(data))
+
+
 def _ccr_byte(flags) -> int:
     """Pack CPU flags into the MB8861 CCR byte (11HINZVC)."""
     ccr = 0xC0
@@ -298,6 +322,17 @@ def _build_argument_parser() -> argparse.ArgumentParser:
         default=None,
         help="Write an instruction-boundary trace to the given file ('-' for stdout)",
     )
+    parser.add_argument(
+        "--clear-regs",
+        action="store_true",
+        help="Zero A/B/IX and clear all flags before execution (lockstep runs)",
+    )
+    parser.add_argument(
+        "--save-initial-memory",
+        type=str,
+        default=None,
+        help="Write the pre-execution 64 KiB memory image to the given file",
+    )
     return parser
 
 
@@ -342,6 +377,12 @@ def main(argv: Sequence[str] | None = None) -> int:
         computer.tick(1)
 
     _initialise_cpu_state(computer, start_address=start_address, stack_pointer=stack_pointer)
+
+    if args.clear_regs:
+        _clear_registers(computer)
+
+    if args.save_initial_memory is not None:
+        _save_memory_image(computer.memory, Path(args.save_initial_memory))
 
     cycle_limit = args.cycles if args.cycles > 0 else None
 
