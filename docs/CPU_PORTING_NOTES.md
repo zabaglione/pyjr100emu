@@ -29,6 +29,7 @@
 - `saveState(StateSet)` / `loadState(StateSet)` で全フィールドを設定
 
 ## 実機仕様を優先したJava版との差分
+- RESETはPCを`FFFE`/`FFFF`のベクタ値へ設定するとともにIフラグをセットする。A、B、IX、SPおよびI以外の条件フラグはRESET値を規定しない。Java版はPCだけを設定し、Iフラグをセットしない。
 - `ORAB extended` (`0xFA`) は、Java版の `add(B, ...)` ではなく他のアドレシングモードと同じ論理ORを実行する。
 - `NEG` のCフラグは、演算前の値が `0x00` 以外ならセットし、`0x00`ならクリアする。Java版はこの極性が逆である。
 - NMIとIRQは、割込み前のCCRをスタックへ退避した後、現在のIフラグをセットしてから割込みベクタへ移る。Java版はIフラグをセットしない。

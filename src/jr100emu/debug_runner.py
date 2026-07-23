@@ -16,6 +16,7 @@ from jr100emu.jr100.computer import JR100Computer
 DEFAULT_WARMUP_CYCLES = 80_000
 DEFAULT_MAX_CYCLES = 1_000_000
 DEFAULT_STACK_POINTER = 0x0244
+BOOT_STACK_POINTER = 0x0000
 EXECUTION_CHUNK = 256
 ADDRESS_MASK = 0xFFFF
 
@@ -111,9 +112,14 @@ def _write_dump(memory, dump_ranges: Sequence[DumpRange], *, target: Path | None
         target.write_text(text + "\n")
 
 
-def _setup_computer(rom_path: str | None) -> JR100Computer:
+def _setup_computer(
+    rom_path: str | None,
+    *,
+    warmup_cycles: int = DEFAULT_WARMUP_CYCLES,
+) -> JR100Computer:
     computer = JR100Computer(rom_path=rom_path, enable_audio=False)
-    computer.tick(DEFAULT_WARMUP_CYCLES)
+    if warmup_cycles > 0:
+        computer.tick(warmup_cycles)
     return computer
 
 
@@ -144,6 +150,23 @@ def _clear_registers(computer: JR100Computer) -> None:
     cpu.registers.index = 0x0000
     cpu.flags.carry_h = False
     cpu.flags.carry_i = False
+    cpu.flags.carry_n = False
+    cpu.flags.carry_z = False
+    cpu.flags.carry_v = False
+    cpu.flags.carry_c = False
+
+
+def _normalise_boot_state(computer: JR100Computer) -> None:
+    """Set deterministic registers while preserving the reset-vector PC."""
+    cpu = computer.cpu_core
+    if cpu is None:
+        raise RuntimeError("CPU core is not available")
+    cpu.registers.acc_a = 0x00
+    cpu.registers.acc_b = 0x00
+    cpu.registers.index = 0x0000
+    cpu.registers.stack_pointer = BOOT_STACK_POINTER
+    cpu.flags.carry_h = False
+    cpu.flags.carry_i = True
     cpu.flags.carry_n = False
     cpu.flags.carry_z = False
     cpu.flags.carry_v = False
@@ -266,9 +289,14 @@ def _build_argument_parser() -> argparse.ArgumentParser:
         prog="jr100-debug-runner",
         description="Headless JR-100 runner for machine language diagnostics.",
     )
+    parser.add_argument(
+        "--boot",
+        action="store_true",
+        help="Trace ROM startup from the hardware reset state",
+    )
     parser.add_argument("--rom", type=str, default=None, help="Path to JR-100 BASIC ROM image")
-    parser.add_argument("--program", type=str, required=True, help="User program (.prg/.prog/.bas)")
-    parser.add_argument("--start", type=str, required=True, help="Hex start address for PC (e.g. 0x0300)")
+    parser.add_argument("--program", type=str, default=None, help="User program (.prg/.prog/.bas)")
+    parser.add_argument("--start", type=str, default=None, help="Hex start address for PC (e.g. 0x0300)")
     parser.add_argument(
         "--cycles",
         type=int,
@@ -308,7 +336,7 @@ def _build_argument_parser() -> argparse.ArgumentParser:
     parser.add_argument(
         "--stack-pointer",
         type=str,
-        default=f"0x{DEFAULT_STACK_POINTER:04X}",
+        default=None,
         help="Stack pointer initial value (hex). Defaults to JR-100 BASIC USR entry value.",
     )
     parser.add_argument(
@@ -340,10 +368,36 @@ def main(argv: Sequence[str] | None = None) -> int:
     parser = _build_argument_parser()
     args = parser.parse_args(argv)
 
-    try:
-        start_address = _parse_hex(args.start)
-    except ValueError as exc:
-        parser.error(f"invalid start address: {exc}")
+    if args.boot:
+        if args.rom is None:
+            parser.error("--boot requires --rom")
+        if not Path(args.rom).is_file():
+            parser.error("--boot ROM path must reference an existing file")
+        if args.program is not None or args.start is not None:
+            parser.error("--boot cannot be combined with --program or --start")
+        if args.no_reset:
+            parser.error("--boot cannot be combined with --no-reset")
+        if args.clear_regs:
+            parser.error("--boot cannot be combined with --clear-regs")
+        if args.stack_pointer is not None:
+            parser.error("--boot cannot be combined with --stack-pointer")
+        start_address = None
+        stack_pointer = BOOT_STACK_POINTER
+    else:
+        if args.program is None or args.start is None:
+            parser.error("--program and --start are required unless --boot is specified")
+        try:
+            start_address = _parse_hex(args.start)
+        except ValueError as exc:
+            parser.error(f"invalid start address: {exc}")
+        try:
+            stack_pointer = _parse_hex(
+                args.stack_pointer
+                if args.stack_pointer is not None
+                else f"0x{DEFAULT_STACK_POINTER:04X}"
+            )
+        except ValueError as exc:
+            parser.error(f"invalid stack pointer: {exc}")
 
     breakpoints: List[int] = []
     for spec in args.break_pc:
@@ -359,27 +413,34 @@ def main(argv: Sequence[str] | None = None) -> int:
         except ValueError as exc:
             parser.error(f"invalid dump range '{spec}': {exc}")
 
-    try:
-        stack_pointer = _parse_hex(args.stack_pointer)
-    except ValueError as exc:
-        parser.error(f"invalid stack pointer: {exc}")
+    computer = _setup_computer(
+        args.rom,
+        warmup_cycles=0 if args.boot else DEFAULT_WARMUP_CYCLES,
+    )
 
-    computer = _setup_computer(args.rom)
-
-    try:
-        _load_program(computer, args.program)
-    except (OSError, ProgramLoadError) as exc:
-        print(f"Failed to load program: {exc}", file=sys.stderr)
-        return 1
-
-    if not args.no_reset:
+    if args.boot:
         computer.reset()
         computer.tick(1)
+        _normalise_boot_state(computer)
+    else:
+        try:
+            _load_program(computer, args.program)
+        except (OSError, ProgramLoadError) as exc:
+            print(f"Failed to load program: {exc}", file=sys.stderr)
+            return 1
 
-    _initialise_cpu_state(computer, start_address=start_address, stack_pointer=stack_pointer)
+        if not args.no_reset:
+            computer.reset()
+            computer.tick(1)
 
-    if args.clear_regs:
-        _clear_registers(computer)
+        _initialise_cpu_state(
+            computer,
+            start_address=start_address,
+            stack_pointer=stack_pointer,
+        )
+
+        if args.clear_regs:
+            _clear_registers(computer)
 
     if args.save_initial_memory is not None:
         _save_memory_image(computer.memory, Path(args.save_initial_memory))
@@ -396,7 +457,8 @@ def main(argv: Sequence[str] | None = None) -> int:
             trace_sink = trace_file
         print("# jr100-trace v1", file=trace_sink)
         print("# generator: pyjr100emu debug_runner", file=trace_sink)
-        print(f"# program: {Path(args.program).name}", file=trace_sink)
+        source_path = args.rom if args.boot else args.program
+        print(f"# program: {Path(source_path).name}", file=trace_sink)
 
     try:
         executed_cycles, break_hit, timeout_hit, cycle_hit = _execute_program(

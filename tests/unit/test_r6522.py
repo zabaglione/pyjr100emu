@@ -125,6 +125,33 @@ def test_ifr_write_ignores_status_bit_and_clears_only_selected_flags() -> None:
     assert via.load8(base + R6522.VIA_REG_IFR) == R6522.IFR_BIT_T2
 
 
+def test_reset_preserves_timer_storage_and_shift_register() -> None:
+    via, _ = make_via()
+    base = via.get_start_address()
+    via.store8(base + R6522.VIA_REG_T1CL, 0x34)
+    via.store8(base + R6522.VIA_REG_T1CH, 0x12)
+    via.store8(base + R6522.VIA_REG_T1LL, 0x78)
+    via.store8(base + R6522.VIA_REG_T1LH, 0x56)
+    via.store8(base + R6522.VIA_REG_T2CL, 0xBC)
+    via.store8(base + R6522.VIA_REG_T2CH, 0x9A)
+    via.store8(base + R6522.VIA_REG_SR, 0x5A)
+    before: dict[str, object] = {}
+    via.save_state(before)
+
+    via.reset()
+
+    after: dict[str, object] = {}
+    via.save_state(after)
+    for field in ("timer1", "latch1", "timer2", "latch2", "SR"):
+        assert after[f"R6522.{field}"] == before[f"R6522.{field}"]
+    assert after["R6522.ACR"] == 0
+    assert after["R6522.IER"] == 0
+    assert after["R6522.IFR"] == 0
+    assert after["R6522.timer1_enable"] is False
+    assert after["R6522.timer2_enable"] is False
+    assert after["R6522.shift_started"] is False
+
+
 def test_reading_disabled_shift_register_clears_shift_interrupt() -> None:
     via, _ = make_via()
     base = via.get_start_address()

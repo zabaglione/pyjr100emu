@@ -380,6 +380,7 @@ class MB8861(CPU):
     def _handle_reset(self) -> None:
         self.status.reset_requested = False
         self.status.fetch_wai = False
+        self.flags.carry_i = True
         self.registers.program_counter = self._load16(self.VECTOR_RESTART)
         self._set_clock_count(0)
 

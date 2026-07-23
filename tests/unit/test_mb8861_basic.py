@@ -47,6 +47,18 @@ def make_cpu() -> MB8861:
     return cpu
 
 
+def test_reset_loads_restart_vector_and_sets_interrupt_mask() -> None:
+    cpu = make_cpu()
+    cpu.flags.carry_i = False
+    cpu.memory.store16(MB8861.VECTOR_RESTART, 0x4567)
+
+    cpu.reset()
+    cpu.execute(1)
+
+    assert cpu.registers.program_counter == 0x4567
+    assert cpu.flags.carry_i is True
+
+
 def test_adda_immediate_updates_flags_and_register() -> None:
     cpu = make_cpu()
     cpu.registers.acc_a = 0x14

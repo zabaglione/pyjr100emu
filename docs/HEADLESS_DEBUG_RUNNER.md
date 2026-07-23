@@ -10,14 +10,17 @@
 
 Executable entry point (subject to implementation): `python -m jr100emu.debug_runner`
 
-Required arguments:
+Program-run mode arguments:
 
 - `--rom PATH`: JR-100 BASIC ROM path. Defaults to auto-detected ROM if omitted, but we allow explicit override for testing.
 - `--program PATH`: User program to load (`.prg`/`.prog`/`.bas`). Mandatory.
 - `--start ADDRESS`: Hex start address (`0x` prefix optional) used to initialize the program counter before execution.
 
+Boot-trace mode uses `--boot --rom PATH` instead. It does not accept `--program` or `--start`.
+
 Optional arguments (initial scope):
 
+- `--boot`: Skip ROM warm-up and user-program injection, then trace from the ROM RESET vector. Requires an explicit `--rom` and cannot be combined with `--program`, `--start`, `--no-reset`, `--clear-regs`, or `--stack-pointer`.
 - `--cycles N`: Maximum CPU cycles to execute (N ≤ 0 disables the cycle limit). Default `1_000_000`.
 - `--break-pc ADDRESS`: Stop when `PC == ADDRESS` after executing the current instruction. Accepts multiple occurrences. Matches Java-style breakpoint support.
 - `--dump FILE`: Destination for memory dump. If omitted, dump to stdout.
@@ -46,6 +49,19 @@ Arguments intentionally **not** included in v1:
    - Execute chunk-sized ticks (e.g. 128 cycles) for efficiency.
    - Check breakpoint conditions. Breakpoint hit triggers memory dump and exit with code 0.
 6. If cycles are exhausted (and the limit is enabled), exit with code 2. If the time limit expires, exit with code 3. If PC hits `--break-pc`, exit 0. Unexpected exceptions exit 1.
+
+### Boot trace flow
+
+`--boot` uses a separate deterministic startup sequence:
+
+1. Instantiate `JR100Computer` without the 80,000-cycle ROM warm-up.
+2. Call `computer.reset()`, which immediately resets the system and registered devices.
+3. Call `computer.tick(1)` to service the pending CPU RESET without executing the first normal instruction and to prime the VIA by one internal tick.
+4. Preserve the PC loaded from `0xFFFE`/`0xFFFF`.
+5. Set A, B, IX, and SP to zero. Set I to one and the remaining condition flags to zero, producing CC `0xD0`.
+6. Save the initial memory image, if requested, and start instruction-boundary tracing.
+
+A/B/IX/SP and H/N/Z/V/C are comparison conventions because RESET does not define their values. I=1 and the RESET-vector PC are hardware RESET behavior.
 
 ## Memory Dump Format
 

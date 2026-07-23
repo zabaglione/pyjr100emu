@@ -691,7 +691,6 @@ class R6522:
         state.IRB = 0
         state.ORB = 0
         state.DDRB = 0
-        state.SR = 0
         state.port_a = 0
         state.port_b = 0
         state.CA1_in = 0
@@ -703,10 +702,6 @@ class R6522:
         state.CB2_in = 0
         state.CB2_out = 0
         state.previous_pb6 = 0
-        state.latch1 = 0
-        state.latch2 = 0
-        state.timer1 = 0
-        state.timer2 = 0
         state.shift_tick = False
         state.shift_counter = 0
         state.shift_started = False

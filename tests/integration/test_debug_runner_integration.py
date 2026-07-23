@@ -3,7 +3,10 @@ from __future__ import annotations
 import struct
 from pathlib import Path
 
+import pytest
+
 from jr100emu import debug_runner
+from jr100emu.cpu.cpu import MB8861
 
 
 class FakeTime:
@@ -27,6 +30,14 @@ def _write_prog(path: Path, *, start: int, payload: bytes, name: str = "TEST") -
         stream.write(struct.pack("<I", len(payload)))
         stream.write(struct.pack("<I", 1))  # binary payload flag
         stream.write(payload)
+
+
+def _write_rom(path: Path, code: bytes, *, start: int = 0xE000) -> None:
+    payload = bytearray(0x2000)
+    payload[: len(code)] = code
+    payload[0x1FFE] = (start >> 8) & 0xFF
+    payload[0x1FFF] = start & 0xFF
+    _write_prog(path, start=0xE000, payload=bytes(payload), name="ROM")
 
 
 def test_debug_runner_breaks_and_dumps(tmp_path, capsys) -> None:
@@ -80,3 +91,111 @@ def test_debug_runner_time_limit(tmp_path, capsys, monkeypatch) -> None:
     captured = capsys.readouterr()
     assert exit_code == 3
     assert "time limit" in captured.err
+
+
+def test_debug_runner_boot_uses_reset_vector_and_normalised_registers(
+    tmp_path, capsys
+) -> None:
+    rom_path = tmp_path / "boot.prg"
+    dump_path = tmp_path / "registers.bin"
+    code = bytes(
+        [
+            MB8861.OP_STAA_EXT,
+            0x00,
+            0x00,
+            MB8861.OP_STAB_EXT,
+            0x00,
+            0x01,
+            MB8861.OP_STX_EXT,
+            0x00,
+            0x02,
+            MB8861.OP_STS_EXT,
+            0x00,
+            0x04,
+            MB8861.OP_BRA_REL,
+            0xFE,
+        ]
+    )
+    _write_rom(rom_path, code)
+
+    exit_code = debug_runner.main(
+        [
+            "--boot",
+            "--rom",
+            str(rom_path),
+            "--cycles",
+            "32",
+            "--dump",
+            str(dump_path),
+            "--dump-range",
+            "0000:0005",
+            "--dump-format",
+            "bin",
+        ]
+    )
+
+    capsys.readouterr()
+    assert exit_code == 2
+    assert dump_path.read_bytes() == bytes(6)
+
+
+def test_debug_runner_boot_uses_hardware_reset_condition_code(tmp_path, capsys) -> None:
+    rom_path = tmp_path / "boot_cc.prg"
+    dump_path = tmp_path / "cc.bin"
+    code = bytes(
+        [
+            MB8861.OP_TPA_IMP,
+            MB8861.OP_STAA_EXT,
+            0x00,
+            0x06,
+            MB8861.OP_BRA_REL,
+            0xFE,
+        ]
+    )
+    _write_rom(rom_path, code)
+
+    exit_code = debug_runner.main(
+        [
+            "--boot",
+            "--rom",
+            str(rom_path),
+            "--cycles",
+            "16",
+            "--dump",
+            str(dump_path),
+            "--dump-range",
+            "0006:0006",
+            "--dump-format",
+            "bin",
+        ]
+    )
+
+    capsys.readouterr()
+    assert exit_code == 2
+    assert dump_path.read_bytes() == bytes([0xD0])
+
+
+@pytest.mark.parametrize(
+    "incompatible_args",
+    [
+        ["--program", "dummy.prg"],
+        ["--start", "0x0300"],
+    ],
+)
+def test_debug_runner_boot_rejects_program_entry_arguments(
+    tmp_path, incompatible_args
+) -> None:
+    rom_path = tmp_path / "boot.prg"
+    _write_rom(rom_path, bytes([MB8861.OP_BRA_REL, 0xFE]))
+
+    with pytest.raises(SystemExit) as exc_info:
+        debug_runner.main(["--boot", "--rom", str(rom_path), *incompatible_args])
+
+    assert exc_info.value.code == 2
+
+
+def test_debug_runner_boot_requires_explicit_rom() -> None:
+    with pytest.raises(SystemExit) as exc_info:
+        debug_runner.main(["--boot"])
+
+    assert exc_info.value.code == 2
