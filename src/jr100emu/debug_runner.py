@@ -173,6 +173,22 @@ def _normalise_boot_state(computer: JR100Computer) -> None:
     cpu.flags.carry_c = False
 
 
+def _normalise_program_via_state(computer: JR100Computer) -> None:
+    """Zero the reset-exempt VIA storage for program-mode lockstep runs.
+
+    R6522 RES preserves T1/T2 counters, latches, and SR, so after the
+    warmup + reset sequence they hold warmup residue that a cold-started
+    DUT cannot reproduce. Program mode zeroes them as a comparison
+    convention; boot mode starts cold and needs no normalisation.
+    """
+    state = computer.via._state
+    state.timer1 = 0
+    state.timer2 = 0
+    state.latch1 = 0
+    state.latch2 = 0
+    state.SR = 0
+
+
 def _save_memory_image(memory, target: Path) -> None:
     """Write the full 64 KiB address space as a raw binary image."""
     data = bytearray(0x10000)
@@ -431,6 +447,10 @@ def main(argv: Sequence[str] | None = None) -> int:
 
         if not args.no_reset:
             computer.reset()
+            # Zero the reset-exempt VIA storage before the reset tick so
+            # the timer phase matches a cold-started DUT (same structure
+            # as the boot flow, where the storage is zero at reset).
+            _normalise_program_via_state(computer)
             computer.tick(1)
 
         _initialise_cpu_state(
