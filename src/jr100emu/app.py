@@ -148,6 +148,7 @@ def _pygame_loop(
     joystick_index: int | None = None,
     joystick_name: str | None = None,
     joystick_keymap_path: str | None = None,
+    joystick_diagnostics: bool = False,
 ) -> None:
     import pygame  # type: ignore
 
@@ -208,6 +209,7 @@ def _pygame_loop(
         gamepad_device.enable_pygame_backend(
             device_index=joystick_index,
             name_filter=joystick_name,
+            diagnostics=joystick_diagnostics,
         )
         backend = gamepad_device.backend
         if backend is not None:
@@ -853,6 +855,11 @@ def main(argv: Iterable[str] | None = None) -> None:
     parser.set_defaults(audio=None)
     parser.add_argument("--joystick", action="store_true", help="Enable pygame joystick input mapping to the JR-100 gamepad port")
     parser.add_argument(
+        "--joystick-diagnostics",
+        action="store_true",
+        help="Print raw pygame joystick input events",
+    )
+    parser.add_argument(
         "--joystick-config",
         help="Path to JSON file that defines axis/button mappings for the gamepad",
     )
@@ -895,11 +902,13 @@ def main(argv: Iterable[str] | None = None) -> None:
                 args.joystick
                 or args.joystick_index is not None
                 or args.joystick_name is not None
+                or args.joystick_diagnostics
             ),
             joystick_config_path=args.joystick_config,
             joystick_index=args.joystick_index,
             joystick_name=args.joystick_name,
             joystick_keymap_path=args.joystick_keymap,
+            joystick_diagnostics=args.joystick_diagnostics,
         )
     except RuntimeError as exc:
         raise SystemExit(str(exc))

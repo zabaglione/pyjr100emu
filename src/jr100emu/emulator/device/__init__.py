@@ -39,10 +39,12 @@ class PygameGamepadBackend:
         device_index: int | None = None,
         name_filter: str | None = None,
         allow_background: bool = True,
+        diagnostics: bool = False,
     ) -> None:
         self._device_index = device_index
         self._name_filter = name_filter.lower() if name_filter else None
         self._allow_background = allow_background
+        self._diagnostics = diagnostics
         self._pygame = None
         self._initialized: bool = False
         self._joysticks: Dict[int, object] = {}
@@ -58,7 +60,8 @@ class PygameGamepadBackend:
             return True
         try:
             import pygame  # type: ignore
-        except Exception:
+        except Exception as exc:
+            print(f"[gamepad] pygame import failed: {exc}")
             return False
 
         self._pygame = pygame
@@ -74,7 +77,8 @@ class PygameGamepadBackend:
 
         try:
             pygame.joystick.init()
-        except Exception:
+        except Exception as exc:
+            print(f"[gamepad] joystick initialization failed: {exc}")
             return False
 
         self._event_types = []
@@ -82,8 +86,13 @@ class PygameGamepadBackend:
             event_type = getattr(pygame, event_name, None)
             if isinstance(event_type, int):
                 self._event_types.append(event_type)
+        if self._diagnostics:
+            for event_name in ("JOYAXISMOTION", "JOYBUTTONDOWN", "JOYBUTTONUP", "JOYHATMOTION"):
+                event_type = getattr(pygame, event_name, None)
+                if isinstance(event_type, int):
+                    self._event_types.append(event_type)
 
-        self._register_existing()
+        self._register_existing(report=True)
         self._initialized = True
         return True
 
@@ -108,6 +117,8 @@ class PygameGamepadBackend:
                     self._register_device_event(event)
                 elif event.type == getattr(self._pygame, "JOYDEVICEREMOVED", None):
                     self._remove_device_event(event)
+                elif self._diagnostics:
+                    self._report_input_event(event)
 
         if not self._joysticks:
             return False
@@ -153,11 +164,13 @@ class PygameGamepadBackend:
     # ------------------------------------------------------------------
     # 内部ヘルパ
     # ------------------------------------------------------------------
-    def _register_existing(self) -> None:
+    def _register_existing(self, *, report: bool = False) -> None:
         if self._pygame is None:
             return
         joystick_mod = self._pygame.joystick
         count = joystick_mod.get_count()
+        if report:
+            print(f"[gamepad] pygame detected {count} joystick(s)")
         for index in range(count):
             self._register_index(index)
 
@@ -170,6 +183,16 @@ class PygameGamepadBackend:
         instance_id = int(getattr(event, "instance_id", getattr(event, "which", -1)))
         if instance_id >= 0:
             self._remove_instance(instance_id)
+
+    def _report_input_event(self, event: object) -> None:
+        if self._pygame is None:
+            return
+        event_name = self._pygame.event.event_name(event.type)
+        details = []
+        for attr in ("instance_id", "which", "axis", "value", "button", "hat"):
+            if hasattr(event, attr):
+                details.append(f"{attr}={getattr(event, attr)!r}")
+        print(f"[gamepad] input {event_name}: {' '.join(details)}")
 
     def _register_index(self, index: int) -> None:
         if self._pygame is None:
@@ -201,6 +224,18 @@ class PygameGamepadBackend:
         self._joysticks[instance_id] = joystick
         self._registered_indices.add(index)
         self._instance_to_index[instance_id] = index
+        try:
+            name = joystick.get_name()
+            axes = joystick.get_numaxes()
+            buttons = joystick.get_numbuttons()
+            hats = joystick.get_numhats()
+            print(
+                "[gamepad] registered "
+                f"index={index} instance={instance_id} name={name!r} "
+                f"axes={axes} buttons={buttons} hats={hats}"
+            )
+        except Exception:
+            print(f"[gamepad] registered index={index} instance={instance_id}")
 
     def _remove_instance(self, instance_id: int) -> None:
         joystick = self._joysticks.pop(instance_id, None)
@@ -249,15 +284,6 @@ class PygameGamepadBackend:
         return id(joystick)
 
 
-DEFAULT_DIRECTION_KEY_MATRIX: Dict[str, Optional[Sequence[int]]] = {
-    "left": (6, 1),   # J
-    "right": (6, 3),  # L
-    "up": (5, 2),     # I
-    "down": (6, 2),   # K
-    "switch": (8, 1),  # SPACE
-}
-
-
 @dataclass
 class GamepadDevice:
     """JR-100 の拡張 I/O ポートへゲームパッド状態を書き込むデバイス。"""
@@ -275,9 +301,9 @@ class GamepadDevice:
         self._backend_ready = False
         self._poll_count = 0
         self._pressed_keys: Dict[Tuple[int, int], str] = {}
-        mapping = self.keyboard_mapping or DEFAULT_DIRECTION_KEY_MATRIX
-        self.keyboard_mapping = mapping
-        self._keyboard_mapping = self._normalize_keyboard_mapping(mapping)
+        self._keyboard_mapping = self._normalize_keyboard_mapping(
+            self.keyboard_mapping or {}
+        )
         if self.port is not None:
             self._adapter.apply_to_port(self.port)
 
@@ -316,12 +342,14 @@ class GamepadDevice:
         device_index: int | None = None,
         name_filter: str | None = None,
         allow_background: bool = True,
+        diagnostics: bool = False,
     ) -> None:
         self.set_backend(
             PygameGamepadBackend(
                 device_index=device_index,
                 name_filter=name_filter,
                 allow_background=allow_background,
+                diagnostics=diagnostics,
             )
         )
 

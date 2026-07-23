@@ -3,6 +3,7 @@ from __future__ import annotations
 from typing import Dict
 
 from jr100emu.emulator.device import GamepadDevice
+from jr100emu.jr100.memory import ExtendedIOPort
 
 
 class RecordingPort:
@@ -33,6 +34,18 @@ class FakeBackend:
 
     def close(self) -> None:
         self.closed = True
+
+
+class RecordingKeyboard:
+    def __init__(self) -> None:
+        self.pressed: list[tuple[int, int]] = []
+        self.released: list[tuple[int, int]] = []
+
+    def press(self, row: int, bit: int) -> None:
+        self.pressed.append((row, bit))
+
+    def release(self, row: int, bit: int) -> None:
+        self.released.append((row, bit))
 
 
 def test_gamepad_device_applies_backend_state() -> None:
@@ -91,3 +104,39 @@ def test_gamepad_device_disable_stops_backend_usage() -> None:
     changed = device.poll()
     assert changed is False
     assert backend.poll_calls == 0
+
+
+def test_gamepad_device_uses_port_without_keyboard_mirroring_by_default() -> None:
+    port = RecordingPort()
+    backend = FakeBackend()
+    keyboard = RecordingKeyboard()
+    device = GamepadDevice(port=port, backend=backend)
+    device.attach_keyboard(keyboard)
+
+    assert device.poll() is True
+    assert port.state is not None
+    assert port.state["switch"] is True
+    assert keyboard.pressed == []
+
+
+def test_gamepad_device_keyboard_mirroring_requires_explicit_keymap() -> None:
+    port = RecordingPort()
+    backend = FakeBackend()
+    keyboard = RecordingKeyboard()
+    device = GamepadDevice(
+        port=port,
+        backend=backend,
+        keyboard_mapping={"switch": (0, 2)},
+    )
+    device.attach_keyboard(keyboard)
+
+    assert device.poll() is True
+    assert keyboard.pressed == [(0, 2)]
+
+
+def test_gamepad_device_writes_only_pressed_bits_to_cc02() -> None:
+    port = ExtendedIOPort(0xCC00)
+    device = GamepadDevice(port=port, backend=FakeBackend())
+
+    assert device.poll() is True
+    assert port.load8(0xCC02) == 0x10

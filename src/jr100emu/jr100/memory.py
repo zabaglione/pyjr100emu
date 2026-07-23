@@ -72,7 +72,7 @@ class VideoRam(RAM):
 class ExtendedIOPort(Addressable):
     """Handles the JR-100 expansion port mapped at 0xCC00-0xCFFF."""
 
-    DEFAULT_STATUS = 0xFF  # bit4: switch, bit3..0: directions (active low)
+    DEFAULT_STATUS = 0x00  # bit4: switch, bit3..0: directions (active high)
 
     def __init__(self, start: int) -> None:
         self.start = start & 0xFFFF
@@ -87,7 +87,7 @@ class ExtendedIOPort(Addressable):
 
     def load8(self, address: int) -> int:
         masked = address & 0xFFFF
-        if masked in {self.start + 0x01, self.start + 0x02}:
+        if masked == self.start + 0x02:
             return self.gamepad_status & 0xFF
         return 0x00
 
@@ -114,15 +114,15 @@ class ExtendedIOPort(Addressable):
     ) -> None:
         status = self.DEFAULT_STATUS
         if right:
-            status &= ~0x01
+            status |= 0x01
         if left:
-            status &= ~0x02
+            status |= 0x02
         if up:
-            status &= ~0x04
+            status |= 0x04
         if down:
-            status &= ~0x08
+            status |= 0x08
         if switch:
-            status &= ~0x10
+            status |= 0x10
         self.gamepad_status = status & 0xFF
 
     def store16(self, address: int, value: int) -> None:

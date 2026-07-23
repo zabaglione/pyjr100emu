@@ -16,8 +16,8 @@
 
 ## ゲームパッド
 
-- `GamepadDevice` は Pygame 経由のポーリング結果を ExtendedIOPort（0xCC02）とキーボード行列へ反映。
-  - JSON で方向ラベルと (row, bit) ペアを複数指定可能 (`--joystick-keymap`)。
+- `GamepadDevice` は Pygame 経由のポーリング結果を ExtendedIOPort（0xCC02）へ反映。
+  - キーボード行列への反映は、JSONで方向ラベルと(row, bit)ペアを指定した場合のみ有効 (`--joystick-keymap`)。
   - 斜め方向は `up_left` 等が優先され、必要に応じて `up`/`left` を抑制。
 
 ## ファイル I/O

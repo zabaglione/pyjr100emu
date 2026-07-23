@@ -28,7 +28,7 @@ ROM BASIC の READY プロンプトで `F1` を押し、次のファイルを選
 
 | オプション | 説明 |
 | --- | --- |
-| `--joystick` | ゲームパッド入力のポーリングを有効化 |
+| `--joystick` | ゲームパッド入力を実機ジョイスティック相当として`$CC02`へ反映 |
 | `--joystick-config` | 軸/ボタンのマッピング JSON（`io/joystick.py` 準拠） |
 | `--joystick-keymap` | ゲーム内キーに紐づくキーマトリクス JSON（例: `datas/joystick_keymaps/starfire.json`） |
 | `--joystick-index`, `--joystick-name` | Pygame デバイスの絞り込み |
@@ -36,7 +36,7 @@ ROM BASIC の READY プロンプトで `F1` を押し、次のファイルを選
 
 ### ゲームパッドの設定
 
-標準では方向キーを I/J/K/L、トリガーを SPACE に割り当てています。8 方向を利用するタイトルでは `--joystick-keymap` を用いて JSON で上書きしてください。各値は `[row, bit]` 形式で JR-100 キーボード行列の行番号 (0〜8) とビット位置 (0〜4) を表します。行列に対応するキーは `src/jr100emu/app.py` の `KEY_MATRIX_MAP` を参照してください。例: `datas/joystick_keymaps/starfire.json`
+標準ではホスト側ゲームパッドをJR-100のジョイスティック入力として`$CC02`へ直接反映し、キーボード行列には何も入力しません。キーボード操作を前提とするソフト向けの仮想パッドは、`--joystick-keymap` を明示して有効化してください。各値は `[row, bit]` 形式で JR-100 キーボード行列の行番号 (0〜8) とビット位置 (0〜4) を表します。行列に対応するキーは `src/jr100emu/app.py` の `KEY_MATRIX_MAP` を参照してください。例: `datas/joystick_keymaps/starfire.json`
 
 ```json
 {
