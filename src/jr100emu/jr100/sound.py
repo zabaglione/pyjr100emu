@@ -185,12 +185,14 @@ class JR100SoundProcessor:
 
     def _apply_frequency(self, frequency: float) -> None:
         self._current_frequency = frequency
+        if frequency <= 0.0 or frequency >= self.sample_rate / 2.0:
+            self._current_table = self._tables[0]
+            self._delta = 0.0
+            return
+
         rank = self._rank_for_frequency(frequency)
         self._current_table = self._tables[rank]
-        if frequency > 0.0:
-            self._delta = (self._table_length * frequency) / float(self.sample_rate)
-        else:
-            self._delta = 0.0
+        self._delta = (self._table_length * frequency) / float(self.sample_rate)
 
     def _append_sample(self, sample: int) -> None:
         self._sample_buffer.append(sample)
