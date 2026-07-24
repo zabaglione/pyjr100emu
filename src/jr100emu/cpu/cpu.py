@@ -582,7 +582,9 @@ class MB8861(CPU):
         self.registers.stack_pointer = sp
 
     def _swi(self) -> None:
-        self.registers.program_counter = (self.registers.program_counter + 1) & 0xFFFF
+        # M68PRM(D) §3.3.3: the value saved for the program counter is the
+        # address of the SWI instruction plus one, which the opcode fetch
+        # has already produced.
         self._push_all_registers()
         self.flags.carry_i = True
         self.registers.program_counter = self._load16(self.VECTOR_SWI)
@@ -1767,7 +1769,9 @@ class MB8861(CPU):
         result = (a + b + carry_in) & 0x1FF
         value = result & 0xFF
         cn = value & 0x80 != 0
-        self.flags.carry_h = ((a & 0x0F) + (b & 0x0F)) > 0x0F
+        # M68PRM(D): H = X3・M3 + M3・~R3 + ~R3・X3 with R = X + M + C,
+        # so the carry input participates in the carry out of bit 3.
+        self.flags.carry_h = ((a & 0x0F) + (b & 0x0F) + carry_in) > 0x0F
         self.flags.carry_n = cn
         self.flags.carry_z = value == 0
         sa = self._to_signed8(a)
@@ -2056,11 +2060,13 @@ class MB8861(CPU):
         self.flags.carry_v = False
 
     def _sts(self, address: int) -> None:
+        # M68PRM(D): N and Z are set from the stored stack pointer
+        # (N = SPH7), not from the index register.
         addr = address & 0xFFFF
         self._store16(addr, self.registers.stack_pointer)
-        ix_signed = self._to_signed16(self.registers.index)
-        self.flags.carry_n = ix_signed < 0
-        self.flags.carry_z = self.registers.index == 0
+        sp_signed = self._to_signed16(self.registers.stack_pointer)
+        self.flags.carry_n = sp_signed < 0
+        self.flags.carry_z = self.registers.stack_pointer == 0
         self.flags.carry_v = False
 
     def _branch(self, offset: int, condition: bool) -> None:

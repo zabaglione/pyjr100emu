@@ -415,7 +415,8 @@ def test_stx_ext_writes_word() -> None:
     assert cpu.flags.carry_z is False
 
 
-def test_sts_ext_uses_ix_for_flags() -> None:
+def test_sts_ext_uses_sp_for_flags() -> None:
+    # M68PRM(D): STS sets N/Z from the stored stack pointer, not IX.
     cpu = make_cpu()
     cpu.registers.index = 0xFFFF
     cpu.registers.stack_pointer = 0x2000
@@ -427,7 +428,7 @@ def test_sts_ext_uses_ix_for_flags() -> None:
     cpu.execute(6)
 
     assert cpu.memory.load16(0x2010) == 0x2000
-    assert cpu.flags.carry_n is True
+    assert cpu.flags.carry_n is False
     assert cpu.flags.carry_z is False
 
 
