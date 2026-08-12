@@ -14,6 +14,14 @@ class JR100Display:
     FONT_NORMAL: int = 0
     FONT_USER_DEFINED: int = 1
 
+    @property
+    def pixel_width(self) -> int:
+        return self.WIDTH_CHARS * self.PPC
+
+    @property
+    def pixel_height(self) -> int:
+        return self.HEIGHT_CHARS * self.PPC
+
     color_map: List[List[int]] = field(default_factory=lambda: [[0x000000] * 256, [0xFFFFFF] * 256])
     character_rom: List[int] = field(default_factory=lambda: [0x00] * (256 * 8))
     user_defined_ram: List[int] = field(default_factory=lambda: [0x00] * (128 * 8))
@@ -104,8 +112,8 @@ class JR100Display:
     # Rendering
     # ------------------------------------------------------------------
     def render_pixels(self) -> List[List[int]]:
-        width = self.WIDTH_CHARS * self.PPC
-        height = self.HEIGHT_CHARS * self.PPC
+        width = self.pixel_width
+        height = self.pixel_height
         pixels = [[0x000000 for _ in range(width)] for _ in range(height)]
         for y_char in range(self.HEIGHT_CHARS):
             for x_char in range(self.WIDTH_CHARS):
@@ -116,6 +124,21 @@ class JR100Display:
                     start = x_char * self.PPC
                     pixels[row_index][start:start + self.PPC] = glyph[line * self.PPC:(line + 1) * self.PPC]
         return pixels
+
+    def render_indexed_frame(self) -> bytes:
+        """Return a compact 0/1 pixel buffer for non-Pygame frontends."""
+
+        frame = bytearray(self.pixel_width * self.pixel_height)
+        for y_char in range(self.HEIGHT_CHARS):
+            for x_char in range(self.WIDTH_CHARS):
+                code = self.video_ram[y_char * self.WIDTH_CHARS + x_char] & 0xFF
+                for line in range(self.PPC):
+                    value = self._glyph_byte(self._current_font, code, line)
+                    row_start = (y_char * self.PPC + line) * self.pixel_width
+                    cell_start = row_start + x_char * self.PPC
+                    for bit in range(self.PPC):
+                        frame[cell_start + bit] = (value >> (7 - bit)) & 0x01
+        return bytes(frame)
 
     def render_pygame_surface(self, scaling: int = 1):
         """Render the display into a pygame Surface.

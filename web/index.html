@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="JR-100 Web Emulator">
+    <title>JR-100 Web Emulator</title>
+    <link rel="stylesheet" href="./style.css">
+  </head>
+  <body>
+    <main class="app-shell">
+      <header class="app-header">
+        <div>
+          <p class="eyebrow">Browser-local emulation</p>
+          <h1>JR-100 Web Emulator</h1>
+        </div>
+        <span id="core-status" class="status-badge">ROM required</span>
+      </header>
+
+      <section class="emulator-layout">
+        <div class="screen-panel">
+          <canvas id="screen" width="256" height="192" aria-label="JR-100 display"></canvas>
+          <div class="screen-meta">
+            <span id="rom-status">No ROM loaded</span>
+            <span id="gamepad-status">No gamepad detected</span>
+          </div>
+        </div>
+
+        <aside class="control-panel">
+          <section class="panel-section">
+            <h2>ROM</h2>
+            <p class="hint">A valid real-machine ROM is required. ROM bytes stay in this browser.</p>
+            <label class="file-button" for="rom-file">Choose ROM</label>
+            <input id="rom-file" type="file" accept=".prg,.prog,.rom,.bin">
+            <div class="button-row">
+              <button id="load-saved" type="button">Load saved</button>
+              <button id="remove-rom" type="button" class="danger">Remove</button>
+            </div>
+          </section>
+
+          <section class="panel-section">
+            <h2>Controls</h2>
+            <div class="button-row">
+              <button id="pause" type="button" disabled>Pause</button>
+              <button id="reset" type="button" disabled>Reset</button>
+            </div>
+            <button id="toggle-keyboard" type="button" disabled>Virtual keyboard</button>
+          </section>
+
+          <section class="panel-section small-copy">
+            <h2>Local data</h2>
+            <p>ROM data uses IndexedDB. Preferences use localStorage. Nothing uploads the selected ROM.</p>
+          </section>
+        </aside>
+      </section>
+
+      <section id="virtual-keyboard" class="virtual-keyboard" hidden aria-label="Virtual keyboard"></section>
+      <p id="error-status" class="error-status" role="alert"></p>
+    </main>
+    <script type="module" src="./emulator.js"></script>
+  </body>
+</html>

@@ -1,0 +1,81 @@
+name: Deploy JR-100 Web Emulator
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out source
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install Python test dependencies
+        run: python -m pip install -r requirements-dev.txt
+
+      - name: Run Python tests and coverage
+        run: python -m pytest --cov=src/jr100emu --cov-report=term-missing -q
+
+      - name: Run Ruff on changed Python surfaces
+        run: >-
+          python -m ruff check
+          src/jr100emu/browser
+          src/jr100emu/jr100/computer.py
+          src/jr100emu/jr100/display.py
+          src/jr100emu/jr100/memory.py
+          src/jr100emu/system
+          tools
+          tests/unit/test_browser_core.py
+          web/tests/browser_smoke.py
+
+      - name: Run browser module tests
+        run: node --test web/tests/*.test.mjs
+
+      - name: Build and verify Pages artifact
+        run: python tools/build_web.py --verify
+
+      - name: Install Chromium for browser smoke test
+        run: python -m playwright install --with-deps chromium
+
+      - name: Start static Pages server
+        run: |
+          python -m http.server 8000 --directory web/dist > /tmp/jr100-pages.log 2>&1 &
+          echo $! > /tmp/jr100-pages.pid
+
+      - name: Run browser smoke test
+        run: python web/tests/browser_smoke.py
+
+      - name: Configure Pages
+        uses: actions/configure-pages@v5
+
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: web/dist
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4

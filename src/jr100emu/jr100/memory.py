@@ -2,8 +2,9 @@
 
 from __future__ import annotations
 
+from dataclasses import dataclass
 from pathlib import Path
-from typing import Optional
+from typing import Optional, Union
 
 from jr100emu.memory import Addressable, RAM, ROM
 
@@ -123,7 +124,12 @@ class ExtendedIOPort(Addressable):
             status |= 0x08
         if switch:
             status |= 0x10
-        self.gamepad_status = status & 0xFF
+        self.set_gamepad_mask(status)
+
+    def set_gamepad_mask(self, mask: int) -> None:
+        """Set the active-high JR-100 joystick bits directly."""
+
+        self.gamepad_status = int(mask) & 0x1F
 
     def store16(self, address: int, value: int) -> None:
         return
@@ -132,15 +138,102 @@ class ExtendedIOPort(Addressable):
         return self.gamepad_status & 0xFF
 
 
+class RomFormatError(ValueError):
+    """Raised when a byte sequence is not a complete JR-100 BASIC ROM."""
+
+
+@dataclass(frozen=True)
+class RomImage:
+    """Decoded JR-100 ROM payload and its source metadata."""
+
+    format: str
+    start_address: int
+    data: bytes
+    name: str = ""
+
+
+def decode_rom_bytes(
+    raw: Union[bytes, bytearray, memoryview],
+    *,
+    start: int,
+    length: int,
+) -> RomImage:
+    """Decode a raw ROM image or the existing JR-100 PROG container."""
+
+    data = bytes(raw)
+    if data.startswith(BasicRom.PROG_FILE_ID):
+        return _decode_prog_rom(data, start=start, length=length)
+    if len(data) == length:
+        return RomImage(format="raw", start_address=start, data=data)
+    raise RomFormatError(
+        f"ROM must be {length} bytes raw or a valid PROG container, got {len(data)} bytes"
+    )
+
+
+def _decode_prog_rom(data: bytes, *, start: int, length: int) -> RomImage:
+    if len(data) < 32:
+        raise RomFormatError("PROG ROM header is truncated")
+
+    name_length = int.from_bytes(data[8:12], "little")
+    name_start = 12
+    name_end = name_start + name_length
+    metadata_end = name_end + 12
+    if name_end < name_start or metadata_end > len(data):
+        raise RomFormatError("PROG ROM metadata is truncated")
+
+    name = data[name_start:name_end].decode("ascii", errors="replace")
+    start_address = int.from_bytes(data[name_end:name_end + 4], "little")
+    data_length = int.from_bytes(data[name_end + 4:name_end + 8], "little")
+    payload_start = name_end + 12
+    payload_end = payload_start + data_length
+    if payload_end > len(data):
+        raise RomFormatError("PROG ROM payload is truncated")
+    if start_address != start:
+        raise RomFormatError(
+            f"PROG ROM start address must be 0x{start:04X}, got 0x{start_address:04X}"
+        )
+    if data_length != length:
+        raise RomFormatError(
+            f"PROG ROM payload must be {length} bytes, got {data_length} bytes"
+        )
+
+    return RomImage(
+        format="prog",
+        start_address=start_address,
+        data=data[payload_start:payload_end],
+        name=name,
+    )
+
+
 class BasicRom(ROM):
     """ROM loader that understands the JR-100 PROG container format."""
 
     PROG_FILE_ID = b"PROG"
 
-    def __init__(self, filename: str, start: int, length: int) -> None:
+    def __init__(
+        self,
+        filename: str,
+        start: int,
+        length: int,
+        *,
+        data: Union[bytes, bytearray, memoryview, None] = None,
+    ) -> None:
         super().__init__(start, length)
-        if filename:
+        self.format: Optional[str] = None
+        self.name = ""
+        if data is not None:
+            self.load_bytes(data)
+        elif filename:
             self.read_rom(filename)
+
+    @classmethod
+    def from_bytes(
+        cls,
+        data: Union[bytes, bytearray, memoryview],
+        start: int,
+        length: int,
+    ) -> "BasicRom":
+        return cls("", start, length, data=data)
 
     def get_font_address(self) -> int:
         return 0xE000
@@ -149,32 +242,19 @@ class BasicRom(ROM):
         path = Path(filename)
         if not path.exists():
             return
-        with path.open("rb") as stream:
-            header = stream.read(4)
-            if header != self.PROG_FILE_ID:
-                return
-            stream.read(4)  # skip version field
-            name_length = self._read_le32(stream)
-            if name_length > 0:
-                stream.read(name_length)
-            start_address = self._read_le32(stream)
-            data_length = self._read_le32(stream)
-            self._read_le32(stream)  # skip reserved field
-            if data_length <= 0:
-                return
-            if start_address < self.start or (start_address + data_length) > (self.start + self.length):
-                data_length = min(data_length, self.length)
-            payload = stream.read(data_length)
-            for index, value in enumerate(payload):
-                if index >= len(self.data):
-                    break
-                self.data[index] = value & 0xFF
+        try:
+            self.load_bytes(path.read_bytes())
+        except RomFormatError:
+            return
 
-    def _read_le32(self, stream) -> int:
-        raw = stream.read(4)
-        if len(raw) != 4:
-            return 0
-        return raw[0] | (raw[1] << 8) | (raw[2] << 16) | (raw[3] << 24)
+    def load_bytes(self, data: Union[bytes, bytearray, memoryview]) -> RomImage:
+        """Replace the ROM contents from a raw image or PROG container."""
+
+        image = decode_rom_bytes(data, start=self.start, length=self.length)
+        self.data[:] = image.data
+        self.format = image.format
+        self.name = image.name
+        return image
 
 
 __all__ = [
@@ -182,5 +262,8 @@ __all__ = [
     "UserDefinedCharacterRam",
     "VideoRam",
     "ExtendedIOPort",
+    "RomFormatError",
+    "RomImage",
+    "decode_rom_bytes",
     "BasicRom",
 ]

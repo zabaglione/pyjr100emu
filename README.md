@@ -1,6 +1,6 @@
 # JR-100 Emulator (Python Edition)
 
-Python で動作する JR-100 エミュレーターです。[Java 版 JR-100 Emulator v2](https://github.com/kemusiro/jr100-emulator-v2) をベースに、実機挙動を忠実に移植しました。Pygame を利用したデモアプリを同梱し、ROM/BASIC/PROG の実行やゲームパッド対応、デバッグオーバーレイなどを備えています。
+Python コアとブラウザ版を備えた JR-100 エミュレーターです。[Java 版 JR-100 Emulator v2](https://github.com/kemusiro/jr100-emulator-v2) をベースに、実機挙動を忠実に移植しました。Pygame を利用したデモアプリと、GitHub Pagesで動作するWeb Emulatorを同梱しています。
 
 ## すぐに試す
 
@@ -12,6 +12,17 @@ PYTHONPATH=src python -m jr100emu.app --rom datas/jr100rom.prg --joystick --audi
 ```
 
 テストや開発ツールを併用する場合は `pip install pytest` のように必要なパッケージを追加でインストールしてください。
+
+## Web Emulator
+
+ブラウザ版はPyodideのWeb WorkerからこのリポジトリのPythonコアを実行し、CanvasへJR-100の256×192画面を描画します。実機ROMの登録が必須で、ROM本体はIndexedDB、設定はlocalStorageへ保存します。アプリケーションからROMをサーバーへ送信する処理はありません。
+
+```bash
+python tools/build_web.py --verify
+python -m http.server 8000 --directory web/dist
+```
+
+詳細は [docs/WEB_EMULATOR.md](docs/WEB_EMULATOR.md) を参照してください。`main`へのpush時は [.github/workflows/deploy-pages.yml](.github/workflows/deploy-pages.yml) がテスト、ROM混入検査、GitHub Pages公開を実行します。
 
 起動後に `F1` キーで簡易ロードメニューを開き、`datas/` 内の BASIC (`.bas`) や PROG (`.prg`) ファイルを選択します。矢印キーやジョイスティックで項目を移動し、`ENTER` もしくはジョイスティックの決定ボタンで読み込みを実行してください。読み込みが完了すると READY プロンプトから `LIST` や `RUN` を利用できるようになります。
 

@@ -1,0 +1,13 @@
+[tool.coverage.run]
+source = ["src/jr100emu"]
+omit = [
+  "src/jr100emu/app.py",
+  "src/jr100emu/frontend/debug_overlay.py",
+  "src/jr100emu/frontend/file_menu.py",
+  "src/jr100emu/frontend/hex_viewer.py",
+  "src/jr100emu/tools/joystick_monitor.py",
+  "src/jr100emu/emulator/device/__init__.py",
+]
+
+[tool.coverage.report]
+fail_under = 80

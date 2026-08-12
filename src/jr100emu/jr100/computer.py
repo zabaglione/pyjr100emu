@@ -55,9 +55,13 @@ class JR100Computer(Computer):
         self,
         rom_path: str | os.PathLike[str] | None = None,
         *,
+        rom_bytes: bytes | bytearray | memoryview | None = None,
         extended_ram: bool = False,
         enable_audio: bool | None = None,
+        allow_implicit_rom: bool = True,
     ) -> None:
+        if rom_path is not None and rom_bytes is not None:
+            raise ValueError("rom_path and rom_bytes are mutually exclusive")
         memory = MemorySystem()
         memory.allocate_space(self.MEMORY_CAPACITY)
 
@@ -80,6 +84,8 @@ class JR100Computer(Computer):
         super().__init__(hardware=hardware)
 
         self._extended_ram = extended_ram
+        self._rom_bytes = bytes(rom_bytes) if rom_bytes is not None else None
+        self._allow_implicit_rom = allow_implicit_rom
         self._rom_path = self._resolve_rom_path(rom_path)
         self.program_info = None
 
@@ -121,8 +127,15 @@ class JR100Computer(Computer):
         memory.register_memory(ext_port)
         self.ext_port = ext_port
 
-        rom_path = str(self._rom_path) if self._rom_path is not None else ""
-        basic_rom = BasicRom(rom_path, self.BASIC_ROM_START, self.BASIC_ROM_LENGTH)
+        if self._rom_bytes is not None:
+            basic_rom = BasicRom.from_bytes(
+                self._rom_bytes,
+                self.BASIC_ROM_START,
+                self.BASIC_ROM_LENGTH,
+            )
+        else:
+            rom_path = str(self._rom_path) if self._rom_path is not None else ""
+            basic_rom = BasicRom(rom_path, self.BASIC_ROM_START, self.BASIC_ROM_LENGTH)
         memory.register_memory(basic_rom)
         self.basic_rom = basic_rom
         self._load_display_rom_from_basic()
@@ -147,6 +160,16 @@ class JR100Computer(Computer):
         rom = BasicRom(path, self.BASIC_ROM_START, self.BASIC_ROM_LENGTH)
         self.hardware.memory.register_memory(rom)
         self.basic_rom = rom
+        self._rom_bytes = None
+        self._rom_path = Path(path)
+        self._load_display_rom_from_basic()
+
+    def load_basic_rom_bytes(self, data: bytes | bytearray | memoryview) -> None:
+        rom = BasicRom.from_bytes(data, self.BASIC_ROM_START, self.BASIC_ROM_LENGTH)
+        self.hardware.memory.register_memory(rom)
+        self.basic_rom = rom
+        self._rom_bytes = bytes(data)
+        self._rom_path = None
         self._load_display_rom_from_basic()
 
     def has_extended_ram(self) -> bool:
@@ -162,11 +185,12 @@ class JR100Computer(Computer):
         candidates: list[Path] = []
         if rom_path is not None and str(rom_path):
             candidates.append(Path(rom_path))
-        env_value = os.getenv(self.ENV_ROM_PATH)
-        if env_value:
-            candidates.append(Path(env_value))
-        base = Path(__file__).resolve().parents[3]
-        candidates.append(base / "datas" / "jr100rom.prg")
+        if self._allow_implicit_rom:
+            env_value = os.getenv(self.ENV_ROM_PATH)
+            if env_value:
+                candidates.append(Path(env_value))
+            base = Path(__file__).resolve().parents[3]
+            candidates.append(base / "datas" / "jr100rom.prg")
         for candidate in candidates:
             if candidate.exists():
                 return candidate
