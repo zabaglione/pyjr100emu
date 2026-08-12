@@ -30,7 +30,20 @@ jobs:
         run: python -m pip install -r requirements-dev.txt
 
       - name: Run Python tests and coverage
-        run: python -m pytest --cov=src/jr100emu --cov-report=term-missing -q
+        env:
+          PYTHONPATH: src:.
+        run: |
+          python -m pytest \
+            --cov=jr100emu.browser \
+            --cov=jr100emu.jr100 \
+            --cov=jr100emu.io.joystick \
+            --cov-report=term-missing -q \
+            --ignore=tests/integration/test_basic_loader.py \
+            --ignore=tests/integration/test_basic_music.py \
+            --ignore=tests/integration/test_rom_basic_sound.py \
+            --ignore=tests/integration/test_star_fire_audio.py \
+            --ignore=tests/integration/test_star_fire_headless.py \
+            --ignore=tests/unit/test_basic_rom_loading.py
 
       - name: Run Ruff on changed Python surfaces
         run: >-

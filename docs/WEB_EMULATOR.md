@@ -38,7 +38,9 @@ python -m http.server 8000 --directory web/dist
 
 `http://127.0.0.1:8000/` を開き、実機ROMをファイル選択から登録します。Pyodideランタイムは固定バージョンをHTTPS CDNから取得します。GitHub PagesのworkflowはPythonテスト、ブラウザモジュールテスト、生成物のROM混入検査を通過してからPages artifactを公開します。
 
-CIのカバレッジ閾値は、Pygame専用のデスクトップUI・デバイス列挙コードを除くコア範囲で80パーセントに設定しています。Web artifactは合成raw ROMを使ったPlaywright smoke testで、ROM登録、Worker起動、Canvas画面、仮想キーボード、IndexedDBからの再読み込みを確認します。実機ROMそのものはリポジトリとCIへ含めません。
+CIのカバレッジ閾値は、ブラウザ境界、JR-100モデル、ジョイスティックアダプターを対象に80パーセントで設定しています。Web artifactは合成raw ROMを使ったPlaywright smoke testで、ROM登録、Worker起動、Canvas画面、仮想キーボード、IndexedDBからの再読み込みを確認します。実機ROMそのものはリポジトリとCIへ含めません。
+
+実機ROMと非公開プログラムを必要とする既存の音声・BASIC・Starfire統合テストは、CIでは明示的に除外します。これらはROMを配置した開発環境で実行し、CIではROM不要のCPU/VIAテストと合成ROMのブラウザsmoke testを実行します。
 
 ## 実装上の境界
 
