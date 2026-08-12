@@ -83,7 +83,7 @@ export class GamepadController {
     this.keyboard.holdGamepadSpecial("SPACE", buttonPressed(gamepad, this.settings.vkbBButton));
     this.keyboard.holdGamepadSpecial("RETURN", buttonPressed(gamepad, this.settings.vkbXButton));
     this.keyboard.holdGamepadSpecial("SHIFT", buttonPressed(gamepad, this.settings.vkbShiftButton));
-    this.keyboard.holdGamepadSpecial("CTL", buttonPressed(gamepad, this.settings.vkbCtrlButton));
+    this.keyboard.holdGamepadSpecial("CTRL", buttonPressed(gamepad, this.settings.vkbCtrlButton));
   }
 
   _axisDirection(gamepad, axisIndex, negativeButton, positiveButton) {
@@ -105,7 +105,7 @@ export class GamepadController {
   }
 
   _releaseSpecialKeys() {
-    for (const label of ["SPACE", "RETURN", "SHIFT", "CTL"]) {
+    for (const label of ["SPACE", "RETURN", "SHIFT", "CTRL"]) {
       this.keyboard.holdGamepadSpecial(label, false);
     }
     this.lastDirection = { x: 0, y: 0 };

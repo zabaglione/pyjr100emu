@@ -21,7 +21,13 @@ from jr100emu.jr100.memory import (
 from jr100emu.jr100.r6522 import JR100R6522
 from jr100emu.jr100.sound import JR100SoundProcessor
 from jr100emu.emulator.device import GamepadDevice
-from jr100emu.emulator.file import ProgramInfo, ProgramLoadError, load_basic_text, load_prog
+from jr100emu.emulator.file import (
+    ProgramInfo,
+    ProgramLoadError,
+    load_basic_text,
+    load_prog,
+    load_prog_bytes,
+)
 from jr100emu.memory import MemorySystem
 from jr100emu.system.computer import Computer
 
@@ -58,6 +64,7 @@ class JR100Computer(Computer):
         rom_bytes: bytes | bytearray | memoryview | None = None,
         extended_ram: bool = False,
         enable_audio: bool | None = None,
+        capture_audio: bool = False,
         allow_implicit_rom: bool = True,
     ) -> None:
         if rom_path is not None and rom_bytes is not None:
@@ -73,7 +80,9 @@ class JR100Computer(Computer):
                 enable_audio = env_audio.lower() in {"1", "true", "yes", "on"}
             else:
                 enable_audio = True
-        sound = JR100SoundProcessor(enable_audio=enable_audio)
+        sound = JR100SoundProcessor(
+            enable_audio=enable_audio, capture_audio=capture_audio
+        )
         hardware = JR100Hardware(
             memory=memory,
             display=display,
@@ -111,11 +120,15 @@ class JR100Computer(Computer):
     # Memory installation
     # ------------------------------------------------------------------
     def _install_memory_map(self, memory: MemorySystem) -> None:
-        main_ram_length = self.MAIN_RAM_EXTENDED if self._extended_ram else self.MAIN_RAM_STANDARD
+        main_ram_length = (
+            self.MAIN_RAM_EXTENDED if self._extended_ram else self.MAIN_RAM_STANDARD
+        )
         main_ram = MainRam(0x0000, main_ram_length)
         memory.register_memory(main_ram)
 
-        user_chars = UserDefinedCharacterRam(self.USER_CHAR_START, self.USER_CHAR_LENGTH)
+        user_chars = UserDefinedCharacterRam(
+            self.USER_CHAR_START, self.USER_CHAR_LENGTH
+        )
         user_chars.set_display(self.hardware.display)
         memory.register_memory(user_chars)
 
@@ -181,7 +194,9 @@ class JR100Computer(Computer):
     # ------------------------------------------------------------------
     # ROM helpers
     # ------------------------------------------------------------------
-    def _resolve_rom_path(self, rom_path: str | os.PathLike[str] | None) -> Optional[Path]:
+    def _resolve_rom_path(
+        self, rom_path: str | os.PathLike[str] | None
+    ) -> Optional[Path]:
         candidates: list[Path] = []
         if rom_path is not None and str(rom_path):
             candidates.append(Path(rom_path))
@@ -223,6 +238,16 @@ class JR100Computer(Computer):
         if not info.name:
             info.name = file_path.stem.upper()
         info.path = file_path
+        self.program_info = info
+        return info
+
+    def load_user_program_bytes(
+        self,
+        data: bytes | bytearray | memoryview,
+        *,
+        filename: str = "",
+    ) -> ProgramInfo:
+        info = load_prog_bytes(self.memory, data, filename=filename)
         self.program_info = info
         return info
 

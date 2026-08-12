@@ -1,35 +1,73 @@
-import { KEY_CELLS, KEY_MATRIX, getKeyCell, keyId } from "./keymap.js";
+import {
+  CTRL_LEGENDS,
+  KEY_CELLS,
+  PHYSICAL_LAYOUT,
+  getKeyCell,
+} from "./keymap.js";
+
+const TYPEABLE_CELLS = KEY_CELLS.filter((cell) => !cell.modifier);
 
 export class VirtualKeyboard {
   constructor(container, input) {
     this.container = container;
     this.input = input;
     this.buttons = new Map();
-    this.cursor = { row: 0, bit: 0 };
+    this.legendCanvases = new Map();
+    this.cursor = { row: 0, column: 0 };
     this.active = false;
+    this.graphicsMode = false;
+    this.font = null;
+    this.normalCodes = null;
+    this.shiftCodes = null;
     this._heldGamepadSource = null;
     this._build();
   }
 
   _build() {
     this.container.replaceChildren();
-    for (const row of KEY_MATRIX) {
+    for (const [rowIndex, row] of PHYSICAL_LAYOUT.entries()) {
       const rowElement = document.createElement("div");
-      rowElement.className = "keyboard-row";
+      rowElement.className = `keyboard-row keyboard-row-${rowIndex + 1}`;
       for (const cell of row) {
         const button = document.createElement("button");
         button.type = "button";
-        button.className = "virtual-key";
+        button.className = `virtual-key key-${cell.label.toLowerCase().replace(/[^a-z0-9]+/g, "-")}`;
         button.dataset.keyId = cell.id;
-        button.textContent = cell.label;
         button.setAttribute("aria-label", cell.label);
+
+        const ctrlLegend = document.createElement("span");
+        ctrlLegend.className = "ctrl-legend";
+        ctrlLegend.textContent = CTRL_LEGENDS[cell.label] || "";
+
+        const face = document.createElement("span");
+        face.className = "key-face";
+        const main = this._createLegendCanvas("main-legend");
+        const alternate = this._createLegendCanvas("alternate-legend");
+        const text = document.createElement("span");
+        text.className = "key-text";
+        text.textContent = cell.label;
+        face.append(main, text, alternate);
+        button.append(ctrlLegend, face);
+
         this.buttons.set(cell.id, button);
+        this.legendCanvases.set(cell.id, { main, alternate, text });
         this._installPointerHandlers(button, cell);
         rowElement.append(button);
       }
       this.container.append(rowElement);
     }
     this._refreshCursor();
+    this._updateLegends();
+  }
+
+  _createLegendCanvas(className) {
+    const canvas = document.createElement("canvas");
+    canvas.className = className;
+    canvas.width = 8;
+    canvas.height = 8;
+    canvas.hidden = true;
+    canvas.setAttribute("aria-hidden", "true");
+    return canvas;
   }
 
   _installPointerHandlers(button, cell) {
@@ -54,6 +92,21 @@ export class VirtualKeyboard {
     button.addEventListener("lostpointercapture", release);
   }
 
+  setRomAssets(font, normalCodes, shiftCodes) {
+    this.font = new Uint8Array(font || 0);
+    this.normalCodes = new Uint8Array(normalCodes || 0);
+    this.shiftCodes = new Uint8Array(shiftCodes || 0);
+    this._updateLegends();
+  }
+
+  setGraphicsMode(active) {
+    const next = Boolean(active);
+    if (next === this.graphicsMode) return;
+    this.graphicsMode = next;
+    this.container.classList.toggle("graphics-mode", next);
+    this._updateLegends();
+  }
+
   setActive(active) {
     this.active = Boolean(active);
     this.container.hidden = !this.active;
@@ -73,15 +126,18 @@ export class VirtualKeyboard {
     return this.active;
   }
 
-  move(rowDelta, bitDelta) {
+  move(rowDelta, columnDelta) {
     if (!this.active) return;
-    this.cursor.row = Math.max(0, Math.min(KEY_MATRIX.length - 1, this.cursor.row + rowDelta));
-    this.cursor.bit = Math.max(0, Math.min(KEY_MATRIX[this.cursor.row].length - 1, this.cursor.bit + bitDelta));
+    this.cursor.row = Math.max(0, Math.min(PHYSICAL_LAYOUT.length - 1, this.cursor.row + rowDelta));
+    this.cursor.column = Math.max(
+      0,
+      Math.min(PHYSICAL_LAYOUT[this.cursor.row].length - 1, this.cursor.column + columnDelta),
+    );
     this._refreshCursor();
   }
 
   holdGamepadKey(cell) {
-    if (!this.active) return;
+    if (!this.active || !cell) return;
     const source = `gamepad-vkbd:${cell.id}`;
     if (this._heldGamepadSource === source) return;
     this.releaseGamepadKey();
@@ -108,19 +164,54 @@ export class VirtualKeyboard {
   }
 
   currentCell() {
-    return getKeyCell(keyId(this.cursor.row, this.cursor.bit));
+    return PHYSICAL_LAYOUT[this.cursor.row]?.[this.cursor.column] || null;
   }
 
   _refreshCursor() {
     for (const button of this.buttons.values()) button.classList.remove("cursor");
-    const current = this.buttons.get(keyId(this.cursor.row, this.cursor.bit));
-    current?.classList.add("cursor");
+    const current = this.currentCell();
+    this.buttons.get(current?.id)?.classList.add("cursor");
   }
 
   _refreshHeld() {
     for (const [id, button] of this.buttons.entries()) {
       const cell = getKeyCell(id);
       button.classList.toggle("held", Boolean(cell && this.input.isPressed(cell.row, cell.bit)));
+    }
+    this._updateLegends();
+  }
+
+  _updateLegends() {
+    const shiftPressed = this.input.isPressed(0, 1);
+    for (const [index, cell] of TYPEABLE_CELLS.entries()) {
+      const legends = this.legendCanvases.get(cell.id);
+      if (!legends) continue;
+      const normal = this.normalCodes?.[index] || 0;
+      const shifted = this.shiftCodes?.[index] || 0;
+      const namedKey = cell.label === "SPACE" || cell.label === "RETURN";
+      const alternate = this.graphicsMode
+        ? ((shiftPressed ? shifted || normal : normal) | 0x40) & 0x7f
+        : shifted;
+      const hasFont = !namedKey && this.font?.length >= 1024 && normal !== 0;
+      legends.text.hidden = hasFont;
+      legends.main.hidden = !hasFont;
+      if (hasFont) this._drawGlyph(legends.main, normal, "#72e6f4");
+      legends.alternate.hidden = !hasFont || alternate === 0;
+      if (hasFont && alternate) this._drawGlyph(legends.alternate, alternate, "#b7f5fb");
+      legends.alternate.dataset.code = alternate.toString(16).padStart(2, "0");
+    }
+  }
+
+  _drawGlyph(canvas, code, color) {
+    const context = canvas.getContext("2d");
+    context.clearRect(0, 0, 8, 8);
+    context.fillStyle = color;
+    const offset = (code & 0x7f) * 8;
+    for (let y = 0; y < 8; y += 1) {
+      const row = this.font[offset + y] || 0;
+      for (let x = 0; x < 8; x += 1) {
+        if (row & (0x80 >> x)) context.fillRect(x, y, 1, 1);
+      }
     }
   }
 }

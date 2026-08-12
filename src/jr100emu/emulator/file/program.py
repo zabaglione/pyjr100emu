@@ -3,7 +3,9 @@
 from __future__ import annotations
 
 from dataclasses import dataclass, field
+import io
 from pathlib import Path
+import re
 from typing import BinaryIO, List, Optional, Sequence
 
 from jr100emu.memory import MemorySystem
@@ -47,6 +49,10 @@ class ProgramInfo:
     basic_area: bool = False
     address_regions: List[AddressRegion] = field(default_factory=list)
     path: Optional[Path] = None
+    version: int = 0
+    entry_point: Optional[int] = None
+    suggested_entry_point: Optional[int] = None
+    entry_source: str = ""
 
     def add_region(self, start: int, end: int, comment: str = "") -> None:
         self.address_regions.append(AddressRegion(start, end, comment))
@@ -57,27 +63,52 @@ def load_prog(memory: MemorySystem, path: str | Path) -> ProgramInfo:
 
     file_path = Path(path)
     with file_path.open("rb") as stream:
-        magic = stream.read(4)
-        if magic != PROG_MAGIC:
-            raise ProgramLoadError("invalid PROG magic")
-        version = _read_u32(stream)
-        if version < PROG_VERSION_MIN or version > PROG_VERSION_MAX:
-            raise ProgramLoadError(f"unsupported PROG version: {version}")
-        info = ProgramInfo(memory=memory, path=file_path)
-        if version == 1:
-            _load_prog_v1(stream, info)
-        else:
-            _load_prog_v2(stream, info)
-        if not info.name:
-            info.name = file_path.stem.upper()
-        return info
+        return _load_prog_stream(memory, stream, path=file_path)
 
 
-def load_basic_text(memory: MemorySystem, path: str | Path, *, encoding: str = "utf-8") -> ProgramInfo:
+def load_prog_bytes(
+    memory: MemorySystem,
+    data: bytes | bytearray | memoryview,
+    *,
+    filename: str = "",
+) -> ProgramInfo:
+    """Load a JR-100 PROG container supplied by a non-filesystem frontend."""
+
+    path = Path(filename) if filename else None
+    return _load_prog_stream(memory, io.BytesIO(bytes(data)), path=path)
+
+
+def _load_prog_stream(
+    memory: MemorySystem,
+    stream: BinaryIO,
+    *,
+    path: Path | None,
+) -> ProgramInfo:
+    magic = stream.read(4)
+    if magic != PROG_MAGIC:
+        raise ProgramLoadError("invalid PROG magic")
+    version = _read_u32(stream)
+    if version < PROG_VERSION_MIN or version > PROG_VERSION_MAX:
+        raise ProgramLoadError(f"unsupported PROG version: {version}")
+    info = ProgramInfo(memory=memory, path=path, version=version)
+    if version == 1:
+        _load_prog_v1(stream, info)
+    else:
+        _load_prog_v2(stream, info)
+    if not info.name and path is not None:
+        info.name = path.stem.upper()
+    return info
+
+
+def load_basic_text(
+    memory: MemorySystem, path: str | Path, *, encoding: str = "utf-8"
+) -> ProgramInfo:
     """Load JR-100 BASIC text (with escape sequences) into memory."""
 
     file_path = Path(path)
-    info = ProgramInfo(memory=memory, basic_area=True, path=file_path, name=file_path.stem.upper())
+    info = ProgramInfo(
+        memory=memory, basic_area=True, path=file_path, name=file_path.stem.upper()
+    )
 
     addr = BASIC_START_ADDRESS
     end_addr_limit = 0x7FFF  # Matches Java implementation
@@ -162,6 +193,8 @@ def _load_prog_v1(stream: BinaryIO, info: ProgramInfo) -> None:
         info.add_region(BASIC_START_ADDRESS, final_addr)
     else:
         info.add_region(start, start + length - 1)
+        info.entry_point = start & 0xFFFF
+        info.entry_source = "v1-start"
     info.name = name or info.name
 
 
@@ -169,6 +202,7 @@ def _load_prog_v2(stream: BinaryIO, info: ProgramInfo) -> None:
     memory = info.memory
     seen_sections: set[int] = set()
     pbin_count = 0
+    first_binary_start: int | None = None
     while True:
         header = stream.read(8)
         if not header:
@@ -189,7 +223,7 @@ def _load_prog_v2(stream: BinaryIO, info: ProgramInfo) -> None:
             name_len = int.from_bytes(payload[:4], "little", signed=False)
             if name_len > PROG_MAX_PROGRAM_NAME_LENGTH or 4 + name_len > section_length:
                 raise ProgramLoadError("invalid PNAM section length")
-            info.name = payload[4:4 + name_len].decode("utf-8") if name_len else ""
+            info.name = payload[4 : 4 + name_len].decode("utf-8") if name_len else ""
         elif section_id == SECTION_PBAS:
             if SECTION_PBAS in seen_sections:
                 continue
@@ -199,9 +233,13 @@ def _load_prog_v2(stream: BinaryIO, info: ProgramInfo) -> None:
                 raise ProgramLoadError("invalid PBAS section length")
             if program_length > PROG_MAX_PROGRAM_LENGTH:
                 raise ProgramLoadError("BASIC program too large")
-            data = payload[4:4 + program_length]
+            data = payload[4 : 4 + program_length]
             _write_prog_block(memory, BASIC_START_ADDRESS, data)
-            final_addr = BASIC_START_ADDRESS + program_length - 1 if program_length else BASIC_START_ADDRESS - 1
+            final_addr = (
+                BASIC_START_ADDRESS + program_length - 1
+                if program_length
+                else BASIC_START_ADDRESS - 1
+            )
             _finalize_basic(memory, final_addr)
             info.basic_area = True
             info.add_region(BASIC_START_ADDRESS, final_addr)
@@ -219,13 +257,15 @@ def _load_prog_v2(stream: BinaryIO, info: ProgramInfo) -> None:
             if data_end > section_length:
                 raise ProgramLoadError("invalid PBIN data length")
             data = payload[8:data_end]
+            if first_binary_start is None:
+                first_binary_start = start & 0xFFFF
             comment_offset = data_end
             remaining = section_length - comment_offset
             if remaining == 0:
                 comment = ""
             elif remaining >= 4:
                 comment_length = int.from_bytes(
-                    payload[comment_offset:comment_offset + 4], "little", signed=False
+                    payload[comment_offset : comment_offset + 4], "little", signed=False
                 )
                 if comment_length > PROG_MAX_COMMENT_LENGTH:
                     raise ProgramLoadError("invalid PBIN comment")
@@ -234,12 +274,18 @@ def _load_prog_v2(stream: BinaryIO, info: ProgramInfo) -> None:
                 if comment_end > section_length:
                     raise ProgramLoadError("invalid PBIN comment")
                 comment = (
-                    payload[comment_start:comment_end].decode("utf-8") if comment_length else ""
+                    payload[comment_start:comment_end].decode("utf-8")
+                    if comment_length
+                    else ""
                 )
             else:
                 raise ProgramLoadError("invalid PBIN comment length")
             _write_prog_block(memory, start, data)
             info.add_region(start, start + data_length - 1, comment)
+            entry_point = _entry_point_from_comment(comment)
+            if info.entry_point is None and entry_point is not None:
+                info.entry_point = entry_point
+                info.entry_source = "comment"
         elif section_id == SECTION_CMNT:
             if SECTION_CMNT in seen_sections:
                 continue
@@ -247,11 +293,35 @@ def _load_prog_v2(stream: BinaryIO, info: ProgramInfo) -> None:
             if section_length < 4:
                 raise ProgramLoadError("invalid CMNT section length")
             comment_length = int.from_bytes(payload[:4], "little", signed=False)
-            if comment_length > PROG_MAX_COMMENT_LENGTH or 4 + comment_length > section_length:
+            if (
+                comment_length > PROG_MAX_COMMENT_LENGTH
+                or 4 + comment_length > section_length
+            ):
                 raise ProgramLoadError("invalid CMNT payload")
-            info.comment = payload[4:4 + comment_length].decode("utf-8") if comment_length else ""
+            info.comment = (
+                payload[4 : 4 + comment_length].decode("utf-8")
+                if comment_length
+                else ""
+            )
         else:
             continue
+    if info.entry_point is None:
+        if first_binary_start is not None:
+            info.suggested_entry_point = first_binary_start
+            info.entry_source = "pbin-start"
+
+
+_ENTRY_POINT_PATTERN = re.compile(
+    r"(?:^|\s)(?:entry|usr)\s*=\s*(?:\$([0-9a-f]{1,4})|0x([0-9a-f]{1,4}))(?:\s|$)",
+    re.IGNORECASE,
+)
+
+
+def _entry_point_from_comment(comment: str) -> int | None:
+    match = _ENTRY_POINT_PATTERN.search(comment)
+    if match is None:
+        return None
+    return int(match.group(1) or match.group(2), 16) & 0xFFFF
 
 
 def _write_prog_block(memory: MemorySystem, start: int, data: Sequence[int]) -> None:
@@ -306,12 +376,16 @@ def _encode_basic_content(content: str, original: str) -> List[int]:
         ch = content[i]
         if ch == "\\":
             if i + 2 >= len(content):
-                raise ProgramLoadError(f"invalid escape at end of line: {original.rstrip()}\n")
-            hex_digits = content[i + 1:i + 3]
+                raise ProgramLoadError(
+                    f"invalid escape at end of line: {original.rstrip()}\n"
+                )
+            hex_digits = content[i + 1 : i + 3]
             try:
                 value = int(hex_digits, 16) & 0xFF
             except ValueError as exc:
-                raise ProgramLoadError(f"invalid escape \\{hex_digits} in line: {original.rstrip()}\n") from exc
+                raise ProgramLoadError(
+                    f"invalid escape \\{hex_digits} in line: {original.rstrip()}\n"
+                ) from exc
             result.append(value)
             i += 3
         else:

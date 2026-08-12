@@ -2,6 +2,8 @@
 
 from __future__ import annotations
 
+from array import array
+import sys
 from typing import Any
 
 from jr100emu.browser.core import BrowserCore
@@ -16,9 +18,9 @@ def _require_core() -> BrowserCore:
     return _core
 
 
-def create_core(values: Any) -> dict[str, Any]:
+def create_core(values: Any, extended_ram: bool = False) -> dict[str, Any]:
     global _core
-    _core = BrowserCore(bytes(values))
+    _core = BrowserCore(bytes(values), extended_ram=bool(extended_ram))
     return dict(_core.rom_info)
 
 
@@ -44,6 +46,53 @@ def set_joystick_mask(mask: int) -> None:
 
 def frame_buffer() -> bytes:
     return _require_core().frame_buffer()
+
+
+def audio_buffer() -> bytes:
+    samples = array("h", _require_core().audio_buffer())
+    if sys.byteorder != "little":
+        samples.byteswap()
+    return samples.tobytes()
+
+
+def font_data() -> bytes:
+    return _require_core().font_data()
+
+
+def normal_key_codes() -> bytes:
+    return _require_core().normal_key_codes()
+
+
+def shift_key_codes() -> bytes:
+    return _require_core().shift_key_codes()
+
+
+def load_program(values: Any, filename: str = "") -> dict[str, Any]:
+    return _require_core().load_program(bytes(values), filename=filename)
+
+
+def run_entry(address: int) -> str:
+    return _require_core().run_entry(address)
+
+
+def debug_state() -> dict[str, Any]:
+    return _require_core().debug_state()
+
+
+def read_memory(start: int, length: int) -> list[int]:
+    return _require_core().read_memory(start, length)
+
+
+def set_breakpoints(addresses: Any) -> None:
+    _require_core().set_breakpoints([int(address) for address in addresses])
+
+
+def continue_execution() -> None:
+    _require_core().continue_execution()
+
+
+def step_instruction() -> dict[str, Any]:
+    return _require_core().step_instruction()
 
 
 def state() -> dict[str, Any]:

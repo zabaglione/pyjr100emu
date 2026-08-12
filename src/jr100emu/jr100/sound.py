@@ -20,6 +20,7 @@ class JR100SoundProcessor:
     sample_rate: int = 44100
     volume: int = 30
     enable_audio: bool = False
+    capture_audio: bool = False
     chunk_samples: int = 2048
     mixer_buffer_samples: int = 512
     history_limit: int = 4096
@@ -122,9 +123,10 @@ class JR100SoundProcessor:
         target_time_ns = self._emulated_time_ns()
         if target_time_ns is None:
             return
-        if self.enable_audio:
+        if self.enable_audio or self.capture_audio:
             self._render_until(target_time_ns)
-            self.pump()
+            if self.enable_audio:
+                self.pump()
         else:
             self._advance_without_audio(target_time_ns)
 
@@ -211,6 +213,18 @@ class JR100SoundProcessor:
     def _ready_chunk_count(self) -> int:
         with self._queue_lock:
             return len(self._ready_chunks)
+
+    def drain_samples(self) -> list[int]:
+        """Return and clear PCM generated for a host-managed audio backend."""
+
+        samples: list[int] = []
+        with self._queue_lock:
+            while self._ready_chunks:
+                samples.extend(self._ready_chunks.popleft())
+            self._chunk_byte_offset = 0
+        samples.extend(self._sample_buffer)
+        self._sample_buffer = array("h")
+        return samples
 
     # ------------------------------------------------------------------
     # Mixer queue control

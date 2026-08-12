@@ -10,51 +10,118 @@
   <body>
     <main class="app-shell">
       <header class="app-header">
-        <div>
-          <p class="eyebrow">Browser-local emulation</p>
-          <h1>JR-100 Web Emulator</h1>
+        <div class="brand-block">
+          <span class="maker">LOCAL MACHINE CONSOLE</span>
+          <span class="brand-rule" aria-hidden="true"></span>
+          <h1>JR-100 <span>WEB</span></h1>
         </div>
         <span id="core-status" class="status-badge">ROM required</span>
       </header>
 
       <section class="emulator-layout">
-        <div class="screen-panel">
-          <canvas id="screen" width="256" height="192" aria-label="JR-100 display"></canvas>
+        <div class="machine-panel">
+          <div class="screen-bezel">
+            <canvas id="screen" width="256" height="192" aria-label="JR-100 display"></canvas>
+          </div>
           <div class="screen-meta">
             <span id="rom-status">No ROM loaded</span>
+            <span id="program-status">No program loaded</span>
             <span id="gamepad-status">No gamepad detected</span>
           </div>
         </div>
 
         <aside class="control-panel">
           <section class="panel-section">
-            <h2>ROM</h2>
-            <p class="hint">A valid real-machine ROM is required. ROM bytes stay in this browser.</p>
-            <label class="file-button" for="rom-file">Choose ROM</label>
+            <div class="section-heading"><h2>System ROM</h2><span>local only</span></div>
+            <p class="hint">A real JR-100 ROM is required and stays in this browser.</p>
+            <label class="file-button primary" for="rom-file">Choose ROM</label>
             <input id="rom-file" type="file" accept=".prg,.prog,.rom,.bin">
-            <div class="button-row">
+            <div class="button-row compact">
               <button id="load-saved" type="button">Load saved</button>
               <button id="remove-rom" type="button" class="danger">Remove</button>
+            </div>
+            <label class="check-row">
+              <input id="extended-ram" type="checkbox">
+              <span>32K extended RAM</span>
+            </label>
+          </section>
+
+          <section class="panel-section">
+            <div class="section-heading"><h2>Program</h2><span>V1 / V2</span></div>
+            <label class="file-button" for="program-file">Load PRG</label>
+            <input id="program-file" type="file" accept=".prg,.prog" disabled>
+            <div class="entry-control">
+              <label for="program-entry">USR entry</label>
+              <input id="program-entry" value="" maxlength="4" placeholder="0300" disabled>
+              <button id="run-entry" type="button" disabled>Run</button>
             </div>
           </section>
 
           <section class="panel-section">
-            <h2>Controls</h2>
-            <div class="button-row">
+            <h2>Console</h2>
+            <div class="button-grid">
               <button id="pause" type="button" disabled>Pause</button>
               <button id="reset" type="button" disabled>Reset</button>
+              <button id="mute" type="button">Sound on</button>
+              <button id="toggle-keyboard" type="button" disabled>Keyboard</button>
+              <button id="toggle-debugger" type="button" disabled>Debugger</button>
             </div>
-            <button id="toggle-keyboard" type="button" disabled>Virtual keyboard</button>
           </section>
 
-          <section class="panel-section small-copy">
-            <h2>Local data</h2>
-            <p>ROM data uses IndexedDB. Preferences use localStorage. Nothing uploads the selected ROM.</p>
+          <section class="panel-section local-note">
+            <h2>Browser storage</h2>
+            <p>ROM: IndexedDB. Settings: localStorage. Program files are not retained.</p>
           </section>
         </aside>
       </section>
 
-      <section id="virtual-keyboard" class="virtual-keyboard" hidden aria-label="Virtual keyboard"></section>
+      <section class="keyboard-section">
+        <header class="accessory-header">
+          <div><span class="section-index">01</span><h2>JR-100 Keyboard</h2></div>
+          <span id="keyboard-mode" class="mode-badge">ALPHA</span>
+        </header>
+        <div id="virtual-keyboard" class="virtual-keyboard" hidden aria-label="Virtual keyboard"></div>
+      </section>
+
+      <section id="debugger" class="debugger" hidden>
+        <header class="accessory-header">
+          <div><span class="section-index">02</span><h2>Debugger</h2></div>
+          <div class="debug-actions">
+            <button id="debug-stack" type="button">Stack</button>
+            <button id="debug-vram" type="button">VRAM</button>
+            <button id="debug-step" type="button">Step</button>
+            <button id="debug-refresh" type="button">Refresh</button>
+          </div>
+        </header>
+        <div class="debug-grid">
+          <section>
+            <h3>CPU</h3>
+            <pre id="debug-cpu">A 00  B 00  IX 0000
+SP 0000  PC 0000  ------</pre>
+          </section>
+          <section>
+            <h3>VIA 6522</h3>
+            <pre id="debug-via">ORA 00 ORB 00 DDRA 00 DDRB 00
+ACR 00 PCR 00 IFR 00 IER 00</pre>
+          </section>
+          <section class="breakpoint-panel">
+            <h3>Breakpoints</h3>
+            <label for="breakpoints">Hex addresses</label>
+            <div class="inline-control">
+              <input id="breakpoints" value="" placeholder="E000, E120">
+              <button id="apply-breakpoints" type="button">Apply</button>
+            </div>
+          </section>
+          <section class="memory-panel">
+            <div class="memory-heading">
+              <h3>Memory</h3>
+              <label>Start <input id="memory-start" value="0000" maxlength="4"></label>
+            </div>
+            <pre id="debug-memory"></pre>
+          </section>
+        </div>
+      </section>
+
       <p id="error-status" class="error-status" role="alert"></p>
     </main>
     <script type="module" src="./emulator.js"></script>

@@ -8,29 +8,40 @@ export class InputRouter {
   }
 
   press(source, cell) {
-    const key = `${cell.row}:${cell.bit}`;
+    this.pressChord(source, [cell]);
+  }
+
+  pressChord(source, cells) {
     this.release(source);
-    let sources = this.held.get(key);
-    if (!sources) {
-      sources = new Set();
-      this.held.set(key, sources);
-      this.sendKey(cell.row, cell.bit, true);
+    const keys = new Set();
+    for (const cell of cells) {
+      if (!cell) continue;
+      const key = `${cell.row}:${cell.bit}`;
+      let sources = this.held.get(key);
+      if (!sources) {
+        sources = new Set();
+        this.held.set(key, sources);
+        this.sendKey(cell.row, cell.bit, true);
+      }
+      sources.add(source);
+      keys.add(key);
     }
-    sources.add(source);
-    this.sourceKeys.set(source, key);
+    if (keys.size > 0) this.sourceKeys.set(source, keys);
   }
 
   release(source) {
-    const key = this.sourceKeys.get(source);
-    if (key === undefined) return;
+    const keys = this.sourceKeys.get(source);
+    if (keys === undefined) return;
     this.sourceKeys.delete(source);
-    const sources = this.held.get(key);
-    if (!sources) return;
-    sources.delete(source);
-    if (sources.size === 0) {
-      this.held.delete(key);
-      const [row, bit] = key.split(":").map(Number);
-      this.sendKey(row, bit, false);
+    for (const key of keys) {
+      const sources = this.held.get(key);
+      if (!sources) continue;
+      sources.delete(source);
+      if (sources.size === 0) {
+        this.held.delete(key);
+        const [row, bit] = key.split(":").map(Number);
+        this.sendKey(row, bit, false);
+      }
     }
   }
 
@@ -68,5 +79,33 @@ export class InputRouter {
 
   isPressed(row, bit) {
     return this.held.has(`${row}:${bit}`);
+  }
+}
+
+export class PhysicalKeyboardController {
+  constructor(input, resolveChord) {
+    this.input = input;
+    this.resolveChord = resolveChord;
+  }
+
+  keyDown(event) {
+    if (event.code === "ShiftLeft" || event.code === "ShiftRight") return true;
+    const chord = this.resolveChord(event);
+    if (!chord) return false;
+    if (event.repeat) return true;
+    if (!chord.some((cell) => cell.label === "SHIFT")) {
+      this.input.release("physical:ShiftLeft");
+      this.input.release("physical:ShiftRight");
+    }
+    this.input.pressChord(`physical:${event.code}`, chord);
+    return true;
+  }
+
+  keyUp(event) {
+    if (event.code === "ShiftLeft" || event.code === "ShiftRight") return true;
+    const source = `physical:${event.code}`;
+    if (!this.input.sourceKeys.has(source)) return Boolean(this.resolveChord(event));
+    this.input.release(source);
+    return true;
   }
 }

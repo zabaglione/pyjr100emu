@@ -52,10 +52,15 @@ jobs:
           src/jr100emu/jr100/computer.py
           src/jr100emu/jr100/display.py
           src/jr100emu/jr100/memory.py
+          src/jr100emu/jr100/sound.py
+          src/jr100emu/emulator/file/program.py
           src/jr100emu/system
           tools
           tests/unit/test_browser_core.py
+          tests/unit/test_prog_loader.py
+          tests/integration/test_browser_real_rom.py
           web/tests/browser_smoke.py
+          web/tests/real_rom_qa.py
 
       - name: Run browser module tests
         run: node --test web/tests/*.test.mjs

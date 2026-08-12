@@ -57,6 +57,23 @@ class JR100R6522(R6522):
     def _jumper_pb7_pb6(self) -> None:
         self.set_port_b(6, self.input_port_b_bit(7))
 
+    def debug_snapshot(self) -> dict[str, int]:
+        """Return the VIA registers needed by host debugger frontends."""
+
+        state = self._state
+        return {
+            "ora": state.ORA & 0xFF,
+            "orb": state.ORB & 0xFF,
+            "ddra": state.DDRA & 0xFF,
+            "ddrb": state.DDRB & 0xFF,
+            "acr": state.ACR & 0xFF,
+            "pcr": state.PCR & 0xFF,
+            "ifr": state.IFR & 0xFF,
+            "ier": state.IER & 0xFF,
+            "t1": state.timer1 & 0xFFFF,
+            "t2": state.timer2 & 0xFFFF,
+        }
+
     def _sound_timestamp(self) -> float:
         return (
             self._state.current_clock * 1_000_000_000

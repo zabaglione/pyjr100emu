@@ -1,29 +1,49 @@
+import { BrowserAudio } from "./audio.js";
+import { DebuggerPanel, hex } from "./debugger.js";
 import { DEFAULT_GAMEPAD_SETTINGS, GamepadController } from "./gamepad.js";
-import { findKeyCell } from "./keymap.js";
-import { InputRouter } from "./input.js";
-import { loadSettings, readStoredRom, saveRom, saveSettings, sha256, deleteStoredRom } from "./storage.js";
+import { resolveKeyboardChord } from "./keymap.js";
+import { InputRouter, PhysicalKeyboardController } from "./input.js";
+import {
+  deleteStoredRom,
+  loadSettings,
+  readStoredRom,
+  saveRom,
+  saveSettings,
+  sha256,
+} from "./storage.js";
 import { VirtualKeyboard } from "./virtual-keyboard.js";
 
 const WIDTH = 256;
 const HEIGHT = 192;
 const DEFAULT_SETTINGS = {
-  virtualKeyboard: false,
+  virtualKeyboard: true,
+  extendedRam: false,
+  audioMuted: false,
   gamepad: DEFAULT_GAMEPAD_SETTINGS,
 };
 
-const screen = document.querySelector("#screen");
+const element = (selector) => document.querySelector(selector);
+const screen = element("#screen");
 const context = screen.getContext("2d", { alpha: false });
 const image = context.createImageData(WIDTH, HEIGHT);
-const coreStatus = document.querySelector("#core-status");
-const romStatus = document.querySelector("#rom-status");
-const gamepadStatus = document.querySelector("#gamepad-status");
-const errorStatus = document.querySelector("#error-status");
-const romFile = document.querySelector("#rom-file");
-const loadSavedButton = document.querySelector("#load-saved");
-const removeRomButton = document.querySelector("#remove-rom");
-const pauseButton = document.querySelector("#pause");
-const resetButton = document.querySelector("#reset");
-const toggleKeyboardButton = document.querySelector("#toggle-keyboard");
+const coreStatus = element("#core-status");
+const romStatus = element("#rom-status");
+const programStatus = element("#program-status");
+const gamepadStatus = element("#gamepad-status");
+const errorStatus = element("#error-status");
+const romFile = element("#rom-file");
+const programFile = element("#program-file");
+const programEntry = element("#program-entry");
+const runEntryButton = element("#run-entry");
+const loadSavedButton = element("#load-saved");
+const removeRomButton = element("#remove-rom");
+const pauseButton = element("#pause");
+const resetButton = element("#reset");
+const muteButton = element("#mute");
+const toggleKeyboardButton = element("#toggle-keyboard");
+const keyboardMode = element("#keyboard-mode");
+const extendedRam = element("#extended-ram");
+const toggleDebuggerButton = element("#toggle-debugger");
 
 const settings = loadSettings(DEFAULT_SETTINGS);
 let running = false;
@@ -32,8 +52,24 @@ let frameInFlight = false;
 let storedRom = null;
 let coreReady = false;
 let pendingRom = null;
+let frameNumber = 0;
+let lastState = null;
+let pcmSampleCount = 0;
 
 const worker = new Worker(new URL("./worker.js", import.meta.url));
+const browserAudio = new BrowserAudio();
+const debuggerView = new DebuggerPanel({
+  root: element("#debugger"),
+  toggleButton: toggleDebuggerButton,
+  worker,
+  isAvailable: () => romLoaded,
+  onPause: () => {
+    running = false;
+    pauseButton.textContent = "Resume";
+    setStatus("Paused");
+  },
+  onError: setError,
+});
 
 function setStatus(message, isReady = false) {
   coreStatus.textContent = message;
@@ -53,9 +89,9 @@ function sendJoystick(mask) {
 }
 
 const input = new InputRouter(sendKey, sendJoystick);
-const virtualKeyboard = new VirtualKeyboard(document.querySelector("#virtual-keyboard"), input);
+const physicalKeyboard = new PhysicalKeyboardController(input, resolveKeyboardChord);
+const virtualKeyboard = new VirtualKeyboard(element("#virtual-keyboard"), input);
 virtualKeyboard.setActive(Boolean(settings.virtualKeyboard));
-toggleKeyboardButton.textContent = virtualKeyboard.active ? "Hide keyboard" : "Virtual keyboard";
 
 const gamepad = new GamepadController(
   input,
@@ -64,12 +100,26 @@ const gamepad = new GamepadController(
   (message) => { gamepadStatus.textContent = message; },
 );
 
+function updateKeyboardButton() {
+  toggleKeyboardButton.textContent = virtualKeyboard.active ? "Hide keyboard" : "Show keyboard";
+}
+
+function updateMuteUi() {
+  muteButton.textContent = browserAudio.muted ? "Sound off" : "Sound on";
+  muteButton.setAttribute("aria-pressed", String(browserAudio.muted));
+}
+
+browserAudio.setMuted(Boolean(settings.audioMuted));
+extendedRam.checked = Boolean(settings.extendedRam);
+updateKeyboardButton();
+updateMuteUi();
+
 function drawFrame(buffer) {
   const frame = buffer instanceof Uint8Array ? buffer : new Uint8Array(buffer);
   if (frame.length !== WIDTH * HEIGHT) throw new Error(`Invalid frame size: ${frame.length}`);
   for (let index = 0; index < frame.length; index += 1) {
     const offset = index * 4;
-    const value = frame[index] ? 255 : 0;
+    const value = frame[index] ? 239 : 5;
     image.data[offset] = value;
     image.data[offset + 1] = value;
     image.data[offset + 2] = value;
@@ -80,7 +130,10 @@ function drawFrame(buffer) {
 
 function postRom(bytes) {
   const copy = bytes.slice();
-  worker.postMessage({ type: "loadRom", buffer: copy.buffer }, [copy.buffer]);
+  worker.postMessage(
+    { type: "loadRom", buffer: copy.buffer, extendedRam: extendedRam.checked },
+    [copy.buffer],
+  );
 }
 
 async function loadRomBytes(bytes, name) {
@@ -109,12 +162,13 @@ async function loadSavedRom() {
 async function setRomUi(info, filename) {
   romLoaded = true;
   running = true;
-  pauseButton.disabled = false;
-  resetButton.disabled = false;
-  toggleKeyboardButton.disabled = false;
+  for (const control of [pauseButton, resetButton, toggleKeyboardButton, toggleDebuggerButton, programFile]) {
+    control.disabled = false;
+  }
   pauseButton.textContent = "Pause";
   setStatus("Running", true);
-  romStatus.textContent = `${filename || info.name || "ROM"} (${info.format}, ${info.size} bytes)`;
+  const ram = extendedRam.checked ? "32K RAM" : "16K RAM";
+  romStatus.textContent = `${filename || info.name || "ROM"} · ${info.format} · ${info.size} bytes · ${ram}`;
   const validated = pendingRom;
   pendingRom = null;
   if (!validated) return;
@@ -122,6 +176,19 @@ async function setRomUi(info, filename) {
     storedRom = await saveRom(validated.bytes, validated.metadata);
   } catch (error) {
     setError(error);
+  }
+}
+
+function updateMachineState(state) {
+  if (!state) return;
+  lastState = state;
+  virtualKeyboard.setGraphicsMode(Boolean(state.graphicsMode));
+  keyboardMode.textContent = state.graphicsMode ? "GRAPH" : "ALPHA";
+  if (state.breakpointHit !== null && state.breakpointHit !== undefined) {
+    running = false;
+    pauseButton.textContent = "Resume";
+    setStatus(`Break $${hex(state.breakpointHit, 4)}`);
+    debuggerView.request();
   }
 }
 
@@ -134,19 +201,52 @@ worker.addEventListener("message", (event) => {
       coreReady = true;
       setStatus("Core ready");
     } else if (message.type === "romLoaded") {
+      virtualKeyboard.setRomAssets(message.font, message.normal, message.shift);
       void setRomUi(message.info, pendingRom?.metadata.filename || storedRom?.filename);
+    } else if (message.type === "programLoaded") {
+      const info = message.info;
+      const shownEntry = info.entryPoint ?? info.suggestedEntryPoint;
+      const entry = shownEntry === null || shownEntry === undefined
+        ? ""
+        : ` · entry $${hex(shownEntry, 4)}`;
+      const action = info.autostartCommand ? ` · ${info.autostartCommand}` : "";
+      const source = info.entrySource === "pbin-start" ? " · PBIN start" : "";
+      programStatus.textContent = `${info.name || "PROGRAM"} · V${info.version}${entry}${source}${action}`;
+      if (shownEntry !== null && shownEntry !== undefined) {
+        programEntry.value = hex(shownEntry, 4);
+        programEntry.disabled = false;
+        runEntryButton.disabled = false;
+      }
+      running = true;
+      pauseButton.textContent = "Pause";
+      setStatus("Running", true);
+    } else if (message.type === "entryQueued") {
+      running = true;
+      pauseButton.textContent = "Pause";
+      programStatus.textContent = `${programStatus.textContent.split(" · queued")[0]} · queued ${message.command}`;
+      setStatus("Running", true);
     } else if (message.type === "frame") {
       frameInFlight = false;
       drawFrame(message.buffer);
+      pcmSampleCount += Math.floor((message.audio?.byteLength || 0) / 2);
+      muteButton.dataset.pcmSamples = String(pcmSampleCount);
+      browserAudio.enqueue(message.audio);
+      updateMachineState(message.state);
+      frameNumber += 1;
+      debuggerView.frameTick(frameNumber);
+    } else if (message.type === "debugSnapshot") {
+      debuggerView.receive(message);
     } else if (message.type === "error") {
       pendingRom = null;
       frameInFlight = false;
+      debuggerView.clearPending();
       running = false;
       setStatus("Error");
       setError(message.message);
     }
   } catch (error) {
     frameInFlight = false;
+    debuggerView.clearPending();
     running = false;
     setError(error);
   }
@@ -154,6 +254,7 @@ worker.addEventListener("message", (event) => {
 
 worker.addEventListener("error", (event) => {
   frameInFlight = false;
+  debuggerView.clearPending();
   running = false;
   setStatus("Worker error");
   setError(event.message || "Worker failed");
@@ -174,6 +275,24 @@ romFile.addEventListener("change", async () => {
   }
 });
 
+programFile.addEventListener("change", async () => {
+  const file = programFile.files?.[0];
+  if (!file || !romLoaded) return;
+  setError(null);
+  try {
+    const bytes = new Uint8Array(await file.arrayBuffer());
+    const copy = bytes.slice();
+    worker.postMessage(
+      { type: "loadProgram", filename: file.name, buffer: copy.buffer },
+      [copy.buffer],
+    );
+  } catch (error) {
+    setError(error);
+  } finally {
+    programFile.value = "";
+  }
+});
+
 loadSavedButton.addEventListener("click", loadSavedRom);
 removeRomButton.addEventListener("click", async () => {
   try {
@@ -182,11 +301,16 @@ removeRomButton.addEventListener("click", async () => {
     romLoaded = false;
     running = false;
     input.clear();
-    pauseButton.disabled = true;
-    resetButton.disabled = true;
-    toggleKeyboardButton.disabled = true;
+    worker.postMessage({ type: "clearKeys" });
+    for (const control of [pauseButton, resetButton, toggleKeyboardButton, toggleDebuggerButton, programFile]) {
+      control.disabled = true;
+    }
+    programEntry.disabled = true;
+    runEntryButton.disabled = true;
+    programEntry.value = "";
     setStatus("ROM required");
     romStatus.textContent = "No ROM loaded";
+    programStatus.textContent = "No program loaded";
   } catch (error) {
     setError(error);
   }
@@ -194,35 +318,80 @@ removeRomButton.addEventListener("click", async () => {
 
 pauseButton.addEventListener("click", () => {
   running = !running;
+  if (running && lastState?.breakpointHit !== null && lastState?.breakpointHit !== undefined) {
+    worker.postMessage({ type: "continue" });
+    lastState = { ...lastState, breakpointHit: null };
+  }
   pauseButton.textContent = running ? "Pause" : "Resume";
   setStatus(running ? "Running" : "Paused", running);
 });
 
 resetButton.addEventListener("click", () => {
-  if (romLoaded) worker.postMessage({ type: "reset" });
+  if (romLoaded) {
+    input.clear();
+    worker.postMessage({ type: "reset" });
+    running = true;
+    pauseButton.textContent = "Pause";
+    setStatus("Running", true);
+  }
+});
+
+muteButton.addEventListener("click", async () => {
+  browserAudio.setMuted(!browserAudio.muted);
+  settings.audioMuted = browserAudio.muted;
+  saveSettings(settings);
+  if (!browserAudio.muted) await browserAudio.unlock();
+  updateMuteUi();
 });
 
 toggleKeyboardButton.addEventListener("click", () => {
-  const active = virtualKeyboard.toggle();
-  toggleKeyboardButton.textContent = active ? "Hide keyboard" : "Virtual keyboard";
-  settings.virtualKeyboard = active;
+  settings.virtualKeyboard = virtualKeyboard.toggle();
   saveSettings(settings);
+  updateKeyboardButton();
 });
 
+extendedRam.addEventListener("change", async () => {
+  settings.extendedRam = extendedRam.checked;
+  saveSettings(settings);
+  if (romLoaded) await loadSavedRom();
+});
+
+runEntryButton.addEventListener("click", () => {
+  try {
+    const token = programEntry.value.trim().replace(/^\$/u, "").replace(/^0x/iu, "");
+    if (!/^[0-9a-f]{1,4}$/iu.test(token)) throw new Error("USR entry must be a hexadecimal address");
+    const address = Number.parseInt(token, 16);
+    input.clear();
+    worker.postMessage({ type: "runEntry", address });
+    setError(null);
+  } catch (error) {
+    setError(error);
+  }
+});
+
+function isEditableTarget(target) {
+  return target instanceof HTMLInputElement || target instanceof HTMLTextAreaElement || target?.isContentEditable;
+}
+
 window.addEventListener("keydown", (event) => {
-  const cell = findKeyCell(event);
-  if (!cell) return;
+  void browserAudio.unlock().catch(setError);
+  if (event.code === "Escape" && romLoaded) {
+    debuggerView.toggle();
+    event.preventDefault();
+    return;
+  }
+  if (isEditableTarget(event.target)) return;
+  if (!physicalKeyboard.keyDown(event)) return;
   event.preventDefault();
-  if (!event.repeat) input.press(`physical:${event.code}`, cell);
 });
 
 window.addEventListener("keyup", (event) => {
-  const cell = findKeyCell(event);
-  if (!cell) return;
+  if (isEditableTarget(event.target)) return;
+  if (!physicalKeyboard.keyUp(event)) return;
   event.preventDefault();
-  input.release(`physical:${event.code}`);
 });
 
+window.addEventListener("pointerdown", () => { void browserAudio.unlock().catch(setError); });
 window.addEventListener("blur", () => {
   input.releaseMomentary();
   input.setJoystickMask(0);
@@ -237,7 +406,7 @@ async function initializeStoredRom() {
   try {
     storedRom = await readStoredRom();
     if (storedRom) {
-      romStatus.textContent = `${storedRom.filename || "Saved ROM"} (saved locally)`;
+      romStatus.textContent = `${storedRom.filename || "Saved ROM"} · saved locally`;
       await loadSavedRom();
     }
   } catch (error) {
@@ -255,5 +424,5 @@ function frameLoop(now) {
 }
 
 setStatus("ROM required");
-initializeStoredRom();
+void initializeStoredRom();
 requestAnimationFrame(frameLoop);
