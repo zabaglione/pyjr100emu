@@ -25,6 +25,7 @@ from jr100emu.emulator.file import (
     ProgramInfo,
     ProgramLoadError,
     load_basic_text,
+    load_basic_text_bytes,
     load_prog,
     load_prog_bytes,
 )
@@ -247,7 +248,11 @@ class JR100Computer(Computer):
         *,
         filename: str = "",
     ) -> ProgramInfo:
-        info = load_prog_bytes(self.memory, data, filename=filename)
+        suffix = Path(filename).suffix.lower()
+        if suffix in {".bas", ".txt"}:
+            info = load_basic_text_bytes(self.memory, data, filename=filename)
+        else:
+            info = load_prog_bytes(self.memory, data, filename=filename)
         self.program_info = info
         return info
 

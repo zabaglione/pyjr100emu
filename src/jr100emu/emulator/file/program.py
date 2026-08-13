@@ -106,40 +106,69 @@ def load_basic_text(
     """Load JR-100 BASIC text (with escape sequences) into memory."""
 
     file_path = Path(path)
+    with file_path.open("r", encoding=encoding) as handle:
+        return _load_basic_text_stream(memory, handle, path=file_path)
+
+
+def load_basic_text_bytes(
+    memory: MemorySystem,
+    data: bytes | bytearray | memoryview,
+    *,
+    filename: str = "",
+    encoding: str = "utf-8",
+) -> ProgramInfo:
+    """Load BASIC text supplied by a non-filesystem frontend."""
+
+    path = Path(filename) if filename else None
+    try:
+        text = bytes(data).decode(encoding)
+    except UnicodeDecodeError as exc:
+        raise ProgramLoadError("BASIC text is not valid UTF-8") from exc
+    return _load_basic_text_stream(memory, io.StringIO(text), path=path)
+
+
+def _load_basic_text_stream(
+    memory: MemorySystem,
+    handle: io.TextIOBase,
+    *,
+    path: Path | None,
+) -> ProgramInfo:
     info = ProgramInfo(
-        memory=memory, basic_area=True, path=file_path, name=file_path.stem.upper()
+        memory=memory,
+        basic_area=True,
+        path=path,
+        name=path.stem.upper() if path is not None else "",
     )
 
     addr = BASIC_START_ADDRESS
     end_addr_limit = 0x7FFF  # Matches Java implementation
 
-    with file_path.open("r", encoding=encoding) as handle:
-        for raw_line in handle:
-            line = raw_line.rstrip("\r\n")
-            canonical = _canonicalize_basic_line(line)
-            if not canonical:
-                continue
-            line_number, rest = _extract_basic_line_number(canonical, raw_line)
-            digits_length = 2
-            if addr + digits_length > end_addr_limit:
-                raise ProgramLoadError("basic program does not fit in memory")
-            memory.store16(addr, line_number)
-            addr += digits_length
-            line_length = digits_length
+    for raw_line in handle:
+        line = raw_line.rstrip("\r\n")
+        canonical = _canonicalize_basic_line(line)
+        if not canonical:
+            continue
+        line_number, rest = _extract_basic_line_number(canonical, raw_line)
+        digits_length = 2
+        if addr + digits_length > end_addr_limit:
+            raise ProgramLoadError("basic program does not fit in memory")
+        memory.store16(addr, line_number)
+        addr += digits_length
+        line_length = digits_length
 
-            for byte in _encode_basic_content(rest, raw_line):
-                if addr > end_addr_limit:
-                    raise ProgramLoadError("basic program does not fit in memory")
-                memory.store8(addr, byte)
-                addr += 1
-                line_length += 1
-
-            if line_length > MAX_BASIC_LINE_LENGTH:
-                raise ProgramLoadError(f"line too long: {raw_line.rstrip()}\n")
+        for byte in _encode_basic_content(rest, raw_line):
             if addr > end_addr_limit:
                 raise ProgramLoadError("basic program does not fit in memory")
-            memory.store8(addr, 0x00)
+            memory.store8(addr, byte)
             addr += 1
+            line_length += 1
+
+        if line_length > MAX_BASIC_LINE_LENGTH:
+            raise ProgramLoadError(f"line too long: {raw_line.rstrip()}\n")
+        if addr > end_addr_limit:
+            raise ProgramLoadError("basic program does not fit in memory")
+        memory.store8(addr, 0x00)
+        addr += 1
 
     last_data_address = addr - 1
     if addr + 3 > end_addr_limit:

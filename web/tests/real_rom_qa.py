@@ -11,6 +11,7 @@ from playwright.sync_api import sync_playwright
 def run(
     url: str,
     rom_path: Path,
+    programs: list[Path],
     screenshot: Path | None,
     mobile_screenshot: Path | None,
 ) -> None:
@@ -36,6 +37,9 @@ def run(
         page.keyboard.up("v")
         page.keyboard.up("Control")
         page.locator("#keyboard-mode").filter(has_text="GRAPH").wait_for(timeout=10_000)
+        page.wait_for_function(
+            "document.querySelector('#mute').dataset.audioBackend !== 'none'"
+        )
         graph_legend = page.locator(".key-1 .alternate-legend").get_attribute(
             "data-code"
         )
@@ -71,6 +75,38 @@ def run(
         assert page.locator("#error-status").inner_text() == ""
         assert not errors, errors
 
+        for program in programs:
+            page.reload(wait_until="networkidle")
+            page.locator("#rom-file").set_input_files(str(rom_path))
+            page.locator("#core-status").filter(has_text="Running").wait_for(
+                timeout=120_000
+            )
+            page.keyboard.press("a")
+            page.wait_for_function(
+                "document.querySelector('#mute').dataset.audioBackend !== 'none'"
+            )
+            before_active = int(
+                page.locator("#mute").get_attribute("data-pcm-active-samples") or 0
+            )
+            page.locator("#program-file").set_input_files(str(program))
+            if program.suffix.lower() in {".bas", ".txt"}:
+                page.locator("#program-status").filter(has_text="BASIC").wait_for(
+                    timeout=20_000
+                )
+            else:
+                page.locator("#program-status").filter(has_text="V").wait_for(
+                    timeout=20_000
+                )
+            page.wait_for_timeout(8_000)
+            after_active = int(
+                page.locator("#mute").get_attribute("data-pcm-active-samples") or 0
+            )
+            print(
+                f"{program}: active PCM {before_active} -> {after_active}; "
+                f"status={page.locator('#program-status').inner_text()}"
+            )
+            assert after_active - before_active > 10_000, program
+
         if screenshot is not None:
             screenshot.parent.mkdir(parents=True, exist_ok=True)
             page.screenshot(path=str(screenshot), full_page=True)
@@ -85,10 +121,11 @@ def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--url", default="http://127.0.0.1:8000/")
     parser.add_argument("--rom", type=Path, required=True)
+    parser.add_argument("--program", type=Path, action="append", default=[])
     parser.add_argument("--screenshot", type=Path)
     parser.add_argument("--mobile-screenshot", type=Path)
     args = parser.parse_args()
-    run(args.url, args.rom, args.screenshot, args.mobile_screenshot)
+    run(args.url, args.rom, args.program, args.screenshot, args.mobile_screenshot)
     print("real ROM browser QA passed")
     return 0
 

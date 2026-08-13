@@ -55,6 +55,7 @@ let pendingRom = null;
 let frameNumber = 0;
 let lastState = null;
 let pcmSampleCount = 0;
+let pcmActiveSampleCount = 0;
 
 const worker = new Worker(new URL("./worker.js", import.meta.url));
 const browserAudio = new BrowserAudio();
@@ -107,6 +108,15 @@ function updateKeyboardButton() {
 function updateMuteUi() {
   muteButton.textContent = browserAudio.muted ? "Sound off" : "Sound on";
   muteButton.setAttribute("aria-pressed", String(browserAudio.muted));
+  muteButton.dataset.audioBackend = browserAudio.backend;
+  muteButton.dataset.audioWorkletStarted = String(browserAudio.workletStarted);
+  muteButton.dataset.pcmActiveSamples = String(pcmActiveSampleCount);
+}
+
+async function unlockAudio() {
+  const unlocked = await browserAudio.unlock();
+  updateMuteUi();
+  return unlocked;
 }
 
 browserAudio.setMuted(Boolean(settings.audioMuted));
@@ -130,6 +140,7 @@ function drawFrame(buffer) {
 
 function postRom(bytes) {
   const copy = bytes.slice();
+  browserAudio.clear();
   worker.postMessage(
     { type: "loadRom", buffer: copy.buffer, extendedRam: extendedRam.checked },
     [copy.buffer],
@@ -205,13 +216,17 @@ worker.addEventListener("message", (event) => {
       void setRomUi(message.info, pendingRom?.metadata.filename || storedRom?.filename);
     } else if (message.type === "programLoaded") {
       const info = message.info;
+      programEntry.value = "";
+      programEntry.disabled = true;
+      runEntryButton.disabled = true;
       const shownEntry = info.entryPoint ?? info.suggestedEntryPoint;
       const entry = shownEntry === null || shownEntry === undefined
         ? ""
         : ` · entry $${hex(shownEntry, 4)}`;
       const action = info.autostartCommand ? ` · ${info.autostartCommand}` : "";
       const source = info.entrySource === "pbin-start" ? " · PBIN start" : "";
-      programStatus.textContent = `${info.name || "PROGRAM"} · V${info.version}${entry}${source}${action}`;
+      const format = info.basic ? "BASIC" : `V${info.version}`;
+      programStatus.textContent = `${info.name || "PROGRAM"} · ${format}${entry}${source}${action}`;
       if (shownEntry !== null && shownEntry !== undefined) {
         programEntry.value = hex(shownEntry, 4);
         programEntry.disabled = false;
@@ -229,8 +244,14 @@ worker.addEventListener("message", (event) => {
       frameInFlight = false;
       drawFrame(message.buffer);
       pcmSampleCount += Math.floor((message.audio?.byteLength || 0) / 2);
+      const pcm = message.audio ? new Int16Array(message.audio) : new Int16Array();
+      for (const sample of pcm) {
+        if (sample !== 0) pcmActiveSampleCount += 1;
+      }
       muteButton.dataset.pcmSamples = String(pcmSampleCount);
+      muteButton.dataset.pcmActiveSamples = String(pcmActiveSampleCount);
       browserAudio.enqueue(message.audio);
+      updateMuteUi();
       updateMachineState(message.state);
       frameNumber += 1;
       debuggerView.frameTick(frameNumber);
@@ -281,6 +302,7 @@ programFile.addEventListener("change", async () => {
   setError(null);
   try {
     const bytes = new Uint8Array(await file.arrayBuffer());
+    browserAudio.clear();
     const copy = bytes.slice();
     worker.postMessage(
       { type: "loadProgram", filename: file.name, buffer: copy.buffer },
@@ -296,6 +318,7 @@ programFile.addEventListener("change", async () => {
 loadSavedButton.addEventListener("click", loadSavedRom);
 removeRomButton.addEventListener("click", async () => {
   try {
+    browserAudio.clear();
     await deleteStoredRom();
     storedRom = null;
     romLoaded = false;
@@ -328,6 +351,7 @@ pauseButton.addEventListener("click", () => {
 
 resetButton.addEventListener("click", () => {
   if (romLoaded) {
+    browserAudio.clear();
     input.clear();
     worker.postMessage({ type: "reset" });
     running = true;
@@ -340,7 +364,7 @@ muteButton.addEventListener("click", async () => {
   browserAudio.setMuted(!browserAudio.muted);
   settings.audioMuted = browserAudio.muted;
   saveSettings(settings);
-  if (!browserAudio.muted) await browserAudio.unlock();
+  if (!browserAudio.muted) await unlockAudio();
   updateMuteUi();
 });
 
@@ -374,7 +398,7 @@ function isEditableTarget(target) {
 }
 
 window.addEventListener("keydown", (event) => {
-  void browserAudio.unlock().catch(setError);
+  void unlockAudio().catch(setError);
   if (event.code === "Escape" && romLoaded) {
     debuggerView.toggle();
     event.preventDefault();
@@ -391,7 +415,7 @@ window.addEventListener("keyup", (event) => {
   event.preventDefault();
 });
 
-window.addEventListener("pointerdown", () => { void browserAudio.unlock().catch(setError); });
+window.addEventListener("pointerdown", () => { void unlockAudio().catch(setError); });
 window.addEventListener("blur", () => {
   input.releaseMomentary();
   input.setJoystickMask(0);

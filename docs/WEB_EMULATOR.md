@@ -44,13 +44,13 @@ ROM未登録ではCPUを起動せず、選択したROMはIndexedDBへ保存し�
 
 ## BEEP
 
-PythonコアのVIA T1サウンドイベントを44.1kHz、16bitモノラルPCMへ変換し、各フレームの画面と一緒にWorkerからWeb Audioへ渡します。Pygameミキサーには依存しません。ブラウザの自動再生制限に対応するため、最初のクリックまたはキー入力でAudioContextを開始します。`Sound on/off`でミュート状態を切り替え、設定はlocalStorageへ保存します。
+PythonコアのVIA T1サウンドイベントを44.1kHz、16bitモノラルPCMへ変換し、各フレームの画面と一緒にWorkerからWeb Audioへ渡します。Web側はPCMを小容量キューへ蓄積し、AudioWorkletの128サンプル処理量へ順次供給します。AudioWorkletが使えない環境だけ、512サンプル単位の連続`AudioBufferSourceNode`へフォールバックします。Pygameミキサーには依存しません。ブラウザの自動再生制限に対応するため、最初のクリックまたはキー入力でAudioContextを開始します。`Sound on/off`でミュート状態を切り替え、設定はlocalStorageへ保存します。
 
 ## PROG V1/V2
 
-`Load PRG`はPROG V1/V2をメモリへ直接読み込みます。ファイルはブラウザ内で処理し、保存もアップロードもしません。
+`Load program`はPROG V1/V2と、通常の`.bas`/`.txt` BASICテキストをメモリへ読み込みます。ファイルはブラウザ内で処理し、保存もアップロードもしません。
 
-- BASICセクションは、ROMのREADY待ち後に`RUN`を自動タイプします。
+- BASICセクションとBASICテキストは、ROMのREADY待ち後に`RUN`を自動タイプします。
 - V1機械語は、V1ヘッダの開始アドレスを`A=USR($hhhh)`で自動実行します。
 - V2機械語は、PBINコメントの`entry=$hhhh`または`USR=$hhhh`を優先します。
 - V2の正式形式には独立した実行エントリがないため、コメントがなければ最初のPBINロード先を推定値として表示します。画面には`PBIN start`と表示し、誤ってデータ領域を実行しないよう自動実行はしません。
@@ -91,10 +91,18 @@ CIのカバレッジ閾値は、ブラウザ境界、JR-100モデル、ジョイ
 ```bash
 python web/tests/real_rom_qa.py \
   --rom datas/jr100rom.prg \
+  --program datas/sound_scale.prg \
+  --program datas/twinkle_star.bas \
   --screenshot /tmp/jr100emu.png
 ```
 
-この受入はREADY表示、CTRL+V、ALPHA/GRAPH凡例切替、BEEP PCM、デバッガを確認します。
+この受入はREADY表示、CTRL+V、ALPHA/GRAPH凡例切替、AudioWorklet選択、指定プログラム実行中の非ゼロPCM増加、デバッガを確認します。
+
+ローカルコアとブラウザ用`BrowserCore`の音声イベントを比較するには、次を実行します。`frequencyHistoryEqual`、音区間数、サンプル数を確認し、タイムラインの実時間基準差によるPCM完全一致だけは要求しません。
+
+```bash
+PYTHONPATH=src python tools/compare_audio.py --frames 1200
+```
 
 ## 実装上の境界
 

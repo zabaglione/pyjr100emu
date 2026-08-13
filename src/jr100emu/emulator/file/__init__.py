@@ -11,6 +11,7 @@ from jr100emu.emulator.file.program import (
     ProgramInfo,
     ProgramLoadError,
     load_basic_text,
+    load_basic_text_bytes,
     load_prog,
     load_prog_bytes,
 )
@@ -24,6 +25,7 @@ __all__ = [
     "BasicTextFormatFile",
     "BinaryTextFormatFile",
     "load_basic_text",
+    "load_basic_text_bytes",
     "load_prog",
     "load_prog_bytes",
 ]

@@ -103,6 +103,19 @@ def run(url: str) -> None:
         assert "32K RAM" in page.locator("#rom-status").inner_text()
         assert page.locator(".main-legend:not([hidden])").count() > 20
         assert page.locator(".key-v .ctrl-legend").inner_text() == "GRAPH"
+        page.keyboard.press("a")
+        page.wait_for_function(
+            "document.querySelector('#mute').dataset.audioBackend !== 'none'"
+        )
+        assert page.locator("#mute").get_attribute("data-audio-backend") in {
+            "worklet",
+            "buffer-source",
+        }
+        page.wait_for_function(
+            "(() => { const button = document.querySelector('#mute'); "
+            "return button.dataset.audioBackend === 'buffer-source' "
+            "|| button.dataset.audioWorkletStarted === 'true'; })()",
+        )
         page.wait_for_function(
             "Number(document.querySelector('#mute').dataset.pcmSamples || 0) > 0"
         )
@@ -121,6 +134,17 @@ def run(url: str) -> None:
         page.locator("#program-status").filter(
             has_text="queued A=USR($3456)"
         ).wait_for()
+
+        page.locator("#program-file").set_input_files(
+            {
+                "name": "demo.bas",
+                "mimeType": "text/plain",
+                "buffer": b"10 END\n",
+            }
+        )
+        page.locator("#program-status").filter(has_text="BASIC").wait_for()
+        assert page.locator("#program-entry").is_disabled()
+        assert page.locator("#run-entry").is_disabled()
 
         page.locator("#toggle-debugger").click()
         page.locator("#debug-memory").filter(has_text="0000").wait_for()

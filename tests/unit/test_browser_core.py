@@ -205,6 +205,17 @@ def test_browser_core_loads_v2_program_and_queues_usr_autostart() -> None:
     assert core.state()["autotypeActive"] is True
 
 
+def test_browser_core_loads_basic_text_bytes_and_queues_run() -> None:
+    core = BrowserCore(_rom_payload())
+
+    info = core.load_program(b"10 END\n", filename="demo.bas")
+
+    assert info["basic"] is True
+    assert info["autostartCommand"] == "RUN"
+    assert core.computer.memory.load16(0x0246) == 10
+    assert core.state()["autotypeActive"] is True
+
+
 def test_browser_core_can_reset_and_run_an_overridden_usr_entry() -> None:
     core = BrowserCore(_rom_payload())
     core.load_program(_machine_prog_v2(), filename="demo.prg")

@@ -17,7 +17,7 @@ PYTHONPATH=src python -m jr100emu.app --rom datas/jr100rom.prg --joystick --audi
 
 ブラウザ版はPyodideのWeb WorkerからこのリポジトリのPythonコアを実行し、CanvasへJR-100の256×192画面を描画します。実機ROMの登録が必須で、ROM本体はIndexedDB、設定はlocalStorageへ保存します。アプリケーションからROMをサーバーへ送信する処理はありません。
 
-Web AudioによるBEEP、実機配列の仮想キーボード、CTRLショートカット、Gamepad API、PROG V1/V2読込、16K/32K RAM切替、CPU/VIA/メモリデバッガを利用できます。仮想キーの文字・Shift・GRAPH凡例は登録した実機ROMのフォントデータから描画します。
+Web Audioによるバッファ再生BEEP、実機配列の仮想キーボード、CTRLショートカット、Gamepad API、PROG V1/V2とBASICテキスト読込、16K/32K RAM切替、CPU/VIA/メモリデバッガを利用できます。仮想キーの文字・Shift・GRAPH凡例は登録した実機ROMのフォントデータから描画します。
 
 ```bash
 python tools/build_web.py --verify

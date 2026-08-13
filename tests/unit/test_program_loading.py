@@ -40,7 +40,12 @@ def _read_c_string(computer: JR100Computer, address: int) -> bytes:
     return bytes(data)
 
 
-def _build_prog_v2(name: str, basic_data: bytes, binary_sections: list[tuple[int, bytes, str]], comment: str) -> bytes:
+def _build_prog_v2(
+    name: str,
+    basic_data: bytes,
+    binary_sections: list[tuple[int, bytes, str]],
+    comment: str,
+) -> bytes:
     buffer = io.BytesIO()
     buffer.write(b"PROG")
     buffer.write(struct.pack("<I", 2))
@@ -79,7 +84,7 @@ def _build_prog_v2(name: str, basic_data: bytes, binary_sections: list[tuple[int
 def test_load_basic_text_with_escape(tmp_path, monkeypatch) -> None:
     # Use bundled ROM via environment override to avoid touching real files in datas.
     rom_bytes = bytearray(0x2000)
-    rom_bytes[-2:] = b"\x00\xE0"  # Reset vector to BASIC ROM start
+    rom_bytes[-2:] = b"\x00\xe0"  # Reset vector to BASIC ROM start
     rom_path = tmp_path / "stub_rom.prg"
     rom_payload = (
         b"PROG"
@@ -120,9 +125,35 @@ def test_load_basic_text_with_escape(tmp_path, monkeypatch) -> None:
     assert memory.load8(end_pointer + 1) == BASIC_TERMINATOR
 
 
+def test_load_basic_text_bytes_matches_file_loader(tmp_path, monkeypatch) -> None:
+    rom_bytes = bytearray(0x2000)
+    rom_bytes[-2:] = b"\x00\xe0"
+    rom_path = tmp_path / "stub_rom.prg"
+    rom_payload = (
+        b"PROG"
+        + struct.pack("<I", 1)
+        + struct.pack("<I", 0)
+        + struct.pack("<I", 0)
+        + struct.pack("<I", len(rom_bytes))
+        + struct.pack("<I", 0)
+        + rom_bytes
+    )
+    rom_path.write_bytes(rom_payload)
+    monkeypatch.setenv("JR100EMU_ROM", str(rom_path))
+
+    source = b'10 PRINT"BUFFER"\n20 END\n'
+    computer = JR100Computer()
+    info = computer.load_user_program_bytes(source, filename="buffer.bas")
+
+    assert info.basic_area is True
+    assert info.name == "BUFFER"
+    assert computer.memory.load16(BASIC_START) == 10
+    assert _read_c_string(computer, BASIC_START + 2) == b'PRINT"BUFFER"'
+
+
 def test_load_prog_with_basic_and_binary(tmp_path, monkeypatch) -> None:
     rom_bytes = bytearray(0x2000)
-    rom_bytes[-2:] = b"\x00\xE0"
+    rom_bytes[-2:] = b"\x00\xe0"
     rom_path = tmp_path / "stub_rom.prg"
     rom_payload = (
         b"PROG"
@@ -153,7 +184,10 @@ def test_load_prog_with_basic_and_binary(tmp_path, monkeypatch) -> None:
     assert info.comment == "sample"
     assert info.basic_area is True
     assert any(region.start == BASIC_START for region in info.address_regions)
-    assert any(region.start == 0x2000 and region.comment == "BIN" for region in info.address_regions)
+    assert any(
+        region.start == 0x2000 and region.comment == "BIN"
+        for region in info.address_regions
+    )
 
     memory = computer.memory
     assert memory.load16(BASIC_START) == 10
@@ -166,7 +200,7 @@ def test_load_prog_with_basic_and_binary(tmp_path, monkeypatch) -> None:
 
 def test_load_program_helper_caption(tmp_path, monkeypatch) -> None:
     rom_bytes = bytearray(0x2000)
-    rom_bytes[-2:] = b"\x00\xE0"
+    rom_bytes[-2:] = b"\x00\xe0"
     rom_path = tmp_path / "stub_rom.prg"
     rom_payload = (
         b"PROG"
@@ -195,7 +229,7 @@ def test_load_program_helper_caption(tmp_path, monkeypatch) -> None:
 
 def test_load_program_helper_error(tmp_path, monkeypatch) -> None:
     rom_bytes = bytearray(0x2000)
-    rom_bytes[-2:] = b"\x00\xE0"
+    rom_bytes[-2:] = b"\x00\xe0"
     rom_path = tmp_path / "stub_rom.prg"
     rom_payload = (
         b"PROG"
@@ -225,7 +259,7 @@ def test_load_program_helper_error(tmp_path, monkeypatch) -> None:
 
 def test_snapshot_roundtrip(tmp_path, monkeypatch) -> None:
     rom_bytes = bytearray(0x2000)
-    rom_bytes[-2:] = b"\x00\xE0"
+    rom_bytes[-2:] = b"\x00\xe0"
     rom_path = tmp_path / "stub_rom.prg"
     rom_payload = (
         b"PROG"
@@ -249,12 +283,15 @@ def test_snapshot_roundtrip(tmp_path, monkeypatch) -> None:
 
     _restore_snapshot(computer, snapshot)
     assert memory.load8(0x0246) == snapshot.memory[0x0246]
-    assert computer.cpu_core.registers.program_counter == snapshot.cpu_registers["program_counter"]
+    assert (
+        computer.cpu_core.registers.program_counter
+        == snapshot.cpu_registers["program_counter"]
+    )
 
 
 def test_snapshot_file_roundtrip(tmp_path, monkeypatch) -> None:
     rom_bytes = bytearray(0x2000)
-    rom_bytes[-2:] = b"\x00\xE0"
+    rom_bytes[-2:] = b"\x00\xe0"
     rom_path = tmp_path / "stub_rom.prg"
     rom_payload = (
         b"PROG"
@@ -298,7 +335,7 @@ def test_snapshot_file_roundtrip(tmp_path, monkeypatch) -> None:
 
 def test_load_program_invalid_extension(tmp_path, monkeypatch) -> None:
     rom_bytes = bytearray(0x2000)
-    rom_bytes[-2:] = b"\x00\xE0"
+    rom_bytes[-2:] = b"\x00\xe0"
     rom_path = tmp_path / "stub_rom.prg"
     rom_payload = (
         b"PROG"
@@ -370,7 +407,9 @@ def test_make_preview_lines_diff() -> None:
         via_state={},
         clock_count=0,
     )
-    entry = HistoryEntry(slot="slot0", timestamp=1.0, comment="hist", path=Path("dummy"))
+    entry = HistoryEntry(
+        slot="slot0", timestamp=1.0, comment="hist", path=Path("dummy")
+    )
     lines = _make_preview_lines(entry, target_snapshot, current_snapshot)
     assert any("PC" in line and "->" in line for line in lines)
     assert any("Memory bytes differ" in line for line in lines)
