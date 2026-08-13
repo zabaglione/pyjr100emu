@@ -26,6 +26,11 @@ def run(
             timeout=120_000
         )
         page.wait_for_timeout(2_000)
+        assert page.locator(".key-a .main-legend").get_attribute("data-code") == "21"
+        assert page.locator(".key-1 .main-legend").get_attribute("data-code") == "11"
+        page.locator(".key-shift").click()
+        assert page.locator(".key-1 .main-legend").get_attribute("data-code") == "01"
+        page.locator(".key-shift").click()
         alpha_legend = page.locator(".key-1 .alternate-legend").get_attribute(
             "data-code"
         )
@@ -37,6 +42,10 @@ def run(
         page.keyboard.up("v")
         page.keyboard.up("Control")
         page.locator("#keyboard-mode").filter(has_text="GRAPH").wait_for(timeout=10_000)
+        assert page.locator(".key-1 .main-legend").get_attribute("data-code") == "51"
+        page.locator(".key-shift").click()
+        assert page.locator(".key-1 .main-legend").get_attribute("data-code") == "41"
+        page.locator(".key-shift").click()
         page.wait_for_function(
             "document.querySelector('#mute').dataset.audioBackend !== 'none'"
         )

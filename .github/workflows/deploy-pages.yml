@@ -21,6 +21,12 @@ jobs:
       - name: Check out source
         uses: actions/checkout@v4
 
+      - name: Set up Emscripten
+        uses: emscripten-core/setup-emsdk@v16
+        with:
+          version: "6.0.6"
+          actions-cache-folder: emsdk-cache
+
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
@@ -64,6 +70,12 @@ jobs:
 
       - name: Run browser module tests
         run: node --test web/tests/*.test.mjs
+
+      - name: Build and test native C++ core
+        run: |
+          cmake -S cpp -B build/native -DCMAKE_BUILD_TYPE=Release
+          cmake --build build/native -j 4
+          ctest --test-dir build/native --output-on-failure
 
       - name: Build and verify Pages artifact
         run: python tools/build_web.py --verify

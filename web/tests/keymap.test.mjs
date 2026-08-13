@@ -5,6 +5,7 @@ import {
   KEY_MATRIX,
   PHYSICAL_LAYOUT,
   CTRL_LEGENDS,
+  legendFontCode,
   resolveKeyboardChord,
 } from "../keymap.js";
 
@@ -44,4 +45,13 @@ test("modern editing keys map to the complete JR-100 CTRL shortcuts", () => {
   assert.deepEqual(resolveKeyboardChord({ code: "Backspace", key: "Backspace" }).map((cell) => cell.label), ["CTRL", "-"]);
   assert.deepEqual(resolveKeyboardChord({ code: "Delete", key: "Delete" }).map((cell) => cell.label), ["CTRL", "5"]);
   assert.deepEqual(resolveKeyboardChord({ code: "CapsLock", key: "CapsLock" }).map((cell) => cell.label), ["SHIFT"]);
+});
+
+test("ROM keyboard codes select alpha and shifted graphic glyphs", () => {
+  assert.equal(legendFontCode(0x41, 0x00, false, false), 0x21);
+  assert.equal(legendFontCode(0x41, 0x00, true, false), 0x21);
+  assert.equal(legendFontCode(0x31, 0x21, false, false), 0x11);
+  assert.equal(legendFontCode(0x31, 0x21, true, false), 0x01);
+  assert.equal(legendFontCode(0x31, 0x21, false, true), 0x51);
+  assert.equal(legendFontCode(0x31, 0x21, true, true), 0x41);
 });

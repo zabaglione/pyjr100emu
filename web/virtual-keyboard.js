@@ -3,6 +3,7 @@ import {
   KEY_CELLS,
   PHYSICAL_LAYOUT,
   getKeyCell,
+  legendFontCode,
 } from "./keymap.js";
 
 const TYPEABLE_CELLS = KEY_CELLS.filter((cell) => !cell.modifier);
@@ -181,6 +182,10 @@ export class VirtualKeyboard {
     this._updateLegends();
   }
 
+  refresh() {
+    this._refreshHeld();
+  }
+
   _updateLegends() {
     const shiftPressed = this.input.isPressed(0, 1);
     for (const [index, cell] of TYPEABLE_CELLS.entries()) {
@@ -189,14 +194,16 @@ export class VirtualKeyboard {
       const normal = this.normalCodes?.[index] || 0;
       const shifted = this.shiftCodes?.[index] || 0;
       const namedKey = cell.label === "SPACE" || cell.label === "RETURN";
-      const alternate = this.graphicsMode
-        ? ((shiftPressed ? shifted || normal : normal) | 0x40) & 0x7f
-        : shifted;
-      const hasFont = !namedKey && this.font?.length >= 1024 && normal !== 0;
+      const normalGlyph = legendFontCode(normal, shifted, false, this.graphicsMode);
+      const shiftedGlyph = legendFontCode(normal, shifted, true, this.graphicsMode);
+      const active = shiftPressed ? shiftedGlyph : normalGlyph;
+      const alternate = shiftPressed ? normalGlyph : shiftedGlyph;
+      const hasFont = !namedKey && this.font?.length >= 1024 && active !== 0;
       legends.text.hidden = hasFont;
       legends.main.hidden = !hasFont;
-      if (hasFont) this._drawGlyph(legends.main, normal, "#72e6f4");
-      legends.alternate.hidden = !hasFont || alternate === 0;
+      if (hasFont) this._drawGlyph(legends.main, active, "#72e6f4");
+      legends.main.dataset.code = active.toString(16).padStart(2, "0");
+      legends.alternate.hidden = !hasFont || alternate === 0 || alternate === active;
       if (hasFont && alternate) this._drawGlyph(legends.alternate, alternate, "#b7f5fb");
       legends.alternate.dataset.code = alternate.toString(16).padStart(2, "0");
     }

@@ -1,4 +1,4 @@
-"""Small, host-independent API used by the browser frontend."""
+"""Headless Python reference API used by comparisons and tests."""
 
 from __future__ import annotations
 
@@ -10,7 +10,7 @@ from jr100emu.jr100.memory import decode_rom_bytes
 
 
 class BrowserCore:
-    """Own one ROM-backed JR-100 instance and expose frame-sized operations."""
+    """Own one ROM-backed Python instance and expose frame-sized operations."""
 
     FRAME_WIDTH = 256
     FRAME_HEIGHT = 192

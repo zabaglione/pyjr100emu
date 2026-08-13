@@ -406,12 +406,14 @@ window.addEventListener("keydown", (event) => {
   }
   if (isEditableTarget(event.target)) return;
   if (!physicalKeyboard.keyDown(event)) return;
+  virtualKeyboard.refresh();
   event.preventDefault();
 });
 
 window.addEventListener("keyup", (event) => {
   if (isEditableTarget(event.target)) return;
   if (!physicalKeyboard.keyUp(event)) return;
+  virtualKeyboard.refresh();
   event.preventDefault();
 });
 

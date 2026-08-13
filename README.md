@@ -1,6 +1,6 @@
-# JR-100 Emulator (Python Edition)
+# JR-100 Emulator
 
-Python コアとブラウザ版を備えた JR-100 エミュレーターです。[Java 版 JR-100 Emulator v2](https://github.com/kemusiro/jr100-emulator-v2) をベースに、実機挙動を忠実に移植しました。Pygame を利用したデモアプリと、GitHub Pagesで動作するWeb Emulatorを同梱しています。
+Pygame版とブラウザ版を備えたJR-100エミュレーターです。[Java版JR-100 Emulator v2](https://github.com/kemusiro/jr100-emulator-v2)をベースに、実機挙動を忠実に移植しました。デスクトップ版はPython、GitHub Pagesで動作するWeb EmulatorはC++20コアをWebAssemblyへコンパイルして実行します。
 
 ## すぐに試す
 
@@ -15,11 +15,12 @@ PYTHONPATH=src python -m jr100emu.app --rom datas/jr100rom.prg --joystick --audi
 
 ## Web Emulator
 
-ブラウザ版はPyodideのWeb WorkerからこのリポジトリのPythonコアを実行し、CanvasへJR-100の256×192画面を描画します。実機ROMの登録が必須で、ROM本体はIndexedDB、設定はlocalStorageへ保存します。アプリケーションからROMをサーバーへ送信する処理はありません。
+ブラウザ版はWeb WorkerからC++/WebAssemblyコアを実行し、CanvasへJR-100の256×192画面を描画します。CPU、メモリ、VIA、画面、サウンド、プログラムローダーは`cpp/`で実装し、実行時にPythonやPyodideを使いません。実機ROMの登録が必須で、ROM本体はIndexedDB、設定はlocalStorageへ保存します。アプリケーションからROMをサーバーへ送信する処理はありません。
 
-Web Audioによるバッファ再生BEEP、実機配列の仮想キーボード、CTRLショートカット、Gamepad API、PROG V1/V2とBASICテキスト読込、16K/32K RAM切替、CPU/VIA/メモリデバッガを利用できます。仮想キーの文字・Shift・GRAPH凡例は登録した実機ROMのフォントデータから描画します。
+Web AudioによるPCMバッファ再生BEEP、実機配列の仮想キーボード、CTRLショートカット、Gamepad API、PROG V1/V2とBASICテキスト読込、16K/32K RAM切替、CPU/VIA/メモリデバッガを利用できます。仮想キーは通常時に英大文字、SHIFT時に対応する記号、CTRL+V後にGRAPH文字、GRAPH+SHIFT時にシフト側GRAPH文字を、登録した実機ROMのフォントで表示します。
 
 ```bash
+# Emscripten 6.0.6 and CMake are required.
 python tools/build_web.py --verify
 python -m http.server 8000 --directory web/dist
 ```

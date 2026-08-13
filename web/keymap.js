@@ -130,3 +130,12 @@ export function getKeyByLabel(label) {
 export function keyId(row, bit) {
   return `r${row}b${bit}`;
 }
+
+export function legendFontCode(normalCode, shiftedCode, shiftPressed, graphicsMode) {
+  const normal = Number(normalCode) & 0xff;
+  if (normal === 0) return 0;
+  const shifted = Number(shiftedCode) & 0xff;
+  const character = shiftPressed && shifted !== 0 ? shifted : normal;
+  const alphaGlyph = (character - 0x20) & 0x7f;
+  return graphicsMode ? (alphaGlyph | 0x40) & 0x7f : alphaGlyph;
+}

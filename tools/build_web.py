@@ -4,19 +4,51 @@
 from __future__ import annotations
 
 import argparse
+import json
 from pathlib import Path
 import shutil
-import zipfile
+import subprocess
 
 
 ROOT = Path(__file__).resolve().parents[1]
 WEB_SOURCE = ROOT / "web"
-PYTHON_SOURCE = ROOT / "src" / "jr100emu"
+CPP_SOURCE = ROOT / "cpp"
+WASM_BUILD = ROOT / "build" / "web-wasm"
 DIST = WEB_SOURCE / "dist"
-PYODIDE_VERSION = "0.26.4"
+
+
+def build_wasm() -> tuple[Path, Path]:
+    emcmake = shutil.which("emcmake")
+    cmake = shutil.which("cmake")
+    if emcmake is None or cmake is None:
+        raise RuntimeError("Emscripten and CMake are required to build the web core")
+    subprocess.run(
+        [
+            emcmake,
+            cmake,
+            "-S",
+            str(CPP_SOURCE),
+            "-B",
+            str(WASM_BUILD),
+            "-DCMAKE_BUILD_TYPE=Release",
+        ],
+        cwd=ROOT,
+        check=True,
+    )
+    subprocess.run(
+        [cmake, "--build", str(WASM_BUILD), "--target", "jr100_wasm", "-j", "4"],
+        cwd=ROOT,
+        check=True,
+    )
+    javascript = WASM_BUILD / "jr100-core.js"
+    wasm = WASM_BUILD / "jr100-core.wasm"
+    if not javascript.is_file() or not wasm.is_file():
+        raise RuntimeError("Emscripten did not produce the expected web core")
+    return javascript, wasm
 
 
 def build_dist() -> Path:
+    javascript, wasm = build_wasm()
     if DIST.exists():
         shutil.rmtree(DIST)
     DIST.mkdir(parents=True)
@@ -27,39 +59,40 @@ def build_dist() -> Path:
         if source.suffix in {".html", ".js", ".css"}:
             shutil.copy2(source, DIST / source.name)
 
-    zip_path = DIST / "python" / "jr100emu.zip"
-    zip_path.parent.mkdir(parents=True, exist_ok=True)
-    with zipfile.ZipFile(zip_path, "w", compression=zipfile.ZIP_DEFLATED) as archive:
-        for source in sorted(PYTHON_SOURCE.rglob("*.py")):
-            if "__pycache__" in source.parts:
-                continue
-            relative = source.relative_to(PYTHON_SOURCE.parent)
-            info = zipfile.ZipInfo(str(relative))
-            info.date_time = (2020, 1, 1, 0, 0, 0)
-            info.compress_type = zipfile.ZIP_DEFLATED
-            archive.writestr(info, source.read_bytes())
-
+    wasm_dist = DIST / "wasm"
+    wasm_dist.mkdir()
+    shutil.copy2(javascript, wasm_dist / javascript.name)
+    shutil.copy2(wasm, wasm_dist / wasm.name)
     (DIST / "build-info.json").write_text(
-        '{"pyodideVersion":"%s","romBundled":false}\n' % PYODIDE_VERSION,
+        json.dumps({"core": "C++/WASM", "romBundled": False}, separators=(",", ":"))
+        + "\n",
         encoding="utf-8",
     )
     return DIST
 
 
 def verify_dist(dist: Path) -> None:
-    forbidden_names = {"jr100rom.prg", "boot.rom", "datas"}
+    forbidden_names = {"jr100rom.prg", "boot.rom", "datas", "jr100emu.zip"}
     for path in dist.rglob("*"):
-        if path.name in forbidden_names:
-            raise RuntimeError(f"private ROM asset reached web artifact: {path}")
-    with zipfile.ZipFile(dist / "python" / "jr100emu.zip") as archive:
-        names = archive.namelist()
-        if not names or any("datas/" in name for name in names):
-            raise RuntimeError("web Python package contains private data assets")
+        if path.name in forbidden_names or path.suffix == ".py":
+            raise RuntimeError(
+                f"private or Python runtime asset reached web artifact: {path}"
+            )
+    worker = (dist / "worker.js").read_text(encoding="utf-8").lower()
+    if "pyodide" in worker or "python/" in worker:
+        raise RuntimeError("worker still references the Python/Pyodide runtime")
+    wasm = dist / "wasm" / "jr100-core.wasm"
+    if wasm.read_bytes()[:4] != b"\x00asm":
+        raise RuntimeError("web core is not a valid WebAssembly binary")
+    if not (dist / "wasm" / "jr100-core.js").is_file():
+        raise RuntimeError("Emscripten loader is missing from the artifact")
 
 
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--verify", action="store_true", help="verify the generated artifact")
+    parser.add_argument(
+        "--verify", action="store_true", help="verify the generated artifact"
+    )
     args = parser.parse_args()
     dist = build_dist()
     if args.verify:
