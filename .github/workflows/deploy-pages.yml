@@ -21,12 +21,6 @@ jobs:
       - name: Check out source
         uses: actions/checkout@v4
 
-      - name: Set up Emscripten
-        uses: emscripten-core/setup-emsdk@v16
-        with:
-          version: "6.0.6"
-          actions-cache-folder: emsdk-cache
-
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
@@ -40,6 +34,7 @@ jobs:
           PYTHONPATH: src:.
         run: |
           python -m pytest \
+            tests \
             --cov=jr100emu.browser \
             --cov=jr100emu.jr100 \
             --cov=jr100emu.io.joystick \
@@ -76,6 +71,11 @@ jobs:
           cmake -S cpp -B build/native -DCMAKE_BUILD_TYPE=Release
           cmake --build build/native -j 4
           ctest --test-dir build/native --output-on-failure
+
+      - name: Set up Emscripten
+        uses: emscripten-core/setup-emsdk@v16
+        with:
+          version: "6.0.6"
 
       - name: Build and verify Pages artifact
         run: python tools/build_web.py --verify
