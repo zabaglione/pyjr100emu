@@ -1,6 +1,11 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { BrowserAudio, pcm16leToFloat32, resampleFloat32 } from "../audio.js";
+import {
+  BrowserAudio,
+  StreamingLinearResampler,
+  pcm16leToFloat32,
+  resampleFloat32,
+} from "../audio.js";
 
 function createWorkletHarness() {
   const nodes = [];
@@ -51,6 +56,16 @@ test("PCM resampling preserves endpoints for a different AudioContext rate", () 
   );
 });
 
+test("streaming resampling is continuous across incoming PCM chunks", () => {
+  const resampler = new StreamingLinearResampler(3, 6);
+
+  const first = resampler.process(Float32Array.from([0, 1]));
+  const second = resampler.process(Float32Array.from([2, 3]));
+
+  assert.deepEqual([...first], [0, 0.5]);
+  assert.deepEqual([...second], [1, 1.5, 2, 2.5]);
+});
+
 test("browser audio sends PCM to one small audio worklet queue", async () => {
   const harness = createWorkletHarness();
   const audio = new BrowserAudio({
@@ -94,6 +109,57 @@ test("browser audio clears queued samples when muted or reset", async () => {
   const messages = harness.nodes[0].port.messages;
   assert.deepEqual(messages.map((message) => message.type), ["samples", "clear", "clear"]);
   assert.equal(audio.muted, false);
+});
+
+test("browser audio exposes worklet buffer and continuity metrics", async () => {
+  const harness = createWorkletHarness();
+  const audio = new BrowserAudio({
+    contextFactory: () => harness.context,
+    audioWorkletNodeFactory: harness.audioWorkletNodeFactory,
+    audioWorkletLoader: async () => {},
+  });
+  await audio.unlock();
+
+  harness.nodes[0].port.onmessage({
+    data: {
+      type: "metrics",
+      bufferedSamples: 1400,
+      droppedSamples: 0,
+      underflowSamples: 0,
+      rebufferCount: 0,
+    },
+  });
+
+  assert.deepEqual(audio.metrics, {
+    bufferedSamples: 1400,
+    droppedSamples: 0,
+    underflowSamples: 0,
+    rebufferCount: 0,
+  });
+});
+
+test("worklet metrics retain samples dropped before audio unlock", async () => {
+  const harness = createWorkletHarness();
+  const audio = new BrowserAudio({
+    contextFactory: () => harness.context,
+    audioWorkletNodeFactory: harness.audioWorkletNodeFactory,
+    audioWorkletLoader: async () => {},
+    maxPendingSamples: 2,
+  });
+
+  audio.enqueue(Uint8Array.from([1, 0, 2, 0, 3, 0]));
+  await audio.unlock();
+  harness.nodes[0].port.onmessage({
+    data: {
+      type: "metrics",
+      bufferedSamples: 2,
+      droppedSamples: 0,
+      underflowSamples: 0,
+      rebufferCount: 0,
+    },
+  });
+
+  assert.equal(audio.metrics.droppedSamples, 1);
 });
 
 test("fallback audio schedules buffered chunks contiguously", async () => {

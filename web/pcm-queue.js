@@ -13,18 +13,21 @@ export class PcmQueue {
     const input = samples instanceof Float32Array
       ? samples
       : Float32Array.from(samples || []);
-    if (input.length === 0) return;
+    if (input.length === 0) return 0;
 
     if (input.length >= this.maxSamples) {
+      const dropped = this.length + input.length - this.maxSamples;
       this.chunks = [input.slice(input.length - this.maxSamples)];
       this.offset = 0;
       this.length = this.maxSamples;
-      return;
+      return dropped;
     }
 
     this.chunks.push(input);
     this.length += input.length;
-    this._dropOldest(this.length - this.maxSamples);
+    const dropped = Math.max(0, this.length - this.maxSamples);
+    this._dropOldest(dropped);
+    return dropped;
   }
 
   read(output) {

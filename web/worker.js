@@ -78,14 +78,20 @@ async function boot() {
   }
 }
 
-function postFrame() {
+function postFrame(logicalFrames = 0) {
   const frame = copyBytes(wasm._jr_frame_data(), wasm._jr_frame_size());
   const audioLength = wasm._jr_audio_size() * 2;
   const pcm = copyBytes(wasm._jr_audio_data(), audioLength);
   check(wasm._jr_clear_audio());
   const currentState = state();
   self.postMessage(
-    { type: "frame", buffer: frame.buffer, audio: pcm.buffer, state: currentState },
+    {
+      type: "frame",
+      buffer: frame.buffer,
+      audio: pcm.buffer,
+      state: currentState,
+      logicalFrames,
+    },
     [frame.buffer, pcm.buffer],
   );
 }
@@ -124,11 +130,17 @@ async function handleMessage(message) {
       break;
     }
     case "runFrame":
-      inputScheduler.beforeFrame();
-      check(wasm._jr_run_frame(CYCLES_PER_FRAME));
-      inputScheduler.afterFrame();
-      postFrame();
+    case "runFrames": {
+      const requested = message.type === "runFrame" ? 1 : Number(message.logicalFrames);
+      const logicalFrames = Math.max(1, Math.min(4, Math.trunc(requested) || 1));
+      for (let index = 0; index < logicalFrames; index += 1) {
+        inputScheduler.beforeFrame();
+        check(wasm._jr_run_frame(CYCLES_PER_FRAME));
+        inputScheduler.afterFrame();
+      }
+      postFrame(logicalFrames);
       break;
+    }
     case "reset":
       inputScheduler.clear();
       check(wasm._jr_clear_keys());

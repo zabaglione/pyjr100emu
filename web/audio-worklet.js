@@ -1,20 +1,24 @@
-import { PcmQueue } from "./pcm-queue.js";
+import { PcmPlaybackBuffer } from "./pcm-playback-buffer.js";
 
 class Jr100PcmProcessor extends AudioWorkletProcessor {
   constructor(options) {
     super();
-    const maxBufferedSamples = options.processorOptions?.maxBufferedSamples ?? 1024;
-    const startThresholdSamples = options.processorOptions?.startThresholdSamples ?? 512;
-    this.queue = new PcmQueue(maxBufferedSamples);
-    this.startThresholdSamples = startThresholdSamples;
-    this.started = false;
+    const maxBufferedSamples = options.processorOptions?.maxBufferedSamples ?? 2940;
+    const startThresholdSamples = options.processorOptions?.startThresholdSamples ?? 1470;
+    this.playback = new PcmPlaybackBuffer({
+      maxBufferedSamples,
+      startThresholdSamples,
+    });
+    this.renderCount = 0;
     this.port.onmessage = (event) => {
       const message = event.data || {};
       if (message.type === "samples") {
-        this.queue.push(message.samples);
+        const before = this.playback.metrics.droppedSamples;
+        this.playback.push(message.samples);
+        if (this.playback.metrics.droppedSamples !== before) this._postMetrics();
       } else if (message.type === "clear") {
-        this.queue.clear();
-        this.started = false;
+        this.playback.clear();
+        this._postMetrics();
       }
     };
   }
@@ -22,14 +26,23 @@ class Jr100PcmProcessor extends AudioWorkletProcessor {
   process(_inputs, outputs) {
     const output = outputs[0]?.[0];
     if (!output) return true;
-    output.fill(0);
-    if (!this.started) {
-      if (this.queue.length < this.startThresholdSamples) return true;
-      this.started = true;
+    const result = this.playback.read(output);
+    if (result.startedNow) {
       this.port.postMessage({ type: "started" });
     }
-    this.queue.read(output);
+    this.renderCount += 1;
+    if (result.startedNow || result.rebuffered || this.renderCount % 16 === 0) {
+      this._postMetrics();
+    }
     return true;
+  }
+
+  _postMetrics() {
+    this.port.postMessage({
+      type: "metrics",
+      ...this.playback.metrics,
+      started: this.playback.started,
+    });
   }
 }
 

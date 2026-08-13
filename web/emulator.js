@@ -1,5 +1,6 @@
 import { BrowserAudio } from "./audio.js";
 import { DebuggerPanel, hex } from "./debugger.js";
+import { EmulationFramePacer } from "./emulation-pacer.js";
 import { DEFAULT_GAMEPAD_SETTINGS, GamepadController } from "./gamepad.js";
 import { resolveKeyboardChord } from "./keymap.js";
 import { InputRouter, PhysicalKeyboardController } from "./input.js";
@@ -15,6 +16,8 @@ import { VirtualKeyboard } from "./virtual-keyboard.js";
 
 const WIDTH = 256;
 const HEIGHT = 192;
+const MAX_PENDING_LOGICAL_FRAMES = 12;
+const MAX_WORKER_LOGICAL_FRAMES = 4;
 const DEFAULT_SETTINGS = {
   virtualKeyboard: true,
   extendedRam: false,
@@ -56,9 +59,11 @@ let frameNumber = 0;
 let lastState = null;
 let pcmSampleCount = 0;
 let pcmActiveSampleCount = 0;
+let pendingLogicalFrames = 0;
 
 const worker = new Worker(new URL("./worker.js", import.meta.url));
 const browserAudio = new BrowserAudio();
+const framePacer = new EmulationFramePacer({ maxCatchUpFrames: 4 });
 const debuggerView = new DebuggerPanel({
   root: element("#debugger"),
   toggleButton: toggleDebuggerButton,
@@ -111,6 +116,15 @@ function updateMuteUi() {
   muteButton.dataset.audioBackend = browserAudio.backend;
   muteButton.dataset.audioWorkletStarted = String(browserAudio.workletStarted);
   muteButton.dataset.pcmActiveSamples = String(pcmActiveSampleCount);
+  muteButton.dataset.audioBufferedSamples = String(browserAudio.metrics.bufferedSamples);
+  muteButton.dataset.audioDroppedSamples = String(browserAudio.metrics.droppedSamples);
+  muteButton.dataset.audioUnderflowSamples = String(browserAudio.metrics.underflowSamples);
+  muteButton.dataset.audioRebufferCount = String(browserAudio.metrics.rebufferCount);
+}
+
+function resetFramePacing(timestamp = performance.now()) {
+  framePacer.reset(timestamp);
+  pendingLogicalFrames = 0;
 }
 
 async function unlockAudio() {
@@ -177,6 +191,7 @@ async function setRomUi(info, filename) {
     control.disabled = false;
   }
   pauseButton.textContent = "Pause";
+  resetFramePacing();
   setStatus("Running", true);
   const ram = extendedRam.checked ? "32K RAM" : "16K RAM";
   romStatus.textContent = `${filename || info.name || "ROM"} · ${info.format} · ${info.size} bytes · ${ram}`;
@@ -193,6 +208,7 @@ async function setRomUi(info, filename) {
 function updateMachineState(state) {
   if (!state) return;
   lastState = state;
+  coreStatus.dataset.clockCount = String(state.clockCount ?? 0);
   virtualKeyboard.setGraphicsMode(Boolean(state.graphicsMode));
   keyboardMode.textContent = state.graphicsMode ? "GRAPH" : "ALPHA";
   if (state.breakpointHit !== null && state.breakpointHit !== undefined) {
@@ -233,10 +249,12 @@ worker.addEventListener("message", (event) => {
         runEntryButton.disabled = false;
       }
       running = true;
+      resetFramePacing();
       pauseButton.textContent = "Pause";
       setStatus("Running", true);
     } else if (message.type === "entryQueued") {
       running = true;
+      resetFramePacing();
       pauseButton.textContent = "Pause";
       programStatus.textContent = `${programStatus.textContent.split(" · queued")[0]} · queued ${message.command}`;
       setStatus("Running", true);
@@ -253,7 +271,7 @@ worker.addEventListener("message", (event) => {
       browserAudio.enqueue(message.audio);
       updateMuteUi();
       updateMachineState(message.state);
-      frameNumber += 1;
+      frameNumber += Math.max(1, Number(message.logicalFrames) || 0);
       debuggerView.frameTick(frameNumber);
     } else if (message.type === "debugSnapshot") {
       debuggerView.receive(message);
@@ -262,6 +280,7 @@ worker.addEventListener("message", (event) => {
       frameInFlight = false;
       debuggerView.clearPending();
       running = false;
+      resetFramePacing();
       setStatus("Error");
       setError(message.message);
     }
@@ -277,6 +296,7 @@ worker.addEventListener("error", (event) => {
   frameInFlight = false;
   debuggerView.clearPending();
   running = false;
+  resetFramePacing();
   setStatus("Worker error");
   setError(event.message || "Worker failed");
 });
@@ -323,6 +343,7 @@ removeRomButton.addEventListener("click", async () => {
     storedRom = null;
     romLoaded = false;
     running = false;
+    resetFramePacing();
     input.clear();
     worker.postMessage({ type: "clearKeys" });
     for (const control of [pauseButton, resetButton, toggleKeyboardButton, toggleDebuggerButton, programFile]) {
@@ -341,6 +362,7 @@ removeRomButton.addEventListener("click", async () => {
 
 pauseButton.addEventListener("click", () => {
   running = !running;
+  resetFramePacing();
   if (running && lastState?.breakpointHit !== null && lastState?.breakpointHit !== undefined) {
     worker.postMessage({ type: "continue" });
     lastState = { ...lastState, breakpointHit: null };
@@ -355,6 +377,7 @@ resetButton.addEventListener("click", () => {
     input.clear();
     worker.postMessage({ type: "reset" });
     running = true;
+    resetFramePacing();
     pauseButton.textContent = "Pause";
     setStatus("Running", true);
   }
@@ -426,6 +449,7 @@ window.addEventListener("blur", () => {
 
 document.addEventListener("visibilitychange", () => {
   if (document.hidden) input.releaseMomentary();
+  resetFramePacing();
 });
 
 async function initializeStoredRom() {
@@ -442,9 +466,19 @@ async function initializeStoredRom() {
 
 function frameLoop(now) {
   gamepad.update(now);
-  if (running && coreReady && romLoaded && !frameInFlight) {
+  if (!(running && coreReady && romLoaded)) {
+    resetFramePacing(now);
+  } else {
+    pendingLogicalFrames = Math.min(
+      MAX_PENDING_LOGICAL_FRAMES,
+      pendingLogicalFrames + framePacer.advance(now),
+    );
+  }
+  if (running && coreReady && romLoaded && !frameInFlight && pendingLogicalFrames > 0) {
+    const logicalFrames = Math.min(MAX_WORKER_LOGICAL_FRAMES, pendingLogicalFrames);
+    pendingLogicalFrames -= logicalFrames;
     frameInFlight = true;
-    worker.postMessage({ type: "runFrame" });
+    worker.postMessage({ type: "runFrames", logicalFrames });
   }
   requestAnimationFrame(frameLoop);
 }

@@ -75,6 +75,7 @@ def run(url: str) -> None:
         assert page.locator(".virtual-key").count() == 45
         assert page.locator(".keyboard-row").count() == 4
         assert page.locator("#virtual-keyboard").get_attribute("hidden") is None
+        assert page.locator(".virtual-key.cursor").count() == 0
 
         page.locator("#rom-file").set_input_files(
             {

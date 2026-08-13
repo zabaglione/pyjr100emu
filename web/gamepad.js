@@ -45,6 +45,7 @@ export class GamepadController {
     if (!gamepad) {
       this.input.setJoystickMask(0);
       this.keyboard.releaseGamepadKey();
+      this.keyboard.hideGamepadCursor?.();
       this._releaseSpecialKeys();
       this.onStatus?.("No gamepad detected");
       return;
@@ -59,6 +60,7 @@ export class GamepadController {
       this._updateVirtualKeyboard(gamepad, now);
     } else {
       this.keyboard.releaseGamepadKey();
+      this.keyboard.hideGamepadCursor?.();
       this._releaseSpecialKeys();
       this.input.setJoystickMask(gamepadMask(gamepad, this.settings));
     }

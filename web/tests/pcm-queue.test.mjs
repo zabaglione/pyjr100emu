@@ -19,8 +19,8 @@ test("PCM queue preserves order while reading small render quanta", () => {
 
 test("PCM queue drops oldest samples when its latency cap is reached", () => {
   const queue = new PcmQueue(4);
-  queue.push(Float32Array.from([1, 2, 3]));
-  queue.push(Float32Array.from([4, 5, 6]));
+  assert.equal(queue.push(Float32Array.from([1, 2, 3])), 0);
+  assert.equal(queue.push(Float32Array.from([4, 5, 6])), 2);
 
   const output = new Float32Array(4);
   assert.equal(queue.read(output), 4);

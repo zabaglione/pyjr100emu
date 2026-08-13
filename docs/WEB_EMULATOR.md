@@ -116,6 +116,15 @@ python web/tests/real_rom_qa.py \
 
 この受入はREADY表示、通常／SHIFT／GRAPH／GRAPH+SHIFTの文字コード、CTRL+V、AudioWorklet選択、指定プログラム実行中の非ゼロPCM増加、デバッガを確認します。
 
+表示リフレッシュレートに依存しない実時間速度と音声キューの連続性は、次の受入で確認します。各プログラムの実行中に100ms間隔でクロック、バッファ量、drop、underflow、再バッファ回数を採取します。最初の3キー入力は音声開始のウォームアップとして測定から除外し、4文字目以降のBEEPを確認します。既定の許容速度差は894kHzに対して0.5パーセントです。
+
+```bash
+python web/tests/realtime_audio_qa.py \
+  --rom datas/jr100rom.prg \
+  datas/sound_scale.prg \
+  datas/twinkle_star.bas
+```
+
 C++コアとpygame版が使うPythonコアの音声を比較するには、次を実行します。既定で`sound_scale.prg`を1200フレーム、`twinkle_star.bas`を4000フレーム実行し、音区間数、サンプル数、各区間の推定周波数を照合します。命令を止める境界の数十クロック差があるためPCMの完全一致は要求しませんが、反復BEEPは音区間数の不一致として失敗します。
 
 ```bash
@@ -128,9 +137,11 @@ PYTHONPATH=src python tools/compare_audio.py
 - `cpp/src/`: CPU、メモリ、VIA、画面、PCM、ローダー実装
 - `cpp/src/wasm_api.cpp`: C++コアを公開する小さなC ABI
 - `web/worker.js`: C ABIとブラウザメッセージの境界
+- `web/emulation-pacer.js`: 表示リフレッシュレートから独立した60Hz論理フレーム制御
 - `web/matrix-input-core.js`: 短打保持と修飾キー先行走査
 - `web/input.js`, `web/keymap.js`: 物理・仮想・Gamepad入力の押下元統合と実機キー変換
-- `web/audio.js`: Web AudioのPCMキュー
+- `web/audio.js`: Web Audio出力とチャンク間で位相を保つサンプルレート変換
+- `web/pcm-playback-buffer.js`: AudioWorkletのプリバッファ、再バッファ、連続性統計
 - `web/virtual-keyboard.js`: 実機配列とROMフォント凡例
 - `web/storage.js`: ブラウザ内バイナリ保存と設定保存
 - `tools/build_web.py`: C++コアをWASM化し、ROMを含まない静的artifactを生成

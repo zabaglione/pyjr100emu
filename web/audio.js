@@ -1,9 +1,9 @@
 import { PcmQueue } from "./pcm-queue.js";
 
 const DEFAULT_SAMPLE_RATE = 44100;
-// 512 samples is 11.6 ms at 44.1 kHz; retain at most two such quanta.
-const DEFAULT_MAX_BUFFERED_SAMPLES = 1024;
-const DEFAULT_START_THRESHOLD_SAMPLES = 512;
+// Two 60 Hz JR-100 frames prebuffer 33.3 ms; four frames cap latency at 66.7 ms.
+const DEFAULT_MAX_BUFFERED_SAMPLES = 2940;
+const DEFAULT_START_THRESHOLD_SAMPLES = 1470;
 const DEFAULT_FALLBACK_CHUNK_SAMPLES = 512;
 
 export function pcm16leToFloat32(buffer) {
@@ -34,6 +34,56 @@ export function resampleFloat32(samples, sourceRate, targetRate) {
     output[index] = samples[left] + (samples[right] - samples[left]) * fraction;
   }
   return output;
+}
+
+export class StreamingLinearResampler {
+  constructor(sourceRate, targetRate) {
+    if (!(sourceRate > 0) || !(targetRate > 0)) {
+      throw new RangeError("sample rates must be positive");
+    }
+    this.sourceRate = Number(sourceRate);
+    this.targetRate = Number(targetRate);
+    this.step = this.sourceRate / this.targetRate;
+    this.buffer = new Float32Array();
+    this.position = 0;
+  }
+
+  process(samples) {
+    const input = samples instanceof Float32Array
+      ? samples
+      : Float32Array.from(samples || []);
+    if (input.length === 0) return input;
+    if (this.sourceRate === this.targetRate) return input;
+
+    const combined = new Float32Array(this.buffer.length + input.length);
+    combined.set(this.buffer);
+    combined.set(input, this.buffer.length);
+    this.buffer = combined;
+    if (this.buffer.length < 2) return new Float32Array();
+
+    const output = [];
+    while (this.position < this.buffer.length - 1) {
+      const left = Math.floor(this.position);
+      const fraction = this.position - left;
+      output.push(
+        this.buffer[left]
+        + (this.buffer[left + 1] - this.buffer[left]) * fraction,
+      );
+      this.position += this.step;
+    }
+
+    const consumed = Math.min(Math.floor(this.position), this.buffer.length - 1);
+    if (consumed > 0) {
+      this.buffer = this.buffer.slice(consumed);
+      this.position -= consumed;
+    }
+    return Float32Array.from(output);
+  }
+
+  reset() {
+    this.buffer = new Float32Array();
+    this.position = 0;
+  }
 }
 
 export class BrowserAudio {
@@ -70,6 +120,15 @@ export class BrowserAudio {
     this.pending = new PcmQueue(this.maxPendingSamples);
     this.fallbackQueue = new PcmQueue(this.maxBufferedSamples);
     this.fallbackSources = new Set();
+    this.resampler = null;
+    this.resamplerTargetRate = null;
+    this.hostDroppedSamples = 0;
+    this.metrics = {
+      bufferedSamples: 0,
+      droppedSamples: 0,
+      underflowSamples: 0,
+      rebufferCount: 0,
+    };
   }
 
   async unlock() {
@@ -95,6 +154,16 @@ export class BrowserAudio {
     this.pending.clear();
     this.fallbackQueue.clear();
     this.workletStarted = false;
+    this.resampler?.reset();
+    this.resampler = null;
+    this.resamplerTargetRate = null;
+    this.hostDroppedSamples = 0;
+    this.metrics = {
+      bufferedSamples: 0,
+      droppedSamples: 0,
+      underflowSamples: 0,
+      rebufferCount: 0,
+    };
     if (this.workletNode) this.workletNode.port.postMessage({ type: "clear" });
     for (const source of this.fallbackSources) {
       try {
@@ -111,11 +180,13 @@ export class BrowserAudio {
     if (this.muted) return false;
     const decoded = pcm16leToFloat32(buffer);
     if (decoded.length === 0) return false;
-    const samples = this._adaptSampleRate(decoded);
     if (!this.context || this.context.state !== "running" || !this._hasOutput()) {
-      this.pending.push(samples);
+      const dropped = this.pending.push(decoded);
+      this.hostDroppedSamples += dropped;
+      this.metrics.droppedSamples += dropped;
       return false;
     }
+    const samples = this._adaptSampleRate(decoded);
     this._sendSamples(samples);
     return true;
   }
@@ -132,13 +203,24 @@ export class BrowserAudio {
           numberOfOutputs: 1,
           outputChannelCount: [1],
           processorOptions: {
-            maxBufferedSamples: this.maxBufferedSamples,
-            startThresholdSamples: this.startThresholdSamples,
+            maxBufferedSamples: this._outputSampleCount(this.maxBufferedSamples),
+            startThresholdSamples: this._outputSampleCount(this.startThresholdSamples),
           },
         });
         if (node) {
           node.port.onmessage = (event) => {
-            if (event.data?.type === "started") this.workletStarted = true;
+            const message = event.data || {};
+            if (message.type === "started") this.workletStarted = true;
+            if (message.type === "metrics") {
+              this.metrics = {
+                bufferedSamples: Number(message.bufferedSamples) || 0,
+                droppedSamples: this.hostDroppedSamples
+                  + (Number(message.droppedSamples) || 0),
+                underflowSamples: Number(message.underflowSamples) || 0,
+                rebufferCount: Number(message.rebufferCount) || 0,
+              };
+              this.workletStarted = Boolean(message.started);
+            }
           };
           node.connect(this.context.destination);
           this.workletNode = node;
@@ -152,7 +234,12 @@ export class BrowserAudio {
     this.fallbackReady = Boolean(
       this.context.createBuffer && this.context.createBufferSource,
     );
-    if (this.fallbackReady) this.backend = "buffer-source";
+    if (this.fallbackReady) {
+      this.fallbackQueue = new PcmQueue(
+        this._outputSampleCount(this.maxBufferedSamples),
+      );
+      this.backend = "buffer-source";
+    }
   }
 
   _hasOutput() {
@@ -161,16 +248,22 @@ export class BrowserAudio {
 
   _adaptSampleRate(samples) {
     const targetRate = this.context?.sampleRate ?? this.sampleRate;
-    return resampleFloat32(samples, this.sampleRate, targetRate);
+    if (targetRate === this.sampleRate) return samples;
+    if (!this.resampler || this.resamplerTargetRate !== targetRate) {
+      this.resampler = new StreamingLinearResampler(this.sampleRate, targetRate);
+      this.resamplerTargetRate = targetRate;
+    }
+    return this.resampler.process(samples);
   }
 
   _flushPending() {
     if (!this._hasOutput() || this.pending.length === 0) return;
-    const samples = this.pending.drain();
+    const samples = this._adaptSampleRate(this.pending.drain());
     this._sendSamples(samples);
   }
 
   _sendSamples(samples) {
+    if (samples.length === 0) return;
     if (this.workletNode) {
       const copy = samples.slice();
       this.workletNode.port.postMessage(
@@ -179,7 +272,10 @@ export class BrowserAudio {
       );
       return;
     }
-    this.fallbackQueue.push(samples);
+    const dropped = this.fallbackQueue.push(samples);
+    this.hostDroppedSamples += dropped;
+    this.metrics.droppedSamples += dropped;
+    this.metrics.bufferedSamples = this.fallbackQueue.length;
     this._pumpFallback();
   }
 
@@ -188,6 +284,7 @@ export class BrowserAudio {
     while (this.fallbackQueue.length >= this.fallbackChunkSamples) {
       const samples = new Float32Array(this.fallbackChunkSamples);
       this.fallbackQueue.read(samples);
+      this.metrics.bufferedSamples = this.fallbackQueue.length;
       this._scheduleFallback(samples);
     }
   }
@@ -207,5 +304,10 @@ export class BrowserAudio {
     this.fallbackSources.add(source);
     source.onended = () => this.fallbackSources.delete(source);
     this.nextStart += samples.length / sampleRate;
+  }
+
+  _outputSampleCount(sourceSamples) {
+    const targetRate = this.context?.sampleRate ?? this.sampleRate;
+    return Math.max(1, Math.round(sourceSamples * targetRate / this.sampleRate));
   }
 }
