@@ -111,7 +111,6 @@ h3 { color: var(--muted); font-size: .66rem; letter-spacing: .09em; margin-botto
   user-select: none;
 }
 .virtual-key:hover { border-color: var(--cyan); box-shadow: 0 0 0 1px rgba(112,230,244,.3); }
-.virtual-key.cursor { box-shadow: inset 0 0 0 2px var(--cyan); outline: 0; }
 .virtual-key.held { background: linear-gradient(#2d7182, #174b5a); border-bottom-width: 1px; transform: translateY(2px); }
 .ctrl-legend { font: 600 6px/1 ui-sans-serif, sans-serif; letter-spacing: -.01em; min-height: 7px; overflow: hidden; text-align: center; white-space: nowrap; }
 .key-face { align-items: center; display: grid; grid-template-columns: 1fr auto 1fr; min-width: 0; }

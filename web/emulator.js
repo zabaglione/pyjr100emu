@@ -101,7 +101,6 @@ virtualKeyboard.setActive(Boolean(settings.virtualKeyboard));
 
 const gamepad = new GamepadController(
   input,
-  virtualKeyboard,
   settings.gamepad || DEFAULT_GAMEPAD_SETTINGS,
   (message) => { gamepadStatus.textContent = message; },
 );
@@ -444,7 +443,6 @@ window.addEventListener("pointerdown", () => { void unlockAudio().catch(setError
 window.addEventListener("blur", () => {
   input.releaseMomentary();
   input.setJoystickMask(0);
-  virtualKeyboard.releaseGamepadKey();
 });
 
 document.addEventListener("visibilitychange", () => {
@@ -465,7 +463,7 @@ async function initializeStoredRom() {
 }
 
 function frameLoop(now) {
-  gamepad.update(now);
+  gamepad.update();
   if (!(running && coreReady && romLoaded)) {
     resetFramePacing(now);
   } else {

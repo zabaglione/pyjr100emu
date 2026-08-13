@@ -14,14 +14,11 @@ export class VirtualKeyboard {
     this.input = input;
     this.buttons = new Map();
     this.legendCanvases = new Map();
-    this.cursor = { row: 0, column: 0 };
-    this.cursorVisible = false;
     this.active = false;
     this.graphicsMode = false;
     this.font = null;
     this.normalCodes = null;
     this.shiftCodes = null;
-    this._heldGamepadSource = null;
     this._build();
   }
 
@@ -58,7 +55,6 @@ export class VirtualKeyboard {
       }
       this.container.append(rowElement);
     }
-    this._refreshCursor();
     this._updateLegends();
   }
 
@@ -115,11 +111,6 @@ export class VirtualKeyboard {
     if (!this.active) {
       this.input.releasePrefix("virtual:");
       this.input.releasePrefix("latch:virtual:");
-      this.input.releasePrefix("gamepad-vkbd:");
-      this.input.releasePrefix("gamepad-special:");
-      this.releaseGamepadKey();
-      this.hideGamepadCursor();
-      this._refreshCursor();
       this._refreshHeld();
     }
   }
@@ -127,63 +118,6 @@ export class VirtualKeyboard {
   toggle() {
     this.setActive(!this.active);
     return this.active;
-  }
-
-  move(rowDelta, columnDelta) {
-    if (!this.active) return;
-    if (rowDelta !== 0 || columnDelta !== 0) this.cursorVisible = true;
-    this.cursor.row = Math.max(0, Math.min(PHYSICAL_LAYOUT.length - 1, this.cursor.row + rowDelta));
-    this.cursor.column = Math.max(
-      0,
-      Math.min(PHYSICAL_LAYOUT[this.cursor.row].length - 1, this.cursor.column + columnDelta),
-    );
-    this._refreshCursor();
-  }
-
-  holdGamepadKey(cell) {
-    if (!this.active || !cell) return;
-    this.cursorVisible = true;
-    this._refreshCursor();
-    const source = `gamepad-vkbd:${cell.id}`;
-    if (this._heldGamepadSource === source) return;
-    this.releaseGamepadKey();
-    this.input.press(source, cell);
-    this._heldGamepadSource = source;
-    this._refreshHeld();
-  }
-
-  releaseGamepadKey() {
-    if (this._heldGamepadSource !== null) {
-      this.input.release(this._heldGamepadSource);
-      this._heldGamepadSource = null;
-      this._refreshHeld();
-    }
-  }
-
-  holdGamepadSpecial(label, pressed) {
-    const cell = KEY_CELLS.find((candidate) => candidate.label === label);
-    if (!cell) return;
-    const source = `gamepad-special:${label}`;
-    if (pressed) this.input.press(source, cell);
-    else this.input.release(source);
-    this._refreshHeld();
-  }
-
-  currentCell() {
-    return PHYSICAL_LAYOUT[this.cursor.row]?.[this.cursor.column] || null;
-  }
-
-  hideGamepadCursor() {
-    if (!this.cursorVisible) return;
-    this.cursorVisible = false;
-    this._refreshCursor();
-  }
-
-  _refreshCursor() {
-    for (const button of this.buttons.values()) button.classList.remove("cursor");
-    if (!this.cursorVisible) return;
-    const current = this.currentCell();
-    this.buttons.get(current?.id)?.classList.add("cursor");
   }
 
   _refreshHeld() {

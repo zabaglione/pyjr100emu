@@ -69,6 +69,31 @@ def run(url: str) -> None:
     with sync_playwright() as playwright:
         browser = playwright.chromium.launch(headless=True, args=["--no-sandbox"])
         page = browser.new_page()
+        page.add_init_script(
+            """
+            globalThis.__testGamepad = {
+              id: "Synthetic Gamepad",
+              axes: [0, 0],
+              buttons: Array.from(
+                { length: 16 },
+                () => ({ pressed: false, value: 0 }),
+              ),
+            };
+            globalThis.__joystickMessages = [];
+            Object.defineProperty(navigator, "getGamepads", {
+              configurable: true,
+              value: () => [globalThis.__testGamepad],
+            });
+            const originalPostMessage = Worker.prototype.postMessage;
+            Worker.prototype.postMessage = function(message, transfer) {
+              if (message?.type === "joystick") {
+                globalThis.__joystickMessages.push(message.mask);
+              }
+              if (transfer === undefined) return originalPostMessage.call(this, message);
+              return originalPostMessage.call(this, message, transfer);
+            };
+            """
+        )
         page.goto(url, wait_until="networkidle")
         assert page.title() == "JR-100 Web Emulator"
         assert page.locator("#core-status").inner_text() == "ROM required"
@@ -104,6 +129,31 @@ def run(url: str) -> None:
         assert "32K RAM" in page.locator("#rom-status").inner_text()
         assert page.locator(".main-legend:not([hidden])").count() > 20
         assert page.locator(".key-v .ctrl-legend").inner_text() == "GRAPH"
+        page.evaluate(
+            """
+            () => {
+              globalThis.__testGamepad.axes = [1, -1];
+              for (const index of [0, 8]) {
+                globalThis.__testGamepad.buttons[index] = { pressed: true, value: 1 };
+              }
+            }
+            """
+        )
+        page.wait_for_function("globalThis.__joystickMessages.includes(0x15)")
+        assert page.locator("#virtual-keyboard").get_attribute("hidden") is None
+        assert page.locator(".virtual-key.cursor").count() == 0
+        page.evaluate(
+            """
+            () => {
+              globalThis.__testGamepad.axes = [0, 0];
+              for (const button of globalThis.__testGamepad.buttons) {
+                button.pressed = false;
+                button.value = 0;
+              }
+            }
+            """
+        )
+        page.wait_for_function("globalThis.__joystickMessages.at(-1) === 0")
         page.keyboard.press("a")
         page.wait_for_function(
             "document.querySelector('#mute').dataset.audioBackend !== 'none'"

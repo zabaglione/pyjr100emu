@@ -15,7 +15,7 @@ ROM未登録ではCPUを起動せず、選択したROMはIndexedDBへ保存し�
 
 ## 入力
 
-キーボードはJR-100の9行×5ビットを正規のデータ定義として扱います。物理キーボード、HTML仮想キーボード、Gamepad APIはすべて同じ入力ルーターを通ります。Worker側では短いタップを最低2フレーム、CTRL/SHIFTを最低4フレーム保持し、修飾キーを文字キーより1フレーム先にROMへ認識させます。
+キーボードはJR-100の9行×5ビットを正規のデータ定義として扱います。物理キーボードとHTML仮想キーボードは同じ入力ルーターを通ります。Worker側では短いタップを最低2フレーム、CTRL/SHIFTを最低4フレーム保持し、修飾キーを文字キーより1フレーム先にROMへ認識させます。
 
 仮想キーボードは実機と同じ4段45キーの並びです。登録ROMの先頭1024バイトにある128文字×8バイトのフォントと、ROM内の通常／Shiftキーテーブルからキーを描画します。表示状態は次の4通りです。
 
@@ -49,7 +49,7 @@ CTRLのBASICショートカット名はキー上部へ表示します。CTRL+V�
 | Down | `0x08` |
 | Switch | `0x10` |
 
-仮想キーボードはブラウザのタッチ操作に加えて、GamepadのSelect、D-pad、A/B/X、L1/R1から操作できます。
+仮想キーボードは表示確認とマウス／タッチ入力に限定し、Gamepad APIからは操作しません。ゲームパッドの方向とSwitchは、仮想キーボードの表示状態に関係なく常にJR-100拡張I/Oへ送ります。
 
 ## BEEPとVIA割込み
 
@@ -139,7 +139,8 @@ PYTHONPATH=src python tools/compare_audio.py
 - `web/worker.js`: C ABIとブラウザメッセージの境界
 - `web/emulation-pacer.js`: 表示リフレッシュレートから独立した60Hz論理フレーム制御
 - `web/matrix-input-core.js`: 短打保持と修飾キー先行走査
-- `web/input.js`, `web/keymap.js`: 物理・仮想・Gamepad入力の押下元統合と実機キー変換
+- `web/input.js`, `web/keymap.js`: 物理・仮想キーボードの押下元統合と実機キー変換
+- `web/gamepad.js`: Gamepad APIからJR-100拡張I/Oへのジョイスティック変換
 - `web/audio.js`: Web Audio出力とチャンク間で位相を保つサンプルレート変換
 - `web/pcm-playback-buffer.js`: AudioWorkletのプリバッファ、再バッファ、連続性統計
 - `web/virtual-keyboard.js`: 実機配列とROMフォント凡例
