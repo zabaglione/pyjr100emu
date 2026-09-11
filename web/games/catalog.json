@@ -9,7 +9,7 @@
       "entry": 768,
       "path": "games/chrono-breach/1.1.0/chrono-breach.prg",
       "sha256": "583ef9442c0f843a0fc4edaa9b35f5b06dd08b9cd44337991952ced8359c67f7",
-      "sourceUrl": "https://github.com/zabaglione/jr100dev/tree/e56f428e8d8b97e0918bf34ca716c6d8694b906c/games/chrono_breach"
+      "sourceUrl": "https://github.com/zabaglione/jr100dev/tree/c077175182e0033df38483e941cf95ec90423443/games/chrono_breach"
     },
     {
       "id": "sigil-deck",
@@ -19,7 +19,7 @@
       "entry": 768,
       "path": "games/sigil-deck/1.1.0/sigil-deck.prg",
       "sha256": "32a2aac924bc8ad449090db8dce93869aae02b4372d50115dde7c6bd68896733",
-      "sourceUrl": "https://github.com/zabaglione/jr100dev/tree/e56f428e8d8b97e0918bf34ca716c6d8694b906c/games/sigil_deck"
+      "sourceUrl": "https://github.com/zabaglione/jr100dev/tree/c077175182e0033df38483e941cf95ec90423443/games/sigil_deck"
     },
     {
       "id": "abyss-signal",
@@ -29,7 +29,7 @@
       "entry": 768,
       "path": "games/abyss-signal/1.1.0/abyss-signal.prg",
       "sha256": "b1188db546f026c37952ada75ec987e8767779d3cae6813f2b237c38fde8849d",
-      "sourceUrl": "https://github.com/zabaglione/jr100dev/tree/e56f428e8d8b97e0918bf34ca716c6d8694b906c/games/abyss_signal"
+      "sourceUrl": "https://github.com/zabaglione/jr100dev/tree/c077175182e0033df38483e941cf95ec90423443/games/abyss_signal"
     },
     {
       "id": "trace-blade",
@@ -39,7 +39,7 @@
       "entry": 768,
       "path": "games/trace-blade/1.1.0/trace-blade.prg",
       "sha256": "e1843f04da21d055033d662dbbe99025158fe79ffa1de08e6e05438674c352b2",
-      "sourceUrl": "https://github.com/zabaglione/jr100dev/tree/e56f428e8d8b97e0918bf34ca716c6d8694b906c/games/trace_blade"
+      "sourceUrl": "https://github.com/zabaglione/jr100dev/tree/c077175182e0033df38483e941cf95ec90423443/games/trace_blade"
     },
     {
       "id": "dice-relic",
@@ -49,7 +49,7 @@
       "entry": 768,
       "path": "games/dice-relic/1.1.0/dice-relic.prg",
       "sha256": "980f8eed8789277b7e0404244b5abd25b52bed9aec1816cfbf33d6f0ec133c7e",
-      "sourceUrl": "https://github.com/zabaglione/jr100dev/tree/e56f428e8d8b97e0918bf34ca716c6d8694b906c/games/dice_relic"
+      "sourceUrl": "https://github.com/zabaglione/jr100dev/tree/c077175182e0033df38483e941cf95ec90423443/games/dice_relic"
     },
     {
       "id": "loop-ten",
@@ -59,7 +59,7 @@
       "entry": 768,
       "path": "games/loop-ten/1.1.0/loop-ten.prg",
       "sha256": "b441c0bda553bbc7634beea683ce663e4d6dc19195d016e215eb08b24c1739aa",
-      "sourceUrl": "https://github.com/zabaglione/jr100dev/tree/e56f428e8d8b97e0918bf34ca716c6d8694b906c/games/loop_ten"
+      "sourceUrl": "https://github.com/zabaglione/jr100dev/tree/c077175182e0033df38483e941cf95ec90423443/games/loop_ten"
     },
     {
       "id": "iron-script",
@@ -69,7 +69,7 @@
       "entry": 768,
       "path": "games/iron-script/1.0.0/iron-script.prg",
       "sha256": "666002722680cc1ea98a98c363db9eaf87b22c9378f6d1a8a931a3c0266bb901",
-      "sourceUrl": "https://github.com/zabaglione/jr100dev/tree/e56f428e8d8b97e0918bf34ca716c6d8694b906c/games/iron_script"
+      "sourceUrl": "https://github.com/zabaglione/jr100dev/tree/c077175182e0033df38483e941cf95ec90423443/games/iron_script"
     },
     {
       "id": "chain-suit",
@@ -79,7 +79,7 @@
       "entry": 768,
       "path": "games/chain-suit/1.0.0/chain-suit.prg",
       "sha256": "851b02187f60f02a5bf2a1cbc7f9ea764555aa0436032791a260c49f132d5563",
-      "sourceUrl": "https://github.com/zabaglione/jr100dev/tree/e56f428e8d8b97e0918bf34ca716c6d8694b906c/games/chain_suit"
+      "sourceUrl": "https://github.com/zabaglione/jr100dev/tree/c077175182e0033df38483e941cf95ec90423443/games/chain_suit"
     },
     {
       "id": "quiet-route",
@@ -89,7 +89,7 @@
       "entry": 768,
       "path": "games/quiet-route/1.0.0/quiet-route.prg",
       "sha256": "3b593fd8537dcbbf1b857c1ba96d596eda13ac99011ea7bfcc3da1e2f9ca5906",
-      "sourceUrl": "https://github.com/zabaglione/jr100dev/tree/e56f428e8d8b97e0918bf34ca716c6d8694b906c/games/quiet_route"
+      "sourceUrl": "https://github.com/zabaglione/jr100dev/tree/c077175182e0033df38483e941cf95ec90423443/games/quiet_route"
     },
     {
       "id": "circuit-works",
@@ -99,7 +99,7 @@
       "entry": 768,
       "path": "games/circuit-works/1.0.0/circuit-works.prg",
       "sha256": "64351b7e9d8af6f8d9a2b4db443d3f78a47749c2bcce34cd1849a632f32d142d",
-      "sourceUrl": "https://github.com/zabaglione/jr100dev/tree/e56f428e8d8b97e0918bf34ca716c6d8694b906c/games/circuit_works"
+      "sourceUrl": "https://github.com/zabaglione/jr100dev/tree/c077175182e0033df38483e941cf95ec90423443/games/circuit_works"
     },
     {
       "id": "hearth-zero",
@@ -109,7 +109,7 @@
       "entry": 768,
       "path": "games/hearth-zero/1.0.0/hearth-zero.prg",
       "sha256": "7b84b4f5ff82e53ef37d9824951dba153838f0f811ddb220d2e05f0be684187e",
-      "sourceUrl": "https://github.com/zabaglione/jr100dev/tree/e56f428e8d8b97e0918bf34ca716c6d8694b906c/games/hearth_zero"
+      "sourceUrl": "https://github.com/zabaglione/jr100dev/tree/c077175182e0033df38483e941cf95ec90423443/games/hearth_zero"
     },
     {
       "id": "night-swarm",
@@ -119,7 +119,7 @@
       "entry": 768,
       "path": "games/night-swarm/1.0.0/night-swarm.prg",
       "sha256": "dd244deb206cffc29f58165a0a6c901a8a34e4cbbc372806d39a2e6e4e748dbe",
-      "sourceUrl": "https://github.com/zabaglione/jr100dev/tree/e56f428e8d8b97e0918bf34ca716c6d8694b906c/games/night_swarm"
+      "sourceUrl": "https://github.com/zabaglione/jr100dev/tree/c077175182e0033df38483e941cf95ec90423443/games/night_swarm"
     },
     {
       "id": "lumen-cross",
@@ -129,27 +129,27 @@
       "entry": 768,
       "path": "games/lumen-cross/1.0.0/lumen-cross.prg",
       "sha256": "55aeefdfd75b903101243afe9178ad0e30d36e339398ec83aa31698b23aabc4a",
-      "sourceUrl": "https://github.com/zabaglione/jr100dev/tree/e56f428e8d8b97e0918bf34ca716c6d8694b906c/games/lumen_cross"
+      "sourceUrl": "https://github.com/zabaglione/jr100dev/tree/c077175182e0033df38483e941cf95ec90423443/games/lumen_cross"
     },
     {
       "id": "magnet-vault",
       "title": "MAGNET VAULT",
-      "version": "1.1.0",
+      "version": "1.2.0",
       "ramKiB": 16,
       "entry": 768,
-      "path": "games/magnet-vault/1.1.0/magnet-vault.prg",
-      "sha256": "62fe07a8571f463171a28c1d58419979cc57e40d873c0d6e6777e019d9afb58c",
-      "sourceUrl": "https://github.com/zabaglione/jr100dev/tree/e56f428e8d8b97e0918bf34ca716c6d8694b906c/games/magnet_vault"
+      "path": "games/magnet-vault/1.2.0/magnet-vault.prg",
+      "sha256": "7c7d0dcf9f3feb15dc2025d08205036db6c627f93de1a184be615994e3a2cdd7",
+      "sourceUrl": "https://github.com/zabaglione/jr100dev/tree/c077175182e0033df38483e941cf95ec90423443/games/magnet_vault"
     },
     {
       "id": "frost-steps",
       "title": "FROST STEPS",
-      "version": "1.1.0",
+      "version": "1.2.0",
       "ramKiB": 16,
       "entry": 768,
-      "path": "games/frost-steps/1.1.0/frost-steps.prg",
-      "sha256": "8ceb7f71364e442868f28b97b57980b6306b51c02b37bef5bc777c50adf5424e",
-      "sourceUrl": "https://github.com/zabaglione/jr100dev/tree/e56f428e8d8b97e0918bf34ca716c6d8694b906c/games/frost_steps"
+      "path": "games/frost-steps/1.2.0/frost-steps.prg",
+      "sha256": "dfeda04f36a099476f0c897b823b1bd95d771e66d8679a5f0699504954c73c1b",
+      "sourceUrl": "https://github.com/zabaglione/jr100dev/tree/c077175182e0033df38483e941cf95ec90423443/games/frost_steps"
     },
     {
       "id": "prism-trace",
@@ -159,7 +159,7 @@
       "entry": 768,
       "path": "games/prism-trace/1.0.0/prism-trace.prg",
       "sha256": "4c1a309259acf97fbe20f27365ecd5a8555ece864e2f7a441d9b2b489e3d7ae4",
-      "sourceUrl": "https://github.com/zabaglione/jr100dev/tree/e56f428e8d8b97e0918bf34ca716c6d8694b906c/games/prism_trace"
+      "sourceUrl": "https://github.com/zabaglione/jr100dev/tree/c077175182e0033df38483e941cf95ec90423443/games/prism_trace"
     },
     {
       "id": "tide-bridge",
@@ -169,27 +169,27 @@
       "entry": 768,
       "path": "games/tide-bridge/1.0.0/tide-bridge.prg",
       "sha256": "a3e35622f981ff0687bc1910c441288cfa31ac1151b1cc6feda6588120d0d7a6",
-      "sourceUrl": "https://github.com/zabaglione/jr100dev/tree/e56f428e8d8b97e0918bf34ca716c6d8694b906c/games/tide_bridge"
+      "sourceUrl": "https://github.com/zabaglione/jr100dev/tree/c077175182e0033df38483e941cf95ec90423443/games/tide_bridge"
     },
     {
       "id": "glyph-shift",
       "title": "GLYPH SHIFT",
-      "version": "1.1.0",
+      "version": "1.2.0",
       "ramKiB": 16,
       "entry": 768,
-      "path": "games/glyph-shift/1.1.0/glyph-shift.prg",
-      "sha256": "b65c0602d9de7a6fba9fc57e5073882d5aa564213f0f2d67c205cbd0ddac031b",
-      "sourceUrl": "https://github.com/zabaglione/jr100dev/tree/e56f428e8d8b97e0918bf34ca716c6d8694b906c/games/glyph_shift"
+      "path": "games/glyph-shift/1.2.0/glyph-shift.prg",
+      "sha256": "0a261e8d2f00093c574e0443e19ce8c56a5520d63aebe8cac207a5d56f337876",
+      "sourceUrl": "https://github.com/zabaglione/jr100dev/tree/c077175182e0033df38483e941cf95ec90423443/games/glyph_shift"
     },
     {
       "id": "gravity-well",
       "title": "GRAVITY WELL",
-      "version": "1.1.0",
+      "version": "1.2.0",
       "ramKiB": 16,
       "entry": 768,
-      "path": "games/gravity-well/1.1.0/gravity-well.prg",
-      "sha256": "6c2c5cbcee75980595a18b7fcd9d0bb5674f9dd8165d0688a79d56e23abb7a90",
-      "sourceUrl": "https://github.com/zabaglione/jr100dev/tree/e56f428e8d8b97e0918bf34ca716c6d8694b906c/games/gravity_well"
+      "path": "games/gravity-well/1.2.0/gravity-well.prg",
+      "sha256": "86d919c7e7260c00b273270b589145c4466702016b2e38c8d0656cc94d510d7c",
+      "sourceUrl": "https://github.com/zabaglione/jr100dev/tree/c077175182e0033df38483e941cf95ec90423443/games/gravity_well"
     },
     {
       "id": "seed-merge",
@@ -199,7 +199,7 @@
       "entry": 768,
       "path": "games/seed-merge/1.0.0/seed-merge.prg",
       "sha256": "3472a72739d49f60035323e82f7c2b89c751859c86ab44ae63a2e44673a1eea5",
-      "sourceUrl": "https://github.com/zabaglione/jr100dev/tree/e56f428e8d8b97e0918bf34ca716c6d8694b906c/games/seed_merge"
+      "sourceUrl": "https://github.com/zabaglione/jr100dev/tree/c077175182e0033df38483e941cf95ec90423443/games/seed_merge"
     },
     {
       "id": "orbit-draft",
@@ -209,7 +209,7 @@
       "entry": 768,
       "path": "games/orbit-draft/1.0.0/orbit-draft.prg",
       "sha256": "042521ea22a2fd355338751d2f45d684a53d07d3f811035314b61a84292499f5",
-      "sourceUrl": "https://github.com/zabaglione/jr100dev/tree/e56f428e8d8b97e0918bf34ca716c6d8694b906c/games/orbit_draft"
+      "sourceUrl": "https://github.com/zabaglione/jr100dev/tree/c077175182e0033df38483e941cf95ec90423443/games/orbit_draft"
     },
     {
       "id": "five-forge",
@@ -219,7 +219,7 @@
       "entry": 768,
       "path": "games/five-forge/1.0.0/five-forge.prg",
       "sha256": "48f0989f02fa4be59ad45c10611d6bdcf0d9d52aa650b241d6e3c558a709e44d",
-      "sourceUrl": "https://github.com/zabaglione/jr100dev/tree/e56f428e8d8b97e0918bf34ca716c6d8694b906c/games/five_forge"
+      "sourceUrl": "https://github.com/zabaglione/jr100dev/tree/c077175182e0033df38483e941cf95ec90423443/games/five_forge"
     },
     {
       "id": "corner-crown",
@@ -229,7 +229,7 @@
       "entry": 768,
       "path": "games/corner-crown/1.0.0/corner-crown.prg",
       "sha256": "df6a9a1956ec8e1d454b8bc3eaca941df9864f565fe27336534379ca99b28352",
-      "sourceUrl": "https://github.com/zabaglione/jr100dev/tree/e56f428e8d8b97e0918bf34ca716c6d8694b906c/games/corner_crown"
+      "sourceUrl": "https://github.com/zabaglione/jr100dev/tree/c077175182e0033df38483e941cf95ec90423443/games/corner_crown"
     },
     {
       "id": "stone-balance",
@@ -239,7 +239,7 @@
       "entry": 768,
       "path": "games/stone-balance/1.0.0/stone-balance.prg",
       "sha256": "ffecba93d21e0ae7c86852f2f9c2e4885dee3f64bf691e024b844d73b00645c9",
-      "sourceUrl": "https://github.com/zabaglione/jr100dev/tree/e56f428e8d8b97e0918bf34ca716c6d8694b906c/games/stone_balance"
+      "sourceUrl": "https://github.com/zabaglione/jr100dev/tree/c077175182e0033df38483e941cf95ec90423443/games/stone_balance"
     },
     {
       "id": "memory-mosaic",
@@ -249,7 +249,7 @@
       "entry": 768,
       "path": "games/memory-mosaic/1.0.0/memory-mosaic.prg",
       "sha256": "ff7d7c844f5f5a60eebbe8b177308d87761acb9d44b2900fb7b887ac8b46cc5e",
-      "sourceUrl": "https://github.com/zabaglione/jr100dev/tree/e56f428e8d8b97e0918bf34ca716c6d8694b906c/games/memory_mosaic"
+      "sourceUrl": "https://github.com/zabaglione/jr100dev/tree/c077175182e0033df38483e941cf95ec90423443/games/memory_mosaic"
     },
     {
       "id": "twenty-one",
@@ -259,7 +259,7 @@
       "entry": 768,
       "path": "games/twenty-one/1.0.0/twenty-one.prg",
       "sha256": "e6e3ae0361a725df92823a89d4b07c9c346eb45a0747a8812a3def5c75c06eba",
-      "sourceUrl": "https://github.com/zabaglione/jr100dev/tree/e56f428e8d8b97e0918bf34ca716c6d8694b906c/games/twenty_one"
+      "sourceUrl": "https://github.com/zabaglione/jr100dev/tree/c077175182e0033df38483e941cf95ec90423443/games/twenty_one"
     },
     {
       "id": "orbit-dodge",
@@ -269,7 +269,7 @@
       "entry": 768,
       "path": "games/orbit-dodge/1.0.0/orbit-dodge.prg",
       "sha256": "e3c686584596451f8a909c7c5dfe1178ccc792af16e277b787b7095829233cc1",
-      "sourceUrl": "https://github.com/zabaglione/jr100dev/tree/e56f428e8d8b97e0918bf34ca716c6d8694b906c/games/orbit_dodge"
+      "sourceUrl": "https://github.com/zabaglione/jr100dev/tree/c077175182e0033df38483e941cf95ec90423443/games/orbit_dodge"
     },
     {
       "id": "gate-runner",
@@ -279,7 +279,7 @@
       "entry": 768,
       "path": "games/gate-runner/1.0.0/gate-runner.prg",
       "sha256": "ae0cd5f30d7e6b7ef223e23738e08b752cb71d7267deb7f14a252f062a77acf6",
-      "sourceUrl": "https://github.com/zabaglione/jr100dev/tree/e56f428e8d8b97e0918bf34ca716c6d8694b906c/games/gate_runner"
+      "sourceUrl": "https://github.com/zabaglione/jr100dev/tree/c077175182e0033df38483e941cf95ec90423443/games/gate_runner"
     },
     {
       "id": "brick-pulse",
@@ -289,7 +289,7 @@
       "entry": 768,
       "path": "games/brick-pulse/1.0.0/brick-pulse.prg",
       "sha256": "4681f78a8098e02089786576b0ffe1419a0f1ba5977dd47cfaf221b7b3957bc9",
-      "sourceUrl": "https://github.com/zabaglione/jr100dev/tree/e56f428e8d8b97e0918bf34ca716c6d8694b906c/games/brick_pulse"
+      "sourceUrl": "https://github.com/zabaglione/jr100dev/tree/c077175182e0033df38483e941cf95ec90423443/games/brick_pulse"
     },
     {
       "id": "star-lance",
@@ -299,7 +299,7 @@
       "entry": 768,
       "path": "games/star-lance/1.0.0/star-lance.prg",
       "sha256": "cc1a8313efdcec314afa41b336caf4133227f6b577af3c8adf87859c57c93773",
-      "sourceUrl": "https://github.com/zabaglione/jr100dev/tree/e56f428e8d8b97e0918bf34ca716c6d8694b906c/games/star_lance"
+      "sourceUrl": "https://github.com/zabaglione/jr100dev/tree/c077175182e0033df38483e941cf95ec90423443/games/star_lance"
     },
     {
       "id": "ribbon-snake",
@@ -309,7 +309,7 @@
       "entry": 768,
       "path": "games/ribbon-snake/1.0.0/ribbon-snake.prg",
       "sha256": "d4c56e8cd2f749f79e596e0843fe4169117586c922f562ed62563b7f5866a6eb",
-      "sourceUrl": "https://github.com/zabaglione/jr100dev/tree/e56f428e8d8b97e0918bf34ca716c6d8694b906c/games/ribbon_snake"
+      "sourceUrl": "https://github.com/zabaglione/jr100dev/tree/c077175182e0033df38483e941cf95ec90423443/games/ribbon_snake"
     },
     {
       "id": "lunar-touchdown",
@@ -319,7 +319,7 @@
       "entry": 768,
       "path": "games/lunar-touchdown/1.0.0/lunar-touchdown.prg",
       "sha256": "a47d21477eebd9cf3cc1ba2cdefbfde5dba2d6f39dc8edaf88efc62f11d905be",
-      "sourceUrl": "https://github.com/zabaglione/jr100dev/tree/e56f428e8d8b97e0918bf34ca716c6d8694b906c/games/lunar_touchdown"
+      "sourceUrl": "https://github.com/zabaglione/jr100dev/tree/c077175182e0033df38483e941cf95ec90423443/games/lunar_touchdown"
     },
     {
       "id": "echo-parry",
@@ -329,7 +329,7 @@
       "entry": 768,
       "path": "games/echo-parry/1.0.0/echo-parry.prg",
       "sha256": "8e55e0a960f22d80e1f3e5a5cfc7e78fae19997375c997f142fe6e787d132465",
-      "sourceUrl": "https://github.com/zabaglione/jr100dev/tree/e56f428e8d8b97e0918bf34ca716c6d8694b906c/games/echo_parry"
+      "sourceUrl": "https://github.com/zabaglione/jr100dev/tree/c077175182e0033df38483e941cf95ec90423443/games/echo_parry"
     },
     {
       "id": "pendulum-port",
@@ -339,7 +339,7 @@
       "entry": 768,
       "path": "games/pendulum-port/1.0.0/pendulum-port.prg",
       "sha256": "efbf2e5e11e80a2c605172993b5213fdf282bff9a5b001c49a61815a86b0bb53",
-      "sourceUrl": "https://github.com/zabaglione/jr100dev/tree/e56f428e8d8b97e0918bf34ca716c6d8694b906c/games/pendulum_port"
+      "sourceUrl": "https://github.com/zabaglione/jr100dev/tree/c077175182e0033df38483e941cf95ec90423443/games/pendulum_port"
     },
     {
       "id": "ruin-lexicon",
@@ -349,7 +349,7 @@
       "entry": 768,
       "path": "games/ruin-lexicon/1.0.0/ruin-lexicon.prg",
       "sha256": "1a74a327535b1526178364d9fc096bc51939f6d4a5bd4253a0b2b91109c8ba2a",
-      "sourceUrl": "https://github.com/zabaglione/jr100dev/tree/e56f428e8d8b97e0918bf34ca716c6d8694b906c/games/ruin_lexicon"
+      "sourceUrl": "https://github.com/zabaglione/jr100dev/tree/c077175182e0033df38483e941cf95ec90423443/games/ruin_lexicon"
     },
     {
       "id": "shadow-archive",
@@ -359,7 +359,7 @@
       "entry": 768,
       "path": "games/shadow-archive/1.0.0/shadow-archive.prg",
       "sha256": "ef97ad8110f6859d125ee85d924a7138311009775db51341d7f97ee09a2d7862",
-      "sourceUrl": "https://github.com/zabaglione/jr100dev/tree/e56f428e8d8b97e0918bf34ca716c6d8694b906c/games/shadow_archive"
+      "sourceUrl": "https://github.com/zabaglione/jr100dev/tree/c077175182e0033df38483e941cf95ec90423443/games/shadow_archive"
     },
     {
       "id": "compass-rose",
@@ -369,7 +369,7 @@
       "entry": 768,
       "path": "games/compass-rose/1.0.0/compass-rose.prg",
       "sha256": "662cfebd60d99aabd64a11622df90e8e3849f8344c5ecd3431250d5845549708",
-      "sourceUrl": "https://github.com/zabaglione/jr100dev/tree/e56f428e8d8b97e0918bf34ca716c6d8694b906c/games/compass_rose"
+      "sourceUrl": "https://github.com/zabaglione/jr100dev/tree/c077175182e0033df38483e941cf95ec90423443/games/compass_rose"
     },
     {
       "id": "mirror-relic",
@@ -379,7 +379,7 @@
       "entry": 768,
       "path": "games/mirror-relic/1.0.0/mirror-relic.prg",
       "sha256": "f42d4ecf1f524908f99d2681be5d0e7904479a89732b8cc825fdf5b8ec757a03",
-      "sourceUrl": "https://github.com/zabaglione/jr100dev/tree/e56f428e8d8b97e0918bf34ca716c6d8694b906c/games/mirror_relic"
+      "sourceUrl": "https://github.com/zabaglione/jr100dev/tree/c077175182e0033df38483e941cf95ec90423443/games/mirror_relic"
     },
     {
       "id": "orchard-days",
@@ -389,7 +389,7 @@
       "entry": 768,
       "path": "games/orchard-days/1.0.0/orchard-days.prg",
       "sha256": "f72debbefb924c329d591e7ff0ed214f005fa6478793a6fda91bef1c9954e23c",
-      "sourceUrl": "https://github.com/zabaglione/jr100dev/tree/e56f428e8d8b97e0918bf34ca716c6d8694b906c/games/orchard_days"
+      "sourceUrl": "https://github.com/zabaglione/jr100dev/tree/c077175182e0033df38483e941cf95ec90423443/games/orchard_days"
     },
     {
       "id": "tidal-nets",
@@ -399,7 +399,7 @@
       "entry": 768,
       "path": "games/tidal-nets/1.0.0/tidal-nets.prg",
       "sha256": "baa25dc2b0519ba5fd4fb7fcb21947e9940697b88ba1e9da277aab5c70c331f9",
-      "sourceUrl": "https://github.com/zabaglione/jr100dev/tree/e56f428e8d8b97e0918bf34ca716c6d8694b906c/games/tidal_nets"
+      "sourceUrl": "https://github.com/zabaglione/jr100dev/tree/c077175182e0033df38483e941cf95ec90423443/games/tidal_nets"
     },
     {
       "id": "potion-path",
@@ -409,7 +409,7 @@
       "entry": 768,
       "path": "games/potion-path/1.0.0/potion-path.prg",
       "sha256": "c980729ee5c0727a9c0c057a0b9aa41e9a42609d7d7443dec75ee6409d214ba0",
-      "sourceUrl": "https://github.com/zabaglione/jr100dev/tree/e56f428e8d8b97e0918bf34ca716c6d8694b906c/games/potion_path"
+      "sourceUrl": "https://github.com/zabaglione/jr100dev/tree/c077175182e0033df38483e941cf95ec90423443/games/potion_path"
     },
     {
       "id": "auction-house",
@@ -419,7 +419,7 @@
       "entry": 768,
       "path": "games/auction-house/1.0.0/auction-house.prg",
       "sha256": "042c1ee504d3ff06b82cdd8b966774b9e8e533f7146876b5b5a61e400a25240e",
-      "sourceUrl": "https://github.com/zabaglione/jr100dev/tree/e56f428e8d8b97e0918bf34ca716c6d8694b906c/games/auction_house"
+      "sourceUrl": "https://github.com/zabaglione/jr100dev/tree/c077175182e0033df38483e941cf95ec90423443/games/auction_house"
     },
     {
       "id": "metro-weave",
@@ -429,7 +429,7 @@
       "entry": 768,
       "path": "games/metro-weave/1.0.0/metro-weave.prg",
       "sha256": "a7624c485f267add59c4b74d554b3df0d85bafcdc65029f1b018bc6f60474a40",
-      "sourceUrl": "https://github.com/zabaglione/jr100dev/tree/e56f428e8d8b97e0918bf34ca716c6d8694b906c/games/metro_weave"
+      "sourceUrl": "https://github.com/zabaglione/jr100dev/tree/c077175182e0033df38483e941cf95ec90423443/games/metro_weave"
     },
     {
       "id": "cargo-balance",
@@ -439,7 +439,7 @@
       "entry": 768,
       "path": "games/cargo-balance/1.0.0/cargo-balance.prg",
       "sha256": "74c8f1b8b9fadb4b9eecdc5e95b8d737955cf01fca7528b2fd7dd78fa517e013",
-      "sourceUrl": "https://github.com/zabaglione/jr100dev/tree/e56f428e8d8b97e0918bf34ca716c6d8694b906c/games/cargo_balance"
+      "sourceUrl": "https://github.com/zabaglione/jr100dev/tree/c077175182e0033df38483e941cf95ec90423443/games/cargo_balance"
     },
     {
       "id": "peg-garden",
@@ -449,7 +449,7 @@
       "entry": 768,
       "path": "games/peg-garden/1.0.0/peg-garden.prg",
       "sha256": "51720667e3345817ef6a43204cc8fbb40dcbb0689a8f5820721cc52a493e56a9",
-      "sourceUrl": "https://github.com/zabaglione/jr100dev/tree/e56f428e8d8b97e0918bf34ca716c6d8694b906c/games/peg_garden"
+      "sourceUrl": "https://github.com/zabaglione/jr100dev/tree/c077175182e0033df38483e941cf95ec90423443/games/peg_garden"
     },
     {
       "id": "number-vault",
@@ -459,7 +459,7 @@
       "entry": 768,
       "path": "games/number-vault/1.0.0/number-vault.prg",
       "sha256": "7082c5c96e962704c117c035bcb9db0e8c7222d8bf39f0c6d0c8f5cb86ebffb3",
-      "sourceUrl": "https://github.com/zabaglione/jr100dev/tree/e56f428e8d8b97e0918bf34ca716c6d8694b906c/games/number_vault"
+      "sourceUrl": "https://github.com/zabaglione/jr100dev/tree/c077175182e0033df38483e941cf95ec90423443/games/number_vault"
     },
     {
       "id": "phase-pairs",
@@ -469,7 +469,7 @@
       "entry": 768,
       "path": "games/phase-pairs/1.0.0/phase-pairs.prg",
       "sha256": "d67563166835776065ad4fad6129446275b4460818c8c7f329528d3b6f6c0a16",
-      "sourceUrl": "https://github.com/zabaglione/jr100dev/tree/e56f428e8d8b97e0918bf34ca716c6d8694b906c/games/phase_pairs"
+      "sourceUrl": "https://github.com/zabaglione/jr100dev/tree/c077175182e0033df38483e941cf95ec90423443/games/phase_pairs"
     },
     {
       "id": "fuse-box",
@@ -479,7 +479,7 @@
       "entry": 768,
       "path": "games/fuse-box/1.0.0/fuse-box.prg",
       "sha256": "4782d115f725320e767297685a0d17a6ba6b4bd63f70f12d4018a41dfdfea896",
-      "sourceUrl": "https://github.com/zabaglione/jr100dev/tree/e56f428e8d8b97e0918bf34ca716c6d8694b906c/games/fuse_box"
+      "sourceUrl": "https://github.com/zabaglione/jr100dev/tree/c077175182e0033df38483e941cf95ec90423443/games/fuse_box"
     },
     {
       "id": "sand-rescue",
@@ -489,7 +489,7 @@
       "entry": 768,
       "path": "games/sand-rescue/1.0.0/sand-rescue.prg",
       "sha256": "ec41250eaa855df8982fef3cd6b072f53c7c65de8ff56cedfb07b435fd6fbc5f",
-      "sourceUrl": "https://github.com/zabaglione/jr100dev/tree/e56f428e8d8b97e0918bf34ca716c6d8694b906c/games/sand_rescue"
+      "sourceUrl": "https://github.com/zabaglione/jr100dev/tree/c077175182e0033df38483e941cf95ec90423443/games/sand_rescue"
     },
     {
       "id": "word-foundry",
@@ -499,7 +499,7 @@
       "entry": 768,
       "path": "games/word-foundry/1.0.0/word-foundry.prg",
       "sha256": "3e16c12df317e1bba279b232a01de641fa0201c148b9ba3fb52f479db6069f06",
-      "sourceUrl": "https://github.com/zabaglione/jr100dev/tree/e56f428e8d8b97e0918bf34ca716c6d8694b906c/games/word_foundry"
+      "sourceUrl": "https://github.com/zabaglione/jr100dev/tree/c077175182e0033df38483e941cf95ec90423443/games/word_foundry"
     },
     {
       "id": "relic-dive",
@@ -509,7 +509,7 @@
       "entry": 768,
       "path": "games/relic-dive/1.1.0/relic-dive.prg",
       "sha256": "bd8ada9d06ea01b94ec4e0139c66e63150cfb197bcb193f2081fb5e786b10047",
-      "sourceUrl": "https://github.com/zabaglione/jr100dev/tree/e56f428e8d8b97e0918bf34ca716c6d8694b906c/games/relic_dive"
+      "sourceUrl": "https://github.com/zabaglione/jr100dev/tree/c077175182e0033df38483e941cf95ec90423443/games/relic_dive"
     }
   ]
 }
