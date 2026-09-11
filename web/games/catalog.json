@@ -284,12 +284,12 @@
     {
       "id": "brick-pulse",
       "title": "BRICK PULSE",
-      "version": "1.2.0",
+      "version": "1.2.1",
       "ramKiB": 16,
       "entry": 768,
-      "path": "games/brick-pulse/1.2.0/brick-pulse.prg",
-      "sha256": "82da80429870775a4b9e2590803ca73f26749b2d0791f516f46975eb33cd53f9",
-      "sourceUrl": "https://github.com/zabaglione/jr100dev/tree/d1f7c0b98bf7ebad888025669d1d79076f4c25a0/games/brick_pulse"
+      "path": "games/brick-pulse/1.2.1/brick-pulse.prg",
+      "sha256": "81f9e050052df9d552ab7a58a1a7894bc4a1eb565e6c423e727b7514632a22ef",
+      "sourceUrl": "https://github.com/zabaglione/jr100dev/tree/0e9203e354f9999e34fcdbf155c5b7749ccd75db/games/brick_pulse"
     },
     {
       "id": "star-lance",
