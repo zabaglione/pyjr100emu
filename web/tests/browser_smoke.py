@@ -65,8 +65,98 @@ def synthetic_program() -> bytes:
     )
 
 
+def check_audio_activation(playwright, url: str) -> None:
+    for autoplay in (False, True):
+        policy = (
+            "no-user-gesture-required"
+            if autoplay
+            else "document-user-activation-required"
+        )
+        browser = playwright.chromium.launch(
+            headless=True, args=["--no-sandbox", f"--autoplay-policy={policy}"]
+        )
+        methods = (
+            ("automatic",) if autoplay else ("screen", "notice", "mute", "keyboard")
+        )
+        for method in methods:
+            context = browser.new_context()
+            page = context.new_page()
+            page.goto(url, wait_until="networkidle")
+            assert not page.locator("#audio-enable").is_visible()
+            # Save a ROM without any click or key, then open the saved-ROM path.
+            page.evaluate(
+                """async bytes => {
+                  const {saveRom} = await import('./storage.js');
+                  await saveRom(Uint8Array.from(bytes), {filename:'synthetic.rom'});
+                }""",
+                list(synthetic_rom()),
+            )
+            page.reload(wait_until="networkidle")
+            page.wait_for_function(
+                "document.querySelector('#core-status').textContent === 'Running'"
+            )
+            notice = page.locator("#audio-enable")
+            if not autoplay:
+                notice.wait_for(state="visible")
+                assert page.locator("#mute").inner_text() == "Enable sound"
+                assert (
+                    page.locator("#mute").get_attribute("data-audio-state")
+                    == "suspended"
+                )
+                rect, screen = (
+                    notice.bounding_box(),
+                    page.locator("#screen").bounding_box(),
+                )
+                assert rect["y"] + rect["height"] <= screen["y"]
+                assert "画面をマウスでクリックして" in notice.inner_text()
+                if method == "keyboard":
+                    notice.focus()
+                    page.keyboard.press("Enter")
+                else:
+                    selector = {
+                        "screen": "#screen",
+                        "notice": "#audio-enable",
+                        "mute": "#mute",
+                    }[method]
+                    page.locator(selector).click()
+            page.wait_for_function(
+                "document.querySelector('#mute').dataset.audioReady === 'true'"
+            )
+            notice.wait_for(state="hidden")
+            assert page.locator("#mute").inner_text() == "Sound on"
+            page.wait_for_function(
+                "document.querySelector('#mute').dataset.audioWorkletStarted === 'true'"
+            )
+            assert page.locator("#error-status").inner_text() == ""
+            if method in ("notice", "keyboard"):
+                assert page.evaluate("document.activeElement.id") == "screen"
+            # Muting hides the activation request and survives a reload.
+            page.locator("#mute").click()
+            assert page.locator("#mute").inner_text() == "Sound off"
+            page.reload(wait_until="networkidle")
+            page.wait_for_function(
+                "document.querySelector('#core-status').textContent === 'Running'"
+            )
+            assert not notice.is_visible()
+            assert page.locator("#mute").inner_text() == "Sound off"
+            assert (
+                page.locator("#mute").get_attribute("data-audio-state") == "not-created"
+            )
+            page.locator("#mute").click()
+            page.wait_for_function(
+                "document.querySelector('#mute').dataset.audioReady === 'true'"
+            )
+            assert not notice.is_visible()
+            context.close()
+            print(
+                f"PASS: audio activation {method}, real browser policy, PCM output and saved mute"
+            )
+        browser.close()
+
+
 def run(url: str) -> None:
     with sync_playwright() as playwright:
+        check_audio_activation(playwright, url)
         browser = playwright.chromium.launch(headless=True, args=["--no-sandbox"])
         page = browser.new_page()
         page.add_init_script(
@@ -129,6 +219,7 @@ def run(url: str) -> None:
         assert page.locator("#error-status").inner_text() == ""
         assert page.locator("#rom-status").inner_text().startswith("synthetic.rom")
         assert "32K RAM" in page.locator("#rom-status").inner_text()
+
         def dismiss_reset(dialog):
             assert dialog.type == "confirm" and "Really reset?" in dialog.message
             dialog.dismiss()

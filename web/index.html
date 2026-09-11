@@ -21,10 +21,12 @@
       <section id="game-launch" class="game-launch" hidden aria-live="polite">
         <strong id="game-launch-status">Preparing game...</strong>
         <a id="game-source" hidden>Game source and controls</a>
-        <span id="game-audio-hint">Press a key or click the screen to enable sound. Gamepads may require this first.</span>
       </section>
       <section class="emulator-layout">
         <div class="machine-panel">
+          <button id="audio-enable" class="audio-notice" type="button" hidden lang="ja">
+            画面をマウスでクリックして、音声を有効にしてください
+          </button>
           <div class="screen-bezel">
             <canvas id="screen" width="256" height="192" aria-label="JR-100 display" tabindex="0"></canvas>
           </div>

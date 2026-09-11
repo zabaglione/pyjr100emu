@@ -61,6 +61,19 @@ h3 { color: var(--muted); font-size: .66rem; letter-spacing: .09em; margin-botto
 .emulator-layout { display: grid; gap: .7rem; grid-template-columns: minmax(0, 1fr) 235px; }
 .machine-panel, .control-panel, .keyboard-section, .debugger { background: var(--ivory); border: 1px solid #b7b1a3; box-shadow: 0 8px 20px rgba(34,31,23,.09); }
 .machine-panel { padding: .7rem; }
+.audio-notice {
+  display: block;
+  width: 100%;
+  margin: 0 0 .7rem;
+  padding: .75rem;
+  border: 2px solid #96650e;
+  background: #fff0ba;
+  color: #513506;
+  font-size: .9rem;
+  font-weight: 700;
+  line-height: 1.6;
+}
+.audio-notice[hidden] { display: none; }
 .screen-bezel { background: #242729; border: 8px solid #343839; box-shadow: inset 0 0 0 2px #090a0b, 0 0 0 1px #aaa69b; margin: 0 auto; max-width: 528px; padding: 7px; }
 #screen { background: #050706; display: block; height: auto; image-rendering: pixelated; max-width: 100%; width: 100%; }
 .screen-meta { color: var(--muted); display: grid; font: .61rem/1.4 ui-monospace, monospace; gap: .18rem; padding: .55rem .15rem 0; }
@@ -163,4 +176,3 @@ h3 { color: var(--muted); font-size: .66rem; letter-spacing: .09em; margin-botto
 .game-launch { display: flex; flex-wrap: wrap; align-items: center; gap: 0.6rem 1.5rem; padding: 1rem; border: 1px solid currentColor; margin-bottom: 1rem; }
 .game-launch[hidden] { display: none; }
 .game-launch a { color: inherit; }
-#game-audio-hint { flex-basis: 100%; font-size: 0.85rem; }

@@ -44,6 +44,7 @@ const removeRomButton = element("#remove-rom");
 const pauseButton = element("#pause");
 const resetButton = element("#reset");
 const muteButton = element("#mute");
+const audioEnableButton = element("#audio-enable");
 const toggleKeyboardButton = element("#toggle-keyboard");
 const keyboardMode = element("#keyboard-mode");
 const extendedRam = element("#extended-ram");
@@ -64,7 +65,7 @@ let pendingLogicalFrames = 0;
 let gameLaunch = null;
 
 const worker = new Worker(new URL("./worker.js", import.meta.url));
-const browserAudio = new BrowserAudio();
+const browserAudio = new BrowserAudio({ onStateChange: updateMuteUi });
 const framePacer = new EmulationFramePacer({ maxCatchUpFrames: 4 });
 const debuggerView = new DebuggerPanel({
   root: element("#debugger"),
@@ -115,8 +116,11 @@ function updateKeyboardButton() {
 }
 
 function updateMuteUi() {
-  muteButton.textContent = browserAudio.muted ? "Sound off" : "Sound on";
+  muteButton.textContent = browserAudio.muted ? "Sound off" : browserAudio.ready ? "Sound on" : "Enable sound";
   muteButton.setAttribute("aria-pressed", String(browserAudio.muted));
+  muteButton.dataset.audioState = browserAudio.context?.state ?? "not-created";
+  muteButton.dataset.audioReady = String(browserAudio.ready);
+  audioEnableButton.hidden = !romLoaded || browserAudio.muted || browserAudio.ready;
   muteButton.dataset.audioBackend = browserAudio.backend;
   muteButton.dataset.audioWorkletStarted = String(browserAudio.workletStarted);
   muteButton.dataset.pcmActiveSamples = String(pcmActiveSampleCount);
@@ -132,10 +136,17 @@ function resetFramePacing(timestamp = performance.now()) {
 }
 
 async function unlockAudio() {
-  const unlocked = await browserAudio.unlock();
-  updateMuteUi();
-  if (unlocked) element("#game-audio-hint").hidden = true;
-  return unlocked;
+  if (browserAudio.muted) return false;
+  try {
+    const pending = browserAudio.unlock();
+    updateMuteUi();
+    return await pending;
+  } catch (error) {
+    if (error.name === "NotAllowedError") return false;
+    throw error;
+  } finally {
+    updateMuteUi();
+  }
 }
 
 browserAudio.setMuted(Boolean(settings.audioMuted));
@@ -192,6 +203,9 @@ async function loadSavedRom() {
 async function setRomUi(info, filename) {
   romLoaded = true;
   running = true;
+  // Try permitted autoplay without making ROM/game loading wait on a gesture.
+  void unlockAudio().catch(setError);
+  updateMuteUi();
   for (const control of [pauseButton, resetButton, toggleKeyboardButton, toggleDebuggerButton, programFile]) {
     control.disabled = false;
   }
@@ -379,6 +393,7 @@ removeRomButton.addEventListener("click", async () => {
     setStatus("ROM required");
     romStatus.textContent = "No ROM loaded";
     programStatus.textContent = "No program loaded";
+    updateMuteUi();
   } catch (error) {
     setError(error);
   }
@@ -407,12 +422,18 @@ resetButton.addEventListener("click", () => {
   }
 });
 
-muteButton.addEventListener("click", async () => {
-  browserAudio.setMuted(!browserAudio.muted);
+muteButton.addEventListener("click", () => {
+  // When playback is blocked, this button enables sound instead of muting it.
+  browserAudio.setMuted(!browserAudio.muted && browserAudio.ready);
   settings.audioMuted = browserAudio.muted;
   saveSettings(settings);
-  if (!browserAudio.muted) await unlockAudio();
+  if (!browserAudio.muted) void unlockAudio().catch(setError);
   updateMuteUi();
+});
+
+audioEnableButton.addEventListener("click", () => {
+  void unlockAudio().catch(setError);
+  screen.focus({ preventScroll: true });
 });
 
 toggleKeyboardButton.addEventListener("click", () => {
@@ -445,6 +466,9 @@ function isEditableTarget(target) {
 }
 
 window.addEventListener("keydown", (event) => {
+  if ([muteButton, audioEnableButton].includes(event.target) && ["Enter", "Space"].includes(event.code)) {
+    return; // Let the native button click enable audio without a JR-100 key.
+  }
   void unlockAudio().catch(setError);
   if (event.code === "Escape" && romLoaded) {
     debuggerView.toggle();
@@ -464,7 +488,10 @@ window.addEventListener("keyup", (event) => {
   event.preventDefault();
 });
 
-window.addEventListener("pointerdown", () => { void unlockAudio().catch(setError); });
+window.addEventListener("click", (event) => {
+  if (muteButton.contains(event.target) || audioEnableButton.contains(event.target)) return;
+  void unlockAudio().catch(setError);
+});
 window.addEventListener("blur", () => {
   input.releaseMomentary();
   input.setJoystickMask(0);

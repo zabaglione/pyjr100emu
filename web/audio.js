@@ -112,7 +112,8 @@ export class BrowserAudio {
     this.context = null;
     this.workletNode = null;
     this.workletStarted = false;
-    this.workletAttempted = false;
+    this.outputPromise = null;
+    this.onStateChange = options.onStateChange ?? (() => {});
     this.fallbackReady = false;
     this.nextStart = 0;
     this.muted = false;
@@ -132,17 +133,26 @@ export class BrowserAudio {
   }
 
   async unlock() {
-    if (!this.context) this.context = this.contextFactory();
+    if (!this.context) {
+      this.context = this.contextFactory();
+      this.context?.addEventListener("statechange", () => this.onStateChange());
+    }
     if (!this.context) return false;
-    if (this.context.state === "suspended" && this.context.resume) {
+    // A blocked resume may stay pending until a user gesture. Each gesture
+    // must call resume itself, even if an automatic attempt is still waiting.
+    if (this.context.state !== "running" && this.context.state !== "closed" && this.context.resume) {
       await this.context.resume();
     }
     await this._ensureOutput();
-    if (this.context.state !== "running") return false;
+    if (!this.ready) return false;
     this.nextStart = Math.max(this.nextStart, this.context.currentTime + this.lookAhead);
     this._flushPending();
     this._pumpFallback();
     return true;
+  }
+
+  get ready() {
+    return this.context?.state === "running" && this._hasOutput();
   }
 
   setMuted(muted) {
@@ -191,9 +201,12 @@ export class BrowserAudio {
     return true;
   }
 
-  async _ensureOutput() {
-    if (this.workletNode || this.fallbackReady || this.workletAttempted) return;
-    this.workletAttempted = true;
+  _ensureOutput() {
+    this.outputPromise ??= this._createOutput();
+    return this.outputPromise;
+  }
+
+  async _createOutput() {
     const canLoadWorklet = Boolean(this.context.audioWorklet?.addModule);
     if (canLoadWorklet) {
       try {

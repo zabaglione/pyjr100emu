@@ -14,6 +14,7 @@ function createWorkletHarness() {
     currentTime: 1,
     sampleRate: 44100,
     destination: {},
+    addEventListener() {},
     audioWorklet: { addModule: async () => {} },
   };
   const audioWorkletNodeFactory = (_context, name, options) => {
@@ -36,6 +37,74 @@ function createWorkletHarness() {
   };
   return { context, nodes, audioWorkletNodeFactory };
 }
+
+test("audio becomes ready only after the output is connected", async () => {
+  const harness = createWorkletHarness();
+  let finishLoading;
+  const loading = new Promise(resolve => { finishLoading = resolve; });
+  const audio = new BrowserAudio({
+    contextFactory: () => harness.context,
+    audioWorkletNodeFactory: harness.audioWorkletNodeFactory,
+    audioWorkletLoader: () => loading,
+  });
+  let secondFinished = false;
+  const first = audio.unlock();
+  const second = audio.unlock().then(value => { secondFinished = true; return value; });
+  await new Promise(resolve => setImmediate(resolve));
+  assert.equal(audio.ready, false);
+  assert.equal(secondFinished, false, "A second click must also wait for the output");
+  finishLoading();
+  assert.deepEqual(await Promise.all([first, second]), [true, true]);
+  assert.equal(audio.ready, true);
+  assert.equal(harness.nodes.length, 1);
+});
+
+test("a gesture retries resume even while autoplay resume is pending", async () => {
+  const harness = createWorkletHarness();
+  harness.context.state = "suspended";
+  let finishResume;
+  let attempts = 0;
+  harness.context.resume = () => {
+    attempts++;
+    if (attempts === 1) return new Promise(resolve => { finishResume = resolve; });
+    harness.context.state = "running";
+    finishResume();
+    return Promise.resolve();
+  };
+  const audio = new BrowserAudio({
+    contextFactory: () => harness.context,
+    audioWorkletNodeFactory: harness.audioWorkletNodeFactory,
+  });
+  const automatic = audio.unlock();
+  assert.equal(audio.ready, false);
+  assert.equal(await audio.unlock(), true);
+  assert.equal(await automatic, true);
+  assert.equal(attempts, 2);
+  assert.equal(audio.ready, true);
+});
+
+test("an interrupted context can resume and reports state changes", async () => {
+  const harness = createWorkletHarness();
+  harness.context.state = "interrupted";
+  let listener;
+  let changes = 0;
+  harness.context.addEventListener = (type, callback) => {
+    assert.equal(type, "statechange");
+    listener = callback;
+  };
+  harness.context.resume = async () => { harness.context.state = "running"; };
+  const audio = new BrowserAudio({
+    contextFactory: () => harness.context,
+    audioWorkletNodeFactory: harness.audioWorkletNodeFactory,
+    onStateChange: () => { changes++; },
+  });
+  assert.equal(await audio.unlock(), true);
+  assert.equal(audio.ready, true);
+  harness.context.state = "suspended";
+  listener();
+  assert.equal(changes, 1);
+  assert.equal(audio.ready, false);
+});
 
 test("signed little-endian PCM is normalized for Web Audio", () => {
   const bytes = Uint8Array.from([0x00, 0x80, 0x00, 0x00, 0xff, 0x7f]);
@@ -169,6 +238,7 @@ test("fallback audio schedules buffered chunks contiguously", async () => {
     currentTime: 1,
     sampleRate: 44100,
     destination: {},
+    addEventListener() {},
     createBuffer: (_channels, length) => ({ length, copyToChannel(samples) { this.samples = samples; } }),
     createBufferSource: () => ({ connect() {}, start(time) { starts.push(time); } }),
   };
