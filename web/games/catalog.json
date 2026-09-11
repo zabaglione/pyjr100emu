@@ -144,12 +144,12 @@
     {
       "id": "frost-steps",
       "title": "FROST STEPS",
-      "version": "1.6.0",
+      "version": "1.6.1",
       "ramKiB": 16,
       "entry": 768,
-      "path": "games/frost-steps/1.6.0/frost-steps.prg",
-      "sha256": "48a55ddeaab98a783e2fbd49c2392a3bfa10faa7c1817c5509f273e0568d05b0",
-      "sourceUrl": "https://github.com/zabaglione/jr100dev/tree/d0f05156675dfd8d72c4093e1045504f5705f422/games/frost_steps"
+      "path": "games/frost-steps/1.6.1/frost-steps.prg",
+      "sha256": "8e10dd278a338208857f5ba768b138447d35f6ba147f1bc936f1b03f6dcf78bf",
+      "sourceUrl": "https://github.com/zabaglione/jr100dev/tree/408fbfcabd96e5d7cfb62b13ae7482ddedd0c2ba/games/frost_steps"
     },
     {
       "id": "prism-trace",
