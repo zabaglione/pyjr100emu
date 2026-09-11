@@ -396,7 +396,7 @@ pauseButton.addEventListener("click", () => {
 });
 
 resetButton.addEventListener("click", () => {
-  if (romLoaded) {
+  if (romLoaded && window.confirm("Really reset? Current game progress will be lost.")) {
     browserAudio.clear();
     input.clear();
     worker.postMessage({ type: "reset" });

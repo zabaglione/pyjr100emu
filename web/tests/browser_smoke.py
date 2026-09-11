@@ -80,12 +80,14 @@ def run(url: str) -> None:
               ),
             };
             globalThis.__joystickMessages = [];
+            globalThis.__resetMessages = 0;
             Object.defineProperty(navigator, "getGamepads", {
               configurable: true,
               value: () => [globalThis.__testGamepad],
             });
             const originalPostMessage = Worker.prototype.postMessage;
             Worker.prototype.postMessage = function(message, transfer) {
+              if (message?.type === "reset") globalThis.__resetMessages++;
               if (message?.type === "joystick") {
                 globalThis.__joystickMessages.push(message.mask);
               }
@@ -127,6 +129,16 @@ def run(url: str) -> None:
         assert page.locator("#error-status").inner_text() == ""
         assert page.locator("#rom-status").inner_text().startswith("synthetic.rom")
         assert "32K RAM" in page.locator("#rom-status").inner_text()
+        def dismiss_reset(dialog):
+            assert dialog.type == "confirm" and "Really reset?" in dialog.message
+            dialog.dismiss()
+
+        page.once("dialog", dismiss_reset)
+        page.locator("#reset").click()
+        assert page.evaluate("globalThis.__resetMessages") == 0
+        page.once("dialog", lambda dialog: dialog.accept())
+        page.locator("#reset").click()
+        page.wait_for_function("globalThis.__resetMessages === 1")
         assert page.locator(".main-legend:not([hidden])").count() > 20
         assert page.locator(".key-v .ctrl-legend").inner_text() == "GRAPH"
         page.evaluate(

@@ -4,52 +4,52 @@
     {
       "id": "chrono-breach",
       "title": "CHRONO BREACH",
-      "version": "1.2.0",
+      "version": "1.2.1",
       "ramKiB": 16,
       "entry": 768,
-      "path": "games/chrono-breach/1.2.0/chrono-breach.prg",
-      "sha256": "0affe4c4c01ab6df20f74841e695790fe60212940d9e5049f973ab555068b40c",
-      "sourceUrl": "https://github.com/zabaglione/jr100dev/tree/d1f7c0b98bf7ebad888025669d1d79076f4c25a0/games/chrono_breach"
+      "path": "games/chrono-breach/1.2.1/chrono-breach.prg",
+      "sha256": "d178fc70751163cb2c4d10055c89658c35f99f0b766df228d1d1061ea47041b8",
+      "sourceUrl": "https://github.com/zabaglione/jr100dev/tree/96a38dc076309886f7759dd934ba17ff9b1e5eea/games/chrono_breach"
     },
     {
       "id": "sigil-deck",
       "title": "SIGIL DECK",
-      "version": "1.2.0",
+      "version": "1.2.1",
       "ramKiB": 16,
       "entry": 768,
-      "path": "games/sigil-deck/1.2.0/sigil-deck.prg",
-      "sha256": "0450a292a3c9ec66222e73b4ce14b2e146cd9b758fa2f157829c776cf80582ad",
-      "sourceUrl": "https://github.com/zabaglione/jr100dev/tree/d1f7c0b98bf7ebad888025669d1d79076f4c25a0/games/sigil_deck"
+      "path": "games/sigil-deck/1.2.1/sigil-deck.prg",
+      "sha256": "c6856a62dabb530cf030e3cd013fc58a8c5caa7ad86f25d4c2aff358de201fa4",
+      "sourceUrl": "https://github.com/zabaglione/jr100dev/tree/96a38dc076309886f7759dd934ba17ff9b1e5eea/games/sigil_deck"
     },
     {
       "id": "abyss-signal",
       "title": "ABYSS SIGNAL",
-      "version": "1.2.0",
+      "version": "1.2.1",
       "ramKiB": 16,
       "entry": 768,
-      "path": "games/abyss-signal/1.2.0/abyss-signal.prg",
-      "sha256": "8550772a91e647672befdfaeda4c3543854b5c2371f05de791a0324dfb2bb547",
-      "sourceUrl": "https://github.com/zabaglione/jr100dev/tree/d1f7c0b98bf7ebad888025669d1d79076f4c25a0/games/abyss_signal"
+      "path": "games/abyss-signal/1.2.1/abyss-signal.prg",
+      "sha256": "c2b95b4e6f33d1706aff39f774cae55d6bf9ca4cf9a6d51c0146238623b5bfb6",
+      "sourceUrl": "https://github.com/zabaglione/jr100dev/tree/96a38dc076309886f7759dd934ba17ff9b1e5eea/games/abyss_signal"
     },
     {
       "id": "trace-blade",
       "title": "TRACE BLADE",
-      "version": "1.2.0",
+      "version": "1.2.1",
       "ramKiB": 16,
       "entry": 768,
-      "path": "games/trace-blade/1.2.0/trace-blade.prg",
-      "sha256": "92ac9f42dfbfbdbde357b160f149042fbac28b51f53c8293f18b9dc254513f6c",
-      "sourceUrl": "https://github.com/zabaglione/jr100dev/tree/d1f7c0b98bf7ebad888025669d1d79076f4c25a0/games/trace_blade"
+      "path": "games/trace-blade/1.2.1/trace-blade.prg",
+      "sha256": "0aa9eaddf63d468e69f6b4115e508f8df948e6516ed208e050944fa35a769228",
+      "sourceUrl": "https://github.com/zabaglione/jr100dev/tree/96a38dc076309886f7759dd934ba17ff9b1e5eea/games/trace_blade"
     },
     {
       "id": "dice-relic",
       "title": "DICE RELIC",
-      "version": "1.3.0",
+      "version": "1.3.1",
       "ramKiB": 16,
       "entry": 768,
-      "path": "games/dice-relic/1.3.0/dice-relic.prg",
-      "sha256": "318cb8b271231b545235bb1f537f52c2cb527b367ae02a2b237d26a0da374027",
-      "sourceUrl": "https://github.com/zabaglione/jr100dev/tree/d1f7c0b98bf7ebad888025669d1d79076f4c25a0/games/dice_relic"
+      "path": "games/dice-relic/1.3.1/dice-relic.prg",
+      "sha256": "d4b13518885600c3226478aa4b12cea32ec1de9b3c05cce447b9c6f7f605c46a",
+      "sourceUrl": "https://github.com/zabaglione/jr100dev/tree/96a38dc076309886f7759dd934ba17ff9b1e5eea/games/dice_relic"
     },
     {
       "id": "loop-ten",
@@ -64,442 +64,442 @@
     {
       "id": "iron-script",
       "title": "IRON SCRIPT",
-      "version": "1.2.0",
+      "version": "1.2.1",
       "ramKiB": 16,
       "entry": 768,
-      "path": "games/iron-script/1.2.0/iron-script.prg",
-      "sha256": "51cecaeba52c63fe55090ead284703c38e592055dcb99921ab780d349bc01d1a",
-      "sourceUrl": "https://github.com/zabaglione/jr100dev/tree/d1f7c0b98bf7ebad888025669d1d79076f4c25a0/games/iron_script"
+      "path": "games/iron-script/1.2.1/iron-script.prg",
+      "sha256": "77d883bd1ce8810e8c2f1dccc1f62370511b0d525a0d7ef7b555e84d302d457c",
+      "sourceUrl": "https://github.com/zabaglione/jr100dev/tree/96a38dc076309886f7759dd934ba17ff9b1e5eea/games/iron_script"
     },
     {
       "id": "chain-suit",
       "title": "CHAIN SUIT",
-      "version": "1.2.0",
+      "version": "1.2.1",
       "ramKiB": 16,
       "entry": 768,
-      "path": "games/chain-suit/1.2.0/chain-suit.prg",
-      "sha256": "cf708129ab55c8bf19f247b6d3c95e294bbb1cf64994e5512ddf13b90e2ec30e",
-      "sourceUrl": "https://github.com/zabaglione/jr100dev/tree/d1f7c0b98bf7ebad888025669d1d79076f4c25a0/games/chain_suit"
+      "path": "games/chain-suit/1.2.1/chain-suit.prg",
+      "sha256": "65ddcc57598be2d012f98bd90e76867a13f77d89d6ee78f2333dcf21a4d73d86",
+      "sourceUrl": "https://github.com/zabaglione/jr100dev/tree/96a38dc076309886f7759dd934ba17ff9b1e5eea/games/chain_suit"
     },
     {
       "id": "quiet-route",
       "title": "QUIET ROUTE",
-      "version": "1.1.0",
+      "version": "1.1.1",
       "ramKiB": 16,
       "entry": 768,
-      "path": "games/quiet-route/1.1.0/quiet-route.prg",
-      "sha256": "7e9a0606c750a686433b5edfe701e9b48ecba17f2997d51ae097a62890ebeee0",
-      "sourceUrl": "https://github.com/zabaglione/jr100dev/tree/d1f7c0b98bf7ebad888025669d1d79076f4c25a0/games/quiet_route"
+      "path": "games/quiet-route/1.1.1/quiet-route.prg",
+      "sha256": "9ec273526ae5e9f186e48fcb73239b26cfc7c55f00712d8839dd6f2e4b854700",
+      "sourceUrl": "https://github.com/zabaglione/jr100dev/tree/96a38dc076309886f7759dd934ba17ff9b1e5eea/games/quiet_route"
     },
     {
       "id": "circuit-works",
       "title": "CIRCUIT WORKS",
-      "version": "1.2.0",
+      "version": "1.2.1",
       "ramKiB": 16,
       "entry": 768,
-      "path": "games/circuit-works/1.2.0/circuit-works.prg",
-      "sha256": "cbe9f876ad55fd92a7eecf18361a0197b667dd29f718caefa8bd856a909391ba",
-      "sourceUrl": "https://github.com/zabaglione/jr100dev/tree/d1f7c0b98bf7ebad888025669d1d79076f4c25a0/games/circuit_works"
+      "path": "games/circuit-works/1.2.1/circuit-works.prg",
+      "sha256": "950bc51c3d4b10ec65c351abc053a8a91a73dc4cd922a1de1fb53d296549a284",
+      "sourceUrl": "https://github.com/zabaglione/jr100dev/tree/96a38dc076309886f7759dd934ba17ff9b1e5eea/games/circuit_works"
     },
     {
       "id": "hearth-zero",
       "title": "HEARTH ZERO",
-      "version": "1.2.0",
+      "version": "1.2.1",
       "ramKiB": 16,
       "entry": 768,
-      "path": "games/hearth-zero/1.2.0/hearth-zero.prg",
-      "sha256": "66a419cb69fffbde0346dfa0b47d302424e7f1569db06e171405825d2d1c6760",
-      "sourceUrl": "https://github.com/zabaglione/jr100dev/tree/d1f7c0b98bf7ebad888025669d1d79076f4c25a0/games/hearth_zero"
+      "path": "games/hearth-zero/1.2.1/hearth-zero.prg",
+      "sha256": "f819a783a011bd6910bfd0545ae322d04b3b060f5670cd34b7139190d56df183",
+      "sourceUrl": "https://github.com/zabaglione/jr100dev/tree/96a38dc076309886f7759dd934ba17ff9b1e5eea/games/hearth_zero"
     },
     {
       "id": "night-swarm",
       "title": "NIGHT SWARM",
-      "version": "1.2.0",
+      "version": "1.2.1",
       "ramKiB": 16,
       "entry": 768,
-      "path": "games/night-swarm/1.2.0/night-swarm.prg",
-      "sha256": "e8401091353f3261e1e2afe6b38b517d9c875884f0e0c9014c0b71e084a6b8d9",
-      "sourceUrl": "https://github.com/zabaglione/jr100dev/tree/d1f7c0b98bf7ebad888025669d1d79076f4c25a0/games/night_swarm"
+      "path": "games/night-swarm/1.2.1/night-swarm.prg",
+      "sha256": "21c178d8fe83d4155972151dfadd01476345d9574975411c52b6712bccb3d7c8",
+      "sourceUrl": "https://github.com/zabaglione/jr100dev/tree/96a38dc076309886f7759dd934ba17ff9b1e5eea/games/night_swarm"
     },
     {
       "id": "lumen-cross",
       "title": "LUMEN CROSS",
-      "version": "1.2.0",
+      "version": "1.2.1",
       "ramKiB": 16,
       "entry": 768,
-      "path": "games/lumen-cross/1.2.0/lumen-cross.prg",
-      "sha256": "84aa178b36b3829afe298b1efcdd8c3043375e3ef1b5b380a442200508ef2a57",
-      "sourceUrl": "https://github.com/zabaglione/jr100dev/tree/d1f7c0b98bf7ebad888025669d1d79076f4c25a0/games/lumen_cross"
+      "path": "games/lumen-cross/1.2.1/lumen-cross.prg",
+      "sha256": "a0f93c9467fcd6d21973495b1102020ad2d13ccba3acb1d084260d18069a1875",
+      "sourceUrl": "https://github.com/zabaglione/jr100dev/tree/96a38dc076309886f7759dd934ba17ff9b1e5eea/games/lumen_cross"
     },
     {
       "id": "magnet-vault",
       "title": "MAGNET VAULT",
-      "version": "1.3.0",
+      "version": "1.3.1",
       "ramKiB": 16,
       "entry": 768,
-      "path": "games/magnet-vault/1.3.0/magnet-vault.prg",
-      "sha256": "cf077d3b13fefb7567a5c053515c365db79567fcf64c0b0bc71006137401ed63",
-      "sourceUrl": "https://github.com/zabaglione/jr100dev/tree/d1f7c0b98bf7ebad888025669d1d79076f4c25a0/games/magnet_vault"
+      "path": "games/magnet-vault/1.3.1/magnet-vault.prg",
+      "sha256": "6e2e6c01664c2ce2694a95879de5dbe8dbb5adf317d66ecbc9d4cc8fece62878",
+      "sourceUrl": "https://github.com/zabaglione/jr100dev/tree/96a38dc076309886f7759dd934ba17ff9b1e5eea/games/magnet_vault"
     },
     {
       "id": "frost-steps",
       "title": "FROST STEPS",
-      "version": "1.4.0",
+      "version": "1.4.1",
       "ramKiB": 16,
       "entry": 768,
-      "path": "games/frost-steps/1.4.0/frost-steps.prg",
-      "sha256": "ceb86063f43165652118e0d34c8ec0c162406996a1bbedeeaf51b07c5b8b5603",
-      "sourceUrl": "https://github.com/zabaglione/jr100dev/tree/d1f7c0b98bf7ebad888025669d1d79076f4c25a0/games/frost_steps"
+      "path": "games/frost-steps/1.4.1/frost-steps.prg",
+      "sha256": "9dbedd3a57cfd57581c57c5d66e8c1e7837bf2366e299ddd0a5f9f0388a3a6eb",
+      "sourceUrl": "https://github.com/zabaglione/jr100dev/tree/96a38dc076309886f7759dd934ba17ff9b1e5eea/games/frost_steps"
     },
     {
       "id": "prism-trace",
       "title": "PRISM TRACE",
-      "version": "1.2.0",
+      "version": "1.2.1",
       "ramKiB": 16,
       "entry": 768,
-      "path": "games/prism-trace/1.2.0/prism-trace.prg",
-      "sha256": "7d53cb87e4bfb4fee5c1fac674c6719490781908b493201b06309a6d36b88fa0",
-      "sourceUrl": "https://github.com/zabaglione/jr100dev/tree/d1f7c0b98bf7ebad888025669d1d79076f4c25a0/games/prism_trace"
+      "path": "games/prism-trace/1.2.1/prism-trace.prg",
+      "sha256": "29ca1d52682c516915fecd1250eb8f8705b5c7d136ba0d152a1767d18e08d042",
+      "sourceUrl": "https://github.com/zabaglione/jr100dev/tree/96a38dc076309886f7759dd934ba17ff9b1e5eea/games/prism_trace"
     },
     {
       "id": "tide-bridge",
       "title": "TIDE BRIDGE",
-      "version": "1.2.0",
+      "version": "1.2.1",
       "ramKiB": 16,
       "entry": 768,
-      "path": "games/tide-bridge/1.2.0/tide-bridge.prg",
-      "sha256": "9aa925edeedf312e823496375ac8251ab9f1546c6a91a4873327a6f8dcee4bf2",
-      "sourceUrl": "https://github.com/zabaglione/jr100dev/tree/d1f7c0b98bf7ebad888025669d1d79076f4c25a0/games/tide_bridge"
+      "path": "games/tide-bridge/1.2.1/tide-bridge.prg",
+      "sha256": "8bd6b988db67283924d7a2d74437457462e1e2fb838cde6d27a0c546687712c4",
+      "sourceUrl": "https://github.com/zabaglione/jr100dev/tree/96a38dc076309886f7759dd934ba17ff9b1e5eea/games/tide_bridge"
     },
     {
       "id": "glyph-shift",
       "title": "GLYPH SHIFT",
-      "version": "1.3.0",
+      "version": "1.3.1",
       "ramKiB": 16,
       "entry": 768,
-      "path": "games/glyph-shift/1.3.0/glyph-shift.prg",
-      "sha256": "55175f67826e9820cb794832fb23445a719a3ccbe3e4d3873522fbd84592ec7b",
-      "sourceUrl": "https://github.com/zabaglione/jr100dev/tree/d1f7c0b98bf7ebad888025669d1d79076f4c25a0/games/glyph_shift"
+      "path": "games/glyph-shift/1.3.1/glyph-shift.prg",
+      "sha256": "a31ca9fef599e4213b26a45deac1d7223ce2eba8e6892444b4bddd4924f25077",
+      "sourceUrl": "https://github.com/zabaglione/jr100dev/tree/96a38dc076309886f7759dd934ba17ff9b1e5eea/games/glyph_shift"
     },
     {
       "id": "gravity-well",
       "title": "GRAVITY WELL",
-      "version": "1.4.0",
+      "version": "1.4.1",
       "ramKiB": 16,
       "entry": 768,
-      "path": "games/gravity-well/1.4.0/gravity-well.prg",
-      "sha256": "be949750914b51d90a8fda2a4fa0869ee3cc48835500b560d227e4b34cd307d1",
-      "sourceUrl": "https://github.com/zabaglione/jr100dev/tree/d1f7c0b98bf7ebad888025669d1d79076f4c25a0/games/gravity_well"
+      "path": "games/gravity-well/1.4.1/gravity-well.prg",
+      "sha256": "71682034c0e4e9a657a95b27fa6b7301c3e87386822701e7d3b6a3a692181039",
+      "sourceUrl": "https://github.com/zabaglione/jr100dev/tree/96a38dc076309886f7759dd934ba17ff9b1e5eea/games/gravity_well"
     },
     {
       "id": "seed-merge",
       "title": "SEED MERGE",
-      "version": "1.2.0",
+      "version": "1.2.1",
       "ramKiB": 16,
       "entry": 768,
-      "path": "games/seed-merge/1.2.0/seed-merge.prg",
-      "sha256": "f511e498b2e6929deaf3f48064d26ce528fedccd0460eec7be974a050e4caecb",
-      "sourceUrl": "https://github.com/zabaglione/jr100dev/tree/d1f7c0b98bf7ebad888025669d1d79076f4c25a0/games/seed_merge"
+      "path": "games/seed-merge/1.2.1/seed-merge.prg",
+      "sha256": "f81abc39cc9cfd5c09af433eec31bd680c52296984e20ead9dfcfa61f8b78fa3",
+      "sourceUrl": "https://github.com/zabaglione/jr100dev/tree/96a38dc076309886f7759dd934ba17ff9b1e5eea/games/seed_merge"
     },
     {
       "id": "orbit-draft",
       "title": "ORBIT DRAFT",
-      "version": "1.2.0",
+      "version": "1.2.1",
       "ramKiB": 16,
       "entry": 768,
-      "path": "games/orbit-draft/1.2.0/orbit-draft.prg",
-      "sha256": "89da4b8a691edeafc6abc076891b962d3c45c327d608798c6e7429b981a02a22",
-      "sourceUrl": "https://github.com/zabaglione/jr100dev/tree/d1f7c0b98bf7ebad888025669d1d79076f4c25a0/games/orbit_draft"
+      "path": "games/orbit-draft/1.2.1/orbit-draft.prg",
+      "sha256": "5dfb241b99e67a4bd78a8a21e8ef5516ab0b4ce375d039f4af2bab0ecc231c1a",
+      "sourceUrl": "https://github.com/zabaglione/jr100dev/tree/96a38dc076309886f7759dd934ba17ff9b1e5eea/games/orbit_draft"
     },
     {
       "id": "five-forge",
       "title": "FIVE FORGE",
-      "version": "1.2.0",
+      "version": "1.2.1",
       "ramKiB": 16,
       "entry": 768,
-      "path": "games/five-forge/1.2.0/five-forge.prg",
-      "sha256": "2798a1df330c5e01d4c7c0909121aec927532faaba5b6293137d9d05a917b558",
-      "sourceUrl": "https://github.com/zabaglione/jr100dev/tree/d1f7c0b98bf7ebad888025669d1d79076f4c25a0/games/five_forge"
+      "path": "games/five-forge/1.2.1/five-forge.prg",
+      "sha256": "dc46fafaee8a8001445f2191acfaff349feaade86a06b47cc074c593f2eb8108",
+      "sourceUrl": "https://github.com/zabaglione/jr100dev/tree/96a38dc076309886f7759dd934ba17ff9b1e5eea/games/five_forge"
     },
     {
       "id": "corner-crown",
       "title": "CORNER CROWN",
-      "version": "1.2.0",
+      "version": "1.2.1",
       "ramKiB": 16,
       "entry": 768,
-      "path": "games/corner-crown/1.2.0/corner-crown.prg",
-      "sha256": "6f39044ec2e6935ff72928a13f6ddabd802295a77e16656df79c7d75e2cf10a4",
-      "sourceUrl": "https://github.com/zabaglione/jr100dev/tree/d1f7c0b98bf7ebad888025669d1d79076f4c25a0/games/corner_crown"
+      "path": "games/corner-crown/1.2.1/corner-crown.prg",
+      "sha256": "9480dda10abc661cca8d117bc783e82d96341c820f240beb278bd6f40611f66e",
+      "sourceUrl": "https://github.com/zabaglione/jr100dev/tree/96a38dc076309886f7759dd934ba17ff9b1e5eea/games/corner_crown"
     },
     {
       "id": "stone-balance",
       "title": "STONE BALANCE",
-      "version": "1.2.0",
+      "version": "1.2.1",
       "ramKiB": 16,
       "entry": 768,
-      "path": "games/stone-balance/1.2.0/stone-balance.prg",
-      "sha256": "1014350f481e98d304dbbbd65dfb353f9daa62d6b0e490c3e1f9df148ea709ee",
-      "sourceUrl": "https://github.com/zabaglione/jr100dev/tree/d1f7c0b98bf7ebad888025669d1d79076f4c25a0/games/stone_balance"
+      "path": "games/stone-balance/1.2.1/stone-balance.prg",
+      "sha256": "765d74dac78078bb008cf085f00eaf6df00af6fe1c099a5243ed1827e2541f7c",
+      "sourceUrl": "https://github.com/zabaglione/jr100dev/tree/96a38dc076309886f7759dd934ba17ff9b1e5eea/games/stone_balance"
     },
     {
       "id": "memory-mosaic",
       "title": "MEMORY MOSAIC",
-      "version": "1.2.0",
+      "version": "1.2.1",
       "ramKiB": 16,
       "entry": 768,
-      "path": "games/memory-mosaic/1.2.0/memory-mosaic.prg",
-      "sha256": "e2a596abc3376a4f62967ee6eeef242eb7f1fc540ffd8de887a711c9f6da4d18",
-      "sourceUrl": "https://github.com/zabaglione/jr100dev/tree/d1f7c0b98bf7ebad888025669d1d79076f4c25a0/games/memory_mosaic"
+      "path": "games/memory-mosaic/1.2.1/memory-mosaic.prg",
+      "sha256": "aa25053b37f684c999e5d2bf48511900cbd70148508a02f30a56ee4cc9963138",
+      "sourceUrl": "https://github.com/zabaglione/jr100dev/tree/96a38dc076309886f7759dd934ba17ff9b1e5eea/games/memory_mosaic"
     },
     {
       "id": "twenty-one",
       "title": "TWENTY ONE",
-      "version": "1.2.0",
+      "version": "1.2.1",
       "ramKiB": 16,
       "entry": 768,
-      "path": "games/twenty-one/1.2.0/twenty-one.prg",
-      "sha256": "2b25d33a3b8f047fbc6781565e9c975a7fbc2a028dc942442c411a783e3dffca",
-      "sourceUrl": "https://github.com/zabaglione/jr100dev/tree/d1f7c0b98bf7ebad888025669d1d79076f4c25a0/games/twenty_one"
+      "path": "games/twenty-one/1.2.1/twenty-one.prg",
+      "sha256": "f0f264a431cace9aa0f65af906c207c0270328a3ac17fbc4222184193f5c1d4f",
+      "sourceUrl": "https://github.com/zabaglione/jr100dev/tree/96a38dc076309886f7759dd934ba17ff9b1e5eea/games/twenty_one"
     },
     {
       "id": "orbit-dodge",
       "title": "ORBIT DODGE",
-      "version": "1.2.0",
+      "version": "1.2.1",
       "ramKiB": 16,
       "entry": 768,
-      "path": "games/orbit-dodge/1.2.0/orbit-dodge.prg",
-      "sha256": "5e29ecc6d4b99f6c62d1ae9dac76e84281afa89d07c6ce79abe0fbff50b9f90d",
-      "sourceUrl": "https://github.com/zabaglione/jr100dev/tree/d1f7c0b98bf7ebad888025669d1d79076f4c25a0/games/orbit_dodge"
+      "path": "games/orbit-dodge/1.2.1/orbit-dodge.prg",
+      "sha256": "d4e80a16ea80cbb15bc9f469a4ce3d5e80732f4013b2d10851ef2c9f4ce7e98f",
+      "sourceUrl": "https://github.com/zabaglione/jr100dev/tree/96a38dc076309886f7759dd934ba17ff9b1e5eea/games/orbit_dodge"
     },
     {
       "id": "gate-runner",
       "title": "GATE RUNNER",
-      "version": "1.2.0",
+      "version": "1.2.1",
       "ramKiB": 16,
       "entry": 768,
-      "path": "games/gate-runner/1.2.0/gate-runner.prg",
-      "sha256": "7d4131f25cb235bb679869c55f44af5fdd8fb45788c02f0defca61346d2cbb99",
-      "sourceUrl": "https://github.com/zabaglione/jr100dev/tree/d1f7c0b98bf7ebad888025669d1d79076f4c25a0/games/gate_runner"
+      "path": "games/gate-runner/1.2.1/gate-runner.prg",
+      "sha256": "2013b71ab6b033eb6c385b434c9dfb8db01a75a82e6f003e1918fd734d001f82",
+      "sourceUrl": "https://github.com/zabaglione/jr100dev/tree/96a38dc076309886f7759dd934ba17ff9b1e5eea/games/gate_runner"
     },
     {
       "id": "brick-pulse",
       "title": "BRICK PULSE",
-      "version": "1.2.1",
+      "version": "2.0.0",
       "ramKiB": 16,
       "entry": 768,
-      "path": "games/brick-pulse/1.2.1/brick-pulse.prg",
-      "sha256": "81f9e050052df9d552ab7a58a1a7894bc4a1eb565e6c423e727b7514632a22ef",
-      "sourceUrl": "https://github.com/zabaglione/jr100dev/tree/0e9203e354f9999e34fcdbf155c5b7749ccd75db/games/brick_pulse"
+      "path": "games/brick-pulse/2.0.0/brick-pulse.prg",
+      "sha256": "69a7a34434bc2dcef7d25473ab88b97b5f9c5f6272de3703ce68c55bdfb9f252",
+      "sourceUrl": "https://github.com/zabaglione/jr100dev/tree/96a38dc076309886f7759dd934ba17ff9b1e5eea/games/brick_pulse"
     },
     {
       "id": "star-lance",
       "title": "STAR LANCE",
-      "version": "1.2.0",
+      "version": "1.2.1",
       "ramKiB": 16,
       "entry": 768,
-      "path": "games/star-lance/1.2.0/star-lance.prg",
-      "sha256": "6b47a3fd9fec6f491271e1a786cd806c94ac037814c36c67c481cf8dcf3e926c",
-      "sourceUrl": "https://github.com/zabaglione/jr100dev/tree/d1f7c0b98bf7ebad888025669d1d79076f4c25a0/games/star_lance"
+      "path": "games/star-lance/1.2.1/star-lance.prg",
+      "sha256": "baca81ade27d2e79ad9a490922bb5a02c8d47b942dfa7085bdfe40aea360945e",
+      "sourceUrl": "https://github.com/zabaglione/jr100dev/tree/96a38dc076309886f7759dd934ba17ff9b1e5eea/games/star_lance"
     },
     {
       "id": "ribbon-snake",
       "title": "RIBBON SNAKE",
-      "version": "1.2.0",
+      "version": "1.2.1",
       "ramKiB": 16,
       "entry": 768,
-      "path": "games/ribbon-snake/1.2.0/ribbon-snake.prg",
-      "sha256": "d9ca93dd853bf92e1ad0bd74b2a902efe661175a9a3454732004143160037088",
-      "sourceUrl": "https://github.com/zabaglione/jr100dev/tree/d1f7c0b98bf7ebad888025669d1d79076f4c25a0/games/ribbon_snake"
+      "path": "games/ribbon-snake/1.2.1/ribbon-snake.prg",
+      "sha256": "a708bfeda4d42aaed201b660a8caa53038cf77a0cba5baf9a9d2f82ca526a490",
+      "sourceUrl": "https://github.com/zabaglione/jr100dev/tree/96a38dc076309886f7759dd934ba17ff9b1e5eea/games/ribbon_snake"
     },
     {
       "id": "lunar-touchdown",
       "title": "LUNAR TOUCHDOWN",
-      "version": "1.2.0",
+      "version": "1.2.1",
       "ramKiB": 16,
       "entry": 768,
-      "path": "games/lunar-touchdown/1.2.0/lunar-touchdown.prg",
-      "sha256": "38328523ae759b008b1bf4c5d222fbfc1350585f8f6ad3ba644cad5fe07f17ab",
-      "sourceUrl": "https://github.com/zabaglione/jr100dev/tree/d1f7c0b98bf7ebad888025669d1d79076f4c25a0/games/lunar_touchdown"
+      "path": "games/lunar-touchdown/1.2.1/lunar-touchdown.prg",
+      "sha256": "c85ab835715ba8e8b851dd86985c7d9c77b6ca5f9225fb2101f28590f8127d89",
+      "sourceUrl": "https://github.com/zabaglione/jr100dev/tree/96a38dc076309886f7759dd934ba17ff9b1e5eea/games/lunar_touchdown"
     },
     {
       "id": "echo-parry",
       "title": "ECHO PARRY",
-      "version": "1.2.0",
+      "version": "1.2.1",
       "ramKiB": 16,
       "entry": 768,
-      "path": "games/echo-parry/1.2.0/echo-parry.prg",
-      "sha256": "b724d68fb6c319f0f93a3f31231a95cc3db0d8bc3f13c5f31983e433564e80ac",
-      "sourceUrl": "https://github.com/zabaglione/jr100dev/tree/d1f7c0b98bf7ebad888025669d1d79076f4c25a0/games/echo_parry"
+      "path": "games/echo-parry/1.2.1/echo-parry.prg",
+      "sha256": "5d1035a296f3d47a229be352f795f25c9e27ffd87561a8b20baaec283f745da1",
+      "sourceUrl": "https://github.com/zabaglione/jr100dev/tree/96a38dc076309886f7759dd934ba17ff9b1e5eea/games/echo_parry"
     },
     {
       "id": "pendulum-port",
       "title": "PENDULUM PORT",
-      "version": "1.2.0",
+      "version": "1.2.1",
       "ramKiB": 16,
       "entry": 768,
-      "path": "games/pendulum-port/1.2.0/pendulum-port.prg",
-      "sha256": "9b7efc30d537a825041a2e88aa1da8df20f52cb838c661e52c13eaeb8155bbed",
-      "sourceUrl": "https://github.com/zabaglione/jr100dev/tree/d1f7c0b98bf7ebad888025669d1d79076f4c25a0/games/pendulum_port"
+      "path": "games/pendulum-port/1.2.1/pendulum-port.prg",
+      "sha256": "58d0d0036e36e5685f1d398c093958da0964a52b7854905458572d666d6dcdbb",
+      "sourceUrl": "https://github.com/zabaglione/jr100dev/tree/96a38dc076309886f7759dd934ba17ff9b1e5eea/games/pendulum_port"
     },
     {
       "id": "ruin-lexicon",
       "title": "RUIN LEXICON",
-      "version": "1.2.0",
+      "version": "1.2.1",
       "ramKiB": 16,
       "entry": 768,
-      "path": "games/ruin-lexicon/1.2.0/ruin-lexicon.prg",
-      "sha256": "ac56e93d403a0385886a57b9db80d322d98bdb83d63265ea4be066e64fbfb36b",
-      "sourceUrl": "https://github.com/zabaglione/jr100dev/tree/d1f7c0b98bf7ebad888025669d1d79076f4c25a0/games/ruin_lexicon"
+      "path": "games/ruin-lexicon/1.2.1/ruin-lexicon.prg",
+      "sha256": "26e7f4867190edab0a766a9db3a1a2a57f5ada5b24369e4744e68424653ca000",
+      "sourceUrl": "https://github.com/zabaglione/jr100dev/tree/96a38dc076309886f7759dd934ba17ff9b1e5eea/games/ruin_lexicon"
     },
     {
       "id": "shadow-archive",
       "title": "SHADOW ARCHIVE",
-      "version": "1.2.0",
+      "version": "1.2.1",
       "ramKiB": 16,
       "entry": 768,
-      "path": "games/shadow-archive/1.2.0/shadow-archive.prg",
-      "sha256": "89bf84a094b3be23d6caed24fb1aa02cd44626d4ac768f76086bd542c8f4aae3",
-      "sourceUrl": "https://github.com/zabaglione/jr100dev/tree/d1f7c0b98bf7ebad888025669d1d79076f4c25a0/games/shadow_archive"
+      "path": "games/shadow-archive/1.2.1/shadow-archive.prg",
+      "sha256": "ef135f5cea542c978c698b6e895ba381c7304cdd90eb94c1a683c1c79e5248ad",
+      "sourceUrl": "https://github.com/zabaglione/jr100dev/tree/96a38dc076309886f7759dd934ba17ff9b1e5eea/games/shadow_archive"
     },
     {
       "id": "compass-rose",
       "title": "COMPASS ROSE",
-      "version": "1.2.0",
+      "version": "1.2.1",
       "ramKiB": 16,
       "entry": 768,
-      "path": "games/compass-rose/1.2.0/compass-rose.prg",
-      "sha256": "fbb66ecd7000ebac47ac4a88a602c3b8f4595271d736f9e135692d8bbbcedc9c",
-      "sourceUrl": "https://github.com/zabaglione/jr100dev/tree/d1f7c0b98bf7ebad888025669d1d79076f4c25a0/games/compass_rose"
+      "path": "games/compass-rose/1.2.1/compass-rose.prg",
+      "sha256": "61b36b98de060cd3beeff37d3fb6a67c89608ecf33234681139cfbbd3117e317",
+      "sourceUrl": "https://github.com/zabaglione/jr100dev/tree/96a38dc076309886f7759dd934ba17ff9b1e5eea/games/compass_rose"
     },
     {
       "id": "mirror-relic",
       "title": "MIRROR RELIC",
-      "version": "1.2.0",
+      "version": "1.2.1",
       "ramKiB": 16,
       "entry": 768,
-      "path": "games/mirror-relic/1.2.0/mirror-relic.prg",
-      "sha256": "70aeb043cb436630231eabc6a68d9eabd6b5a7ce6726f0477f085794dbb3698c",
-      "sourceUrl": "https://github.com/zabaglione/jr100dev/tree/d1f7c0b98bf7ebad888025669d1d79076f4c25a0/games/mirror_relic"
+      "path": "games/mirror-relic/1.2.1/mirror-relic.prg",
+      "sha256": "0bc08eaf9349e5030c766438db4205c54554c0d9d54db5ad3f2fe8ab4d155faa",
+      "sourceUrl": "https://github.com/zabaglione/jr100dev/tree/96a38dc076309886f7759dd934ba17ff9b1e5eea/games/mirror_relic"
     },
     {
       "id": "orchard-days",
       "title": "ORCHARD DAYS",
-      "version": "1.2.0",
+      "version": "1.2.1",
       "ramKiB": 16,
       "entry": 768,
-      "path": "games/orchard-days/1.2.0/orchard-days.prg",
-      "sha256": "6613600bc6741115aa7038a221a5c8911d1d9251759d7a0640762573e2f56192",
-      "sourceUrl": "https://github.com/zabaglione/jr100dev/tree/d1f7c0b98bf7ebad888025669d1d79076f4c25a0/games/orchard_days"
+      "path": "games/orchard-days/1.2.1/orchard-days.prg",
+      "sha256": "c4d11c1ee85dee7125d6b61557d014a2a07fce57e3d4be633dcccb0aa0ecbe71",
+      "sourceUrl": "https://github.com/zabaglione/jr100dev/tree/96a38dc076309886f7759dd934ba17ff9b1e5eea/games/orchard_days"
     },
     {
       "id": "tidal-nets",
       "title": "TIDAL NETS",
-      "version": "1.2.0",
+      "version": "1.2.1",
       "ramKiB": 16,
       "entry": 768,
-      "path": "games/tidal-nets/1.2.0/tidal-nets.prg",
-      "sha256": "5156b2d0acb8ad84062e9ba5f75702f5b931618b2a13a677b66975b18f3ebdde",
-      "sourceUrl": "https://github.com/zabaglione/jr100dev/tree/d1f7c0b98bf7ebad888025669d1d79076f4c25a0/games/tidal_nets"
+      "path": "games/tidal-nets/1.2.1/tidal-nets.prg",
+      "sha256": "73bf2a6b04ef17af20c7216f1928808e7c0236f217ad976b834caccfa31a4744",
+      "sourceUrl": "https://github.com/zabaglione/jr100dev/tree/96a38dc076309886f7759dd934ba17ff9b1e5eea/games/tidal_nets"
     },
     {
       "id": "potion-path",
       "title": "POTION PATH",
-      "version": "1.2.0",
+      "version": "1.2.1",
       "ramKiB": 16,
       "entry": 768,
-      "path": "games/potion-path/1.2.0/potion-path.prg",
-      "sha256": "f9caca190af8439320d17ba08030bdc402db50e55be2c1a2109fc4ae6ecc767d",
-      "sourceUrl": "https://github.com/zabaglione/jr100dev/tree/d1f7c0b98bf7ebad888025669d1d79076f4c25a0/games/potion_path"
+      "path": "games/potion-path/1.2.1/potion-path.prg",
+      "sha256": "0cd3ee9b97b289df3eb3a755dd1cf2f70ec28e92c8cdc3bcedbcc6ac20066143",
+      "sourceUrl": "https://github.com/zabaglione/jr100dev/tree/96a38dc076309886f7759dd934ba17ff9b1e5eea/games/potion_path"
     },
     {
       "id": "auction-house",
       "title": "AUCTION HOUSE",
-      "version": "1.2.0",
+      "version": "1.2.1",
       "ramKiB": 16,
       "entry": 768,
-      "path": "games/auction-house/1.2.0/auction-house.prg",
-      "sha256": "55ccb95f8b988adfcc9cddeb8abaeb6978ef45639ddd808aa2824e35e962ca71",
-      "sourceUrl": "https://github.com/zabaglione/jr100dev/tree/d1f7c0b98bf7ebad888025669d1d79076f4c25a0/games/auction_house"
+      "path": "games/auction-house/1.2.1/auction-house.prg",
+      "sha256": "965ae854ed27442fa672d3c1f9b823bd775f1a80c196ca0170c4d6e171a47026",
+      "sourceUrl": "https://github.com/zabaglione/jr100dev/tree/96a38dc076309886f7759dd934ba17ff9b1e5eea/games/auction_house"
     },
     {
       "id": "metro-weave",
       "title": "METRO WEAVE",
-      "version": "1.2.0",
+      "version": "1.2.1",
       "ramKiB": 16,
       "entry": 768,
-      "path": "games/metro-weave/1.2.0/metro-weave.prg",
-      "sha256": "eec71c211eecb3b54cbe5f0f86e08a96289f495b4ef60e9ce82df8de8867ce0c",
-      "sourceUrl": "https://github.com/zabaglione/jr100dev/tree/d1f7c0b98bf7ebad888025669d1d79076f4c25a0/games/metro_weave"
+      "path": "games/metro-weave/1.2.1/metro-weave.prg",
+      "sha256": "0781e731ea8435f407bafba4dec598a8a50e949f8d850fe2b42e4552628ac1d3",
+      "sourceUrl": "https://github.com/zabaglione/jr100dev/tree/96a38dc076309886f7759dd934ba17ff9b1e5eea/games/metro_weave"
     },
     {
       "id": "cargo-balance",
       "title": "CARGO BALANCE",
-      "version": "1.2.0",
+      "version": "1.2.1",
       "ramKiB": 16,
       "entry": 768,
-      "path": "games/cargo-balance/1.2.0/cargo-balance.prg",
-      "sha256": "7df42142b4d1831f734aa2bbd534b942a89dede525466f9740dda3f28267e80e",
-      "sourceUrl": "https://github.com/zabaglione/jr100dev/tree/d1f7c0b98bf7ebad888025669d1d79076f4c25a0/games/cargo_balance"
+      "path": "games/cargo-balance/1.2.1/cargo-balance.prg",
+      "sha256": "3c4df77adbbcf237b2b12d819fe069c2b61733ee510732984b156c5a5eab9dd1",
+      "sourceUrl": "https://github.com/zabaglione/jr100dev/tree/96a38dc076309886f7759dd934ba17ff9b1e5eea/games/cargo_balance"
     },
     {
       "id": "peg-garden",
       "title": "PEG GARDEN",
-      "version": "1.2.0",
+      "version": "1.2.1",
       "ramKiB": 16,
       "entry": 768,
-      "path": "games/peg-garden/1.2.0/peg-garden.prg",
-      "sha256": "26f1f8bc5c100cc7c01a4fd7ba35164030ba525c6db1b175b8b05f489b36044c",
-      "sourceUrl": "https://github.com/zabaglione/jr100dev/tree/d1f7c0b98bf7ebad888025669d1d79076f4c25a0/games/peg_garden"
+      "path": "games/peg-garden/1.2.1/peg-garden.prg",
+      "sha256": "d74db49a6d689bc2e48dc4763a7421cac0c318f2903ee14eb6c320bc7a20b489",
+      "sourceUrl": "https://github.com/zabaglione/jr100dev/tree/96a38dc076309886f7759dd934ba17ff9b1e5eea/games/peg_garden"
     },
     {
       "id": "number-vault",
       "title": "NUMBER VAULT",
-      "version": "1.2.0",
+      "version": "1.2.1",
       "ramKiB": 16,
       "entry": 768,
-      "path": "games/number-vault/1.2.0/number-vault.prg",
-      "sha256": "286741296a1f49c5f793472593ae6484a52af2bc612d095f6c677b08b6c4424c",
-      "sourceUrl": "https://github.com/zabaglione/jr100dev/tree/d1f7c0b98bf7ebad888025669d1d79076f4c25a0/games/number_vault"
+      "path": "games/number-vault/1.2.1/number-vault.prg",
+      "sha256": "1a0be6dfcfd71d5e72e3a87f4009824f9156601fe10c8cdb4afc6d0a392a57eb",
+      "sourceUrl": "https://github.com/zabaglione/jr100dev/tree/96a38dc076309886f7759dd934ba17ff9b1e5eea/games/number_vault"
     },
     {
       "id": "phase-pairs",
       "title": "PHASE PAIRS",
-      "version": "1.2.0",
+      "version": "1.2.1",
       "ramKiB": 16,
       "entry": 768,
-      "path": "games/phase-pairs/1.2.0/phase-pairs.prg",
-      "sha256": "51ebd962a11ca3c70377860cb642aca663c298fc1bb3fe993c9afef6af508b81",
-      "sourceUrl": "https://github.com/zabaglione/jr100dev/tree/d1f7c0b98bf7ebad888025669d1d79076f4c25a0/games/phase_pairs"
+      "path": "games/phase-pairs/1.2.1/phase-pairs.prg",
+      "sha256": "8a250a779be7196f7106e23e1909c92419422876fa31df9f31abea614bc464c7",
+      "sourceUrl": "https://github.com/zabaglione/jr100dev/tree/96a38dc076309886f7759dd934ba17ff9b1e5eea/games/phase_pairs"
     },
     {
       "id": "fuse-box",
       "title": "FUSE BOX",
-      "version": "1.2.0",
+      "version": "1.2.1",
       "ramKiB": 16,
       "entry": 768,
-      "path": "games/fuse-box/1.2.0/fuse-box.prg",
-      "sha256": "f1081e63a5afa27e19352cd132d1d4b163a7d86fc290e42cd0f1c3b095d84bab",
-      "sourceUrl": "https://github.com/zabaglione/jr100dev/tree/d1f7c0b98bf7ebad888025669d1d79076f4c25a0/games/fuse_box"
+      "path": "games/fuse-box/1.2.1/fuse-box.prg",
+      "sha256": "c587845edc28049868b0fb2fbda0cc5514932b97d40b423451809e92a48153f1",
+      "sourceUrl": "https://github.com/zabaglione/jr100dev/tree/96a38dc076309886f7759dd934ba17ff9b1e5eea/games/fuse_box"
     },
     {
       "id": "sand-rescue",
       "title": "SAND RESCUE",
-      "version": "1.2.0",
+      "version": "1.2.1",
       "ramKiB": 16,
       "entry": 768,
-      "path": "games/sand-rescue/1.2.0/sand-rescue.prg",
-      "sha256": "97ea1b5362adb0b2c420022d6b06842a435a76eb2549fe033c3961ca46983548",
-      "sourceUrl": "https://github.com/zabaglione/jr100dev/tree/d1f7c0b98bf7ebad888025669d1d79076f4c25a0/games/sand_rescue"
+      "path": "games/sand-rescue/1.2.1/sand-rescue.prg",
+      "sha256": "d4fcd515d19f1bbec7a088c501bad9e2effad66d94bd2e48f0266ef79b548423",
+      "sourceUrl": "https://github.com/zabaglione/jr100dev/tree/96a38dc076309886f7759dd934ba17ff9b1e5eea/games/sand_rescue"
     },
     {
       "id": "word-foundry",
       "title": "WORD FOUNDRY",
-      "version": "1.2.0",
+      "version": "1.2.1",
       "ramKiB": 16,
       "entry": 768,
-      "path": "games/word-foundry/1.2.0/word-foundry.prg",
-      "sha256": "b221422f360a6ccb4db3fff68fff0bc02eb97f3d3f082775356dc4de9523d832",
-      "sourceUrl": "https://github.com/zabaglione/jr100dev/tree/d1f7c0b98bf7ebad888025669d1d79076f4c25a0/games/word_foundry"
+      "path": "games/word-foundry/1.2.1/word-foundry.prg",
+      "sha256": "f5c48934547261ffb90274dca53051f99415360d55e64861219616f24a7851a2",
+      "sourceUrl": "https://github.com/zabaglione/jr100dev/tree/96a38dc076309886f7759dd934ba17ff9b1e5eea/games/word_foundry"
     },
     {
       "id": "relic-dive",
