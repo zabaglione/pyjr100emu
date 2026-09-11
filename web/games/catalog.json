@@ -1,0 +1,65 @@
+{
+  "schemaVersion": 1,
+  "games": [
+    {
+      "id": "chrono-breach",
+      "title": "CHRONO BREACH",
+      "version": "1.0.0",
+      "ramKiB": 16,
+      "entry": 768,
+      "path": "games/chrono-breach/1.0.0/chrono-breach.prg",
+      "sha256": "a08c1042df91286888b6bac3c0793f2ba54affb6dd49db89b8538a747eb4f988",
+      "sourceUrl": "https://github.com/zabaglione/jr100dev/tree/main/games/chrono_breach"
+    },
+    {
+      "id": "sigil-deck",
+      "title": "SIGIL DECK",
+      "version": "1.0.0",
+      "ramKiB": 16,
+      "entry": 768,
+      "path": "games/sigil-deck/1.0.0/sigil-deck.prg",
+      "sha256": "ad29b147be8df468123ce9a43f311107850ddfa26f0a580156e897b74e2bddb8",
+      "sourceUrl": "https://github.com/zabaglione/jr100dev/tree/main/games/sigil_deck"
+    },
+    {
+      "id": "abyss-signal",
+      "title": "ABYSS SIGNAL",
+      "version": "1.0.0",
+      "ramKiB": 16,
+      "entry": 768,
+      "path": "games/abyss-signal/1.0.0/abyss-signal.prg",
+      "sha256": "7204a6fe24d3cd164a2360bb0bdf73af88834ea4d749be2273d7e9355cc835ac",
+      "sourceUrl": "https://github.com/zabaglione/jr100dev/tree/main/games/abyss_signal"
+    },
+    {
+      "id": "trace-blade",
+      "title": "TRACE BLADE",
+      "version": "1.0.0",
+      "ramKiB": 16,
+      "entry": 768,
+      "path": "games/trace-blade/1.0.0/trace-blade.prg",
+      "sha256": "4cc6e5f9b4e70bda78eee68e810a06e8adcc322b934b20215d624386c98e25d6",
+      "sourceUrl": "https://github.com/zabaglione/jr100dev/tree/main/games/trace_blade"
+    },
+    {
+      "id": "dice-relic",
+      "title": "DICE RELIC",
+      "version": "1.0.0",
+      "ramKiB": 16,
+      "entry": 768,
+      "path": "games/dice-relic/1.0.0/dice-relic.prg",
+      "sha256": "ba34ad01eca865aa6425e4b5989c4836999011d2bd33e95d3d1696961a226941",
+      "sourceUrl": "https://github.com/zabaglione/jr100dev/tree/main/games/dice_relic"
+    },
+    {
+      "id": "loop-ten",
+      "title": "LOOP TEN",
+      "version": "1.0.0",
+      "ramKiB": 16,
+      "entry": 768,
+      "path": "games/loop-ten/1.0.0/loop-ten.prg",
+      "sha256": "7dfee1adda7dc476211c6d543d7ceebf642e1e7c9a7c7a21e90b93ef7918b819",
+      "sourceUrl": "https://github.com/zabaglione/jr100dev/tree/main/games/loop_ten"
+    }
+  ]
+}

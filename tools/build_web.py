@@ -4,11 +4,12 @@
 from __future__ import annotations
 
 import argparse
+import hashlib
 import json
-from pathlib import Path
+import re
 import shutil
 import subprocess
-
+from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 WEB_SOURCE = ROOT / "web"
@@ -47,6 +48,48 @@ def build_wasm() -> tuple[Path, Path]:
     return javascript, wasm
 
 
+def catalog_files(web_root: Path) -> list[Path]:
+    games_root = web_root / "games"
+    manifest = games_root / "catalog.json"
+    catalog = json.loads(manifest.read_text(encoding="utf-8"))
+    if catalog.get("schemaVersion") != 1 or not isinstance(catalog.get("games"), list):
+        raise RuntimeError("invalid public game catalog")
+    paths = [manifest, games_root / "LICENSE.txt"]
+    seen = set()
+    for game in catalog["games"]:
+        game_id, version = game.get("id", ""), game.get("version", "")
+        if not re.fullmatch(
+            r"[a-z][a-z0-9]*(?:-[a-z0-9]+)*", game_id
+        ) or not re.fullmatch(r"[0-9]+\.[0-9]+\.[0-9]+", version):
+            raise RuntimeError("invalid public game identity")
+        expected = f"games/{game_id}/{version}/{game_id}.prg"
+        if game_id in seen or game.get("path") != expected or game.get("ramKiB") != 16:
+            raise RuntimeError("invalid public game path or RAM requirement")
+        seen.add(game_id)
+        if (
+            not isinstance(game.get("entry"), int)
+            or not 0x300 <= game["entry"] < 0x3000
+        ):
+            raise RuntimeError("invalid public game entry")
+        artifact = web_root / expected
+        data = artifact.read_bytes()
+        if not 8 <= len(data) <= 65536 or data[:4] != b"PROG":
+            raise RuntimeError("invalid public game artifact")
+        if hashlib.sha256(data).hexdigest() != game.get("sha256"):
+            raise RuntimeError("public game hash mismatch")
+        paths.append(artifact)
+    if not paths[1].is_file():
+        raise RuntimeError("public game license is missing")
+    return paths
+
+
+def copy_games(source: Path, destination: Path) -> None:
+    for path in catalog_files(source):
+        target = destination / path.relative_to(source)
+        target.parent.mkdir(parents=True, exist_ok=True)
+        shutil.copy2(path, target)
+
+
 def build_dist() -> Path:
     javascript, wasm = build_wasm()
     if DIST.exists():
@@ -59,6 +102,7 @@ def build_dist() -> Path:
         if source.suffix in {".html", ".js", ".css"}:
             shutil.copy2(source, DIST / source.name)
 
+    copy_games(WEB_SOURCE, DIST)
     wasm_dist = DIST / "wasm"
     wasm_dist.mkdir()
     shutil.copy2(javascript, wasm_dist / javascript.name)
@@ -78,6 +122,10 @@ def verify_dist(dist: Path) -> None:
             raise RuntimeError(
                 f"private or Python runtime asset reached web artifact: {path}"
             )
+    expected_games = set(catalog_files(dist))
+    actual_games = {p for p in (dist / "games").rglob("*") if p.is_file()}
+    if actual_games != expected_games:
+        raise RuntimeError("unlisted asset reached the public game directory")
     worker = (dist / "worker.js").read_text(encoding="utf-8").lower()
     if "pyodide" in worker or "python/" in worker:
         raise RuntimeError("worker still references the Python/Pyodide runtime")

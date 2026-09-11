@@ -1,3 +1,4 @@
+import { gameIdFromUrl, fetchGame, GameLaunch } from "./game-launch.js";
 import { BrowserAudio } from "./audio.js";
 import { DebuggerPanel, hex } from "./debugger.js";
 import { EmulationFramePacer } from "./emulation-pacer.js";
@@ -60,6 +61,7 @@ let lastState = null;
 let pcmSampleCount = 0;
 let pcmActiveSampleCount = 0;
 let pendingLogicalFrames = 0;
+let gameLaunch = null;
 
 const worker = new Worker(new URL("./worker.js", import.meta.url));
 const browserAudio = new BrowserAudio();
@@ -84,6 +86,9 @@ function setStatus(message, isReady = false) {
 
 function setError(error) {
   errorStatus.textContent = error ? String(error.message || error) : "";
+  if (error && !element("#game-launch").hidden) {
+    element("#game-launch-status").textContent = errorStatus.textContent;
+  }
 }
 
 function sendKey(row, bit, pressed) {
@@ -129,6 +134,7 @@ function resetFramePacing(timestamp = performance.now()) {
 async function unlockAudio() {
   const unlocked = await browserAudio.unlock();
   updateMuteUi();
+  if (unlocked) element("#game-audio-hint").hidden = true;
   return unlocked;
 }
 
@@ -194,6 +200,7 @@ async function setRomUi(info, filename) {
   setStatus("Running", true);
   const ram = extendedRam.checked ? "32K RAM" : "16K RAM";
   romStatus.textContent = `${filename || info.name || "ROM"} · ${info.format} · ${info.size} bytes · ${ram}`;
+  gameLaunch?.romLoaded();
   const validated = pendingRom;
   pendingRom = null;
   if (!validated) return;
@@ -231,6 +238,14 @@ worker.addEventListener("message", (event) => {
       void setRomUi(message.info, pendingRom?.metadata.filename || storedRom?.filename);
     } else if (message.type === "programLoaded") {
       const info = message.info;
+      if (gameLaunch?.state === "loading") {
+        if (info.entryPoint !== gameLaunch.game.entry || info.basic) {
+          throw new Error("Game entry does not match the catalog");
+        }
+        gameLaunch.state = "loaded";
+        element("#game-launch-status").textContent = `${gameLaunch.game.title} · ${gameLaunch.game.version} · 16KB`;
+        screen.focus({preventScroll:true});
+      }
       programEntry.value = "";
       programEntry.disabled = true;
       runEntryButton.disabled = true;
@@ -270,11 +285,20 @@ worker.addEventListener("message", (event) => {
       browserAudio.enqueue(message.audio);
       updateMuteUi();
       updateMachineState(message.state);
+      const requestedGame = gameLaunch?.frame(message.state?.clockCount ?? 0);
+      if (requestedGame) {
+        input.clear();
+        worker.postMessage({type:"clearKeys"});
+        browserAudio.clear();
+        const copy = requestedGame.bytes.slice();
+        worker.postMessage({type:"loadProgram", filename:`${requestedGame.id}.prg`, buffer:copy.buffer}, [copy.buffer]);
+      }
       frameNumber += Math.max(1, Number(message.logicalFrames) || 0);
       debuggerView.frameTick(frameNumber);
     } else if (message.type === "debugSnapshot") {
       debuggerView.receive(message);
     } else if (message.type === "error") {
+      gameLaunch?.cancel();
       pendingRom = null;
       frameInFlight = false;
       debuggerView.clearPending();
@@ -284,6 +308,7 @@ worker.addEventListener("message", (event) => {
       setError(message.message);
     }
   } catch (error) {
+    gameLaunch?.cancel();
     frameInFlight = false;
     debuggerView.clearPending();
     running = false;
@@ -452,7 +477,23 @@ document.addEventListener("visibilitychange", () => {
 
 async function initializeStoredRom() {
   try {
+    const gameId = gameIdFromUrl(location.href);
+    if (gameId) {
+      element("#game-launch").hidden = false;
+      element("#game-launch-status").textContent = "Preparing game...";
+      const game = await fetchGame(gameId, new URL("./", location.href));
+      gameLaunch = new GameLaunch(game);
+      extendedRam.checked = false;
+      extendedRam.disabled = true;
+      element("#game-source").href = game.sourceUrl;
+      element("#game-source").hidden = false;
+      element("#game-launch-status").textContent = `Starting ${game.title}...`;
+    }
     storedRom = await readStoredRom();
+    if (gameLaunch && !storedRom) {
+      element("#game-launch-status").textContent = "Saved BASIC ROM required";
+      throw new Error("Set up your own BASIC ROM in this browser first, then reload this game link.");
+    }
     if (storedRom) {
       romStatus.textContent = `${storedRom.filename || "Saved ROM"} · saved locally`;
       await loadSavedRom();

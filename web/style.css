@@ -159,3 +159,8 @@ h3 { color: var(--muted); font-size: .66rem; letter-spacing: .09em; margin-botto
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { scroll-behavior: auto !important; transition: none !important; }
 }
+
+.game-launch { display: flex; flex-wrap: wrap; align-items: center; gap: 0.6rem 1.5rem; padding: 1rem; border: 1px solid currentColor; margin-bottom: 1rem; }
+.game-launch[hidden] { display: none; }
+.game-launch a { color: inherit; }
+#game-audio-hint { flex-basis: 100%; font-size: 0.85rem; }

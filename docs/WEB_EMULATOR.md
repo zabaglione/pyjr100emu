@@ -148,3 +148,13 @@ PYTHONPATH=src python tools/compare_audio.py
 - `tools/build_web.py`: C++コアをWASM化し、ROMを含まない静的artifactを生成
 
 JR100_openFPGAはキーマップと実機の操作感を確認する資料としてのみ扱い、GPL-2.0-or-laterのソースコードはC++実装へ取り込んでいません。C++コアはこのリポジトリのPython版と公開されているJR-100仕様を基準に実装しています。
+
+## Wikiからゲームを起動する
+
+`?game=chrono-breach` のようにカタログIDを付けたURLで、公開ゲームを自動起動できます。利用者は同じサイト・ブラウザーに自分のBASIC ROMを事前登録します。ゲームURLでは標準16KBを使い、通常起動用に保存した32KB設定を書き換えません。
+
+ゲームは `web/games/catalog.json` に列挙したPRGのみを取得します。ID・版・RAM・開始番地・パス・SHA-256を照合し、ROMの初期化後に読み込み、既存のUSR自動入力で実行します。任意の外部URLやROMをゲームリンクから読み込む機能はありません。音声はブラウザーの制限に従い、最初のキー入力／画面クリックで有効になります。
+
+配布するゲームは [jr100devのgamesディレクトリ](https://github.com/zabaglione/jr100dev/tree/main/games) でビルドします。そちらの `games/package_games.py` にこのリポジトリの `web/games` を指定すると、版付きPRG、カタログ、ライセンスを生成します。BASIC ROMは配布物に含めません。
+
+`tools/build_web.py --verify` はカタログ掲載物だけをコピーし、ハッシュや配布物の余分なファイルを検査します。未知のID、取得エラー、ハッシュ不一致、ROM未登録は画面へ表示します。ゲームの実機確認状況は各作品の説明を参照してください。
