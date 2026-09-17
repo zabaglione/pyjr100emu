@@ -385,24 +385,24 @@
       "genre": "puzzle",
       "edited": false,
       "outcome": "first stage cleared",
-      "prg_sha256": "618e1cfc47cf8ff222f0885e89cf77dfc4261574b57770bb2bcdab44c14c8233",
+      "prg_sha256": "02b09f4d884f632c4f545bd71a9aade328aae2289c76707a57ede60b0f0e0f5e",
       "seconds": 30.0,
       "video": {
         "path": "game-media/frost-steps/play.mp4",
-        "sha256": "9c6f7bdcde7a6ca11aca5b84ac899c0922aeb2884758f3d35daba5e46a5a90a9"
+        "sha256": "000409e5900556a13ca8a1ac669a9e47101ae3ebd199fa6849e08cd94fde5564"
       },
       "images": [
         {
           "path": "game-media/frost-steps/demo-start.png",
-          "sha256": "551b7b87c9c75fadbbcf9245d9a55d95da4f9af4815588bb5a693159e18e36c7"
+          "sha256": "f34dd6cb213b9ff66e5a37910d06a3ca136699d898bea4bad10fe44dfad3ebe9"
         },
         {
           "path": "game-media/frost-steps/demo-play.png",
-          "sha256": "fa6de7b13a84216b4f52db61086df094bf141129822f2839a6e5540d51ded582"
+          "sha256": "0cec2db71ec2e9840f9cf090f989ef8c0e83cae516c4e58f1f0543b07c599193"
         },
         {
           "path": "game-media/frost-steps/demo-clear.png",
-          "sha256": "6844db8ce0db6d2a79baa4b0f163b493bc0a2ec3bf3bbf6dd1466b98fe046a5b"
+          "sha256": "c5e976035c328abaa8eb5965ab74270b2772aa7282f154ee0142841fc8f6b19e"
         }
       ]
     },
