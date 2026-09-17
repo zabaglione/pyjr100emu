@@ -1,0 +1,1382 @@
+{
+  "schemaVersion": 1,
+  "games": [
+    {
+      "id": "chrono-breach",
+      "title": "CHRONO BREACH",
+      "genre": "tactics",
+      "edited": false,
+      "outcome": "first stage cleared",
+      "prg_sha256": "2488d64c42cbe88d6814a27bebd05c0dcec5fdc483509b61ac42470c844a9ad9",
+      "seconds": 30.767,
+      "video": {
+        "path": "game-media/chrono-breach/play.mp4",
+        "sha256": "089daac9dbd6ab283661c24245129c7778174dc4a747deed833e67928031fb95"
+      },
+      "images": [
+        {
+          "path": "game-media/chrono-breach/demo-start.png",
+          "sha256": "869c4597db2857ee09a35f21cae74b298a07fde4c96ed3e20dee2ff5aabc4eea"
+        },
+        {
+          "path": "game-media/chrono-breach/demo-play.png",
+          "sha256": "7a7f4ccbab86fe5e392b30d78709a4a8bea3b5b502e9841b3ec3f67efd6542fe"
+        },
+        {
+          "path": "game-media/chrono-breach/demo-clear.png",
+          "sha256": "4995e7b09042f35ac5cb630c4fd4f71604561c0257d4cf1b67c2946c40bcaa49"
+        }
+      ]
+    },
+    {
+      "id": "sigil-deck",
+      "title": "SIGIL DECK",
+      "genre": "tabletop",
+      "edited": false,
+      "outcome": "first battle won",
+      "prg_sha256": "9b2b356bc0df4575b90439571398870f8c15280173fc40d3ceb9641de36952ad",
+      "seconds": 30.0,
+      "video": {
+        "path": "game-media/sigil-deck/play.mp4",
+        "sha256": "a303ddb03b1bffd7fd931693e06f3d9924e0bd8fb21302d6e2c4ee321869e0e2"
+      },
+      "images": [
+        {
+          "path": "game-media/sigil-deck/demo-start.png",
+          "sha256": "3726b1a54487d1cb6ea09e9addc447e77d8483a88f9174598c928665ed9a34f4"
+        },
+        {
+          "path": "game-media/sigil-deck/demo-play.png",
+          "sha256": "6544608d102cdab5c650cf88196474498092ff92fea0978105cb4f6537c00557"
+        },
+        {
+          "path": "game-media/sigil-deck/demo-clear.png",
+          "sha256": "d8a93cc80096e89be1172ba1477e163d63cfe2998182095358df636ab5c55278"
+        }
+      ]
+    },
+    {
+      "id": "abyss-signal",
+      "title": "ABYSS SIGNAL",
+      "genre": "exploration",
+      "edited": true,
+      "outcome": "all five records recovered and returned to base",
+      "prg_sha256": "21a016474d2df7f15946e7214e3318aaebe44374902c84b89ca82ca209696c40",
+      "seconds": 30.0,
+      "video": {
+        "path": "game-media/abyss-signal/play.mp4",
+        "sha256": "85196605329b12a5c419767c8df7e53c488b6a74c733b28ad81f2e80a005034a"
+      },
+      "images": [
+        {
+          "path": "game-media/abyss-signal/demo-start.png",
+          "sha256": "c30c971629c60dc73a974439cea6e024861b354882a8e89dead97e51bc0b0039"
+        },
+        {
+          "path": "game-media/abyss-signal/demo-play.png",
+          "sha256": "39260b918dc9a140dfc3cf65f06a7ba5ef3aa969e75b08d6150a9c17e7b94dab"
+        },
+        {
+          "path": "game-media/abyss-signal/demo-clear.png",
+          "sha256": "38807eee4fc03f7a733ed1ac13e5cb51a43ef29aa456013379a4c0fcd329edc2"
+        }
+      ]
+    },
+    {
+      "id": "trace-blade",
+      "title": "TRACE BLADE",
+      "genre": "puzzle",
+      "edited": false,
+      "outcome": "first stage cleared",
+      "prg_sha256": "22b166b381d0c7201326a34482a26e9a71e0d4746888a05f9cde69b8f6cc7e35",
+      "seconds": 30.0,
+      "video": {
+        "path": "game-media/trace-blade/play.mp4",
+        "sha256": "b3d2d5a6107252b03be0466a6b9975b93ca363da3b22728474f2f8e2463d7059"
+      },
+      "images": [
+        {
+          "path": "game-media/trace-blade/demo-start.png",
+          "sha256": "c44cf558590a67d98115818653520d702be06e3019c260ff08e6accfb54a1d7c"
+        },
+        {
+          "path": "game-media/trace-blade/demo-play.png",
+          "sha256": "1989babc6da5a741040f9b056bb6d4dfbe48207536c889ca682329b6a7430e00"
+        },
+        {
+          "path": "game-media/trace-blade/demo-clear.png",
+          "sha256": "2ef27f3f62b003850280600e3b1e17dbe1d4d675072fe56e275e473c09474d07"
+        }
+      ]
+    },
+    {
+      "id": "dice-relic",
+      "title": "DICE RELIC",
+      "genre": "tabletop",
+      "edited": false,
+      "outcome": "first battle won",
+      "prg_sha256": "6e2d508dc949f54fce17bacbf7389dd09756e78886279ee3fba6176c1a75df0b",
+      "seconds": 30.0,
+      "video": {
+        "path": "game-media/dice-relic/play.mp4",
+        "sha256": "829e68ec8dce72e35e92ee550aac762c36fe915708a396eb345f374b67ad4146"
+      },
+      "images": [
+        {
+          "path": "game-media/dice-relic/demo-start.png",
+          "sha256": "9e28c2f5e9fe2f9c43f3984985c68ed0de21e9552d7db559ce2b5dfa019a5588"
+        },
+        {
+          "path": "game-media/dice-relic/demo-play.png",
+          "sha256": "d7aff58b2c2481c0eb858a773763439f4f385982812105d294ff7080b5de7f90"
+        },
+        {
+          "path": "game-media/dice-relic/demo-clear.png",
+          "sha256": "a410151f7945129484fb3741f7ffd7d702dc9799bd388ee9b3082cc634e767b4"
+        }
+      ]
+    },
+    {
+      "id": "loop-ten",
+      "title": "LOOP TEN",
+      "genre": "exploration",
+      "edited": false,
+      "outcome": "first two chamber seals collected",
+      "prg_sha256": "28434127dfb7caa9fc4ec442a5e977257a8ffbfcaf9d14d587b1005df0c980d9",
+      "seconds": 30.0,
+      "video": {
+        "path": "game-media/loop-ten/play.mp4",
+        "sha256": "84215f977b1eb86412b15ef0bc1d019d7db9402e2f4486d8d792e925f8736668"
+      },
+      "images": [
+        {
+          "path": "game-media/loop-ten/demo-start.png",
+          "sha256": "f5db17848e769cb3134b1b833dc6fe244f4f9244aba7e6ba86a8985b958aa800"
+        },
+        {
+          "path": "game-media/loop-ten/demo-play.png",
+          "sha256": "a82c4ecd815f4dab46a8b211b0c8ab31231fc77340acab93fccb2c428368a269"
+        },
+        {
+          "path": "game-media/loop-ten/demo-clear.png",
+          "sha256": "a3228f91cb6e92cfcb23466e3c5f00240b5b6e16d2c726a88270e4b0557d4818"
+        }
+      ]
+    },
+    {
+      "id": "iron-script",
+      "title": "IRON SCRIPT",
+      "genre": "tactics",
+      "edited": false,
+      "outcome": "first stage cleared",
+      "prg_sha256": "16b030b0582d4401bb627be7448dedd6fc17b2b705143a028ae0e335629d733d",
+      "seconds": 30.667,
+      "video": {
+        "path": "game-media/iron-script/play.mp4",
+        "sha256": "f1a9923606cc564b44ff6f8af4e083bac3b9158d8105e2a675d631c8414c2e07"
+      },
+      "images": [
+        {
+          "path": "game-media/iron-script/demo-start.png",
+          "sha256": "b050abd8707080744cb70a6c2c4ddae6acc319c9f708a2ed49f420f45c6c462c"
+        },
+        {
+          "path": "game-media/iron-script/demo-play.png",
+          "sha256": "4cd85c7d987cb815ee41ab9ec3769e801a57347b6398c73e207e0fa6ea162978"
+        },
+        {
+          "path": "game-media/iron-script/demo-clear.png",
+          "sha256": "a8839a0eb6e9fa5c06cea5404a74c44a26a45cb538182bae3ee19bba024821dc"
+        }
+      ]
+    },
+    {
+      "id": "chain-suit",
+      "title": "CHAIN SUIT",
+      "genre": "tabletop",
+      "edited": false,
+      "outcome": "first stage cleared",
+      "prg_sha256": "33838e1c9ace0297638178403ba1aa7c73c6f80002b3636b4b427affa23542df",
+      "seconds": 30.567,
+      "video": {
+        "path": "game-media/chain-suit/play.mp4",
+        "sha256": "39e0dfb2146cbccd558e9466ddfa6c67629d379c7999dd4fc48c175a716ec5a6"
+      },
+      "images": [
+        {
+          "path": "game-media/chain-suit/demo-start.png",
+          "sha256": "fa2e77919acaa8db7ff00a708972f3577b012f45673022ac562ab4eb5dd2a056"
+        },
+        {
+          "path": "game-media/chain-suit/demo-play.png",
+          "sha256": "0e2a905cab8693b1d54b8c42dbdeb113df1f3efda1ea30909ffa373223f1ea19"
+        },
+        {
+          "path": "game-media/chain-suit/demo-clear.png",
+          "sha256": "e3b201339b79647340010da212c972590caccad85528f12ada18743c349ac6ee"
+        }
+      ]
+    },
+    {
+      "id": "quiet-route",
+      "title": "QUIET ROUTE",
+      "genre": "exploration",
+      "edited": false,
+      "outcome": "first stage cleared",
+      "prg_sha256": "44a7ea4b7727a1bdc7e602dad20b92414daac0591f9164e8e78bec560bd314f4",
+      "seconds": 30.0,
+      "video": {
+        "path": "game-media/quiet-route/play.mp4",
+        "sha256": "3ce146b8657944a0012675fb4961b6169fecdef488402b16a9c2d5d5dcd34099"
+      },
+      "images": [
+        {
+          "path": "game-media/quiet-route/demo-start.png",
+          "sha256": "2cd2c0a8b1e18a4f8cdfff399fe13bf880a28c67b2a85a8dc25e3ea8d2045818"
+        },
+        {
+          "path": "game-media/quiet-route/demo-play.png",
+          "sha256": "e42b6d85baeff7cf4440ace68b637208a6645e8da8cba24e754d2384eb22f6cf"
+        },
+        {
+          "path": "game-media/quiet-route/demo-clear.png",
+          "sha256": "6561d5248e578a51634ef6c0a4af146fba45e4599ad0640a588e485095f353fd"
+        }
+      ]
+    },
+    {
+      "id": "circuit-works",
+      "title": "CIRCUIT WORKS",
+      "genre": "tactics",
+      "edited": false,
+      "outcome": "first stage cleared",
+      "prg_sha256": "5b336757bb26bb830ade9b5739fd8ee8d966c26feeb2f44968dacf630daf3580",
+      "seconds": 30.0,
+      "video": {
+        "path": "game-media/circuit-works/play.mp4",
+        "sha256": "830bb5896f064faa217f9ce7d4a2358cbec69a5133ef64650569f43cdebadccf"
+      },
+      "images": [
+        {
+          "path": "game-media/circuit-works/demo-start.png",
+          "sha256": "53b260edab100208b80bc8478167ea8f2246369b7b8cbe376a529c6526c3e800"
+        },
+        {
+          "path": "game-media/circuit-works/demo-play.png",
+          "sha256": "bf569d57b66e4e546ae8393fe56f6cf6cc55ad34176c01ff507fb806250a3b10"
+        },
+        {
+          "path": "game-media/circuit-works/demo-clear.png",
+          "sha256": "370a8ab085c63d691faa96a54881dceec350b8d47fc274c78bc072c75af867b3"
+        }
+      ]
+    },
+    {
+      "id": "hearth-zero",
+      "title": "HEARTH ZERO",
+      "genre": "management",
+      "edited": false,
+      "outcome": "first stage cleared",
+      "prg_sha256": "5932b2632891e1cfe37c4846d7d1db8088ad28c7dfeba0553ef757f45bd47b72",
+      "seconds": 31.3,
+      "video": {
+        "path": "game-media/hearth-zero/play.mp4",
+        "sha256": "cdcc7790a6a27f8002b7f906d21fac59dd63188efdec480994fbef633174f9e5"
+      },
+      "images": [
+        {
+          "path": "game-media/hearth-zero/demo-start.png",
+          "sha256": "cf82b0735da167801a9f35272917a3d249b84bf13cc83e54a5bd49375bb19405"
+        },
+        {
+          "path": "game-media/hearth-zero/demo-play.png",
+          "sha256": "f941edebb7b5a65dbf65c81ef951da843198428bf6b45a550ed178586317c60d"
+        },
+        {
+          "path": "game-media/hearth-zero/demo-clear.png",
+          "sha256": "3e4f76abe14c46c77635e7adf2ee53b8590b2b611539cd9c4bc9fef0f6e8f395"
+        }
+      ]
+    },
+    {
+      "id": "night-swarm",
+      "title": "NIGHT SWARM",
+      "genre": "action",
+      "edited": false,
+      "outcome": "first stage cleared",
+      "prg_sha256": "2cda66e1a46a7987d4a94c0aab8a82554e58636cf3ee19c7d2255831cd85d7c0",
+      "seconds": 32.767,
+      "video": {
+        "path": "game-media/night-swarm/play.mp4",
+        "sha256": "de8d47e31461052211d89420e0abb2aa00e187a4324ee0566221750c49b65694"
+      },
+      "images": [
+        {
+          "path": "game-media/night-swarm/demo-start.png",
+          "sha256": "3495700f6a852f410ff4b9cd0c6c62ac700501bd163a957cc870a5cbfe53c4c7"
+        },
+        {
+          "path": "game-media/night-swarm/demo-play.png",
+          "sha256": "b46ee632b173544cac8c36c2e96a154669c05f25c5b881319554a81dc4b8a06d"
+        },
+        {
+          "path": "game-media/night-swarm/demo-clear.png",
+          "sha256": "5d92d292233e3bcc0ba98234c5336bc4eae5704f11811642cd0d9f344509603a"
+        }
+      ]
+    },
+    {
+      "id": "lumen-cross",
+      "title": "LUMEN CROSS",
+      "genre": "puzzle",
+      "edited": false,
+      "outcome": "first stage cleared",
+      "prg_sha256": "2c56f5d949bfa05c7a308a7206e1805c613dc4f57f8ebb6c91c599b679759116",
+      "seconds": 32.333,
+      "video": {
+        "path": "game-media/lumen-cross/play.mp4",
+        "sha256": "94f97d6f1d25d9117b3e28e0afee169fa03057cc68643c61c3063eab5896ac3e"
+      },
+      "images": [
+        {
+          "path": "game-media/lumen-cross/demo-start.png",
+          "sha256": "a1963549a52dff17546651df8ecd4f3d8e514d610b6ae52b91ca09e69568232c"
+        },
+        {
+          "path": "game-media/lumen-cross/demo-play.png",
+          "sha256": "8dcec737c909db9ced454e63ce9dbd4115aea62d729386068ef87f45563c45db"
+        },
+        {
+          "path": "game-media/lumen-cross/demo-clear.png",
+          "sha256": "76036fd3983e2d3b8e556a76351c51e478e25e52a84d894903dd55cc27396c27"
+        }
+      ]
+    },
+    {
+      "id": "magnet-vault",
+      "title": "MAGNET VAULT",
+      "genre": "puzzle",
+      "edited": false,
+      "outcome": "first stage cleared",
+      "prg_sha256": "fed6914c46f0135e87573e5d40a3aaab7814d42a392be1244c4b1e245fe77c48",
+      "seconds": 30.533,
+      "video": {
+        "path": "game-media/magnet-vault/play.mp4",
+        "sha256": "0c4e6ea4a62f42fbf36b1a0bcf5edb79cece322b22a221a2bf2056ba22543017"
+      },
+      "images": [
+        {
+          "path": "game-media/magnet-vault/demo-start.png",
+          "sha256": "24b9aa3c14569c3b8f6ffe268f2c94b5b20b1e6fca49c14890801d64cf25d525"
+        },
+        {
+          "path": "game-media/magnet-vault/demo-play.png",
+          "sha256": "7ad72ac82512730b080d6c270bf3661fc06687b323ecd2b44d97030f097f6b5a"
+        },
+        {
+          "path": "game-media/magnet-vault/demo-clear.png",
+          "sha256": "9d43288781c52e50dd4e5ca16103424413d09ea97561ddffecdbc11f67fe73b7"
+        }
+      ]
+    },
+    {
+      "id": "frost-steps",
+      "title": "FROST STEPS",
+      "genre": "puzzle",
+      "edited": false,
+      "outcome": "first stage cleared",
+      "prg_sha256": "618e1cfc47cf8ff222f0885e89cf77dfc4261574b57770bb2bcdab44c14c8233",
+      "seconds": 30.0,
+      "video": {
+        "path": "game-media/frost-steps/play.mp4",
+        "sha256": "9c6f7bdcde7a6ca11aca5b84ac899c0922aeb2884758f3d35daba5e46a5a90a9"
+      },
+      "images": [
+        {
+          "path": "game-media/frost-steps/demo-start.png",
+          "sha256": "551b7b87c9c75fadbbcf9245d9a55d95da4f9af4815588bb5a693159e18e36c7"
+        },
+        {
+          "path": "game-media/frost-steps/demo-play.png",
+          "sha256": "fa6de7b13a84216b4f52db61086df094bf141129822f2839a6e5540d51ded582"
+        },
+        {
+          "path": "game-media/frost-steps/demo-clear.png",
+          "sha256": "6844db8ce0db6d2a79baa4b0f163b493bc0a2ec3bf3bbf6dd1466b98fe046a5b"
+        }
+      ]
+    },
+    {
+      "id": "prism-trace",
+      "title": "PRISM TRACE",
+      "genre": "puzzle",
+      "edited": false,
+      "outcome": "first stage cleared",
+      "prg_sha256": "b5d85d998119d082d46e73f4940fc99f16f001e40134ab7aebdfdab15d400b42",
+      "seconds": 30.667,
+      "video": {
+        "path": "game-media/prism-trace/play.mp4",
+        "sha256": "743288a15806a1be46dffed047616cbb24703d3575c854c2ae082efc465309e7"
+      },
+      "images": [
+        {
+          "path": "game-media/prism-trace/demo-start.png",
+          "sha256": "e66c1fed2bc849e157a377a0da4b2d5f298bd3e321279e0d17a33156ffbb3adc"
+        },
+        {
+          "path": "game-media/prism-trace/demo-play.png",
+          "sha256": "97fd92cb63dc4e2c637ca7468db91e0ec917c9ae9ed535f612274d6f5b0a6f50"
+        },
+        {
+          "path": "game-media/prism-trace/demo-clear.png",
+          "sha256": "3e4f0476a19df1192e74009fa9553e6cc8d1e79908e314e63efeeafbc964a5e4"
+        }
+      ]
+    },
+    {
+      "id": "tide-bridge",
+      "title": "TIDE BRIDGE",
+      "genre": "puzzle",
+      "edited": false,
+      "outcome": "first stage cleared",
+      "prg_sha256": "5c339247ddedf1eb699cd224bbe5d176edf2bc4990a4bed9bcf059713c31a705",
+      "seconds": 31.167,
+      "video": {
+        "path": "game-media/tide-bridge/play.mp4",
+        "sha256": "6ca0098bf73dac694021f346ea1bccc61aae01febf18979575ffc851971a2bfd"
+      },
+      "images": [
+        {
+          "path": "game-media/tide-bridge/demo-start.png",
+          "sha256": "fe9b5e1aba9550b386538ed77a509f78afccdc7f8c848d04fb895fe3575537f5"
+        },
+        {
+          "path": "game-media/tide-bridge/demo-play.png",
+          "sha256": "5569e000cf92822bfbcf03645cdad90241eec3c9a029b696ef5a54a448dd1886"
+        },
+        {
+          "path": "game-media/tide-bridge/demo-clear.png",
+          "sha256": "cf35c97d2608d195db0503abc82e9ecc10b6c7dfc1ba61b9ebef5a35c61257d6"
+        }
+      ]
+    },
+    {
+      "id": "glyph-shift",
+      "title": "GLYPH SHIFT",
+      "genre": "puzzle",
+      "edited": false,
+      "outcome": "first stage cleared",
+      "prg_sha256": "663187d1f4b04999dca5ca3d26431209f820ebbe993add718aef20872a5cb86c",
+      "seconds": 31.167,
+      "video": {
+        "path": "game-media/glyph-shift/play.mp4",
+        "sha256": "3e77a7e47c7c87d7c1b892f9d1b8939944e03984b729780a6abaa86584e5a10a"
+      },
+      "images": [
+        {
+          "path": "game-media/glyph-shift/demo-start.png",
+          "sha256": "207576a81e8b376c66a18187baec062cbbbf3275536f4d9d854402d4ce4c6b9d"
+        },
+        {
+          "path": "game-media/glyph-shift/demo-play.png",
+          "sha256": "fd6c09fbe97c6b65041771ff5f230d6adac0a1151315927458cd877953306ad2"
+        },
+        {
+          "path": "game-media/glyph-shift/demo-clear.png",
+          "sha256": "7bf141c4906b159712c3aecf83a628881e4908d3e2e1517404feaaf2925a003a"
+        }
+      ]
+    },
+    {
+      "id": "gravity-well",
+      "title": "GRAVITY WELL",
+      "genre": "puzzle",
+      "edited": false,
+      "outcome": "first stage cleared",
+      "prg_sha256": "395cd3934e50d3571a9157a7894c9ab44dd5cd9e36c584cbdc7d448eb1837391",
+      "seconds": 30.0,
+      "video": {
+        "path": "game-media/gravity-well/play.mp4",
+        "sha256": "4fecaaaf202f20ae4a8823c24028e1e7456b8917ff0b0b076dac7985eefdc056"
+      },
+      "images": [
+        {
+          "path": "game-media/gravity-well/demo-start.png",
+          "sha256": "952ab5f3ccc8c2f60c4abebbf5f22d9764a6c4235e1de6f40514bcc4ad8d9205"
+        },
+        {
+          "path": "game-media/gravity-well/demo-play.png",
+          "sha256": "5c3f7cec769698386ee3c32df876185917e8465ca26b535f3397e2fe5ef400ba"
+        },
+        {
+          "path": "game-media/gravity-well/demo-clear.png",
+          "sha256": "a6e2c53e7250607d169b3e9ac9dbfc0a8585d781c4c6b96c95901b10a4eb2611"
+        }
+      ]
+    },
+    {
+      "id": "seed-merge",
+      "title": "SEED MERGE",
+      "genre": "puzzle",
+      "edited": true,
+      "outcome": "first stage cleared",
+      "prg_sha256": "1a9a9970b92604e5991a964f7bcb23c57a7bc3d88ff2ddce23491a48f14f291f",
+      "seconds": 30.0,
+      "video": {
+        "path": "game-media/seed-merge/play.mp4",
+        "sha256": "7c7b0f3c57b3e60c15144e249d64ca88330012d41f13af7b5ad7cb4654279cdc"
+      },
+      "images": [
+        {
+          "path": "game-media/seed-merge/demo-start.png",
+          "sha256": "85ad525853190617938600e997726e65cb34d3a71ac1018ea1152e9be4932326"
+        },
+        {
+          "path": "game-media/seed-merge/demo-play.png",
+          "sha256": "e3357bb63f2feabb26d1e42e80312523e58f6bb8dd0ed98efcbdb807fe68d781"
+        },
+        {
+          "path": "game-media/seed-merge/demo-clear.png",
+          "sha256": "b153561c70f6c930966c711c7ba1d1b9866a3efec5324f60702bacfb12b5d8ba"
+        }
+      ]
+    },
+    {
+      "id": "orbit-draft",
+      "title": "ORBIT DRAFT",
+      "genre": "tabletop",
+      "edited": false,
+      "outcome": "first stage cleared",
+      "prg_sha256": "3785f40ce535ac1cbed55ad8c4a597f00a7a1f20d9db9284cce43de69f0fdb97",
+      "seconds": 31.767,
+      "video": {
+        "path": "game-media/orbit-draft/play.mp4",
+        "sha256": "e1ad49576264d22a660b92dd6647bbd119b37c71bf5626c5f400faafdc793570"
+      },
+      "images": [
+        {
+          "path": "game-media/orbit-draft/demo-start.png",
+          "sha256": "a40136688ca36ad28326cf86c30429925f76327a46b01c83c1cd80cf512451ea"
+        },
+        {
+          "path": "game-media/orbit-draft/demo-play.png",
+          "sha256": "8da95ac26d062921ac200ea2f83730981c109c6cbb4c1f5bba61d109c17728cc"
+        },
+        {
+          "path": "game-media/orbit-draft/demo-clear.png",
+          "sha256": "00a83da67c5499687a7cccb5e31f08cc54480f52ae85409e953492c17983b18f"
+        }
+      ]
+    },
+    {
+      "id": "five-forge",
+      "title": "FIVE FORGE",
+      "genre": "tabletop",
+      "edited": true,
+      "outcome": "first stage cleared",
+      "prg_sha256": "45b44e495ca137b240b3ffec276d7be3708ee7e350a203244fe022b6e02b4cae",
+      "seconds": 30.0,
+      "video": {
+        "path": "game-media/five-forge/play.mp4",
+        "sha256": "cceb39b75e0f6d891fcab772a8175ca646a97870bd3784a0422f18474b95c4e0"
+      },
+      "images": [
+        {
+          "path": "game-media/five-forge/demo-start.png",
+          "sha256": "6e57aea2bdc81641f9e6c0abbec0150cc639a04332bd2eedb68a838ec1f5b9c1"
+        },
+        {
+          "path": "game-media/five-forge/demo-play.png",
+          "sha256": "5406d824a7988c6e772452cd1d15dee8413a240f763a5fa2131e35cf5304c178"
+        },
+        {
+          "path": "game-media/five-forge/demo-clear.png",
+          "sha256": "95e9955c7f63a1459e2617452f2e811ef43e9d62e437c4a99e720e74ad12d113"
+        }
+      ]
+    },
+    {
+      "id": "corner-crown",
+      "title": "CORNER CROWN",
+      "genre": "tabletop",
+      "edited": true,
+      "outcome": "first stage cleared",
+      "prg_sha256": "c1b44612a11aebfeaaae89312944c09f33d1106853445832786ba1c872d5fd76",
+      "seconds": 30.0,
+      "video": {
+        "path": "game-media/corner-crown/play.mp4",
+        "sha256": "82c08729a1199085c20bd4626b96c25d6aa431776763a90e5cea13f2beddc909"
+      },
+      "images": [
+        {
+          "path": "game-media/corner-crown/demo-start.png",
+          "sha256": "cf1986a9cd9128083bc61158f3320e9d671bee78cebf05f59039121d2e4b28c9"
+        },
+        {
+          "path": "game-media/corner-crown/demo-play.png",
+          "sha256": "4c6e0ec3327d1352fa8f88aeb8750e2e14c7ad53808758d547bc0b3c4f998264"
+        },
+        {
+          "path": "game-media/corner-crown/demo-clear.png",
+          "sha256": "7e75aa0f855c2fc69c2646db51930618ad661dabd54e12d87eb4e7ecc764b523"
+        }
+      ]
+    },
+    {
+      "id": "stone-balance",
+      "title": "STONE BALANCE",
+      "genre": "tabletop",
+      "edited": false,
+      "outcome": "first stage cleared",
+      "prg_sha256": "d4d12f4de89b67d37db68df6694c24d7bea78a54bde0dce29c81fcb4ce63f3ce",
+      "seconds": 33.433,
+      "video": {
+        "path": "game-media/stone-balance/play.mp4",
+        "sha256": "69f9e517d36fe8c06f3a46eccfc9b572fe6b53c6de3f2f27e4a322274e5df453"
+      },
+      "images": [
+        {
+          "path": "game-media/stone-balance/demo-start.png",
+          "sha256": "6cd9bfbb978a7698e785e312e265cff42903921ff4fe099f52989e0c9440b2cd"
+        },
+        {
+          "path": "game-media/stone-balance/demo-play.png",
+          "sha256": "e319db85d59abad6cfdd44b166e0a8795199c703bebaf54cd7e327d8e90302de"
+        },
+        {
+          "path": "game-media/stone-balance/demo-clear.png",
+          "sha256": "9696d4c3d97418bfb84582559e2e77bd44c966416fc879b2f7f9c4ed1456aa11"
+        }
+      ]
+    },
+    {
+      "id": "memory-mosaic",
+      "title": "MEMORY MOSAIC",
+      "genre": "tabletop",
+      "edited": true,
+      "outcome": "first stage cleared",
+      "prg_sha256": "da13c7748efa1baeb37d2b6b7c1e6922123df30bc42338e1564ad53836dafa4f",
+      "seconds": 30.0,
+      "video": {
+        "path": "game-media/memory-mosaic/play.mp4",
+        "sha256": "c2901e050f77a5fa0afe8cff88c2f5de53ef842925174d118bdc6c5780557872"
+      },
+      "images": [
+        {
+          "path": "game-media/memory-mosaic/demo-start.png",
+          "sha256": "3524dc76ce6da34aba2b8aa7e6aec304d6b4bdbf236eb9ede0a28a03048e9515"
+        },
+        {
+          "path": "game-media/memory-mosaic/demo-play.png",
+          "sha256": "df98ba5fe0781c956897aea2ff3a9e3b32cccb4d9a07ff08b7ee59be63d3335f"
+        },
+        {
+          "path": "game-media/memory-mosaic/demo-clear.png",
+          "sha256": "584b256d7e3a6ea19059ba3465a358f840279a112ffba35f6412beb86991da66"
+        }
+      ]
+    },
+    {
+      "id": "twenty-one",
+      "title": "TWENTY ONE",
+      "genre": "tabletop",
+      "edited": true,
+      "outcome": "first stage cleared",
+      "prg_sha256": "03113993a2a49a787430ea8695f0f6c54e0942425329d9d040dfb44ba4f80ee8",
+      "seconds": 30.0,
+      "video": {
+        "path": "game-media/twenty-one/play.mp4",
+        "sha256": "0bc5cb2df0419300bcd69b18a03d7ec516b9e03daf7f33069de9eb82af3eb4bd"
+      },
+      "images": [
+        {
+          "path": "game-media/twenty-one/demo-start.png",
+          "sha256": "9b30b85f134176860884c7bf440a022b553edb998af5786fc59c18336b9ff638"
+        },
+        {
+          "path": "game-media/twenty-one/demo-play.png",
+          "sha256": "ce3b853131d4809cc22fceb68217baa916bfbe7a7515602b61ad96f093f8d0d3"
+        },
+        {
+          "path": "game-media/twenty-one/demo-clear.png",
+          "sha256": "ed8a2771c221de4fc22a88ef24dda82a5b14e92b933a374394ae8ce5eb4ed2e6"
+        }
+      ]
+    },
+    {
+      "id": "orbit-dodge",
+      "title": "ORBIT DODGE",
+      "genre": "action",
+      "edited": false,
+      "outcome": "first stage cleared",
+      "prg_sha256": "d7c314bddf0980ab51386b0319429c9d9cccec6d262c19f4a3f415816ded822f",
+      "seconds": 30.0,
+      "video": {
+        "path": "game-media/orbit-dodge/play.mp4",
+        "sha256": "47039b7331efd602d1b7226a108b7f8c37fded33662ccfc3080e1f59f04e2a4e"
+      },
+      "images": [
+        {
+          "path": "game-media/orbit-dodge/demo-start.png",
+          "sha256": "cdb8ba8f86f5d89b32d2ac84320a371499a3092ce88e5d4f787a42769b3f415d"
+        },
+        {
+          "path": "game-media/orbit-dodge/demo-play.png",
+          "sha256": "26da1c06474184f582e9a2c7e07b975cf3b1b7f2ff02b65247f37fe1304c8434"
+        },
+        {
+          "path": "game-media/orbit-dodge/demo-clear.png",
+          "sha256": "a8e53e1b6d423191de0489bdf3f8273fd3dea2d78c2d532a8472decc179ee3df"
+        }
+      ]
+    },
+    {
+      "id": "gate-runner",
+      "title": "GATE RUNNER",
+      "genre": "action",
+      "edited": false,
+      "outcome": "first stage cleared",
+      "prg_sha256": "0c052c9870ebe3f67178c48996fad5e69b4b689c94d0b9b19fe7b2bbacba0b5d",
+      "seconds": 30.0,
+      "video": {
+        "path": "game-media/gate-runner/play.mp4",
+        "sha256": "640f7bdd43720e18d09995cab49de3e2dc943becf39667eca4fd05d12b400026"
+      },
+      "images": [
+        {
+          "path": "game-media/gate-runner/demo-start.png",
+          "sha256": "27b36ed7252d6aa426c14bec88cfa4f68a9e1bdc219b06b3f4426e0cdd886113"
+        },
+        {
+          "path": "game-media/gate-runner/demo-play.png",
+          "sha256": "3e8492f089a67fb514883d4b340f587df190abeedb60c508dde3d9005bc9a955"
+        },
+        {
+          "path": "game-media/gate-runner/demo-clear.png",
+          "sha256": "d0e091063a674676d6c671481fd152b2c2dc3593813fe2c93881861b4a950fea"
+        }
+      ]
+    },
+    {
+      "id": "brick-pulse",
+      "title": "BRICK PULSE",
+      "genre": "action",
+      "edited": true,
+      "outcome": "first stage cleared",
+      "prg_sha256": "345e3b16cac32a2e6cc962d9ac3457c3efe2a686add7fb004a3ea65427973cb4",
+      "seconds": 30.0,
+      "video": {
+        "path": "game-media/brick-pulse/play.mp4",
+        "sha256": "2a224dbfe0564abf651db738f0fe12954b505d55b9faba4f5bbd868b7d57698d"
+      },
+      "images": [
+        {
+          "path": "game-media/brick-pulse/demo-start.png",
+          "sha256": "7626f45b5ba2e33dc610b3d6fafc1202f404f4023fc931b770ad3e8cfa6a596b"
+        },
+        {
+          "path": "game-media/brick-pulse/demo-play.png",
+          "sha256": "f889d788e34d096d29ed03e965b710d8ad287ee5827e7cdf015e667d308d4e77"
+        },
+        {
+          "path": "game-media/brick-pulse/demo-clear.png",
+          "sha256": "6aee6df595611c776c18e7a2dbf540e59e73e5a8e3f3659fffe707bb7da9c65d"
+        }
+      ]
+    },
+    {
+      "id": "star-lance",
+      "title": "STAR LANCE",
+      "genre": "action",
+      "edited": false,
+      "outcome": "first stage cleared",
+      "prg_sha256": "58281c5c1c2db3f0aedef35a432e9377634a2a3330632e74c812b4fc06c47dea",
+      "seconds": 30.0,
+      "video": {
+        "path": "game-media/star-lance/play.mp4",
+        "sha256": "6f03cf273da1fce30c0b3513dfa7b9c7e3a3505c83948089fc897d270e2921a7"
+      },
+      "images": [
+        {
+          "path": "game-media/star-lance/demo-start.png",
+          "sha256": "e206feb2dcce1caa939c55bde76cfd221a50eea27ff02fbeeef9411e06993700"
+        },
+        {
+          "path": "game-media/star-lance/demo-play.png",
+          "sha256": "b414b3d851a71a9a804b5c20c5aa985375e07417715f4bc1da36c91968513769"
+        },
+        {
+          "path": "game-media/star-lance/demo-clear.png",
+          "sha256": "46067a7aebb390ba193d243af581ba938856a31006e62487a78a8843c2d4a3a1"
+        }
+      ]
+    },
+    {
+      "id": "ribbon-snake",
+      "title": "RIBBON SNAKE",
+      "genre": "action",
+      "edited": true,
+      "outcome": "first stage cleared",
+      "prg_sha256": "50cb9f9c2ec2111d0fce5c38b46c3b2b6a5f3186034a75b45d8f637fe0ede674",
+      "seconds": 30.0,
+      "video": {
+        "path": "game-media/ribbon-snake/play.mp4",
+        "sha256": "a40c940d4910b30f7b06e03de9db369513ddc10fd58adbb9da85b3d6ffac8b18"
+      },
+      "images": [
+        {
+          "path": "game-media/ribbon-snake/demo-start.png",
+          "sha256": "e9f9f0d050d48bce491dce56b07084c773e2d17857b443d349a346bf947ab8b7"
+        },
+        {
+          "path": "game-media/ribbon-snake/demo-play.png",
+          "sha256": "e4e5a125439a458f315ec7ee212aecd738528e363d3617a9d7e259b8d79fea88"
+        },
+        {
+          "path": "game-media/ribbon-snake/demo-clear.png",
+          "sha256": "010e73e7bc8f6657a61d1cf0eb7fe062717dcf51bb0fcbc2085e02c8923d0c65"
+        }
+      ]
+    },
+    {
+      "id": "lunar-touchdown",
+      "title": "LUNAR TOUCHDOWN",
+      "genre": "action",
+      "edited": false,
+      "outcome": "first two stages cleared",
+      "prg_sha256": "deb997a437aa6f2840e2c1ae4f175def9492a109cf5530f148f634d774c2adaa",
+      "seconds": 32.3,
+      "video": {
+        "path": "game-media/lunar-touchdown/play.mp4",
+        "sha256": "edac553bb137156fbed1340ce27fd5de7564210c4a667107caf69768d98057ec"
+      },
+      "images": [
+        {
+          "path": "game-media/lunar-touchdown/demo-start.png",
+          "sha256": "919e742fe0049e8329c69427f127b91bf223f8a6403caa92e85978f8aac18579"
+        },
+        {
+          "path": "game-media/lunar-touchdown/demo-play.png",
+          "sha256": "bba9595b138f2b13d3fe3c5858ee3e035bba77e6f8dfc9dc080e2732917195e1"
+        },
+        {
+          "path": "game-media/lunar-touchdown/demo-clear.png",
+          "sha256": "a599ed0f44bcb17643af6c20c5c22ab520f1c1c2a822510c669085f015137430"
+        }
+      ]
+    },
+    {
+      "id": "echo-parry",
+      "title": "ECHO PARRY",
+      "genre": "action",
+      "edited": false,
+      "outcome": "first stage cleared",
+      "prg_sha256": "c82f77331d0fe8eb92ccc5b2eba857b258a7817687c1ea7e862a8fb874925c6b",
+      "seconds": 30.0,
+      "video": {
+        "path": "game-media/echo-parry/play.mp4",
+        "sha256": "60e4da3a758cb9fa0aab497197148bdb4b7485ebfaefee36a557a2b298a8d921"
+      },
+      "images": [
+        {
+          "path": "game-media/echo-parry/demo-start.png",
+          "sha256": "94a4cb550ef8db90766d65b60e61fa5d389de70e42647de18aca49f35b45832c"
+        },
+        {
+          "path": "game-media/echo-parry/demo-play.png",
+          "sha256": "a85925a0a472084e2c83ff3c021c83a1b7a67d6f0b7407461faca8af7215ff9a"
+        },
+        {
+          "path": "game-media/echo-parry/demo-clear.png",
+          "sha256": "3ff55d7e6a25841ece8099c8755c88b4f5308ef282a54ffa8a1cb8c08112d43f"
+        }
+      ]
+    },
+    {
+      "id": "pendulum-port",
+      "title": "PENDULUM PORT",
+      "genre": "action",
+      "edited": true,
+      "outcome": "first stage cleared",
+      "prg_sha256": "eeeec720b68e258332536065bf6152434cca65b8ca712b24a1d867cdaae97d42",
+      "seconds": 30.0,
+      "video": {
+        "path": "game-media/pendulum-port/play.mp4",
+        "sha256": "254d7b6641e7f816fe3e35fc76d5cc2ee875d32d780921268e7f296074cd5863"
+      },
+      "images": [
+        {
+          "path": "game-media/pendulum-port/demo-start.png",
+          "sha256": "4ea657240dd9411230643562e7721d8c16fb2ff4e3f8e17631f81f516b111ab5"
+        },
+        {
+          "path": "game-media/pendulum-port/demo-play.png",
+          "sha256": "3f1fc9d6d78dbf77baa1eeb5adc39e889c45ba4eaf59be451452df8df1e497e2"
+        },
+        {
+          "path": "game-media/pendulum-port/demo-clear.png",
+          "sha256": "7624c95b945df1188ecac68ec230f8e7707b35c4acd2dd6761193bf65d1a529f"
+        }
+      ]
+    },
+    {
+      "id": "ruin-lexicon",
+      "title": "RUIN LEXICON",
+      "genre": "exploration",
+      "edited": false,
+      "outcome": "first stage cleared",
+      "prg_sha256": "7bc13955b81a82688606f27bf8452ba44abf3ac8b0c36a1c5d8dd1224adf60cd",
+      "seconds": 30.0,
+      "video": {
+        "path": "game-media/ruin-lexicon/play.mp4",
+        "sha256": "e3e251bcf0769f706c15a9eaa6b162029926179062dc16b41a138f3442a039f7"
+      },
+      "images": [
+        {
+          "path": "game-media/ruin-lexicon/demo-start.png",
+          "sha256": "87ea62c1bd68b28172575420b64f12b0cd58b116e66d8b864ec6b7d178976e34"
+        },
+        {
+          "path": "game-media/ruin-lexicon/demo-play.png",
+          "sha256": "5dc32dd5ce0a66b077ef678568044d4f701b027cd06b6c1c497cb5962bf73ac4"
+        },
+        {
+          "path": "game-media/ruin-lexicon/demo-clear.png",
+          "sha256": "26375c1750547b7aa46639dccbc11e8633d47257d6817b2497891855befb3f62"
+        }
+      ]
+    },
+    {
+      "id": "shadow-archive",
+      "title": "SHADOW ARCHIVE",
+      "genre": "exploration",
+      "edited": false,
+      "outcome": "first stage cleared",
+      "prg_sha256": "363f09151c11392fced0840f0577a2122e6ecb0371b43224a798bc2cf1845bbd",
+      "seconds": 33.2,
+      "video": {
+        "path": "game-media/shadow-archive/play.mp4",
+        "sha256": "67d4b20aa4fe4b2421e5102fd0365e0192fdfb7e7729b9857317e0665e1145b0"
+      },
+      "images": [
+        {
+          "path": "game-media/shadow-archive/demo-start.png",
+          "sha256": "8070b2ef219723497614e595dcac8c67ba3384d0186ae240cee1a8a6ea4e18d9"
+        },
+        {
+          "path": "game-media/shadow-archive/demo-play.png",
+          "sha256": "a57170ffcfa67820baed2d0e1c879f3eaa6700ddce2f623da624d224edf6d8be"
+        },
+        {
+          "path": "game-media/shadow-archive/demo-clear.png",
+          "sha256": "f9db7642f3d74a8e80d5d9bbe96b1e9f1d9a5495f810ade55cd0cb9d2f721c4a"
+        }
+      ]
+    },
+    {
+      "id": "compass-rose",
+      "title": "COMPASS ROSE",
+      "genre": "exploration",
+      "edited": false,
+      "outcome": "first stage cleared",
+      "prg_sha256": "0b76d6b4ccc664743324e12b8517e4563bd551b7bcf36d281a56eb3e07975aac",
+      "seconds": 30.0,
+      "video": {
+        "path": "game-media/compass-rose/play.mp4",
+        "sha256": "7a70ffa28067f278a72a8c84a1194e9637b503326e0220dc486d6855f2fe0680"
+      },
+      "images": [
+        {
+          "path": "game-media/compass-rose/demo-start.png",
+          "sha256": "59bc6f319c1579c9630a17d8c32265ff2c203177f170dfb1c9414d5f52e96869"
+        },
+        {
+          "path": "game-media/compass-rose/demo-play.png",
+          "sha256": "6df16e1fb1e1429f2d3086b792df538e91e36830aa397b68687d0bab0b0dd7f8"
+        },
+        {
+          "path": "game-media/compass-rose/demo-clear.png",
+          "sha256": "cedf0313d7e982f53106cacc070622ab75e86f134548a49e6a9fde780a66a76a"
+        }
+      ]
+    },
+    {
+      "id": "mirror-relic",
+      "title": "MIRROR RELIC",
+      "genre": "exploration",
+      "edited": false,
+      "outcome": "first stage cleared",
+      "prg_sha256": "1d7ee8a6afb270775dd2de0900109f3d21ef3ff9fcfae62b11f88b8b883d89e8",
+      "seconds": 34.067,
+      "video": {
+        "path": "game-media/mirror-relic/play.mp4",
+        "sha256": "3543e27e7dc027a5793c8ddb418b7f1b72b21beac4f376a5ee1040249539a24d"
+      },
+      "images": [
+        {
+          "path": "game-media/mirror-relic/demo-start.png",
+          "sha256": "2554ebd606337af65a6ff1bfabc748cbbfb87b19d48d3e848656fd274f57be8a"
+        },
+        {
+          "path": "game-media/mirror-relic/demo-play.png",
+          "sha256": "6beb601da178f3e3bde441e6c23c3f1bdd2f100070530efdfb2c0de6533e65ee"
+        },
+        {
+          "path": "game-media/mirror-relic/demo-clear.png",
+          "sha256": "bc81473d69241b87f85f40d97050b0b7115c395bd69336c7751876d6826b4cc3"
+        }
+      ]
+    },
+    {
+      "id": "orchard-days",
+      "title": "ORCHARD DAYS",
+      "genre": "management",
+      "edited": false,
+      "outcome": "first stage cleared",
+      "prg_sha256": "4a6e7be26727707af8fe540fe3b10550f90bbfc22b8dbbd3c2f8eddfe7b73ab9",
+      "seconds": 33.667,
+      "video": {
+        "path": "game-media/orchard-days/play.mp4",
+        "sha256": "232d6ca3922db9442e666e25c685d0b3f61f80b358a30ef3e90a832821162555"
+      },
+      "images": [
+        {
+          "path": "game-media/orchard-days/demo-start.png",
+          "sha256": "49dea2638e9d25f9bf02c98db0a04a6a651e0df37a873b6381c2222471638862"
+        },
+        {
+          "path": "game-media/orchard-days/demo-play.png",
+          "sha256": "3b4b3e55dceb12ea2928f85bdb04d50984ad1508080c27a28b6f03a5d611033f"
+        },
+        {
+          "path": "game-media/orchard-days/demo-clear.png",
+          "sha256": "63451f7593c81e1178140f8bfbe02786f25ee84b96eebf175089fd0cca20effc"
+        }
+      ]
+    },
+    {
+      "id": "tidal-nets",
+      "title": "TIDAL NETS",
+      "genre": "management",
+      "edited": false,
+      "outcome": "first stage cleared",
+      "prg_sha256": "c7373e5173ac4ec14fbc6f8e5a022c6d6eb40c5549f32d96c99886033a225936",
+      "seconds": 30.0,
+      "video": {
+        "path": "game-media/tidal-nets/play.mp4",
+        "sha256": "1a9432733867653c9368bde488d8be7d20657ffff9f4be204d978ffd72aa8573"
+      },
+      "images": [
+        {
+          "path": "game-media/tidal-nets/demo-start.png",
+          "sha256": "6833d55474bfa5aff0f4438a70eed0e4926f1c251f5738ca5d9c413be24cf8a0"
+        },
+        {
+          "path": "game-media/tidal-nets/demo-play.png",
+          "sha256": "74ab66058e16f347e84d974ef7ac30448e99696d965f229115a977c8fb4b0b0a"
+        },
+        {
+          "path": "game-media/tidal-nets/demo-clear.png",
+          "sha256": "8dbfdbcfc1ffe2adcc9a38200357a8d462708589812f0e24531b13b1eaa56d88"
+        }
+      ]
+    },
+    {
+      "id": "potion-path",
+      "title": "POTION PATH",
+      "genre": "management",
+      "edited": false,
+      "outcome": "first stage cleared",
+      "prg_sha256": "988ad687504110bbfeef5edb234570529910e92ca9c06b2dafbe55edc23055b7",
+      "seconds": 30.0,
+      "video": {
+        "path": "game-media/potion-path/play.mp4",
+        "sha256": "7528831c5173e13fb481977c8db82da955c3fcae8a11d423f3783c2e5f36db2e"
+      },
+      "images": [
+        {
+          "path": "game-media/potion-path/demo-start.png",
+          "sha256": "6d9c865f196a29145c3a0f0802e9bd631481659bd0647a30e5aef2c8c47d5366"
+        },
+        {
+          "path": "game-media/potion-path/demo-play.png",
+          "sha256": "7e64dcc4584c7166408eacaa0209d323bf774c90924680968ace6438a040dca1"
+        },
+        {
+          "path": "game-media/potion-path/demo-clear.png",
+          "sha256": "a711928a11f899c8432b7c217ae80db04fd2b670dd3776a69a0297ece052d41a"
+        }
+      ]
+    },
+    {
+      "id": "auction-house",
+      "title": "AUCTION HOUSE",
+      "genre": "management",
+      "edited": true,
+      "outcome": "first stage cleared",
+      "prg_sha256": "76c21f46a08f4d3222a96875e8e0b77d7d1f962622abba9058552c47130e6908",
+      "seconds": 30.0,
+      "video": {
+        "path": "game-media/auction-house/play.mp4",
+        "sha256": "916cd3a4b09f5fd55a150c14a3abdbbc3697f649f66f5b0046b26b33079b2456"
+      },
+      "images": [
+        {
+          "path": "game-media/auction-house/demo-start.png",
+          "sha256": "ac09224e59473f2469f2255f5cba3ac3b384724cf958ecb1ef1ddef952a97c12"
+        },
+        {
+          "path": "game-media/auction-house/demo-play.png",
+          "sha256": "fbe7004c2c5d2ed9237abad5306f944f6dd409adca302f72e2afb770f93b816b"
+        },
+        {
+          "path": "game-media/auction-house/demo-clear.png",
+          "sha256": "dbaacd8eb6dbb167dbea7df0bc3853980f4e5e2622299c5c3b641dfbeb130ff2"
+        }
+      ]
+    },
+    {
+      "id": "metro-weave",
+      "title": "METRO WEAVE",
+      "genre": "tactics",
+      "edited": true,
+      "outcome": "first stage cleared",
+      "prg_sha256": "5e1f38686bab281b85c803e956207708e056be863f0265f0aee6ce99184d5ee2",
+      "seconds": 30.0,
+      "video": {
+        "path": "game-media/metro-weave/play.mp4",
+        "sha256": "79a9b31f4c5096fbf16d39844b1384fe468c03e1180bcc4d54ac0b78d584e197"
+      },
+      "images": [
+        {
+          "path": "game-media/metro-weave/demo-start.png",
+          "sha256": "96ccf27c7004ea81db9e2710753119038df57f743bd8e504cc21939680ab7fce"
+        },
+        {
+          "path": "game-media/metro-weave/demo-play.png",
+          "sha256": "b5a6e53f2c1630ea97a2d61808cdc631012f95a0fe66d2e2c01e29e1878b82e3"
+        },
+        {
+          "path": "game-media/metro-weave/demo-clear.png",
+          "sha256": "0668d633bb164c6db82b2771655e086083ac48fb77cdd34bd85e9c6601ca36f8"
+        }
+      ]
+    },
+    {
+      "id": "cargo-balance",
+      "title": "CARGO BALANCE",
+      "genre": "management",
+      "edited": false,
+      "outcome": "first stage cleared",
+      "prg_sha256": "3bc1c55b97885ac9ade271fcfa25dda3cbc55996775cc3a87e0a3fbf9aa26380",
+      "seconds": 32.533,
+      "video": {
+        "path": "game-media/cargo-balance/play.mp4",
+        "sha256": "6210baf82fcf7666f747a1c4a5a7b81772e025dc0ef3c48ea401311fa77b3404"
+      },
+      "images": [
+        {
+          "path": "game-media/cargo-balance/demo-start.png",
+          "sha256": "6f0291336190d46a468856c2f1c32e0fb8a6032c723e86076ae88a699a3bbe53"
+        },
+        {
+          "path": "game-media/cargo-balance/demo-play.png",
+          "sha256": "baac73c07ec6c1dc880c0cb9d3681657d5b45fc6166cabf9791b32d4f38b6db8"
+        },
+        {
+          "path": "game-media/cargo-balance/demo-clear.png",
+          "sha256": "63b4547dc7d6659299642cb5d4c6eb48edc1688a227fe78a4ad12b4451f94cda"
+        }
+      ]
+    },
+    {
+      "id": "peg-garden",
+      "title": "PEG GARDEN",
+      "genre": "puzzle",
+      "edited": true,
+      "outcome": "first stage cleared",
+      "prg_sha256": "afc2492a1ed854eb796ddbddca0196618edb63a6a565e81e42747291c1e549cf",
+      "seconds": 30.0,
+      "video": {
+        "path": "game-media/peg-garden/play.mp4",
+        "sha256": "3816ae997441aae0b5e0b9d43372389cd95eac01cb2d23c2e2a0d6f4e7e4f9b2"
+      },
+      "images": [
+        {
+          "path": "game-media/peg-garden/demo-start.png",
+          "sha256": "23f3d062fb14355d1f2a98638f112e3b4d6d194d5a254a6ed5dfc281b24adc68"
+        },
+        {
+          "path": "game-media/peg-garden/demo-play.png",
+          "sha256": "f87bb4cd8065863e41f0edcb3986bf94ee7cebd8d20c08168197f2a5b515ce28"
+        },
+        {
+          "path": "game-media/peg-garden/demo-clear.png",
+          "sha256": "4fce005669d80f8de67049217866d6c5e3d33b8dd64a94d8d6c2a0f935850aae"
+        }
+      ]
+    },
+    {
+      "id": "number-vault",
+      "title": "NUMBER VAULT",
+      "genre": "puzzle",
+      "edited": false,
+      "outcome": "first stage cleared",
+      "prg_sha256": "05ec0f50e649b567d3745a3b09aec9bbd6cab0baa8726d39617fc11b936239a2",
+      "seconds": 30.0,
+      "video": {
+        "path": "game-media/number-vault/play.mp4",
+        "sha256": "c16b4f1000c52e6937f14af3467d145c9198e7e1c3e760f84ed986f734522a5c"
+      },
+      "images": [
+        {
+          "path": "game-media/number-vault/demo-start.png",
+          "sha256": "827fd603f3d56d3b55ddfbf1bef30d16ce512c0525d89335ccc1f2b238a06acb"
+        },
+        {
+          "path": "game-media/number-vault/demo-play.png",
+          "sha256": "6f2a2c8aa2f06e62b9b454815eec12b83dafb72757225d33a34f9a618e35ec35"
+        },
+        {
+          "path": "game-media/number-vault/demo-clear.png",
+          "sha256": "4417706a3d56925fd033260ed32077632e8f94da2de053626fa3fbfa32aed90e"
+        }
+      ]
+    },
+    {
+      "id": "phase-pairs",
+      "title": "PHASE PAIRS",
+      "genre": "puzzle",
+      "edited": false,
+      "outcome": "first stage cleared",
+      "prg_sha256": "1e10e5e16b216fea2c873288fb7db6b167a9adbcc35ba350492cc2fb4f517e0a",
+      "seconds": 32.9,
+      "video": {
+        "path": "game-media/phase-pairs/play.mp4",
+        "sha256": "55126353f6f3255dd875d1d9b87027b4d63eef7b7157e504caddf9dcc516140e"
+      },
+      "images": [
+        {
+          "path": "game-media/phase-pairs/demo-start.png",
+          "sha256": "9765073bca23297f823d32bda87bc8e1e06d81c77225f3a0bae1f3463e603812"
+        },
+        {
+          "path": "game-media/phase-pairs/demo-play.png",
+          "sha256": "2f4a9a2961c609b8746961f047fbdd5d459c176d1ffc2bf9b989fc943b4c476e"
+        },
+        {
+          "path": "game-media/phase-pairs/demo-clear.png",
+          "sha256": "489b189db2ed925f2c02f133334a195e7b3872389acca219c3681eebcdd8e98d"
+        }
+      ]
+    },
+    {
+      "id": "fuse-box",
+      "title": "FUSE BOX",
+      "genre": "puzzle",
+      "edited": false,
+      "outcome": "first stage cleared",
+      "prg_sha256": "59080404d2780e50db620a3e33b484bfdab6e8191b5f43e9cb364bd24a96ff50",
+      "seconds": 32.8,
+      "video": {
+        "path": "game-media/fuse-box/play.mp4",
+        "sha256": "5ceaa8bb5bbf3075adb39efa768d38aef01cfaca412ed12d8f60e74c3efb38c1"
+      },
+      "images": [
+        {
+          "path": "game-media/fuse-box/demo-start.png",
+          "sha256": "499855b7d1458f39f66325b5075afdfe5605130f4155673f01cc190ae2a5314f"
+        },
+        {
+          "path": "game-media/fuse-box/demo-play.png",
+          "sha256": "0aaeac2e3d8077e2bf8f732b12d29c339ec3d87d5bfdb127c11da271653524ac"
+        },
+        {
+          "path": "game-media/fuse-box/demo-clear.png",
+          "sha256": "af921266142e5a0628ae8826ae7f5e26be7cb4fe7fddf010bbdbcc4b53455f08"
+        }
+      ]
+    },
+    {
+      "id": "sand-rescue",
+      "title": "SAND RESCUE",
+      "genre": "tactics",
+      "edited": false,
+      "outcome": "first stage cleared",
+      "prg_sha256": "d5a77c1c0a81c394cfe83c235479e73f72ceb28d228edc5dae554db229a80727",
+      "seconds": 30.0,
+      "video": {
+        "path": "game-media/sand-rescue/play.mp4",
+        "sha256": "641ddb68fce3d069088abf56c3d9e38888081597bb266198397b688edf8b3a34"
+      },
+      "images": [
+        {
+          "path": "game-media/sand-rescue/demo-start.png",
+          "sha256": "e6136abf972a9b09323f1a0db82a2d98a51f1eb0dfb9dc9e649224298c923ec4"
+        },
+        {
+          "path": "game-media/sand-rescue/demo-play.png",
+          "sha256": "94e01bdc439267dd4aadb8f478a032b83b19c7ef969c771f49a48072c932fb39"
+        },
+        {
+          "path": "game-media/sand-rescue/demo-clear.png",
+          "sha256": "00bad1dcfcaae0e07cc53171d9678c8a1f035601bdddd6477c756352ab460ece"
+        }
+      ]
+    },
+    {
+      "id": "word-foundry",
+      "title": "WORD FOUNDRY",
+      "genre": "puzzle",
+      "edited": true,
+      "outcome": "first stage cleared",
+      "prg_sha256": "5025e7d74f05afc21526644018556e6a0d4accb06ad804e4eea1cac1d372d12d",
+      "seconds": 30.0,
+      "video": {
+        "path": "game-media/word-foundry/play.mp4",
+        "sha256": "3e5dd50744953e1fdd48bdfa5d7481fafa94910d54e3b6633b57c2d96fae106d"
+      },
+      "images": [
+        {
+          "path": "game-media/word-foundry/demo-start.png",
+          "sha256": "5795c7b50f487affff1e86e7b69c65f9369f7c8d5858a6d54a6b515d9cd0f048"
+        },
+        {
+          "path": "game-media/word-foundry/demo-play.png",
+          "sha256": "afb1ebbb4cda6ad58881c1fc827e69fec83032563f7c7433ec9206a6e1ec2e07"
+        },
+        {
+          "path": "game-media/word-foundry/demo-clear.png",
+          "sha256": "3f6ef987dc3f39d47fe9e38b0385c18e78cb2e6879e0301ae93b63f6a15a03e7"
+        }
+      ]
+    },
+    {
+      "id": "relic-dive",
+      "title": "RELIC DIVE",
+      "genre": "exploration",
+      "edited": true,
+      "outcome": "first floor completed; entered floor 2",
+      "prg_sha256": "3b3c881ca7ee9a70987bacccfef8a89ad3e6ba3148f01447b8b060b3785bf7ee",
+      "seconds": 30.0,
+      "video": {
+        "path": "game-media/relic-dive/play.mp4",
+        "sha256": "0763c186b18ca73fb0f169500296edc33831d7aed5291f59c82c413afa14c182"
+      },
+      "images": [
+        {
+          "path": "game-media/relic-dive/demo-start.png",
+          "sha256": "eb65ae0d2fac408ba591e0f96cce572407b1f27e718b028f309c2c97ad805e2f"
+        },
+        {
+          "path": "game-media/relic-dive/demo-play.png",
+          "sha256": "0e3c635c47207a9b6432051aae8dabe5770707c776a1bdc5d0776a7bdde4f857"
+        },
+        {
+          "path": "game-media/relic-dive/demo-clear.png",
+          "sha256": "ecd2bc31ec92951e7c797861d8f17e24f7dcc115ef09e9bfef8510feda83fd3d"
+        }
+      ]
+    }
+  ]
+}

@@ -90,6 +90,51 @@ def copy_games(source: Path, destination: Path) -> None:
         shutil.copy2(path, target)
 
 
+def media_files(web_root: Path) -> list[Path]:
+    root = web_root / "game-media"
+    manifest = root / "catalog.json"
+    catalog = json.loads(manifest.read_text(encoding="utf-8"))
+    playable = json.loads((web_root / "games/catalog.json").read_text())
+    programs = {game["id"]: game["sha256"] for game in playable["games"]}
+    if catalog.get("schemaVersion") != 1 or not isinstance(catalog.get("games"), list):
+        raise RuntimeError("invalid public media catalog")
+    paths = [manifest, root / "LICENSE.txt"]
+    seen = set()
+    for game in catalog["games"]:
+        game_id = game.get("id")
+        if game_id not in programs or game_id in seen:
+            raise RuntimeError("unknown or duplicate media game")
+        seen.add(game_id)
+        if (
+            game.get("prg_sha256") != programs[game_id]
+            or not 25 <= game.get("seconds", 0) <= 35
+        ):
+            raise RuntimeError("stale media program or invalid duration")
+        images = game.get("images", [])
+        if len(images) != 3 or not isinstance(game.get("edited"), bool):
+            raise RuntimeError("media needs three screenshots and edit disclosure")
+        assets = [game["video"], *images]
+        names = ["play.mp4", "demo-start.png", "demo-play.png", "demo-clear.png"]
+        for asset, name in zip(assets, names):
+            expected = f"game-media/{game_id}/{name}"
+            if asset.get("path") != expected:
+                raise RuntimeError("invalid public media path")
+            path = web_root / expected
+            data = path.read_bytes()
+            if not 8 <= len(data) <= 10_000_000:
+                raise RuntimeError("invalid public media size")
+            if (name.endswith(".png") and data[:8] != b"\x89PNG\r\n\x1a\n") or (
+                name.endswith(".mp4") and data[4:8] != b"ftyp"
+            ):
+                raise RuntimeError("invalid public media format")
+            if hashlib.sha256(data).hexdigest() != asset.get("sha256"):
+                raise RuntimeError("public media hash mismatch")
+            paths.append(path)
+    if seen != set(programs) or not paths[1].is_file():
+        raise RuntimeError("incomplete public game media")
+    return paths
+
+
 def build_dist() -> Path:
     javascript, wasm = build_wasm()
     if DIST.exists():
@@ -103,6 +148,10 @@ def build_dist() -> Path:
             shutil.copy2(source, DIST / source.name)
 
     copy_games(WEB_SOURCE, DIST)
+    for source in media_files(WEB_SOURCE):
+        target = DIST / source.relative_to(WEB_SOURCE)
+        target.parent.mkdir(parents=True, exist_ok=True)
+        shutil.copy2(source, target)
     shutil.copy2(WEB_SOURCE / "presentation.mp4", DIST / "presentation.mp4")
     wasm_dist = DIST / "wasm"
     wasm_dist.mkdir()
@@ -127,6 +176,10 @@ def verify_dist(dist: Path) -> None:
     actual_games = {p for p in (dist / "games").rglob("*") if p.is_file()}
     if actual_games != expected_games:
         raise RuntimeError("unlisted asset reached the public game directory")
+    expected_media = set(media_files(dist))
+    actual_media = {p for p in (dist / "game-media").rglob("*") if p.is_file()}
+    if actual_media != expected_media:
+        raise RuntimeError("unlisted asset reached the public media directory")
     worker = (dist / "worker.js").read_text(encoding="utf-8").lower()
     if "pyodide" in worker or "python/" in worker:
         raise RuntimeError("worker still references the Python/Pyodide runtime")

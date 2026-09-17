@@ -1,0 +1,119 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>JR-100 Game Videos</title>
+  <style>
+    :root { color-scheme: dark; }
+    * { box-sizing: border-box; }
+    body { margin: 0 auto; max-width: 1200px; padding: 28px 24px 64px; background: #101214; color: #edf0ed; font: 16px/1.6 system-ui, sans-serif; }
+    a { color: #a9dfb0; text-underline-offset: 3px; }
+    h1 { margin-bottom: 0; font-size: clamp(1.8rem, 5vw, 2.6rem); }
+    h2 { margin: 0; font-size: 1.5rem; }
+    .muted { color: #b6c0b8; }
+    .player { max-width: 816px; margin: 32px auto; scroll-margin-top: 20px; }
+    video { display: block; width: 100%; height: auto; background: #000; margin-top: 16px; }
+    nav { display: flex; flex-wrap: wrap; gap: 12px 24px; margin: 16px 0; }
+    .shots { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+    .shots img, .card img { width: 100%; height: auto; display: block; image-rendering: pixelated; }
+    input { width: 100%; padding: 12px 14px; margin: 12px 0 24px; border: 1px solid #56635a; border-radius: 4px; background: #171c18; color: inherit; font: inherit; }
+    .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(245px, 1fr)); gap: 20px; }
+    .card { display: block; overflow: hidden; border: 1px solid #37423b; border-radius: 4px; background: #181e1a; color: inherit; text-decoration: none; }
+    .card:hover, .card:focus-visible { border-color: #a9dfb0; outline: 2px solid #a9dfb0; }
+    .card strong, .card span { display: block; padding: 0 14px; }
+    .card strong { padding-top: 12px; }
+    .card span { padding-bottom: 12px; font-size: .9rem; color: #b6c0b8; }
+    [hidden] { display: none !important; }
+  </style>
+</head>
+<body>
+  <header>
+    <a href="https://github.com/zabaglione/jr100dev/wiki">Game guides</a> / <a href="./">Emulator</a>
+    <h1>JR-100 Game Videos</h1>
+    <p class="muted">51 games. Three screenshots and about 30 seconds of gameplay for each.</p>
+  </header>
+  <section class="player" id="player" hidden aria-label="Selected game video">
+    <h2 id="game-title"></h2>
+    <video id="video" controls playsinline preload="metadata" width="816" height="624"></video>
+    <p id="description"></p>
+    <nav><a id="play">Play this game</a><a id="guide">How to play</a><a id="download" download>Download video</a></nav>
+    <div class="shots" id="shots"></div>
+    <p class="muted">Automated keyboard replay with pauses between decisions. Original game speed and sound. No ROM is needed to watch; playing requires your own BASIC ROM.</p>
+  </section>
+  <label for="search">Find a game</label>
+  <input id="search" type="search" placeholder="Search by title" autocomplete="off">
+  <p id="status" role="status">Loading videos...</p>
+  <div id="games" class="grid"></div>
+  <script type="module">
+    const byId = (id) => document.getElementById(id);
+    let games = [];
+    function select(game, scroll = false) {
+      byId("player").hidden = false;
+      byId("game-title").textContent = game.title;
+      const video = byId("video");
+      video.pause();
+      video.src = game.video.path;
+      video.poster = game.images[1].path;
+      video.setAttribute("aria-label", `${game.title} gameplay`);
+      byId("description").textContent = `${Math.round(game.seconds)} seconds · ${game.outcome}. ${game.edited ? 'Digest: middle sections omitted; cuts are marked LATER.' : 'Continuous play from the title to the result.'}`;
+      byId("play").href = `./?game=${game.id}`;
+      byId("guide").href = `https://github.com/zabaglione/jr100dev/wiki/${game.id.toUpperCase()}`;
+      byId("download").href = game.video.path;
+      byId("shots").replaceChildren(...game.images.map((asset, i) => {
+        const link = document.createElement("a");
+        link.href = asset.path;
+        const image = document.createElement("img");
+        image.src = asset.path;
+        image.alt = `${game.title}: ${['start', 'playing', 'goal reached'][i]}`;
+        image.width = 816; image.height = 624;
+        link.append(image);
+        return link;
+      }));
+      if (scroll) byId("player").scrollIntoView({behavior: "smooth"});
+    }
+    function render() {
+      const query = byId("search").value.trim().toLowerCase();
+      const matches = games.filter((game) => game.title.toLowerCase().includes(query));
+      byId("status").textContent = `${matches.length} ${matches.length === 1 ? 'game' : 'games'}`;
+      byId("games").replaceChildren(...matches.map((game) => {
+        const card = document.createElement("a");
+        card.className = "card";
+        card.href = `?game=${game.id}`;
+        card.addEventListener("click", (event) => {
+          if (event.ctrlKey || event.metaKey || event.shiftKey || event.altKey) return;
+          event.preventDefault();
+          history.pushState(null, "", card.href);
+          select(game, true);
+        });
+        const image = document.createElement("img");
+        image.src = game.images[1].path;
+        image.alt = `${game.title} gameplay`;
+        image.loading = "lazy"; image.width = 816; image.height = 624;
+        const title = document.createElement("strong"); title.textContent = game.title;
+        const info = document.createElement("span");
+        info.textContent = `${Math.round(game.seconds)} sec · ${game.edited ? 'Digest' : 'Full stage'} · Sound`;
+        card.append(image, title, info);
+        return card;
+      }));
+    }
+    function fromLocation() {
+      const id = new URLSearchParams(location.search).get("game");
+      const game = games.find((item) => item.id === id);
+      if (game) select(game);
+      else { byId("video").pause(); byId("player").hidden = true; }
+    }
+    try {
+      const response = await fetch("game-media/catalog.json");
+      if (!response.ok) throw new Error("Catalog request failed");
+      const catalog = await response.json();
+      games = catalog.games;
+      render(); fromLocation();
+      byId("search").addEventListener("input", render);
+      window.addEventListener("popstate", fromLocation);
+    } catch {
+      byId("status").textContent = "Videos could not be loaded. Please reload this page.";
+    }
+  </script>
+</body>
+</html>

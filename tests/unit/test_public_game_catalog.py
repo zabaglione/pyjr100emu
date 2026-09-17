@@ -70,3 +70,59 @@ def test_modified_artifact_cannot_build(tmp_path):
     artifact.write_bytes(b"PROGmodified")
     with pytest.raises(RuntimeError, match="hash mismatch"):
         build.catalog_files(tmp_path)
+
+
+def fixture_media(root):
+    _, _, program = fixture_catalog(root)
+    folder = root / "game-media/test-game"
+    folder.mkdir(parents=True)
+    assets = []
+    for name in ("play.mp4", "demo-start.png", "demo-play.png", "demo-clear.png"):
+        data = (
+            b"\x00\x00\x00\x10ftypfixture"
+            if name.endswith("mp4")
+            else b"\x89PNG\r\n\x1a\nfixture"
+        )
+        (folder / name).write_bytes(data)
+        assets.append(
+            {
+                "path": f"game-media/test-game/{name}",
+                "sha256": hashlib.sha256(data).hexdigest(),
+            }
+        )
+    entry = {
+        "id": "test-game",
+        "prg_sha256": program["sha256"],
+        "seconds": 30,
+        "edited": False,
+        "video": assets[0],
+        "images": assets[1:],
+    }
+    manifest = root / "game-media/catalog.json"
+    manifest.write_text(json.dumps({"schemaVersion": 1, "games": [entry]}))
+    (root / "game-media/LICENSE.txt").write_text("Test fixture license")
+    return manifest, entry
+
+
+def test_media_allows_only_catalogued_assets(tmp_path):
+    fixture_media(tmp_path)
+    (tmp_path / "game-media/unlisted.bin").write_bytes(b"private fixture")
+    files = build.media_files(tmp_path)
+    assert len(files) == 6
+    assert all(path.name != "unlisted.bin" for path in files)
+
+
+@pytest.mark.parametrize(
+    "patch",
+    [
+        {"seconds": 10},
+        {"images": []},
+        {"prg_sha256": "0" * 64},
+        {"video": {"path": "../private.mp4", "sha256": "0" * 64}},
+    ],
+)
+def test_incomplete_or_unsafe_media_cannot_build(tmp_path, patch):
+    manifest, entry = fixture_media(tmp_path)
+    manifest.write_text(json.dumps({"schemaVersion": 1, "games": [entry | patch]}))
+    with pytest.raises(RuntimeError):
+        build.media_files(tmp_path)
