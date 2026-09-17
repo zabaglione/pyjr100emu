@@ -1276,11 +1276,11 @@
       "genre": "puzzle",
       "edited": false,
       "outcome": "first stage cleared",
-      "prg_sha256": "59080404d2780e50db620a3e33b484bfdab6e8191b5f43e9cb364bd24a96ff50",
-      "seconds": 32.8,
+      "prg_sha256": "72d13160d54e001e0c8aa874019be17ca00d4dc113d3ae3d874c3f637b19721e",
+      "seconds": 31.467,
       "video": {
         "path": "game-media/fuse-box/play.mp4",
-        "sha256": "5ceaa8bb5bbf3075adb39efa768d38aef01cfaca412ed12d8f60e74c3efb38c1"
+        "sha256": "690db443fef6baa8959321de2193707ee736b40efa8de3b1db1e85b2e2c63cdf"
       },
       "images": [
         {
@@ -1289,11 +1289,11 @@
         },
         {
           "path": "game-media/fuse-box/demo-play.png",
-          "sha256": "0aaeac2e3d8077e2bf8f732b12d29c339ec3d87d5bfdb127c11da271653524ac"
+          "sha256": "668dd283956cdd6b5ed94d766c42be879f6e6c52f9c9fa94ce43b9ed1ad1b23d"
         },
         {
           "path": "game-media/fuse-box/demo-clear.png",
-          "sha256": "af921266142e5a0628ae8826ae7f5e26be7cb4fe7fddf010bbdbcc4b53455f08"
+          "sha256": "30bfdaf1e6bb26b48c51c49476deb43139440886af110a67e4634ca6a0c81b3e"
         }
       ]
     },

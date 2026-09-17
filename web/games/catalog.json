@@ -474,12 +474,12 @@
     {
       "id": "fuse-box",
       "title": "FUSE BOX",
-      "version": "1.5.0",
+      "version": "1.6.0",
       "ramKiB": 16,
       "entry": 768,
-      "path": "games/fuse-box/1.5.0/fuse-box.prg",
-      "sha256": "59080404d2780e50db620a3e33b484bfdab6e8191b5f43e9cb364bd24a96ff50",
-      "sourceUrl": "https://github.com/zabaglione/jr100dev/tree/c26ab733372948a4fb53841d8e80bf00a2d0fbc5/games/fuse_box"
+      "path": "games/fuse-box/1.6.0/fuse-box.prg",
+      "sha256": "72d13160d54e001e0c8aa874019be17ca00d4dc113d3ae3d874c3f637b19721e",
+      "sourceUrl": "https://github.com/zabaglione/jr100dev/tree/cd101fc92010e89c0f502b9b25cb38d823906000/games/fuse_box"
     },
     {
       "id": "sand-rescue",
