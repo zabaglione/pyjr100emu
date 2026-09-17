@@ -1277,10 +1277,10 @@
       "edited": false,
       "outcome": "first stage cleared",
       "prg_sha256": "72d13160d54e001e0c8aa874019be17ca00d4dc113d3ae3d874c3f637b19721e",
-      "seconds": 31.467,
+      "seconds": 31.633,
       "video": {
         "path": "game-media/fuse-box/play.mp4",
-        "sha256": "690db443fef6baa8959321de2193707ee736b40efa8de3b1db1e85b2e2c63cdf"
+        "sha256": "cb8b0b5dd07adabb42f0d13567522436f0b8df390f90ae03382a533168f6c49c"
       },
       "images": [
         {
@@ -1289,11 +1289,11 @@
         },
         {
           "path": "game-media/fuse-box/demo-play.png",
-          "sha256": "668dd283956cdd6b5ed94d766c42be879f6e6c52f9c9fa94ce43b9ed1ad1b23d"
+          "sha256": "e56709141539202f2daaf3b99c9ad695bfdd03982543d99eeaea86d9603a8f0a"
         },
         {
           "path": "game-media/fuse-box/demo-clear.png",
-          "sha256": "30bfdaf1e6bb26b48c51c49476deb43139440886af110a67e4634ca6a0c81b3e"
+          "sha256": "53c1e603adda116a9ec3a62d821dfdb7b6c05aadaed5d5ec0ace7fee3feedef0"
         }
       ]
     },
