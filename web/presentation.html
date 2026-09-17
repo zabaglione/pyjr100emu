@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>JR-100 Games - Motion and Sound</title>
+  <style>
+    body { max-width: 816px; margin: 32px auto; padding: 0 20px; background: #101214; color: #eee; font: 17px/1.6 system-ui, sans-serif; }
+    h1 { font-size: 1.8rem; line-height: 1.2; }
+    video { display: block; width: 100%; height: auto; background: #000; }
+    a { color: #9fcfff; }
+    nav { display: flex; flex-wrap: wrap; gap: 12px 24px; margin: 24px 0; }
+  </style>
+</head>
+<body>
+  <h1>JR-100 Games: Motion and Sound</h1>
+  <p>A 24-second recording of actual emulator frames and audio.</p>
+  <video controls playsinline preload="metadata" width="816" height="624" aria-label="JR-100 game motion and sound showcase">
+    <source src="presentation.mp4" type="video/mp4">
+    <a href="presentation.mp4">Download the video</a>
+  </video>
+  <nav aria-label="Play the featured games">
+    <a href="./?game=magnet-vault">MAGNET VAULT</a>
+    <a href="./?game=echo-parry">ECHO PARRY</a>
+    <a href="./?game=corner-crown">CORNER CROWN</a>
+    <a href="./?game=star-lance">STAR LANCE</a>
+  </nav>
+  <p>Playing requires your own BASIC ROM, stored only in your browser.</p>
+  <p><a href="https://github.com/zabaglione/jr100dev/wiki/Presentation">Showcase guide</a> / <a href="https://github.com/zabaglione/jr100dev/wiki">All 51 games</a></p>
+</body>
+</html>

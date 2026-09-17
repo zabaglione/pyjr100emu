@@ -103,6 +103,7 @@ def build_dist() -> Path:
             shutil.copy2(source, DIST / source.name)
 
     copy_games(WEB_SOURCE, DIST)
+    shutil.copy2(WEB_SOURCE / "presentation.mp4", DIST / "presentation.mp4")
     wasm_dist = DIST / "wasm"
     wasm_dist.mkdir()
     shutil.copy2(javascript, wasm_dist / javascript.name)
