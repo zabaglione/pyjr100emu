@@ -105,10 +105,11 @@ def media_files(web_root: Path) -> list[Path]:
         if game_id not in programs or game_id in seen:
             raise RuntimeError("unknown or duplicate media game")
         seen.add(game_id)
-        if (
-            game.get("prg_sha256") != programs[game_id]
-            or not 25 <= game.get("seconds", 0) <= 35
-        ):
+        seconds = game.get("seconds", 0)
+        valid_duration = seconds >= 25 and (
+            not game.get("edited") if game_id == "peg-garden" else seconds <= 35
+        )
+        if game.get("prg_sha256") != programs[game_id] or not valid_duration:
             raise RuntimeError("stale media program or invalid duration")
         images = game.get("images", [])
         if len(images) != 3 or not isinstance(game.get("edited"), bool):

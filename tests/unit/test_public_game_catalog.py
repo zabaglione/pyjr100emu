@@ -14,18 +14,18 @@ build = importlib.util.module_from_spec(spec)
 spec.loader.exec_module(build)
 
 
-def fixture_catalog(root):
+def fixture_catalog(root, game_id="test-game"):
     data = b"PROGfixture"
-    artifact = root / "games/test-game/1.0.0/test-game.prg"
+    artifact = root / f"games/{game_id}/1.0.0/{game_id}.prg"
     artifact.parent.mkdir(parents=True)
     artifact.write_bytes(data)
     (root / "games/LICENSE.txt").write_text("Test fixture license")
     entry = {
-        "id": "test-game",
+        "id": game_id,
         "version": "1.0.0",
         "ramKiB": 16,
         "entry": 768,
-        "path": "games/test-game/1.0.0/test-game.prg",
+        "path": f"games/{game_id}/1.0.0/{game_id}.prg",
         "sha256": hashlib.sha256(data).hexdigest(),
     }
     manifest = root / "games/catalog.json"
@@ -72,9 +72,9 @@ def test_modified_artifact_cannot_build(tmp_path):
         build.catalog_files(tmp_path)
 
 
-def fixture_media(root):
-    _, _, program = fixture_catalog(root)
-    folder = root / "game-media/test-game"
+def fixture_media(root, game_id="test-game"):
+    _, _, program = fixture_catalog(root, game_id)
+    folder = root / f"game-media/{game_id}"
     folder.mkdir(parents=True)
     assets = []
     for name in ("play.mp4", "demo-start.png", "demo-play.png", "demo-clear.png"):
@@ -86,12 +86,12 @@ def fixture_media(root):
         (folder / name).write_bytes(data)
         assets.append(
             {
-                "path": f"game-media/test-game/{name}",
+                "path": f"game-media/{game_id}/{name}",
                 "sha256": hashlib.sha256(data).hexdigest(),
             }
         )
     entry = {
-        "id": "test-game",
+        "id": game_id,
         "prg_sha256": program["sha256"],
         "seconds": 30,
         "edited": False,
@@ -126,3 +126,24 @@ def test_incomplete_or_unsafe_media_cannot_build(tmp_path, patch):
     manifest.write_text(json.dumps({"schemaVersion": 1, "games": [entry | patch]}))
     with pytest.raises(RuntimeError):
         build.media_files(tmp_path)
+
+
+@pytest.mark.parametrize(
+    ("game_id", "seconds", "edited", "allowed"),
+    [
+        ("peg-garden", 44.533, False, True),
+        ("peg-garden", 90, False, True),
+        ("peg-garden", 30, True, False),
+        ("peg-garden", 44.533, True, False),
+        ("test-game", 44.533, False, False),
+    ],
+)
+def test_full_length_peg_garden_media(tmp_path, game_id, seconds, edited, allowed):
+    manifest, entry = fixture_media(tmp_path, game_id)
+    entry.update(seconds=seconds, edited=edited)
+    manifest.write_text(json.dumps({"schemaVersion": 1, "games": [entry]}))
+    if allowed:
+        assert len(build.media_files(tmp_path)) == 6
+    else:
+        with pytest.raises(RuntimeError, match="invalid duration"):
+            build.media_files(tmp_path)

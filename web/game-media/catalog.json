@@ -1193,13 +1193,13 @@
       "id": "peg-garden",
       "title": "PEG GARDEN",
       "genre": "puzzle",
-      "edited": true,
+      "edited": false,
       "outcome": "first stage cleared",
       "prg_sha256": "afc2492a1ed854eb796ddbddca0196618edb63a6a565e81e42747291c1e549cf",
-      "seconds": 30.0,
+      "seconds": 44.533,
       "video": {
         "path": "game-media/peg-garden/play.mp4",
-        "sha256": "3816ae997441aae0b5e0b9d43372389cd95eac01cb2d23c2e2a0d6f4e7e4f9b2"
+        "sha256": "683fd77a7716fb81c87e63a15000d41658d5b5c8fb5a96c8097a8ee6798ad00b"
       },
       "images": [
         {
