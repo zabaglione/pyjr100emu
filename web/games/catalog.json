@@ -464,12 +464,12 @@
     {
       "id": "phase-pairs",
       "title": "PHASE PAIRS",
-      "version": "1.5.0",
+      "version": "1.6.0",
       "ramKiB": 16,
       "entry": 768,
-      "path": "games/phase-pairs/1.5.0/phase-pairs.prg",
-      "sha256": "1e10e5e16b216fea2c873288fb7db6b167a9adbcc35ba350492cc2fb4f517e0a",
-      "sourceUrl": "https://github.com/zabaglione/jr100dev/tree/c26ab733372948a4fb53841d8e80bf00a2d0fbc5/games/phase_pairs"
+      "path": "games/phase-pairs/1.6.0/phase-pairs.prg",
+      "sha256": "2bb70bf7850ada22ec51b095be03521708184d6765134d8b69e8a8e623b100ab",
+      "sourceUrl": "https://github.com/zabaglione/jr100dev/tree/094401ef8abbb96136ca7533d0ab24b4a728893c/games/phase_pairs"
     },
     {
       "id": "fuse-box",
