@@ -15,7 +15,7 @@
     .player { max-width: 816px; margin: 32px auto; scroll-margin-top: 20px; }
     video { display: block; width: 100%; height: auto; background: #000; margin-top: 16px; }
     nav { display: flex; flex-wrap: wrap; gap: 12px 24px; margin: 16px 0; }
-    .shots { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+    .shots { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-top: 16px; }
     .shots img, .card img { width: 100%; height: auto; display: block; image-rendering: pixelated; }
     input { width: 100%; padding: 12px 14px; margin: 12px 0 24px; border: 1px solid #56635a; border-radius: 4px; background: #171c18; color: inherit; font: inherit; }
     .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(245px, 1fr)); gap: 20px; }
@@ -35,10 +35,11 @@
   </header>
   <section class="player" id="player" hidden aria-label="Selected game video">
     <h2 id="game-title"></h2>
+    <div class="shots" id="shots"></div>
+    <p><a id="watch" href="#video">Watch gameplay video</a></p>
     <video id="video" controls playsinline preload="metadata" width="816" height="624"></video>
     <p id="description"></p>
     <nav><a id="play">Play this game</a><a id="guide">How to play</a><a id="download" download>Download video</a></nav>
-    <div class="shots" id="shots"></div>
     <p class="muted">Automated keyboard replay with pauses between decisions. Original game speed and sound. No ROM is needed to watch; playing requires your own BASIC ROM.</p>
   </section>
   <label for="search">Find a game</label>
@@ -56,6 +57,7 @@
       video.src = game.video.path;
       video.poster = game.images[1].path;
       video.setAttribute("aria-label", `${game.title} gameplay`);
+      byId("watch").textContent = `Watch gameplay video (${Math.round(game.seconds)} seconds, with sound)`;
       byId("description").textContent = `${Math.round(game.seconds)} seconds · ${game.outcome}. ${game.edited ? 'Digest: middle sections omitted; cuts are marked LATER.' : 'Continuous play from the title to the result.'}`;
       byId("play").href = `./?game=${game.id}`;
       byId("guide").href = `https://github.com/zabaglione/jr100dev/wiki/${game.id.toUpperCase()}`;
