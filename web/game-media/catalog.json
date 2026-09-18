@@ -169,24 +169,24 @@
       "genre": "tactics",
       "edited": false,
       "outcome": "first stage cleared",
-      "prg_sha256": "8ece6f84a8463fa8169d82384a2d35d3d80f4a0613985c89b6cdcee9bc388d3e",
-      "seconds": 31.933,
+      "prg_sha256": "852869ce561cb69978beaebb4e9dd11c06634570100597bc2503336ce1b18366",
+      "seconds": 31.1,
       "video": {
         "path": "game-media/iron-script/play.mp4",
-        "sha256": "710a842af6ab6597d12185e3e441d88f639438135044c8d7d8723256c4372d3e"
+        "sha256": "91ce172fee4f858d07ad980bb333c3c57319ba447b37540c7a328fc53958ec86"
       },
       "images": [
         {
           "path": "game-media/iron-script/demo-start.png",
-          "sha256": "e4c7cbbbfbaf6577429d3c058c2d8bf135ad5bbc2f0297df923ef1bd996a9ff9"
+          "sha256": "2184833672eb1a0800ce45b04e4bc86f5465a23aabdcedd96a16f316cb145a1b"
         },
         {
           "path": "game-media/iron-script/demo-play.png",
-          "sha256": "7ae9a2972d4f69559d75eaed5c565685ac76e6d60e8723ac6ff246b538f7f5a5"
+          "sha256": "b59f427455f5bfdf8e044600e0c41bcf20a5287d745ac807ba8954a538a63f9c"
         },
         {
           "path": "game-media/iron-script/demo-clear.png",
-          "sha256": "8f59355aeefd9e1567c37aaa8d8d33990dfdb6fb796cac92c90a7620391b5807"
+          "sha256": "68b5c2a57dc53db37d3f904dad02a80ed776c70ddc108f1e585a9500f402ade2"
         }
       ]
     },
