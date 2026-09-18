@@ -74,12 +74,12 @@
     {
       "id": "chain-suit",
       "title": "CHAIN SUIT",
-      "version": "1.5.0",
+      "version": "1.6.0",
       "ramKiB": 16,
       "entry": 768,
-      "path": "games/chain-suit/1.5.0/chain-suit.prg",
-      "sha256": "33838e1c9ace0297638178403ba1aa7c73c6f80002b3636b4b427affa23542df",
-      "sourceUrl": "https://github.com/zabaglione/jr100dev/tree/c26ab733372948a4fb53841d8e80bf00a2d0fbc5/games/chain_suit"
+      "path": "games/chain-suit/1.6.0/chain-suit.prg",
+      "sha256": "13d4d6452433814dc6644d1ddd71bec9eafb8c54b887dbfd1915d46a1d4629e3",
+      "sourceUrl": "https://github.com/zabaglione/jr100dev/tree/d335b818981348f2f98b84f4a537683edf028458/games/chain_suit"
     },
     {
       "id": "quiet-route",
@@ -154,22 +154,22 @@
     {
       "id": "prism-trace",
       "title": "PRISM TRACE",
-      "version": "1.5.0",
+      "version": "1.6.0",
       "ramKiB": 16,
       "entry": 768,
-      "path": "games/prism-trace/1.5.0/prism-trace.prg",
-      "sha256": "b5d85d998119d082d46e73f4940fc99f16f001e40134ab7aebdfdab15d400b42",
-      "sourceUrl": "https://github.com/zabaglione/jr100dev/tree/c26ab733372948a4fb53841d8e80bf00a2d0fbc5/games/prism_trace"
+      "path": "games/prism-trace/1.6.0/prism-trace.prg",
+      "sha256": "0b5d213faf4767c637c966c79e2385828643ece2b959fcf526792a61729ae144",
+      "sourceUrl": "https://github.com/zabaglione/jr100dev/tree/d335b818981348f2f98b84f4a537683edf028458/games/prism_trace"
     },
     {
       "id": "tide-bridge",
       "title": "TIDE BRIDGE",
-      "version": "1.5.0",
+      "version": "1.6.0",
       "ramKiB": 16,
       "entry": 768,
-      "path": "games/tide-bridge/1.5.0/tide-bridge.prg",
-      "sha256": "5c339247ddedf1eb699cd224bbe5d176edf2bc4990a4bed9bcf059713c31a705",
-      "sourceUrl": "https://github.com/zabaglione/jr100dev/tree/c26ab733372948a4fb53841d8e80bf00a2d0fbc5/games/tide_bridge"
+      "path": "games/tide-bridge/1.6.0/tide-bridge.prg",
+      "sha256": "7ef866b6d6a0cca328f6170b97f3ec6607490cb7cf693ff17d94d068620db26e",
+      "sourceUrl": "https://github.com/zabaglione/jr100dev/tree/d335b818981348f2f98b84f4a537683edf028458/games/tide_bridge"
     },
     {
       "id": "glyph-shift",

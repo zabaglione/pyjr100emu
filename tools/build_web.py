@@ -107,7 +107,9 @@ def media_files(web_root: Path) -> list[Path]:
         seen.add(game_id)
         seconds = game.get("seconds", 0)
         valid_duration = seconds >= 25 and (
-            not game.get("edited") if game_id == "peg-garden" else seconds <= 35
+            not game.get("edited")
+            if game_id in ("peg-garden", "seed-merge")
+            else seconds <= 35
         )
         if game.get("prg_sha256") != programs[game_id] or not valid_duration:
             raise RuntimeError("stale media program or invalid duration")
