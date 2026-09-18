@@ -424,12 +424,12 @@
     {
       "id": "metro-weave",
       "title": "METRO WEAVE",
-      "version": "1.6.0",
+      "version": "1.7.0",
       "ramKiB": 16,
       "entry": 768,
-      "path": "games/metro-weave/1.6.0/metro-weave.prg",
-      "sha256": "55210c1782210e911de8aa7dcada7cf00dbec67014a2c0d1b710c96c76ce681a",
-      "sourceUrl": "https://github.com/zabaglione/jr100dev/tree/b55dede0560458d720542448b4b2718c8aeb644a/games/metro_weave"
+      "path": "games/metro-weave/1.7.0/metro-weave.prg",
+      "sha256": "8e2b3e6e0871d35859ed561c0c972e005c7a94610bf19631ca5c65430f3a6553",
+      "sourceUrl": "https://github.com/zabaglione/jr100dev/tree/85280ed0d38b3ccbcb9b26657a3300b83f5e009e/games/metro_weave"
     },
     {
       "id": "cargo-balance",

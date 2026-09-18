@@ -1141,24 +1141,24 @@
       "genre": "tactics",
       "edited": false,
       "outcome": "first stage cleared",
-      "prg_sha256": "55210c1782210e911de8aa7dcada7cf00dbec67014a2c0d1b710c96c76ce681a",
-      "seconds": 68.867,
+      "prg_sha256": "8e2b3e6e0871d35859ed561c0c972e005c7a94610bf19631ca5c65430f3a6553",
+      "seconds": 79.567,
       "video": {
         "path": "game-media/metro-weave/play.mp4",
-        "sha256": "73510bc0a653dff52c7c70a0bf4e8885bf346552a62e1527fd3e2df9a486fca5"
+        "sha256": "3c6fc53fab60bb3031535f6d75e178027ea3609521a143af1563114e45db0d5b"
       },
       "images": [
         {
           "path": "game-media/metro-weave/demo-start.png",
-          "sha256": "f2a0e25135b8ca38c65267a12a47afac2986bbfa31f283d7a16e388be93f46d5"
+          "sha256": "4dd49f2e67c161121c847827ceb305f6b614406721a11f9af820779ca399e09c"
         },
         {
           "path": "game-media/metro-weave/demo-play.png",
-          "sha256": "95cff7a7eb743f974f30c9e6bee225b18a920fe7c76fbfca0e261123c34ec95f"
+          "sha256": "3a40fc795f56c10bd22dca95c324c81ab08c453488de94463e678a0a613e0146"
         },
         {
           "path": "game-media/metro-weave/demo-clear.png",
-          "sha256": "7c185fb3f5f0b470b484e4e83b9492b58546e5baecc47272a6a5509220db35de"
+          "sha256": "089e38577329bacecfacfa11ff1adbf0751a707e8caf53e3536143b73f47cc76"
         }
       ]
     },
