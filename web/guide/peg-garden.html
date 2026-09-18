@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>PEG GARDEN · JR-100 Games</title>
+  <meta name="title-en" content="PEG GARDEN · JR-100 Games">
+  <meta name="title-ja" content="PEG GARDEN · JR-100 Games">
+  <meta name="description" content="Jump neighboring stones to clear a garden.">
+  <meta name="description-en" content="Jump neighboring stones to clear a garden.">
+  <meta name="description-ja" content="飛び越しで石を取り除く庭園パズル">
+  <link rel="canonical" href="https://zabaglione.github.io/pyjr100emu/guide/peg-garden.html">
+  <link rel="alternate" hreflang="en" href="https://zabaglione.github.io/pyjr100emu/guide/peg-garden.html?lang=en">
+  <link rel="alternate" hreflang="ja" href="https://zabaglione.github.io/pyjr100emu/guide/peg-garden.html?lang=ja">
+  <link rel="alternate" hreflang="x-default" href="https://zabaglione.github.io/pyjr100emu/guide/peg-garden.html">
+  <script src="language.js"></script>
+  <link rel="stylesheet" href="style.css">
+  <script src="guide.js" defer></script>
+</head>
+<body>
+  <a class="skip" href="#main"><span lang="en" data-language="en">Skip to content</span><span lang="ja" data-language="ja">本文へ</span></a>
+  <header class="wrap masthead">
+    <a class="brand" data-guide-link href="index.html">JR-100 GAMES</a>
+    <nav class="languages" aria-label="Language / 言語">
+      <a data-language-switch href="?lang=en" hreflang="en" lang="en">English</a>
+      <a data-language-switch href="?lang=ja" hreflang="ja" lang="ja">日本語</a>
+    </nav>
+  </header>
+  <div class="wrap"><nav class="utility"><a data-guide-link href="index.html"><span lang="en" data-language="en">All games</span><span lang="ja" data-language="ja">全作品</span></a><a data-guide-link href="controls.html"><span lang="en" data-language="en">Getting started</span><span lang="ja" data-language="ja">操作と起動方法</span></a><a href="../gameplay.html"><span lang="en" data-language="en">Gameplay videos</span><span lang="ja" data-language="ja">プレイ動画</span></a><a href="../"><span lang="en" data-language="en">Emulator</span><span lang="ja" data-language="ja">エミュレーター</span></a></nav></div>
+  <main class="wrap" id="main"><section class="hero">
+      <p class="breadcrumbs"><a data-guide-link href="index.html"><span lang="en" data-language="en">All games</span><span lang="ja" data-language="ja">全作品</span></a> / <span lang="en" data-language="en">Puzzle</span><span lang="ja" data-language="ja">パズル</span></p>
+      <h1>PEG GARDEN</h1><div class="intro" data-language="en" lang="en"><p>Jump over neighboring stones to remove them and reduce the garden to five stones or fewer.</p>
+</div><div class="intro" data-language="ja" lang="ja"><p>隣の石を飛び越して取り除き、石を5個以下に減らす庭園パズルです。</p>
+</div>
+      <nav class="actions"><a class="button primary" href="../?game=peg-garden"><span lang="en" data-language="en">Play this game</span><span lang="ja" data-language="ja">このゲームをプレイ</span></a><a href="https://github.com/zabaglione/jr100dev/tree/main/games/peg_garden"><span lang="en" data-language="en">Source</span><span lang="ja" data-language="ja">ソース</span></a></nav>
+      <p class="note"><span lang="en" data-language="en">To play, set up your own BASIC ROM in the emulator once. Screenshots and videos need no ROM.</span><span lang="ja" data-language="ja">プレイにはエミュレーターで自分のBASIC ROMを一度設定してください。画像と動画の閲覧にはROMは不要です。</span> <a data-guide-link href="controls.html"><span lang="en" data-language="en">Setup and controls</span><span lang="ja" data-language="ja">設定と共通操作</span></a></p>
+    </section>
+    <section class="media" aria-label="Screenshots and video">
+      <div class="shots"><figure><a href="../game-media/peg-garden/demo-start.png"><img src="../game-media/peg-garden/demo-start.png" width="816" height="624" alt="PEG GARDEN — At the start" loading="lazy"></a><figcaption><span lang="en" data-language="en">At the start</span><span lang="ja" data-language="ja">開始時の盤面</span></figcaption></figure><figure><a href="../game-media/peg-garden/demo-play.png"><img src="../game-media/peg-garden/demo-play.png" width="816" height="624" alt="PEG GARDEN — In play" loading="lazy"></a><figcaption><span lang="en" data-language="en">In play</span><span lang="ja" data-language="ja">プレイ中</span></figcaption></figure><figure><a href="../game-media/peg-garden/demo-clear.png"><img src="../game-media/peg-garden/demo-clear.png" width="816" height="624" alt="PEG GARDEN — First goal reached" loading="lazy"></a><figcaption><span lang="en" data-language="en">First goal reached</span><span lang="ja" data-language="ja">最初の目標を達成</span></figcaption></figure></div>
+      <p class="video-link"><a class="button" href="../gameplay.html?game=peg-garden#video"><span lang="en" data-language="en">Watch gameplay with sound (44 seconds)</span><span lang="ja" data-language="ja">音付きプレイ動画を見る（約44秒）</span></a></p>
+      <p class="note"><span lang="en" data-language="en">First stage cleared.</span><span lang="ja" data-language="ja">1ステージのクリアまでを収録。</span></p>
+    </section><article class="manual" data-language="en" lang="en"><h2>Controls and play</h2>
+<p>WASD selects a cell. Press RETURN to select a stone, move to an empty cell two spaces away, then press RETURN again. The stone between the starting and landing cells is removed.</p>
+<p>Directions work on the keyboard or pad; the pad button also acts as RETURN. SPACE opens confirmation to restart this stage. NO is selected initially. Choose with A/D, confirm with RETURN, or cancel with SPACE. Play pauses during confirmation. CTRL+C returns to BASIC.</p>
+<p>The selected stone visibly jumps over its neighbor and lands in the empty hole. Wait for the animation to finish before pressing again.</p>
+<p>The display shows the garden, selected stone, and number remaining.</p>
+<h2>More screenshots</h2>
+<p><img src="https://raw.githubusercontent.com/wiki/zabaglione/jr100dev/images/peg-garden/play-01.png" alt="PEG GARDEN: play 01" loading="lazy" decoding="async" /></p>
+<p><img src="https://raw.githubusercontent.com/wiki/zabaglione/jr100dev/images/peg-garden/play-02.png" alt="PEG GARDEN: play 02" loading="lazy" decoding="async" /></p>
+</article><article class="manual" data-language="ja" lang="ja"><h2>操作と遊び方</h2>
+<p>WASDで位置を選び、RETURNで石を選択し、2マス先の空き位置を選んでRETURNを押します。間の石が取り除かれます。</p>
+<p>方向キーはキーボードまたはパッド、RETURNはパッドのボタンでも操作できます。SPACEでこの面のやり直し確認を開きます。やり直し確認はNOが初期選択です。A/Dで選び、RETURNで確定、SPACEで取り消します。確認中は進行を止めます。CTRL+CでBASICへ戻ります。</p>
+<p>選んだ駒が隣の駒を飛び越え、空いた穴に着地する様子を表示します。演出が終わってから次のキーを押してください。</p>
+<p>庭園の石、選択中の石、残数を表示します。</p>
+<p><img src="https://raw.githubusercontent.com/wiki/zabaglione/jr100dev/images/peg-garden/play-01.png" alt="ゲーム開始時" loading="lazy" decoding="async" /></p>
+<p><img src="https://raw.githubusercontent.com/wiki/zabaglione/jr100dev/images/peg-garden/play-02.png" alt="プレイ中の場面" loading="lazy" decoding="async" /></p>
+</article></main>
+  <footer class="wrap"><p><span lang="en" data-language="en">Made for the JR-100 with standard 16 KB RAM. Emulator-tested; real hardware is unverified.</span><span lang="ja" data-language="ja">標準RAM 16KBのJR-100向け。エミュレーターで検証済みです。実機での動作・音声は未確認です。</span></p><a href="https://github.com/zabaglione/jr100dev/wiki">Wiki</a> · <a href="https://github.com/zabaglione/jr100dev/tree/main/games">Source / MIT License</a></footer>
+</body>
+</html>

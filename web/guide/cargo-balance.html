@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>CARGO BALANCE · JR-100 Games</title>
+  <meta name="title-en" content="CARGO BALANCE · JR-100 Games">
+  <meta name="title-ja" content="CARGO BALANCE · JR-100 Games">
+  <meta name="description" content="Read upcoming weights and balance high fares against the risk of capsizing.">
+  <meta name="description-en" content="Read upcoming weights and balance high fares against the risk of capsizing.">
+  <meta name="description-ja" content="先の荷物を読み、外側の高運賃と転覆を考える6航海">
+  <link rel="canonical" href="https://zabaglione.github.io/pyjr100emu/guide/cargo-balance.html">
+  <link rel="alternate" hreflang="en" href="https://zabaglione.github.io/pyjr100emu/guide/cargo-balance.html?lang=en">
+  <link rel="alternate" hreflang="ja" href="https://zabaglione.github.io/pyjr100emu/guide/cargo-balance.html?lang=ja">
+  <link rel="alternate" hreflang="x-default" href="https://zabaglione.github.io/pyjr100emu/guide/cargo-balance.html">
+  <script src="language.js"></script>
+  <link rel="stylesheet" href="style.css">
+  <script src="guide.js" defer></script>
+</head>
+<body>
+  <a class="skip" href="#main"><span lang="en" data-language="en">Skip to content</span><span lang="ja" data-language="ja">本文へ</span></a>
+  <header class="wrap masthead">
+    <a class="brand" data-guide-link href="index.html">JR-100 GAMES</a>
+    <nav class="languages" aria-label="Language / 言語">
+      <a data-language-switch href="?lang=en" hreflang="en" lang="en">English</a>
+      <a data-language-switch href="?lang=ja" hreflang="ja" lang="ja">日本語</a>
+    </nav>
+  </header>
+  <div class="wrap"><nav class="utility"><a data-guide-link href="index.html"><span lang="en" data-language="en">All games</span><span lang="ja" data-language="ja">全作品</span></a><a data-guide-link href="controls.html"><span lang="en" data-language="en">Getting started</span><span lang="ja" data-language="ja">操作と起動方法</span></a><a href="../gameplay.html"><span lang="en" data-language="en">Gameplay videos</span><span lang="ja" data-language="ja">プレイ動画</span></a><a href="../"><span lang="en" data-language="en">Emulator</span><span lang="ja" data-language="ja">エミュレーター</span></a></nav></div>
+  <main class="wrap" id="main"><section class="hero">
+      <p class="breadcrumbs"><a data-guide-link href="index.html"><span lang="en" data-language="en">All games</span><span lang="ja" data-language="ja">全作品</span></a> / <span lang="en" data-language="en">Management &amp; survival</span><span lang="ja" data-language="ja">経営・サバイバル</span></p>
+      <h1>CARGO BALANCE</h1><div class="intro" data-language="en" lang="en"><p>Load 12 crates into four holds across six voyages. Outer holds pay double fare but exert three times the tilting force of inner holds. Preview the next two weights and allow for wind and the ship's balance limit.</p>
+</div><div class="intro" data-language="ja" lang="ja"><p>12個の荷物を4つの船倉へ積む全6航海。外側は運賃が2倍になる一方、船を傾ける力は内側の3倍です。次の2個の重さを読み、風と許容差に備えます。</p>
+</div>
+      <nav class="actions"><a class="button primary" href="../?game=cargo-balance"><span lang="en" data-language="en">Play this game</span><span lang="ja" data-language="ja">このゲームをプレイ</span></a><a href="https://github.com/zabaglione/jr100dev/tree/main/games/cargo_balance"><span lang="en" data-language="en">Source</span><span lang="ja" data-language="ja">ソース</span></a></nav>
+      <p class="note"><span lang="en" data-language="en">To play, set up your own BASIC ROM in the emulator once. Screenshots and videos need no ROM.</span><span lang="ja" data-language="ja">プレイにはエミュレーターで自分のBASIC ROMを一度設定してください。画像と動画の閲覧にはROMは不要です。</span> <a data-guide-link href="controls.html"><span lang="en" data-language="en">Setup and controls</span><span lang="ja" data-language="ja">設定と共通操作</span></a></p>
+    </section>
+    <section class="media" aria-label="Screenshots and video">
+      <div class="shots"><figure><a href="../game-media/cargo-balance/demo-start.png"><img src="../game-media/cargo-balance/demo-start.png" width="816" height="624" alt="CARGO BALANCE — At the start" loading="lazy"></a><figcaption><span lang="en" data-language="en">At the start</span><span lang="ja" data-language="ja">開始時の盤面</span></figcaption></figure><figure><a href="../game-media/cargo-balance/demo-play.png"><img src="../game-media/cargo-balance/demo-play.png" width="816" height="624" alt="CARGO BALANCE — In play" loading="lazy"></a><figcaption><span lang="en" data-language="en">In play</span><span lang="ja" data-language="ja">プレイ中</span></figcaption></figure><figure><a href="../game-media/cargo-balance/demo-clear.png"><img src="../game-media/cargo-balance/demo-clear.png" width="816" height="624" alt="CARGO BALANCE — First goal reached" loading="lazy"></a><figcaption><span lang="en" data-language="en">First goal reached</span><span lang="ja" data-language="ja">最初の目標を達成</span></figcaption></figure></div>
+      <p class="video-link"><a class="button" href="../gameplay.html?game=cargo-balance#video"><span lang="en" data-language="en">Watch gameplay with sound (42 seconds)</span><span lang="ja" data-language="ja">音付きプレイ動画を見る（約42秒）</span></a></p>
+      <p class="note"><span lang="en" data-language="en">First stage cleared.</span><span lang="ja" data-language="ja">1ステージのクリアまでを収録。</span></p>
+    </section><article class="manual" data-language="en" lang="en"><h2>Controls and play</h2>
+<p>A/D selects a hold; RETURN loads it. Each hold fits four crates. The difference between port and starboard force, including wind, must stay within LIMIT or the ship capsizes. Load all 12 crates to depart.</p>
+<p>Directions work on the keyboard or pad; the pad button also acts as RETURN. SPACE opens confirmation to restart this stage. NO is selected initially. Choose with A/D, confirm with RETURN, or cancel with SPACE. Play pauses during confirmation. CTRL+C returns to BASIC.</p>
+<p>Crates fall from the crane; hull and cargo tilt and sway together. Loading sounds, a capsize explanation, and a departure jingle make the result clear. Wait for animations to finish before pressing again.</p>
+<p>NEXT LOAD is the current crate, NEXT the following two, and LOADED the count aboard. PORT and STARBOARD are forces on each side; WIND adds force to port. FARE is earned passage money. Later voyages narrow the tolerance from 10 to 8.</p>
+<h2>More screenshots</h2>
+<p><img src="https://raw.githubusercontent.com/wiki/zabaglione/jr100dev/images/cargo-balance/play-01.png" alt="CARGO BALANCE: play 01" loading="lazy" decoding="async" /></p>
+<p><img src="https://raw.githubusercontent.com/wiki/zabaglione/jr100dev/images/cargo-balance/play-02.png" alt="CARGO BALANCE: play 02" loading="lazy" decoding="async" /></p>
+</article><article class="manual" data-language="ja" lang="ja"><h2>操作と遊び方</h2>
+<p>A/Dで船倉を選び、RETURNで積みます。各船倉は4個まで。左右の力の差に風の分を加え、LIMITを超えると転覆します。全12個を積めば出航です。</p>
+<p>方向キーはキーボードまたはパッド、RETURNはパッドのボタンでも操作できます。SPACEでこの面のやり直し確認を開きます。やり直し確認はNOが初期選択です。A/Dで選び、RETURNで確定、SPACEで取り消します。確認中は進行を止めます。CTRL+CでBASICへ戻ります。</p>
+<p>クレーンから荷物が落下し、船体と積み荷が一緒に傾いて揺れます。積載音、転覆の原因表示、出航ジングルで結果を確認できます。演出が終わってから次のキーを押してください。</p>
+<p>NEXT LOADは今の荷物、NEXTは続く2個、LOADEDは積載数。PORTとSTARBOARDは左右に掛かる力、WINDは左へ掛かる追加の力、FAREは運賃です。後半は許容差が10から8へ狭まります。</p>
+<p><img src="https://raw.githubusercontent.com/wiki/zabaglione/jr100dev/images/cargo-balance/play-01.png" alt="ゲーム開始時" loading="lazy" decoding="async" /></p>
+<p><img src="https://raw.githubusercontent.com/wiki/zabaglione/jr100dev/images/cargo-balance/play-02.png" alt="プレイ中の場面" loading="lazy" decoding="async" /></p>
+</article></main>
+  <footer class="wrap"><p><span lang="en" data-language="en">Made for the JR-100 with standard 16 KB RAM. Emulator-tested; real hardware is unverified.</span><span lang="ja" data-language="ja">標準RAM 16KBのJR-100向け。エミュレーターで検証済みです。実機での動作・音声は未確認です。</span></p><a href="https://github.com/zabaglione/jr100dev/wiki">Wiki</a> · <a href="https://github.com/zabaglione/jr100dev/tree/main/games">Source / MIT License</a></footer>
+</body>
+</html>

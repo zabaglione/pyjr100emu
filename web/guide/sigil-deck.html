@@ -1,0 +1,435 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>SIGIL DECK · JR-100 Games</title>
+  <meta name="title-en" content="SIGIL DECK · JR-100 Games">
+  <meta name="title-ja" content="SIGIL DECK · JR-100 Games">
+  <meta name="description" content="Build a deck of sigils to seal the Lord of the Void.">
+  <meta name="description-en" content="Build a deck of sigils to seal the Lord of the Void.">
+  <meta name="description-ja" content="カードを組み合わせて虚空の王を封じる">
+  <link rel="canonical" href="https://zabaglione.github.io/pyjr100emu/guide/sigil-deck.html">
+  <link rel="alternate" hreflang="en" href="https://zabaglione.github.io/pyjr100emu/guide/sigil-deck.html?lang=en">
+  <link rel="alternate" hreflang="ja" href="https://zabaglione.github.io/pyjr100emu/guide/sigil-deck.html?lang=ja">
+  <link rel="alternate" hreflang="x-default" href="https://zabaglione.github.io/pyjr100emu/guide/sigil-deck.html">
+  <script src="language.js"></script>
+  <link rel="stylesheet" href="style.css">
+  <script src="guide.js" defer></script>
+</head>
+<body>
+  <a class="skip" href="#main"><span lang="en" data-language="en">Skip to content</span><span lang="ja" data-language="ja">本文へ</span></a>
+  <header class="wrap masthead">
+    <a class="brand" data-guide-link href="index.html">JR-100 GAMES</a>
+    <nav class="languages" aria-label="Language / 言語">
+      <a data-language-switch href="?lang=en" hreflang="en" lang="en">English</a>
+      <a data-language-switch href="?lang=ja" hreflang="ja" lang="ja">日本語</a>
+    </nav>
+  </header>
+  <div class="wrap"><nav class="utility"><a data-guide-link href="index.html"><span lang="en" data-language="en">All games</span><span lang="ja" data-language="ja">全作品</span></a><a data-guide-link href="controls.html"><span lang="en" data-language="en">Getting started</span><span lang="ja" data-language="ja">操作と起動方法</span></a><a href="../gameplay.html"><span lang="en" data-language="en">Gameplay videos</span><span lang="ja" data-language="ja">プレイ動画</span></a><a href="../"><span lang="en" data-language="en">Emulator</span><span lang="ja" data-language="ja">エミュレーター</span></a></nav></div>
+  <main class="wrap" id="main"><section class="hero">
+      <p class="breadcrumbs"><a data-guide-link href="index.html"><span lang="en" data-language="en">All games</span><span lang="ja" data-language="ja">全作品</span></a> / <span lang="en" data-language="en">Cards &amp; board games</span><span lang="ja" data-language="ja">カード・ボード</span></p>
+      <h1>SIGIL DECK</h1><div class="intro" data-language="en" lang="en"><p><strong>Collect sigils, build your deck, and seal the Lord of the Void.</strong></p>
+<p>Fight ten card battles, starting each turn with four cards and three energy. Choose rewards from 24 card types and combine attacks, shields, poison, and healing against six regular enemy types and two bosses.</p>
+</div><div class="intro" data-language="ja" lang="ja"><p><strong>紋章を集め、自分のデッキで虚空の王を封じる。</strong></p>
+<p>手札4枚、エナジー3から始まる10戦のカードバトル。24種のカードから勝利報酬を選び、攻撃・防御・毒・回復を組み合わせます。通常敵6種とボス2種が登場します。JR-100・標準RAM 16KB用です。</p>
+</div>
+      <nav class="actions"><a class="button primary" href="../?game=sigil-deck"><span lang="en" data-language="en">Play this game</span><span lang="ja" data-language="ja">このゲームをプレイ</span></a><a href="https://github.com/zabaglione/jr100dev/tree/main/games/sigil_deck"><span lang="en" data-language="en">Source</span><span lang="ja" data-language="ja">ソース</span></a></nav>
+      <p class="note"><span lang="en" data-language="en">To play, set up your own BASIC ROM in the emulator once. Screenshots and videos need no ROM.</span><span lang="ja" data-language="ja">プレイにはエミュレーターで自分のBASIC ROMを一度設定してください。画像と動画の閲覧にはROMは不要です。</span> <a data-guide-link href="controls.html"><span lang="en" data-language="en">Setup and controls</span><span lang="ja" data-language="ja">設定と共通操作</span></a></p>
+    </section>
+    <section class="media" aria-label="Screenshots and video">
+      <div class="shots"><figure><a href="../game-media/sigil-deck/demo-start.png"><img src="../game-media/sigil-deck/demo-start.png" width="816" height="624" alt="SIGIL DECK — At the start" loading="lazy"></a><figcaption><span lang="en" data-language="en">At the start</span><span lang="ja" data-language="ja">開始時の盤面</span></figcaption></figure><figure><a href="../game-media/sigil-deck/demo-play.png"><img src="../game-media/sigil-deck/demo-play.png" width="816" height="624" alt="SIGIL DECK — In play" loading="lazy"></a><figcaption><span lang="en" data-language="en">In play</span><span lang="ja" data-language="ja">プレイ中</span></figcaption></figure><figure><a href="../game-media/sigil-deck/demo-clear.png"><img src="../game-media/sigil-deck/demo-clear.png" width="816" height="624" alt="SIGIL DECK — First goal reached" loading="lazy"></a><figcaption><span lang="en" data-language="en">First goal reached</span><span lang="ja" data-language="ja">最初の目標を達成</span></figcaption></figure></div>
+      <p class="video-link"><a class="button" href="../gameplay.html?game=sigil-deck#video"><span lang="en" data-language="en">Watch gameplay with sound (30 seconds)</span><span lang="ja" data-language="ja">音付きプレイ動画を見る（約30秒）</span></a></p>
+      <p class="note"><span lang="en" data-language="en">First battle won.</span><span lang="ja" data-language="ja">最初の戦闘に勝利するまでを収録。</span></p>
+    </section><article class="manual" data-language="en" lang="en"><h2>Controls</h2>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>Action</th>
+<th>Keyboard</th>
+<th>Directional pad + one button</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Select a card, END TURN, or a reward</td>
+<td>A / D</td>
+<td>Left/right</td>
+</tr>
+<tr>
+<td>Use / confirm</td>
+<td>RETURN</td>
+<td>Button</td>
+</tr>
+<tr>
+<td>Select END TURN directly</td>
+<td>SPACE</td>
+<td>Select END TURN with left/right</td>
+</tr>
+<tr>
+<td>View deck</td>
+<td>W</td>
+<td>Up</td>
+</tr>
+<tr>
+<td>Close deck view</td>
+<td>Any game-control key</td>
+<td>Direction or button</td>
+</tr>
+<tr>
+<td>Return to BASIC</td>
+<td>CTRL+C</td>
+<td>Use the keyboard</td>
+</tr>
+</tbody>
+</table></div>
+<p>The arrow above a card marks your selection. Its effect appears below. You cannot use an empty slot or a card whose energy cost you cannot pay. Select and confirm END TURN to let the enemy act.</p>
+<p>Restarting or returning to the title during play asks for confirmation. NO is selected initially. Choose with A/D, confirm with RETURN, or cancel with SPACE.</p>
+<h2>Battles and deck</h2>
+<ul>
+<li>Maximum HP is 60. Each turn restores energy to 3 and draws four cards.</li>
+<li>Played cards and cards remaining at the end of a turn go to the discard pile. When the draw pile empties, the discard pile becomes the draw pile.</li>
+<li>EXHAUST removes a card for this battle; it returns for the next battle. A resolving card cannot draw itself with its own effect.</li>
+<li>NEXT shows the enemy's next action, cycling through attack, defense, and heavy attack.</li>
+<li>SH is shield. Incoming damage uses up shield before reducing HP. Your shield expires at your next turn; enemy shield lasts until the enemy's next action.</li>
+<li>POISON deals damage through shield before an enemy action, then decreases by 1.</li>
+<li>WEAK reduces the enemy's attack by 3. VUL increases your attack by 50%, rounded down.</li>
+<li>STR adds attack power for the battle. ECHO doubles your next attack. THORN retaliates against the enemy's attack that turn.</li>
+<li>DRAW, USED, and X show the sizes of the draw, discard, and exhausted piles.</li>
+<li>After a victory, add one of three cards or choose REST to heal 10 HP. Either choice also heals another 4 HP. Defeat the final boss to win.</li>
+</ul>
+<p><img src="https://raw.githubusercontent.com/wiki/zabaglione/jr100dev/images/sigil-deck/battle-05.png" alt="The Oracle battle" loading="lazy" decoding="async" /></p>
+<p>THE ORACLE is the fifth-battle boss. Its silhouette, next action, your buffs, and your hand share one screen.</p>
+<p><img src="https://raw.githubusercontent.com/wiki/zabaglione/jr100dev/images/sigil-deck/reward-05.png" alt="Card reward" loading="lazy" decoding="async" /></p>
+<p>Choose between strengthening your deck and healing. Cards you acquire remain available in later battles.</p>
+<h2>All 24 cards</h2>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>Name</th>
+<th style="text-align:right">EN</th>
+<th>Effect</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>STRIKE</td>
+<td style="text-align:right">1</td>
+<td>Attack 6</td>
+</tr>
+<tr>
+<td>WARD</td>
+<td style="text-align:right">1</td>
+<td>Shield 5</td>
+</tr>
+<tr>
+<td>SPARK</td>
+<td style="text-align:right">0</td>
+<td>Attack 3</td>
+</tr>
+<tr>
+<td>MEND</td>
+<td style="text-align:right">1</td>
+<td>Heal 4</td>
+</tr>
+<tr>
+<td>FOCUS</td>
+<td style="text-align:right">0</td>
+<td>Energy +1</td>
+</tr>
+<tr>
+<td>VENOM</td>
+<td style="text-align:right">1</td>
+<td>Poison +3</td>
+</tr>
+<tr>
+<td>CLEAVE</td>
+<td style="text-align:right">2</td>
+<td>Attack 12</td>
+</tr>
+<tr>
+<td>AEGIS</td>
+<td style="text-align:right">2</td>
+<td>Shield 12</td>
+</tr>
+<tr>
+<td>HASTE</td>
+<td style="text-align:right">1</td>
+<td>Draw 1; energy +1</td>
+</tr>
+<tr>
+<td>SIPHON</td>
+<td style="text-align:right">2</td>
+<td>Attack 6; heal 3</td>
+</tr>
+<tr>
+<td>SCORCH</td>
+<td style="text-align:right">1</td>
+<td>Attack 4; poison +2</td>
+</tr>
+<tr>
+<td>THORN</td>
+<td style="text-align:right">1</td>
+<td>Shield 4; retaliate for 3</td>
+</tr>
+<tr>
+<td>BASH</td>
+<td style="text-align:right">2</td>
+<td>Attack 9, then VUL for 2 turns</td>
+</tr>
+<tr>
+<td>ECHO</td>
+<td style="text-align:right">1</td>
+<td>Double the next attack</td>
+</tr>
+<tr>
+<td>FORTFY</td>
+<td style="text-align:right">1</td>
+<td>Shield 7; retain remaining shield for one extra turn</td>
+</tr>
+<tr>
+<td>RITUAL</td>
+<td style="text-align:right">2</td>
+<td>Attack +2 for this battle</td>
+</tr>
+<tr>
+<td>PURGE</td>
+<td style="text-align:right">0</td>
+<td>WEAK for 2 turns</td>
+</tr>
+<tr>
+<td>INSIGT</td>
+<td style="text-align:right">0</td>
+<td>Draw 2; hand limit 4</td>
+</tr>
+<tr>
+<td>SURGE</td>
+<td style="text-align:right">0</td>
+<td>Energy +2; EXHAUST</td>
+</tr>
+<tr>
+<td>RESTOR</td>
+<td style="text-align:right">2</td>
+<td>Heal 9; EXHAUST</td>
+</tr>
+<tr>
+<td>DOOM</td>
+<td style="text-align:right">3</td>
+<td>Attack 20</td>
+</tr>
+<tr>
+<td>BARRIR</td>
+<td style="text-align:right">3</td>
+<td>Shield 22</td>
+</tr>
+<tr>
+<td>PLAGUE</td>
+<td style="text-align:right">2</td>
+<td>Poison +7</td>
+</tr>
+<tr>
+<td>FINISH</td>
+<td style="text-align:right">1</td>
+<td>Attack 4; +12 attack if enemy HP is 12 or less</td>
+</tr>
+</tbody>
+</table></div>
+<p><img src="https://raw.githubusercontent.com/wiki/zabaglione/jr100dev/images/sigil-deck/victory.png" alt="Victory" loading="lazy" decoding="async" /></p>
+</article><article class="manual" data-language="ja" lang="ja"><h2>操作</h2>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>操作</th>
+<th>キーボード</th>
+<th>方向＋1ボタンパッド</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>カード／END TURN／報酬を選ぶ</td>
+<td>A / D</td>
+<td>左／右</td>
+</tr>
+<tr>
+<td>使用／決定</td>
+<td>RETURN</td>
+<td>ボタン</td>
+</tr>
+<tr>
+<td>END TURNへ選択を移す</td>
+<td>SPACE</td>
+<td>左右でEND TURNを選ぶ</td>
+</tr>
+<tr>
+<td>デッキを見る</td>
+<td>W</td>
+<td>上</td>
+</tr>
+<tr>
+<td>デッキ表示から戻る</td>
+<td>任意のゲーム操作キー</td>
+<td>方向またはボタン</td>
+</tr>
+<tr>
+<td>BASICへ戻る</td>
+<td>CTRL+C</td>
+<td>キーボードを使用</td>
+</tr>
+</tbody>
+</table></div>
+<p>カードの上にある矢印が選択位置です。画面下に選択カードの効果を表示します。残りエナジーが足りないときや空の枠は使用できません。END TURNを選んで決定すると敵が行動します。</p>
+<p>やり直し／プレイ中のタイトル移動は実行前に確認します。NOが初期選択です。A/Dで選びRETURNで確定、SPACEで取り消します。</p>
+<h2>戦闘とデッキ</h2>
+<ul>
+<li>HPは最大60。各ターンにエナジーが3へ戻り、手札を4枚引きます。</li>
+<li>使用したカードとターン終了時の残り手札は捨て札へ。山札が尽きると捨て札を山札に戻します。</li>
+<li>EXHAUSTのカードはその戦闘から除外され、次の戦闘で戻ります。効果を処理中のカードを自分自身のドローで引くことはありません。</li>
+<li>敵の次の行動をNEXTに表示します。攻撃・防御・強攻撃の順に循環します。</li>
+<li>SHは防御値。まず防御で攻撃を受け、残りがHPに入ります。自分の防御は次の自分のターンで消えます。敵の防御も次の敵行動までです。</li>
+<li>POISONは敵行動の前に防御を無視してダメージを与え、1ずつ減ります。</li>
+<li>WEAKは敵の攻撃を3減らし、VULは自分の攻撃を50%増やします。端数は切り捨てます。</li>
+<li>STRは戦闘中の攻撃加算、ECHOは次の攻撃を2倍、THORNはそのターンの敵攻撃に対する反撃です。</li>
+<li>HUDのDRAWは山札、USEDは捨て札、Xは消滅札の枚数です。</li>
+<li>勝利すると3枚から1枚を加えるか、RESTでHPを10回復します。どちらも追加でHPが4回復します。最後のボスを倒せばクリアです。</li>
+</ul>
+<p><img src="https://raw.githubusercontent.com/wiki/zabaglione/jr100dev/images/sigil-deck/battle-05.png" alt="The Oracle battle" loading="lazy" decoding="async" /></p>
+<p>5戦目のボス、THE ORACLE。敵の大きなシルエット、次の行動、自分の強化と手札を一画面で確認できます。</p>
+<p><img src="https://raw.githubusercontent.com/wiki/zabaglione/jr100dev/images/sigil-deck/reward-05.png" alt="Card reward" loading="lazy" decoding="async" /></p>
+<p>勝利報酬でデッキを伸ばすか、回復を選ぶかを判断します。取得したカードは以後の戦闘でも使えます。</p>
+<h2>カード24種</h2>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>表示名</th>
+<th style="text-align:right">EN</th>
+<th>効果</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>STRIKE</td>
+<td style="text-align:right">1</td>
+<td>攻撃6</td>
+</tr>
+<tr>
+<td>WARD</td>
+<td style="text-align:right">1</td>
+<td>防御5</td>
+</tr>
+<tr>
+<td>SPARK</td>
+<td style="text-align:right">0</td>
+<td>攻撃3</td>
+</tr>
+<tr>
+<td>MEND</td>
+<td style="text-align:right">1</td>
+<td>回復4</td>
+</tr>
+<tr>
+<td>FOCUS</td>
+<td style="text-align:right">0</td>
+<td>エナジー+1</td>
+</tr>
+<tr>
+<td>VENOM</td>
+<td style="text-align:right">1</td>
+<td>毒+3</td>
+</tr>
+<tr>
+<td>CLEAVE</td>
+<td style="text-align:right">2</td>
+<td>攻撃12</td>
+</tr>
+<tr>
+<td>AEGIS</td>
+<td style="text-align:right">2</td>
+<td>防御12</td>
+</tr>
+<tr>
+<td>HASTE</td>
+<td style="text-align:right">1</td>
+<td>1枚引き、エナジー+1</td>
+</tr>
+<tr>
+<td>SIPHON</td>
+<td style="text-align:right">2</td>
+<td>攻撃6、回復3</td>
+</tr>
+<tr>
+<td>SCORCH</td>
+<td style="text-align:right">1</td>
+<td>攻撃4、毒+2</td>
+</tr>
+<tr>
+<td>THORN</td>
+<td style="text-align:right">1</td>
+<td>防御4、反撃3</td>
+</tr>
+<tr>
+<td>BASH</td>
+<td style="text-align:right">2</td>
+<td>攻撃9、その後VULを2ターン</td>
+</tr>
+<tr>
+<td>ECHO</td>
+<td style="text-align:right">1</td>
+<td>次の攻撃を2倍</td>
+</tr>
+<tr>
+<td>FORTFY</td>
+<td style="text-align:right">1</td>
+<td>防御7、残った防御を次ターンへ1回保持</td>
+</tr>
+<tr>
+<td>RITUAL</td>
+<td style="text-align:right">2</td>
+<td>戦闘中の攻撃+2</td>
+</tr>
+<tr>
+<td>PURGE</td>
+<td style="text-align:right">0</td>
+<td>WEAKを2ターン</td>
+</tr>
+<tr>
+<td>INSIGT</td>
+<td style="text-align:right">0</td>
+<td>2枚引く。手札上限4</td>
+</tr>
+<tr>
+<td>SURGE</td>
+<td style="text-align:right">0</td>
+<td>エナジー+2、EXHAUST</td>
+</tr>
+<tr>
+<td>RESTOR</td>
+<td style="text-align:right">2</td>
+<td>回復9、EXHAUST</td>
+</tr>
+<tr>
+<td>DOOM</td>
+<td style="text-align:right">3</td>
+<td>攻撃20</td>
+</tr>
+<tr>
+<td>BARRIR</td>
+<td style="text-align:right">3</td>
+<td>防御22</td>
+</tr>
+<tr>
+<td>PLAGUE</td>
+<td style="text-align:right">2</td>
+<td>毒+7</td>
+</tr>
+<tr>
+<td>FINISH</td>
+<td style="text-align:right">1</td>
+<td>攻撃4。敵HPが12以下なら攻撃+12</td>
+</tr>
+</tbody>
+</table></div>
+<p><img src="https://raw.githubusercontent.com/wiki/zabaglione/jr100dev/images/sigil-deck/victory.png" alt="Victory" loading="lazy" decoding="async" /></p>
+</article></main>
+  <footer class="wrap"><p><span lang="en" data-language="en">Made for the JR-100 with standard 16 KB RAM. Emulator-tested; real hardware is unverified.</span><span lang="ja" data-language="ja">標準RAM 16KBのJR-100向け。エミュレーターで検証済みです。実機での動作・音声は未確認です。</span></p><a href="https://github.com/zabaglione/jr100dev/wiki">Wiki</a> · <a href="https://github.com/zabaglione/jr100dev/tree/main/games">Source / MIT License</a></footer>
+</body>
+</html>

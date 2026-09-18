@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>CHAIN SUIT · JR-100 Games</title>
+  <meta name="title-en" content="CHAIN SUIT · JR-100 Games">
+  <meta name="title-ja" content="CHAIN SUIT · JR-100 Games">
+  <meta name="description" content="Exchange cards and choose scoring hands to reach a target.">
+  <meta name="description-en" content="Exchange cards and choose scoring hands to reach a target.">
+  <meta name="description-ja" content="手札交換と役の選択で得点ノルマに挑む">
+  <link rel="canonical" href="https://zabaglione.github.io/pyjr100emu/guide/chain-suit.html">
+  <link rel="alternate" hreflang="en" href="https://zabaglione.github.io/pyjr100emu/guide/chain-suit.html?lang=en">
+  <link rel="alternate" hreflang="ja" href="https://zabaglione.github.io/pyjr100emu/guide/chain-suit.html?lang=ja">
+  <link rel="alternate" hreflang="x-default" href="https://zabaglione.github.io/pyjr100emu/guide/chain-suit.html">
+  <script src="language.js"></script>
+  <link rel="stylesheet" href="style.css">
+  <script src="guide.js" defer></script>
+</head>
+<body>
+  <a class="skip" href="#main"><span lang="en" data-language="en">Skip to content</span><span lang="ja" data-language="ja">本文へ</span></a>
+  <header class="wrap masthead">
+    <a class="brand" data-guide-link href="index.html">JR-100 GAMES</a>
+    <nav class="languages" aria-label="Language / 言語">
+      <a data-language-switch href="?lang=en" hreflang="en" lang="en">English</a>
+      <a data-language-switch href="?lang=ja" hreflang="ja" lang="ja">日本語</a>
+    </nav>
+  </header>
+  <div class="wrap"><nav class="utility"><a data-guide-link href="index.html"><span lang="en" data-language="en">All games</span><span lang="ja" data-language="ja">全作品</span></a><a data-guide-link href="controls.html"><span lang="en" data-language="en">Getting started</span><span lang="ja" data-language="ja">操作と起動方法</span></a><a href="../gameplay.html"><span lang="en" data-language="en">Gameplay videos</span><span lang="ja" data-language="ja">プレイ動画</span></a><a href="../"><span lang="en" data-language="en">Emulator</span><span lang="ja" data-language="ja">エミュレーター</span></a></nav></div>
+  <main class="wrap" id="main"><section class="hero">
+      <p class="breadcrumbs"><a data-guide-link href="index.html"><span lang="en" data-language="en">All games</span><span lang="ja" data-language="ja">全作品</span></a> / <span lang="en" data-language="en">Cards &amp; board games</span><span lang="ja" data-language="ja">カード・ボード</span></p>
+      <h1>CHAIN SUIT</h1><div class="intro" data-language="en" lang="en"><p>Exchange cards in a five-card hand and reach 25 total points across three scoring rounds. No pair earns 3 points, one pair 8, multiple matching pairs 16, and five cards of one suit 25.</p>
+</div><div class="intro" data-language="ja" lang="ja"><p>5枚の手札を交換し、3回の採点で合計25点を目指します。役なし3点、1組のペア8点、複数のペア16点、同一スート5枚25点です。</p>
+</div>
+      <nav class="actions"><a class="button primary" href="../?game=chain-suit"><span lang="en" data-language="en">Play this game</span><span lang="ja" data-language="ja">このゲームをプレイ</span></a><a href="https://github.com/zabaglione/jr100dev/tree/main/games/chain_suit"><span lang="en" data-language="en">Source</span><span lang="ja" data-language="ja">ソース</span></a></nav>
+      <p class="note"><span lang="en" data-language="en">To play, set up your own BASIC ROM in the emulator once. Screenshots and videos need no ROM.</span><span lang="ja" data-language="ja">プレイにはエミュレーターで自分のBASIC ROMを一度設定してください。画像と動画の閲覧にはROMは不要です。</span> <a data-guide-link href="controls.html"><span lang="en" data-language="en">Setup and controls</span><span lang="ja" data-language="ja">設定と共通操作</span></a></p>
+    </section>
+    <section class="media" aria-label="Screenshots and video">
+      <div class="shots"><figure><a href="../game-media/chain-suit/demo-start.png"><img src="../game-media/chain-suit/demo-start.png" width="816" height="624" alt="CHAIN SUIT — At the start" loading="lazy"></a><figcaption><span lang="en" data-language="en">At the start</span><span lang="ja" data-language="ja">開始時の盤面</span></figcaption></figure><figure><a href="../game-media/chain-suit/demo-play.png"><img src="../game-media/chain-suit/demo-play.png" width="816" height="624" alt="CHAIN SUIT — In play" loading="lazy"></a><figcaption><span lang="en" data-language="en">In play</span><span lang="ja" data-language="ja">プレイ中</span></figcaption></figure><figure><a href="../game-media/chain-suit/demo-clear.png"><img src="../game-media/chain-suit/demo-clear.png" width="816" height="624" alt="CHAIN SUIT — First goal reached" loading="lazy"></a><figcaption><span lang="en" data-language="en">First goal reached</span><span lang="ja" data-language="ja">最初の目標を達成</span></figcaption></figure></div>
+      <p class="video-link"><a class="button" href="../gameplay.html?game=chain-suit#video"><span lang="en" data-language="en">Watch gameplay with sound (31 seconds)</span><span lang="ja" data-language="ja">音付きプレイ動画を見る（約31秒）</span></a></p>
+      <p class="note"><span lang="en" data-language="en">First stage cleared.</span><span lang="ja" data-language="ja">1ステージのクリアまでを収録。</span></p>
+    </section><article class="manual" data-language="en" lang="en"><h2>Controls and play</h2>
+<p>Move the arrow above the cards with A/D. W exchanges that card, up to twice per hand. RETURN scores the hand and deals the next one.</p>
+<p>Directions work on the keyboard or pad; the pad button also acts as RETURN. SPACE opens confirmation to restart this stage. NO is selected initially. Choose with A/D, confirm with RETURN, or cancel with SPACE. Play pauses during confirmation. CTRL+C returns to BASIC.</p>
+<p>An exchanged card narrows to its edge, then opens to reveal the new face. When scored, the contributing cards flash. The hand name, earned points, and total remain visible with sound and a pause of about two seconds before the next hand. Wait until the animation ends before pressing again.</p>
+<p>Each framed card shows its rank, 1–13, and a spade, heart, diamond, or club. Ranks use at most two digits, without a leading zero. A <code>*</code> marks each card contributing to the hand. The current hand name and points appear below the cards. NO PAIR and ONE PAIR mean exactly that; TWO PAIRS means two pairs. THREE / FOUR / FIVE OF A KIND identify three to five matching ranks. FULL HOUSE is a triple plus a pair. FLUSH is five cards of the same suit. Hands with multiple equal-rank pair combinations all earn 16 points; a flush takes precedence at 25. SCORE is the total, GOAL the target, and REDRAWS the exchanges remaining.</p>
+<h2>More screenshots</h2>
+<p><img src="https://raw.githubusercontent.com/wiki/zabaglione/jr100dev/images/chain-suit/play-01.png" alt="CHAIN SUIT: play 01" loading="lazy" decoding="async" /></p>
+<p><img src="https://raw.githubusercontent.com/wiki/zabaglione/jr100dev/images/chain-suit/play-02.png" alt="CHAIN SUIT: play 02" loading="lazy" decoding="async" /></p>
+</article><article class="manual" data-language="ja" lang="ja"><h2>操作と遊び方</h2>
+<p>A/Dで札の上の矢印を動かし、Wでその札を交換します。交換は各手札につき2回まで。RETURNで採点して次の手札へ進みます。</p>
+<p>方向キーはキーボードまたはパッド、RETURNはパッドのボタンでも操作できます。SPACEでこの面のやり直し確認を開きます。やり直し確認はNOが初期選択です。A/Dで選び、RETURNで確定、SPACEで取り消します。確認中は進行を止めます。CTRL+CでBASICへ戻ります。</p>
+<p>交換する札は細くなって側面を見せ、新しい札として開きます。採点時は役を作る札の印が点滅し、役名・今回の点数・合計点を残して効果音と約2秒の間を挟んでから、次の手札へ進みます。演出が終わってから次のキーを押してください。</p>
+<p>各札の枠内に1〜13の数字と、スペード・ハート・ダイヤ・クラブのスート記号を表示します。数字は最大2桁で、先頭の0は付けません。役に含まれる札の下には * 印が付き、盤面の下に現在の役名と点数が出ます。NO PAIRは役なし、ONE PAIRは1組、TWO PAIRSは2組、THREE / FOUR / FIVE OF A KINDは同じ数字3〜5枚、FULL HOUSEは3枚と2枚の組、FLUSHは同一スート5枚です。同じ数字の組が複数できる役はすべて16点で、同一スートが揃う場合は25点を優先します。下段のSCOREは合計点、GOALは目標点、REDRAWSは交換残数です。</p>
+<p><img src="https://raw.githubusercontent.com/wiki/zabaglione/jr100dev/images/chain-suit/play-01.png" alt="ゲーム開始時" loading="lazy" decoding="async" /></p>
+<p><img src="https://raw.githubusercontent.com/wiki/zabaglione/jr100dev/images/chain-suit/play-02.png" alt="プレイ中の場面" loading="lazy" decoding="async" /></p>
+</article></main>
+  <footer class="wrap"><p><span lang="en" data-language="en">Made for the JR-100 with standard 16 KB RAM. Emulator-tested; real hardware is unverified.</span><span lang="ja" data-language="ja">標準RAM 16KBのJR-100向け。エミュレーターで検証済みです。実機での動作・音声は未確認です。</span></p><a href="https://github.com/zabaglione/jr100dev/wiki">Wiki</a> · <a href="https://github.com/zabaglione/jr100dev/tree/main/games">Source / MIT License</a></footer>
+</body>
+</html>

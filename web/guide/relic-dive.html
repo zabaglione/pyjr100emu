@@ -1,0 +1,223 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>RELIC DIVE · JR-100 Games</title>
+  <meta name="title-en" content="RELIC DIVE · JR-100 Games">
+  <meta name="title-ja" content="RELIC DIVE · JR-100 Games">
+  <meta name="description" content="Explore a changing 64×32 dungeon with food, equipment, and magic to find its deepest relic.">
+  <meta name="description-en" content="Explore a changing 64×32 dungeon with food, equipment, and magic to find its deepest relic.">
+  <meta name="description-ja" content="64×32マスの迷宮で食料・装備・魔法を使い、最深部の遺物を探す">
+  <link rel="canonical" href="https://zabaglione.github.io/pyjr100emu/guide/relic-dive.html">
+  <link rel="alternate" hreflang="en" href="https://zabaglione.github.io/pyjr100emu/guide/relic-dive.html?lang=en">
+  <link rel="alternate" hreflang="ja" href="https://zabaglione.github.io/pyjr100emu/guide/relic-dive.html?lang=ja">
+  <link rel="alternate" hreflang="x-default" href="https://zabaglione.github.io/pyjr100emu/guide/relic-dive.html">
+  <script src="language.js"></script>
+  <link rel="stylesheet" href="style.css">
+  <script src="guide.js" defer></script>
+</head>
+<body>
+  <a class="skip" href="#main"><span lang="en" data-language="en">Skip to content</span><span lang="ja" data-language="ja">本文へ</span></a>
+  <header class="wrap masthead">
+    <a class="brand" data-guide-link href="index.html">JR-100 GAMES</a>
+    <nav class="languages" aria-label="Language / 言語">
+      <a data-language-switch href="?lang=en" hreflang="en" lang="en">English</a>
+      <a data-language-switch href="?lang=ja" hreflang="ja" lang="ja">日本語</a>
+    </nav>
+  </header>
+  <div class="wrap"><nav class="utility"><a data-guide-link href="index.html"><span lang="en" data-language="en">All games</span><span lang="ja" data-language="ja">全作品</span></a><a data-guide-link href="controls.html"><span lang="en" data-language="en">Getting started</span><span lang="ja" data-language="ja">操作と起動方法</span></a><a href="../gameplay.html"><span lang="en" data-language="en">Gameplay videos</span><span lang="ja" data-language="ja">プレイ動画</span></a><a href="../"><span lang="en" data-language="en">Emulator</span><span lang="ja" data-language="ja">エミュレーター</span></a></nav></div>
+  <main class="wrap" id="main"><section class="hero">
+      <p class="breadcrumbs"><a data-guide-link href="index.html"><span lang="en" data-language="en">All games</span><span lang="ja" data-language="ja">全作品</span></a> / <span lang="en" data-language="en">Exploration &amp; adventure</span><span lang="ja" data-language="ja">探索・アドベンチャー</span></p>
+      <h1>RELIC DIVE</h1><div class="intro" data-language="en" lang="en"><p>Descend through a freshly generated 64×32 dungeon, managing food, equipment, unidentified potions, and scrolls to find the relic on the deepest floor. Hidden passages, damage and poison traps, and 15 enemy types await. Turns advance only when you act, so take your time in menus.</p>
+</div><div class="intro" data-language="ja" lang="ja"><p>標準RAM 16KBのJR-100向けローグライクです。毎回変わる64×32マスの迷宮で、食料、装備、正体不明の薬や巻物を使いながら階段を降り、最深部の遺物を探します。隠し通路、ダメージ罠、毒罠、15種類の敵が登場します。行動するまでターンは進まず、メニューも落ち着いて操作できます。</p>
+</div>
+      <nav class="actions"><a class="button primary" href="../?game=relic-dive"><span lang="en" data-language="en">Play this game</span><span lang="ja" data-language="ja">このゲームをプレイ</span></a><a href="https://github.com/zabaglione/jr100dev/tree/main/games/relic_dive"><span lang="en" data-language="en">Source</span><span lang="ja" data-language="ja">ソース</span></a></nav>
+      <p class="note"><span lang="en" data-language="en">To play, set up your own BASIC ROM in the emulator once. Screenshots and videos need no ROM.</span><span lang="ja" data-language="ja">プレイにはエミュレーターで自分のBASIC ROMを一度設定してください。画像と動画の閲覧にはROMは不要です。</span> <a data-guide-link href="controls.html"><span lang="en" data-language="en">Setup and controls</span><span lang="ja" data-language="ja">設定と共通操作</span></a></p>
+    </section>
+    <section class="media" aria-label="Screenshots and video">
+      <div class="shots"><figure><a href="../game-media/relic-dive/demo-start.png"><img src="../game-media/relic-dive/demo-start.png" width="816" height="624" alt="RELIC DIVE — At the start" loading="lazy"></a><figcaption><span lang="en" data-language="en">At the start</span><span lang="ja" data-language="ja">開始時の盤面</span></figcaption></figure><figure><a href="../game-media/relic-dive/demo-play.png"><img src="../game-media/relic-dive/demo-play.png" width="816" height="624" alt="RELIC DIVE — In play" loading="lazy"></a><figcaption><span lang="en" data-language="en">In play</span><span lang="ja" data-language="ja">プレイ中</span></figcaption></figure><figure><a href="../game-media/relic-dive/demo-clear.png"><img src="../game-media/relic-dive/demo-clear.png" width="816" height="624" alt="RELIC DIVE — First goal reached" loading="lazy"></a><figcaption><span lang="en" data-language="en">First goal reached</span><span lang="ja" data-language="ja">最初の目標を達成</span></figcaption></figure></div>
+      <p class="video-link"><a class="button" href="../gameplay.html?game=relic-dive#video"><span lang="en" data-language="en">Watch gameplay with sound (62 seconds)</span><span lang="ja" data-language="ja">音付きプレイ動画を見る（約62秒）</span></a></p>
+      <p class="note"><span lang="en" data-language="en">First floor completed; entered floor 2.</span><span lang="ja" data-language="ja">最初の階を踏破し、2階へ進むまでを収録。</span></p>
+    </section><article class="manual" data-language="en" lang="en"><h2>Controls and play</h2>
+<pre><code class="language-text">Q W E
+A S D
+Z X C
+</code></pre>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>Action</th>
+<th>Keyboard</th>
+<th>One-button pad</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Move in eight directions / attack an adjacent enemy</td>
+<td>QWE / AD / ZXC</td>
+<td>Cardinal and diagonal directions</td>
+</tr>
+<tr>
+<td>Wait one turn</td>
+<td>S</td>
+<td>WAIT in the menu</td>
+</tr>
+<tr>
+<td>Menu / confirm / start</td>
+<td>RETURN</td>
+<td>Button</td>
+</tr>
+<tr>
+<td>Select difficulty or menu entry</td>
+<td>W / X</td>
+<td>Up/down</td>
+</tr>
+<tr>
+<td>Back</td>
+<td>SPACE</td>
+<td>Select BACK and confirm</td>
+</tr>
+<tr>
+<td>Read help</td>
+<td>HELP in the menu</td>
+<td>Same</td>
+</tr>
+<tr>
+<td>Return to BASIC</td>
+<td>CTRL+C</td>
+<td>Use the keyboard</td>
+</tr>
+</tbody>
+</table></div>
+<p>X moves down; the central S key waits. Walk toward an adjacent enemy to attack. You cannot slip diagonally through wall corners. Hold a cardinal direction to walk along a safe, explored straight corridor; movement stops before enemies, junctions, unexplored cells, items, stairs, and other points of interest.</p>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>Difficulty</th>
+<th style="text-align:right">Relic floor</th>
+<th style="text-align:right">Starting HP</th>
+<th style="text-align:right">Starting food</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>EASY</td>
+<td style="text-align:right">5</td>
+<td style="text-align:right">24</td>
+<td style="text-align:right">240</td>
+</tr>
+<tr>
+<td>NORMAL</td>
+<td style="text-align:right">10</td>
+<td style="text-align:right">20</td>
+<td style="text-align:right">200</td>
+</tr>
+<tr>
+<td>HARD</td>
+<td style="text-align:right">20</td>
+<td style="text-align:right">16</td>
+<td style="text-align:right">160</td>
+</tr>
+</tbody>
+</table></div>
+<p>Start with EASY and walk over items to pick them up. You have six inventory slots. Use INVENTORY to eat food, drink potions, read scrolls, and equip weapons or armor. Picking up food alone does not replenish your food meter: you must use it. Some floors have no food, so watch your supplies. Potion and scroll appearances are assigned different effects each adventure; using one identifies it.</p>
+<p>The upper display shows floor, current/maximum HP, food (FD), level (LV), attack (ATK), defense (DEF), and gold. Recent events and controls appear below. Explored terrain is remembered, but enemies appear only within your current field of view.</p>
+<p>Sound effects mark the start of the adventure and incoming damage. A short pause after losing HP gives you time to read what happened. Success and failure have jingles. Release and press your key again after the sound and message finish.</p>
+<p><img src="https://raw.githubusercontent.com/wiki/zabaglione/jr100dev/images/relic-dive/play-01.png" alt="Starting items and surroundings" loading="lazy" decoding="async" /></p>
+<p>Open the menu while standing on stairs to reveal DESCEND. SEARCH checks your cell and its eight neighbors for hidden passages and traps. INSPECT lets you examine nearby cells with a cursor. SUSPEND pauses the adventure; powering off or resetting the emulator loses the suspended game.</p>
+<p><img src="https://raw.githubusercontent.com/wiki/zabaglione/jr100dev/images/relic-dive/play-02.png" alt="An explored dungeon" loading="lazy" decoding="async" />
+<img src="https://raw.githubusercontent.com/wiki/zabaglione/jr100dev/images/relic-dive/inventory.png" alt="Inventory and equipment" loading="lazy" decoding="async" /></p>
+</article><article class="manual" data-language="ja" lang="ja"><h2>操作と遊び方</h2>
+<pre><code class="language-text">Q W E
+A S D
+Z X C
+</code></pre>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>操作</th>
+<th>キーボード</th>
+<th>1ボタンパッド</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>8方向移動・隣の敵を攻撃</td>
+<td>QWE／AD／ZXC</td>
+<td>上下左右と斜め</td>
+</tr>
+<tr>
+<td>1ターン待機</td>
+<td>S</td>
+<td>メニューのWAIT</td>
+</tr>
+<tr>
+<td>メニュー・決定・開始</td>
+<td>RETURN</td>
+<td>ボタン</td>
+</tr>
+<tr>
+<td>難易度・メニュー選択</td>
+<td>W／X</td>
+<td>上／下</td>
+</tr>
+<tr>
+<td>一つ前へ戻る</td>
+<td>SPACE</td>
+<td>BACKを選択して決定</td>
+</tr>
+<tr>
+<td>説明を読む</td>
+<td>メニューのHELP</td>
+<td>同左</td>
+</tr>
+<tr>
+<td>BASICへ戻る</td>
+<td>CTRL+C</td>
+<td>キーボードを使用</td>
+</tr>
+</tbody>
+</table></div>
+<p>下方向はX、中央のSは待機です。隣に敵がいる方向へ進むと攻撃します。壁の角を斜めにすり抜けることはできません。安全な探索済み直線通路では上下左右の長押しで歩けますが、敵・分岐・未探索地点・品物・階段などの前で止まります。</p>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>難易度</th>
+<th style="text-align:right">遺物のある階</th>
+<th style="text-align:right">初期HP</th>
+<th style="text-align:right">初期食料</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>EASY</td>
+<td style="text-align:right">5階</td>
+<td style="text-align:right">24</td>
+<td style="text-align:right">240</td>
+</tr>
+<tr>
+<td>NORMAL</td>
+<td style="text-align:right">10階</td>
+<td style="text-align:right">20</td>
+<td style="text-align:right">200</td>
+</tr>
+<tr>
+<td>HARD</td>
+<td style="text-align:right">20階</td>
+<td style="text-align:right">16</td>
+<td style="text-align:right">160</td>
+</tr>
+</tbody>
+</table></div>
+<p>まずはEASYで始め、品物の上へ移動して拾います。持ち物は6枠。INVENTORYから食料・薬・巻物を使い、武器・防具を装備します。食料は拾うだけでは回復せず、使う必要があります。食料のない階もあるため、残量を見ながら進んでください。薬と巻物は冒険ごとに外見と効果の対応が変わり、使うと正体が判明します。</p>
+<p>画面上部のHUDは、階、現在／最大HP、食料（FD）、レベル（LV）、攻撃力（ATK）、防御力（DEF）、所持金を表示します。下部には直前の出来事と操作案内が出ます。歩いて確認した地形は記憶しますが、敵は現在見えている範囲だけ表示します。</p>
+<p>冒険の開始と被弾を効果音で知らせます。HPが減ったときは短い間が入り、直前の出来事を確認できます。成功・失敗の結果にはジングルを付けています。音と表示が終わってからキーを押し直してください。</p>
+<p><img src="https://raw.githubusercontent.com/wiki/zabaglione/jr100dev/images/relic-dive/play-01.png" alt="冒険開始・周辺の品物" loading="lazy" decoding="async" /></p>
+<p>階段の上でメニューを開くとDESCENDが現れます。SEARCHは足元と周囲8マスの隠し通路・罠を調べます。INSPECTはカーソルで周辺を確認する操作です。SUSPENDで一時中断できます。電源を切ったりエミュレーターをリセットしたりすると、中断した記録は失われます。</p>
+<p><img src="https://raw.githubusercontent.com/wiki/zabaglione/jr100dev/images/relic-dive/play-02.png" alt="探索が進んだ迷宮" loading="lazy" decoding="async" /></p>
+<p><img src="https://raw.githubusercontent.com/wiki/zabaglione/jr100dev/images/relic-dive/inventory.png" alt="持ち物・装備選択" loading="lazy" decoding="async" /></p>
+</article></main>
+  <footer class="wrap"><p><span lang="en" data-language="en">Made for the JR-100 with standard 16 KB RAM. Emulator-tested; real hardware is unverified.</span><span lang="ja" data-language="ja">標準RAM 16KBのJR-100向け。エミュレーターで検証済みです。実機での動作・音声は未確認です。</span></p><a href="https://github.com/zabaglione/jr100dev/wiki">Wiki</a> · <a href="https://github.com/zabaglione/jr100dev/tree/main/games">Source / MIT License</a></footer>
+</body>
+</html>

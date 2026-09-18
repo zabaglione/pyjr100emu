@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>COMPASS ROSE · JR-100 Games</title>
+  <meta name="title-en" content="COMPASS ROSE · JR-100 Games">
+  <meta name="title-ja" content="COMPASS ROSE · JR-100 Games">
+  <meta name="description" content="Choose where to survey and infer a relic&#x27;s location from bearings and distance bands.">
+  <meta name="description-en" content="Choose where to survey and infer a relic&#x27;s location from bearings and distance bands.">
+  <meta name="description-ja" content="測定する場所を選び、方角と距離帯から探し当てる">
+  <link rel="canonical" href="https://zabaglione.github.io/pyjr100emu/guide/compass-rose.html">
+  <link rel="alternate" hreflang="en" href="https://zabaglione.github.io/pyjr100emu/guide/compass-rose.html?lang=en">
+  <link rel="alternate" hreflang="ja" href="https://zabaglione.github.io/pyjr100emu/guide/compass-rose.html?lang=ja">
+  <link rel="alternate" hreflang="x-default" href="https://zabaglione.github.io/pyjr100emu/guide/compass-rose.html">
+  <script src="language.js"></script>
+  <link rel="stylesheet" href="style.css">
+  <script src="guide.js" defer></script>
+</head>
+<body>
+  <a class="skip" href="#main"><span lang="en" data-language="en">Skip to content</span><span lang="ja" data-language="ja">本文へ</span></a>
+  <header class="wrap masthead">
+    <a class="brand" data-guide-link href="index.html">JR-100 GAMES</a>
+    <nav class="languages" aria-label="Language / 言語">
+      <a data-language-switch href="?lang=en" hreflang="en" lang="en">English</a>
+      <a data-language-switch href="?lang=ja" hreflang="ja" lang="ja">日本語</a>
+    </nav>
+  </header>
+  <div class="wrap"><nav class="utility"><a data-guide-link href="index.html"><span lang="en" data-language="en">All games</span><span lang="ja" data-language="ja">全作品</span></a><a data-guide-link href="controls.html"><span lang="en" data-language="en">Getting started</span><span lang="ja" data-language="ja">操作と起動方法</span></a><a href="../gameplay.html"><span lang="en" data-language="en">Gameplay videos</span><span lang="ja" data-language="ja">プレイ動画</span></a><a href="../"><span lang="en" data-language="en">Emulator</span><span lang="ja" data-language="ja">エミュレーター</span></a></nav></div>
+  <main class="wrap" id="main"><section class="hero">
+      <p class="breadcrumbs"><a data-guide-link href="index.html"><span lang="en" data-language="en">All games</span><span lang="ja" data-language="ja">全作品</span></a> / <span lang="en" data-language="en">Exploration &amp; adventure</span><span lang="ja" data-language="ja">探索・アドベンチャー</span></p>
+      <h1>COMPASS ROSE</h1><div class="intro" data-language="en" lang="en"><p>Locate buried relics at ten sites using your last measured bearing and distance band. Readings do not update automatically when you move: choose survey locations that narrow the possibilities.</p>
+</div><div class="intro" data-language="ja" lang="ja"><p>最後に測った方角と距離帯から、埋まった遺物を探す全10地点。位置が変わっても測定結果は自動では変わりません。測る場所を選び、候補を絞ります。</p>
+</div>
+      <nav class="actions"><a class="button primary" href="../?game=compass-rose"><span lang="en" data-language="en">Play this game</span><span lang="ja" data-language="ja">このゲームをプレイ</span></a><a href="https://github.com/zabaglione/jr100dev/tree/main/games/compass_rose"><span lang="en" data-language="en">Source</span><span lang="ja" data-language="ja">ソース</span></a></nav>
+      <p class="note"><span lang="en" data-language="en">To play, set up your own BASIC ROM in the emulator once. Screenshots and videos need no ROM.</span><span lang="ja" data-language="ja">プレイにはエミュレーターで自分のBASIC ROMを一度設定してください。画像と動画の閲覧にはROMは不要です。</span> <a data-guide-link href="controls.html"><span lang="en" data-language="en">Setup and controls</span><span lang="ja" data-language="ja">設定と共通操作</span></a></p>
+    </section>
+    <section class="media" aria-label="Screenshots and video">
+      <div class="shots"><figure><a href="../game-media/compass-rose/demo-start.png"><img src="../game-media/compass-rose/demo-start.png" width="816" height="624" alt="COMPASS ROSE — At the start" loading="lazy"></a><figcaption><span lang="en" data-language="en">At the start</span><span lang="ja" data-language="ja">開始時の盤面</span></figcaption></figure><figure><a href="../game-media/compass-rose/demo-play.png"><img src="../game-media/compass-rose/demo-play.png" width="816" height="624" alt="COMPASS ROSE — In play" loading="lazy"></a><figcaption><span lang="en" data-language="en">In play</span><span lang="ja" data-language="ja">プレイ中</span></figcaption></figure><figure><a href="../game-media/compass-rose/demo-clear.png"><img src="../game-media/compass-rose/demo-clear.png" width="816" height="624" alt="COMPASS ROSE — First goal reached" loading="lazy"></a><figcaption><span lang="en" data-language="en">First goal reached</span><span lang="ja" data-language="ja">最初の目標を達成</span></figcaption></figure></div>
+      <p class="video-link"><a class="button" href="../gameplay.html?game=compass-rose#video"><span lang="en" data-language="en">Watch gameplay with sound (30 seconds)</span><span lang="ja" data-language="ja">音付きプレイ動画を見る（約30秒）</span></a></p>
+      <p class="note"><span lang="en" data-language="en">First stage cleared.</span><span lang="ja" data-language="ja">1ステージのクリアまでを収録。</span></p>
+    </section><article class="manual" data-language="en" lang="en"><h2>Controls and play</h2>
+<p>WASD moves, X surveys, and RETURN digs. Moving costs 1 supply and surveying costs 2. Your initial survey is free, with up to four additional surveys. You can miss twice; the third empty dig fails the attempt.</p>
+<p>Directions work on the keyboard or pad; the pad button also acts as RETURN. SPACE opens confirmation to restart this stage. NO is selected initially. Choose with A/D, confirm with RETURN, or cancel with SPACE. Play pauses during confirmation. CTRL+C returns to BASIC.</p>
+<p>A survey expands through three rings. Walking passes through intermediate positions; digging creates a hole, and discovery has light and sound. Previous survey locations remain marked. Wait for the animation to finish before pressing again.</p>
+<p>BEARING shows N/S/W/E. NEAR means distance 0–2, MID 3–5, and FAR 6 or more. Distance is the sum of horizontal and vertical steps. FROM records the survey's column and row; SURVEYS is remaining surveys, STEPS is supply, and DIGS is digs available.</p>
+<h2>More screenshots</h2>
+<p><img src="https://raw.githubusercontent.com/wiki/zabaglione/jr100dev/images/compass-rose/play-01.png" alt="COMPASS ROSE: play 01" loading="lazy" decoding="async" /></p>
+<p><img src="https://raw.githubusercontent.com/wiki/zabaglione/jr100dev/images/compass-rose/play-02.png" alt="COMPASS ROSE: play 02" loading="lazy" decoding="async" /></p>
+</article><article class="manual" data-language="ja" lang="ja"><h2>操作と遊び方</h2>
+<p>WASDで移動、Xで測定、RETURNで掘ります。移動は補給1、測定は2。開始時の測定は無料で、追加は4回までです。掘り外せるのは2回で、3回目の空振りで失敗します。</p>
+<p>方向キーはキーボードまたはパッド、RETURNはパッドのボタンでも操作できます。SPACEでこの面のやり直し確認を開きます。やり直し確認はNOが初期選択です。A/Dで選び、RETURNで確定、SPACEで取り消します。確認中は進行を止めます。CTRL+CでBASICへ戻ります。</p>
+<p>測定では輪が3段階に広がり、歩行は途中の位置を通ります。掘る動きと穴、発見時の光と音を表示し、過去の測定地点を残します。演出が終わってから次のキーを押してください。</p>
+<p>BEARINGはN/S/W/Eの方角、NEARは距離0〜2、MIDは3〜5、FARは6以上。距離は上下左右の合計です。FROMは測定地点の列・行、SURVEYSは残り測定、STEPSは補給、DIGSは掘れる回数です。</p>
+<p><img src="https://raw.githubusercontent.com/wiki/zabaglione/jr100dev/images/compass-rose/play-01.png" alt="ゲーム開始時" loading="lazy" decoding="async" /></p>
+<p><img src="https://raw.githubusercontent.com/wiki/zabaglione/jr100dev/images/compass-rose/play-02.png" alt="プレイ中の場面" loading="lazy" decoding="async" /></p>
+</article></main>
+  <footer class="wrap"><p><span lang="en" data-language="en">Made for the JR-100 with standard 16 KB RAM. Emulator-tested; real hardware is unverified.</span><span lang="ja" data-language="ja">標準RAM 16KBのJR-100向け。エミュレーターで検証済みです。実機での動作・音声は未確認です。</span></p><a href="https://github.com/zabaglione/jr100dev/wiki">Wiki</a> · <a href="https://github.com/zabaglione/jr100dev/tree/main/games">Source / MIT License</a></footer>
+</body>
+</html>

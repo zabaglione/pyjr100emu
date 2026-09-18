@@ -29,7 +29,7 @@
 </head>
 <body>
   <header>
-    <a href="https://github.com/zabaglione/jr100dev/wiki">Game guides</a> / <a href="./">Emulator</a>
+    <a href="./guide/">Game guides</a> / <a href="./">Emulator</a>
     <h1>JR-100 Game Videos</h1>
     <p class="muted">51 games. Three screenshots and a gameplay video for each.</p>
   </header>
@@ -60,7 +60,7 @@
       byId("watch").textContent = `Watch gameplay video (${Math.round(game.seconds)} seconds, with sound)`;
       byId("description").textContent = `${Math.round(game.seconds)} seconds · ${game.outcome}. ${game.edited ? 'Digest: middle sections omitted; cuts are marked LATER.' : 'Continuous play from the title to the result.'}`;
       byId("play").href = `./?game=${game.id}`;
-      byId("guide").href = `https://github.com/zabaglione/jr100dev/wiki/${game.id.toUpperCase()}`;
+      byId("guide").href = `./guide/${game.id}.html`;
       byId("download").href = game.video.path;
       byId("shots").replaceChildren(...game.images.map((asset, i) => {
         const link = document.createElement("a");

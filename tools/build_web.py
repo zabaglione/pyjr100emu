@@ -139,6 +139,42 @@ def media_files(web_root: Path) -> list[Path]:
     return paths
 
 
+def guide_files(web_root: Path) -> list[Path]:
+    """Only reviewed static guide pages and assets enter the Pages artifact."""
+    folder = web_root / "guide"
+    manifest = folder / "manifest.json"
+    data = json.loads(manifest.read_text(encoding="utf-8"))
+    catalog = json.loads((web_root / "games/catalog.json").read_text())
+    ids = sorted(game["id"] for game in catalog["games"])
+    expected = {f"{gid}.html" for gid in ids} | {
+        "index.html",
+        "controls.html",
+        "language.js",
+        "guide.js",
+        "style.css",
+        "LICENSE.txt",
+    }
+    if (
+        data.get("schemaVersion") != 1
+        or data.get("games") != ids
+        or not isinstance(data.get("files"), dict)
+        or set(data["files"]) != expected
+    ):
+        raise RuntimeError("incomplete or invalid public guide manifest")
+    paths = [manifest]
+    for name, digest in data["files"].items():
+        path = folder / name
+        if path.is_symlink() or not path.is_file():
+            raise RuntimeError("invalid public guide file")
+        content = path.read_bytes()
+        if not 1 <= len(content) <= 1_000_000:
+            raise RuntimeError("invalid public guide size")
+        if hashlib.sha256(content).hexdigest() != digest:
+            raise RuntimeError("public guide hash mismatch")
+        paths.append(path)
+    return paths
+
+
 def build_dist() -> Path:
     javascript, wasm = build_wasm()
     if DIST.exists():
@@ -152,6 +188,10 @@ def build_dist() -> Path:
             shutil.copy2(source, DIST / source.name)
 
     copy_games(WEB_SOURCE, DIST)
+    for source in guide_files(WEB_SOURCE):
+        target = DIST / source.relative_to(WEB_SOURCE)
+        target.parent.mkdir(parents=True, exist_ok=True)
+        shutil.copy2(source, target)
     for source in media_files(WEB_SOURCE):
         target = DIST / source.relative_to(WEB_SOURCE)
         target.parent.mkdir(parents=True, exist_ok=True)
@@ -184,6 +224,10 @@ def verify_dist(dist: Path) -> None:
     actual_media = {p for p in (dist / "game-media").rglob("*") if p.is_file()}
     if actual_media != expected_media:
         raise RuntimeError("unlisted asset reached the public media directory")
+    expected_guides = set(guide_files(dist))
+    actual_guides = {p for p in (dist / "guide").rglob("*") if p.is_file()}
+    if actual_guides != expected_guides:
+        raise RuntimeError("unlisted asset reached the public guide directory")
     worker = (dist / "worker.js").read_text(encoding="utf-8").lower()
     if "pyodide" in worker or "python/" in worker:
         raise RuntimeError("worker still references the Python/Pyodide runtime")

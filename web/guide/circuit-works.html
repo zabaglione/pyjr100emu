@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>CIRCUIT WORKS · JR-100 Games</title>
+  <meta name="title-en" content="CIRCUIT WORKS · JR-100 Games">
+  <meta name="title-ja" content="CIRCUIT WORKS · JR-100 Games">
+  <meta name="description" content="Follow 0/1 signals through 22 three-gate logic circuits.">
+  <meta name="description-en" content="Follow 0/1 signals through 22 three-gate logic circuits.">
+  <meta name="description-ja" content="配線を流れる0/1を見ながら組む22の論理回路">
+  <link rel="canonical" href="https://zabaglione.github.io/pyjr100emu/guide/circuit-works.html">
+  <link rel="alternate" hreflang="en" href="https://zabaglione.github.io/pyjr100emu/guide/circuit-works.html?lang=en">
+  <link rel="alternate" hreflang="ja" href="https://zabaglione.github.io/pyjr100emu/guide/circuit-works.html?lang=ja">
+  <link rel="alternate" hreflang="x-default" href="https://zabaglione.github.io/pyjr100emu/guide/circuit-works.html">
+  <script src="language.js"></script>
+  <link rel="stylesheet" href="style.css">
+  <script src="guide.js" defer></script>
+</head>
+<body>
+  <a class="skip" href="#main"><span lang="en" data-language="en">Skip to content</span><span lang="ja" data-language="ja">本文へ</span></a>
+  <header class="wrap masthead">
+    <a class="brand" data-guide-link href="index.html">JR-100 GAMES</a>
+    <nav class="languages" aria-label="Language / 言語">
+      <a data-language-switch href="?lang=en" hreflang="en" lang="en">English</a>
+      <a data-language-switch href="?lang=ja" hreflang="ja" lang="ja">日本語</a>
+    </nav>
+  </header>
+  <div class="wrap"><nav class="utility"><a data-guide-link href="index.html"><span lang="en" data-language="en">All games</span><span lang="ja" data-language="ja">全作品</span></a><a data-guide-link href="controls.html"><span lang="en" data-language="en">Getting started</span><span lang="ja" data-language="ja">操作と起動方法</span></a><a href="../gameplay.html"><span lang="en" data-language="en">Gameplay videos</span><span lang="ja" data-language="ja">プレイ動画</span></a><a href="../"><span lang="en" data-language="en">Emulator</span><span lang="ja" data-language="ja">エミュレーター</span></a></nav></div>
+  <main class="wrap" id="main"><section class="hero">
+      <p class="breadcrumbs"><a data-guide-link href="index.html"><span lang="en" data-language="en">All games</span><span lang="ja" data-language="ja">全作品</span></a> / <span lang="en" data-language="en">Tactics &amp; automation</span><span lang="ja" data-language="ja">戦術・自動化</span></p>
+      <h1>CIRCUIT WORKS</h1><div class="intro" data-language="en" lang="en"><p>Configure three logic gates to match target W for all eight combinations of inputs A, B, and C. There are 22 circuits. G1 combines A and B, G2 combines G1 and C, and G3 combines G2 and A.</p>
+</div><div class="intro" data-language="ja" lang="ja"><p>3段の論理ゲートを組み替え、3入力A・B・Cの8通りすべてで目標Wを満たす全22問です。G1はAとB、G2はG1とC、G3はG2とAを計算します。</p>
+</div>
+      <nav class="actions"><a class="button primary" href="../?game=circuit-works"><span lang="en" data-language="en">Play this game</span><span lang="ja" data-language="ja">このゲームをプレイ</span></a><a href="https://github.com/zabaglione/jr100dev/tree/main/games/circuit_works"><span lang="en" data-language="en">Source</span><span lang="ja" data-language="ja">ソース</span></a></nav>
+      <p class="note"><span lang="en" data-language="en">To play, set up your own BASIC ROM in the emulator once. Screenshots and videos need no ROM.</span><span lang="ja" data-language="ja">プレイにはエミュレーターで自分のBASIC ROMを一度設定してください。画像と動画の閲覧にはROMは不要です。</span> <a data-guide-link href="controls.html"><span lang="en" data-language="en">Setup and controls</span><span lang="ja" data-language="ja">設定と共通操作</span></a></p>
+    </section>
+    <section class="media" aria-label="Screenshots and video">
+      <div class="shots"><figure><a href="../game-media/circuit-works/demo-start.png"><img src="../game-media/circuit-works/demo-start.png" width="816" height="624" alt="CIRCUIT WORKS — At the start" loading="lazy"></a><figcaption><span lang="en" data-language="en">At the start</span><span lang="ja" data-language="ja">開始時の盤面</span></figcaption></figure><figure><a href="../game-media/circuit-works/demo-play.png"><img src="../game-media/circuit-works/demo-play.png" width="816" height="624" alt="CIRCUIT WORKS — In play" loading="lazy"></a><figcaption><span lang="en" data-language="en">In play</span><span lang="ja" data-language="ja">プレイ中</span></figcaption></figure><figure><a href="../game-media/circuit-works/demo-clear.png"><img src="../game-media/circuit-works/demo-clear.png" width="816" height="624" alt="CIRCUIT WORKS — First goal reached" loading="lazy"></a><figcaption><span lang="en" data-language="en">First goal reached</span><span lang="ja" data-language="ja">最初の目標を達成</span></figcaption></figure></div>
+      <p class="video-link"><a class="button" href="../gameplay.html?game=circuit-works#video"><span lang="en" data-language="en">Watch gameplay with sound (30 seconds)</span><span lang="ja" data-language="ja">音付きプレイ動画を見る（約30秒）</span></a></p>
+      <p class="note"><span lang="en" data-language="en">First stage cleared.</span><span lang="ja" data-language="ja">1ステージのクリアまでを収録。</span></p>
+    </section><article class="manual" data-language="en" lang="en"><h2>Controls and play</h2>
+<p>Select a gate with W/S, choose AND, OR, or XOR with A/D, and press RETURN to test all eight rows. AND outputs 1 when both inputs are 1; OR when at least one is 1; XOR when exactly one is 1.</p>
+<p>Directions work on the keyboard or pad; the pad button also acts as RETURN. SPACE opens confirmation to restart this stage. NO is selected initially. Choose with A/D, confirm with RETURN, or cancel with SPACE. Play pauses during confirmation. CTRL+C returns to BASIC.</p>
+<p>Wires and sockets connect the gates, and visible 0/1 signals travel through each of the three stages. Sounds and marks record each row's result. Wait until testing finishes before pressing again.</p>
+<p>The table on the right reads A, B, C, W, NOW. W is the target and NOW is your circuit's output. A star marks a match; X marks a mismatch. MATCHED counts matching rows.</p>
+<h2>More screenshots</h2>
+<p><img src="https://raw.githubusercontent.com/wiki/zabaglione/jr100dev/images/circuit-works/play-01.png" alt="CIRCUIT WORKS: play 01" loading="lazy" decoding="async" /></p>
+<p><img src="https://raw.githubusercontent.com/wiki/zabaglione/jr100dev/images/circuit-works/play-02.png" alt="CIRCUIT WORKS: play 02" loading="lazy" decoding="async" /></p>
+</article><article class="manual" data-language="ja" lang="ja"><h2>操作と遊び方</h2>
+<p>W/Sでゲートを選び、A/DでAND・OR・XORを変更、RETURNで8行を試験します。ANDは両方が1、ORは一方以上が1、XORは片方だけが1のとき1です。</p>
+<p>方向キーはキーボードまたはパッド、RETURNはパッドのボタンでも操作できます。SPACEでこの面のやり直し確認を開きます。やり直し確認はNOが初期選択です。A/Dで選び、RETURNで確定、SPACEで取り消します。確認中は進行を止めます。CTRL+CでBASICへ戻ります。</p>
+<p>ゲートをつなぐ配線とソケットを加え、信号の0/1が3段のゲートを通る途中の位置を見せます。各行の照合結果を音と印で残します。演出が終わってから次のキーを押してください。</p>
+<p>右の表はA・B・C・W・NOWの順。Wが目標、NOWが今回の出力です。各行の星印は一致、Xは不一致。MATCHEDは一致した行数です。</p>
+<p><img src="https://raw.githubusercontent.com/wiki/zabaglione/jr100dev/images/circuit-works/play-01.png" alt="ゲーム開始時" loading="lazy" decoding="async" /></p>
+<p><img src="https://raw.githubusercontent.com/wiki/zabaglione/jr100dev/images/circuit-works/play-02.png" alt="プレイ中の場面" loading="lazy" decoding="async" /></p>
+</article></main>
+  <footer class="wrap"><p><span lang="en" data-language="en">Made for the JR-100 with standard 16 KB RAM. Emulator-tested; real hardware is unverified.</span><span lang="ja" data-language="ja">標準RAM 16KBのJR-100向け。エミュレーターで検証済みです。実機での動作・音声は未確認です。</span></p><a href="https://github.com/zabaglione/jr100dev/wiki">Wiki</a> · <a href="https://github.com/zabaglione/jr100dev/tree/main/games">Source / MIT License</a></footer>
+</body>
+</html>

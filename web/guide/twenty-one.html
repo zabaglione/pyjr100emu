@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>TWENTY ONE · JR-100 Games</title>
+  <meta name="title-en" content="TWENTY ONE · JR-100 Games">
+  <meta name="title-ja" content="TWENTY ONE · JR-100 Games">
+  <meta name="description" content="Use a 52-card deck and double down to finish seven hands ahead.">
+  <meta name="description-en" content="Use a 52-card deck and double down to finish seven hands ahead.">
+  <meta name="description-ja" content="52枚の山札とダブルを使い7勝負の収支を競う">
+  <link rel="canonical" href="https://zabaglione.github.io/pyjr100emu/guide/twenty-one.html">
+  <link rel="alternate" hreflang="en" href="https://zabaglione.github.io/pyjr100emu/guide/twenty-one.html?lang=en">
+  <link rel="alternate" hreflang="ja" href="https://zabaglione.github.io/pyjr100emu/guide/twenty-one.html?lang=ja">
+  <link rel="alternate" hreflang="x-default" href="https://zabaglione.github.io/pyjr100emu/guide/twenty-one.html">
+  <script src="language.js"></script>
+  <link rel="stylesheet" href="style.css">
+  <script src="guide.js" defer></script>
+</head>
+<body>
+  <a class="skip" href="#main"><span lang="en" data-language="en">Skip to content</span><span lang="ja" data-language="ja">本文へ</span></a>
+  <header class="wrap masthead">
+    <a class="brand" data-guide-link href="index.html">JR-100 GAMES</a>
+    <nav class="languages" aria-label="Language / 言語">
+      <a data-language-switch href="?lang=en" hreflang="en" lang="en">English</a>
+      <a data-language-switch href="?lang=ja" hreflang="ja" lang="ja">日本語</a>
+    </nav>
+  </header>
+  <div class="wrap"><nav class="utility"><a data-guide-link href="index.html"><span lang="en" data-language="en">All games</span><span lang="ja" data-language="ja">全作品</span></a><a data-guide-link href="controls.html"><span lang="en" data-language="en">Getting started</span><span lang="ja" data-language="ja">操作と起動方法</span></a><a href="../gameplay.html"><span lang="en" data-language="en">Gameplay videos</span><span lang="ja" data-language="ja">プレイ動画</span></a><a href="../"><span lang="en" data-language="en">Emulator</span><span lang="ja" data-language="ja">エミュレーター</span></a></nav></div>
+  <main class="wrap" id="main"><section class="hero">
+      <p class="breadcrumbs"><a data-guide-link href="index.html"><span lang="en" data-language="en">All games</span><span lang="ja" data-language="ja">全作品</span></a> / <span lang="en" data-language="en">Cards &amp; board games</span><span lang="ja" data-language="ja">カード・ボード</span></p>
+      <h1>TWENTY ONE</h1><div class="intro" data-language="en" lang="en"><p>Play blackjack with a 52-card deck. Finish seven hands with at least 12 chips, starting from 10, to clear the game. Cards do not repeat within a deck; the deck is reshuffled when exhausted.</p>
+</div><div class="intro" data-language="ja" lang="ja"><p>52枚の山札で遊ぶブラックジャック。7回の勝負を終えて、持ち金を10から12以上へ増やせばクリアです。同じ山札の途中でカードは重複せず、使い切ると切り直します。</p>
+</div>
+      <nav class="actions"><a class="button primary" href="../?game=twenty-one"><span lang="en" data-language="en">Play this game</span><span lang="ja" data-language="ja">このゲームをプレイ</span></a><a href="https://github.com/zabaglione/jr100dev/tree/main/games/twenty_one"><span lang="en" data-language="en">Source</span><span lang="ja" data-language="ja">ソース</span></a></nav>
+      <p class="note"><span lang="en" data-language="en">To play, set up your own BASIC ROM in the emulator once. Screenshots and videos need no ROM.</span><span lang="ja" data-language="ja">プレイにはエミュレーターで自分のBASIC ROMを一度設定してください。画像と動画の閲覧にはROMは不要です。</span> <a data-guide-link href="controls.html"><span lang="en" data-language="en">Setup and controls</span><span lang="ja" data-language="ja">設定と共通操作</span></a></p>
+    </section>
+    <section class="media" aria-label="Screenshots and video">
+      <div class="shots"><figure><a href="../game-media/twenty-one/demo-start.png"><img src="../game-media/twenty-one/demo-start.png" width="816" height="624" alt="TWENTY ONE — At the start" loading="lazy"></a><figcaption><span lang="en" data-language="en">At the start</span><span lang="ja" data-language="ja">開始時の盤面</span></figcaption></figure><figure><a href="../game-media/twenty-one/demo-play.png"><img src="../game-media/twenty-one/demo-play.png" width="816" height="624" alt="TWENTY ONE — In play" loading="lazy"></a><figcaption><span lang="en" data-language="en">In play</span><span lang="ja" data-language="ja">プレイ中</span></figcaption></figure><figure><a href="../game-media/twenty-one/demo-clear.png"><img src="../game-media/twenty-one/demo-clear.png" width="816" height="624" alt="TWENTY ONE — First goal reached" loading="lazy"></a><figcaption><span lang="en" data-language="en">First goal reached</span><span lang="ja" data-language="ja">最初の目標を達成</span></figcaption></figure></div>
+      <p class="video-link"><a class="button" href="../gameplay.html?game=twenty-one#video"><span lang="en" data-language="en">Watch gameplay with sound (59 seconds)</span><span lang="ja" data-language="ja">音付きプレイ動画を見る（約59秒）</span></a></p>
+      <p class="note"><span lang="en" data-language="en">First stage cleared.</span><span lang="ja" data-language="ja">1ステージのクリアまでを収録。</span></p>
+    </section><article class="manual" data-language="en" lang="en"><h2>Controls and play</h2>
+<p>Choose HIT, STAND, or DOUBLE with A/D and confirm with RETURN. HIT draws one card. STAND resolves the hand. DOUBLE raises your stake to 4, draws exactly one card, and resolves immediately. DOUBLE is available only with the original two cards and at least 4 chips.</p>
+<p>Directions work on the keyboard or pad; the pad button also acts as RETURN. SPACE opens confirmation to restart this stage. NO is selected initially. Choose with A/D, confirm with RETURN, or cancel with SPACE. Play pauses during confirmation. CTRL+C returns to BASIC.</p>
+<p>Ranks, face cards, and suits appear within individual frames, and the hidden card has a distinct back. Dealing, dealer draws, results, and chip changes appear in order, with time to inspect each hand. Wait for animations to finish before pressing again.</p>
+<p>An ace counts as 1 or 11; face cards count as 10. The normal stake is 2. A winning 21 on the first two cards earns 3. The dealer draws until reaching 17. A tie leaves your chips unchanged. The dealer's second card stays hidden until resolution. Having fewer than 2 chips ends the game.</p>
+<h2>More screenshots</h2>
+<p><img src="https://raw.githubusercontent.com/wiki/zabaglione/jr100dev/images/twenty-one/play-01.png" alt="TWENTY ONE: play 01" loading="lazy" decoding="async" /></p>
+<p><img src="https://raw.githubusercontent.com/wiki/zabaglione/jr100dev/images/twenty-one/play-02.png" alt="TWENTY ONE: play 02" loading="lazy" decoding="async" /></p>
+</article><article class="manual" data-language="ja" lang="ja"><h2>操作と遊び方</h2>
+<p>A/DでHIT・STAND・DOUBLEを選び、RETURNで決定。HITは1枚引き、STANDは勝負、DOUBLEは賭け金を4にして1枚だけ引き勝負します。DOUBLEは最初の2枚かつ持ち金4以上で選べます。</p>
+<p>方向キーはキーボードまたはパッド、RETURNはパッドのボタンでも操作できます。SPACEでこの面のやり直し確認を開きます。やり直し確認はNOが初期選択です。A/Dで選び、RETURNで確定、SPACEで取り消します。確認中は進行を止めます。CTRL+CでBASICへ戻ります。</p>
+<p>カードの枠内に数字・絵札とスートを並べ、伏せ札を区別します。配る途中の移動、相手の追加ドロー、勝敗と持ち金の増減を順番に見せ、各勝負の確認時間を設けます。演出が終わってから次のキーを押してください。</p>
+<p>Aは1または11、絵札は10です。通常の賭け金は2、最初の2枚で21なら勝利時に3増えます。相手は17まで引きます。引き分けは持ち金が変わりません。相手の2枚目は勝負まで伏せられ、持ち金2未満で終了です。</p>
+<p><img src="https://raw.githubusercontent.com/wiki/zabaglione/jr100dev/images/twenty-one/play-01.png" alt="ゲーム開始時" loading="lazy" decoding="async" /></p>
+<p><img src="https://raw.githubusercontent.com/wiki/zabaglione/jr100dev/images/twenty-one/play-02.png" alt="プレイ中の場面" loading="lazy" decoding="async" /></p>
+</article></main>
+  <footer class="wrap"><p><span lang="en" data-language="en">Made for the JR-100 with standard 16 KB RAM. Emulator-tested; real hardware is unverified.</span><span lang="ja" data-language="ja">標準RAM 16KBのJR-100向け。エミュレーターで検証済みです。実機での動作・音声は未確認です。</span></p><a href="https://github.com/zabaglione/jr100dev/wiki">Wiki</a> · <a href="https://github.com/zabaglione/jr100dev/tree/main/games">Source / MIT License</a></footer>
+</body>
+</html>

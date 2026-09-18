@@ -1,0 +1,128 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>IRON SCRIPT · JR-100 Games</title>
+  <meta name="title-en" content="IRON SCRIPT · JR-100 Games">
+  <meta name="title-ja" content="IRON SCRIPT · JR-100 Games">
+  <meta name="description" content="Program shots, switches, and loops to solve 24 factories.">
+  <meta name="description-en" content="Program shots, switches, and loops to solve 24 factories.">
+  <meta name="description-ja" content="射撃・スイッチ・繰り返しの命令で24の工場を攻略">
+  <link rel="canonical" href="https://zabaglione.github.io/pyjr100emu/guide/iron-script.html">
+  <link rel="alternate" hreflang="en" href="https://zabaglione.github.io/pyjr100emu/guide/iron-script.html?lang=en">
+  <link rel="alternate" hreflang="ja" href="https://zabaglione.github.io/pyjr100emu/guide/iron-script.html?lang=ja">
+  <link rel="alternate" hreflang="x-default" href="https://zabaglione.github.io/pyjr100emu/guide/iron-script.html">
+  <script src="language.js"></script>
+  <link rel="stylesheet" href="style.css">
+  <script src="guide.js" defer></script>
+</head>
+<body>
+  <a class="skip" href="#main"><span lang="en" data-language="en">Skip to content</span><span lang="ja" data-language="ja">本文へ</span></a>
+  <header class="wrap masthead">
+    <a class="brand" data-guide-link href="index.html">JR-100 GAMES</a>
+    <nav class="languages" aria-label="Language / 言語">
+      <a data-language-switch href="?lang=en" hreflang="en" lang="en">English</a>
+      <a data-language-switch href="?lang=ja" hreflang="ja" lang="ja">日本語</a>
+    </nav>
+  </header>
+  <div class="wrap"><nav class="utility"><a data-guide-link href="index.html"><span lang="en" data-language="en">All games</span><span lang="ja" data-language="ja">全作品</span></a><a data-guide-link href="controls.html"><span lang="en" data-language="en">Getting started</span><span lang="ja" data-language="ja">操作と起動方法</span></a><a href="../gameplay.html"><span lang="en" data-language="en">Gameplay videos</span><span lang="ja" data-language="ja">プレイ動画</span></a><a href="../"><span lang="en" data-language="en">Emulator</span><span lang="ja" data-language="ja">エミュレーター</span></a></nav></div>
+  <main class="wrap" id="main"><section class="hero">
+      <p class="breadcrumbs"><a data-guide-link href="index.html"><span lang="en" data-language="en">All games</span><span lang="ja" data-language="ja">全作品</span></a> / <span lang="en" data-language="en">Tactics &amp; automation</span><span lang="ja" data-language="ja">戦術・自動化</span></p>
+      <h1>IRON SCRIPT</h1><div class="intro" data-language="en" lang="en"><p>Program movement, shooting, switches, and loops to guide a robot to a diamond-shaped terminal in 24 factories. Use at most 12 instruction slots and limited ammunition to get past guards, doors, and cycling lasers.</p>
+</div><div class="intro" data-language="ja" lang="ja"><p>移動・射撃・スイッチ操作・繰り返しを組み合わせ、ロボットをダイヤ形の端末へ導く24ステージのプログラミングパズルです。最大12枠の命令と限られた弾数で、警備ロボット、扉、周期レーザーを突破します。</p>
+</div>
+      <nav class="actions"><a class="button primary" href="../?game=iron-script"><span lang="en" data-language="en">Play this game</span><span lang="ja" data-language="ja">このゲームをプレイ</span></a><a href="https://github.com/zabaglione/jr100dev/tree/main/games/iron_script"><span lang="en" data-language="en">Source</span><span lang="ja" data-language="ja">ソース</span></a></nav>
+      <p class="note"><span lang="en" data-language="en">To play, set up your own BASIC ROM in the emulator once. Screenshots and videos need no ROM.</span><span lang="ja" data-language="ja">プレイにはエミュレーターで自分のBASIC ROMを一度設定してください。画像と動画の閲覧にはROMは不要です。</span> <a data-guide-link href="controls.html"><span lang="en" data-language="en">Setup and controls</span><span lang="ja" data-language="ja">設定と共通操作</span></a></p>
+    </section>
+    <section class="media" aria-label="Screenshots and video">
+      <div class="shots"><figure><a href="../game-media/iron-script/demo-start.png"><img src="../game-media/iron-script/demo-start.png" width="816" height="624" alt="IRON SCRIPT — At the start" loading="lazy"></a><figcaption><span lang="en" data-language="en">At the start</span><span lang="ja" data-language="ja">開始時の盤面</span></figcaption></figure><figure><a href="../game-media/iron-script/demo-play.png"><img src="../game-media/iron-script/demo-play.png" width="816" height="624" alt="IRON SCRIPT — In play" loading="lazy"></a><figcaption><span lang="en" data-language="en">In play</span><span lang="ja" data-language="ja">プレイ中</span></figcaption></figure><figure><a href="../game-media/iron-script/demo-clear.png"><img src="../game-media/iron-script/demo-clear.png" width="816" height="624" alt="IRON SCRIPT — First goal reached" loading="lazy"></a><figcaption><span lang="en" data-language="en">First goal reached</span><span lang="ja" data-language="ja">最初の目標を達成</span></figcaption></figure></div>
+      <p class="video-link"><a class="button" href="../gameplay.html?game=iron-script#video"><span lang="en" data-language="en">Watch gameplay with sound (30 seconds)</span><span lang="ja" data-language="ja">音付きプレイ動画を見る（約30秒）</span></a></p>
+      <p class="note"><span lang="en" data-language="en">First stage cleared.</span><span lang="ja" data-language="ja">1ステージのクリアまでを収録。</span></p>
+    </section><article class="manual" data-language="en" lang="en"><h2>Controls and play</h2>
+<p>Select an instruction slot with A/D and change its command with W/S. RETURN starts execution from the first slot; RETURN during execution stops it. Failure or stopping keeps your program. Edit it and press RETURN to rerun from the stage's original positions, guards, doors, and ammunition. A confirmed SPACE restart also erases the program.</p>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>Command</th>
+<th>Action</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>↑ ↓ ← →</td>
+<td>Face that direction and move one cell. The arrows use JR-100 graphic characters.</td>
+</tr>
+<tr>
+<td>. (WAIT)</td>
+<td>Wait one action to align with the laser cycle.</td>
+</tr>
+<tr>
+<td>F (FIRE)</td>
+<td>Fire one shot in DIR, dealing 1 damage to the first enemy hit. Walls and closed doors stop it.</td>
+</tr>
+<tr>
+<td>U (USE)</td>
+<td>While on a switch, toggle every door.</td>
+</tr>
+<tr>
+<td>L (LOOP)</td>
+<td>Repeat the preceding two slots once, in the same order. <code>→ → L</code> moves four cells. L cannot occupy the first two slots or follow a pair containing L.</td>
+</tr>
+</tbody>
+</table></div>
+<p>Instructions run left to right, then top to bottom. A, B, and C label slots 10–12. PROGRAM shows the usable slot count; X slots are unavailable. Stages allow 6–12 slots, so loops may be needed to fit the route. Reaching the terminal clears the stage immediately, without executing the remaining program.</p>
+<p>Directions work on the keyboard or pad; the pad button also acts as RETURN. SPACE opens confirmation to restart this stage. NO is selected initially. Choose with A/D, confirm with RETURN, or cancel with SPACE. Play pauses during confirmation. CTRL+C returns to BASIC.</p>
+<p>The robot turns and passes through intermediate positions. Doors open through intermediate shapes; shots travel forward. An armored guard flashes and loses its armor after the first hit, then disappears through four destruction frames when defeated. Each action has a sound effect. Failure freezes the cause and the responsible instruction on screen. Wait until the animation ends before pressing again.</p>
+<p>AMMO is shots remaining, DIR is the firing direction, DOOR shows door state, and STEPS counts executed actions. L occupies one slot but performs two actions. Editing pauses time.</p>
+<p>Lasers alternate on/off after every action. NEXT LASER shows their state after the next action: you cannot remain on a laser cell when it becomes ON! Waiting and shooting each count as an action. Two beams indicate an active laser; a dotted floor indicates an inactive one.</p>
+<p>Guards block your path; contact stops the run. Normal guards take one shot, armored guards marked <code>2</code> take two. Changing facing requires moving in that direction, so plan your firing position and ammunition. You need not defeat all guards; detours are an option.</p>
+<p>Stages 1–4 introduce doors and shooting, 5–8 laser timing, 9–12 loops, 13–16 firing positions and detours, 17–20 combined mechanisms, and 21–24 combined slot and ammunition limits.</p>
+<h2>More screenshots</h2>
+<p><img src="https://raw.githubusercontent.com/wiki/zabaglione/jr100dev/images/iron-script/play-01.png" alt="IRON SCRIPT: play 01" loading="lazy" decoding="async" /></p>
+<p><img src="https://raw.githubusercontent.com/wiki/zabaglione/jr100dev/images/iron-script/play-02.png" alt="IRON SCRIPT: play 02" loading="lazy" decoding="async" /></p>
+</article><article class="manual" data-language="ja" lang="ja"><h2>操作と遊び方</h2>
+<p>A/Dで命令枠を選び、W/Sで命令を変更します。RETURNで最初の枠から実行し、実行中のRETURNで停止します。失敗や停止の後も命令列は残り、修正してRETURNを押すと、位置・敵・扉・弾数をその面の開始状態へ戻して再実行します。SPACEでやり直す場合は命令列も消去します。</p>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>命令</th>
+<th>動作</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>↑ ↓ ← →</td>
+<td>指定方向を向き、1マス移動します。方向にはJR-100のグラフィック文字を使用しています。</td>
+</tr>
+<tr>
+<td>.（WAIT）</td>
+<td>その場で1動作待ち、レーザーの周期を合わせます。</td>
+</tr>
+<tr>
+<td>F（FIRE）</td>
+<td>DIRの方向へ1発撃ちます。最初に当たった敵へ1ダメージ。壁と閉じた扉で弾が止まります。</td>
+</tr>
+<tr>
+<td>U（USE）</td>
+<td>スイッチの上で、すべての扉を開閉します。</td>
+</tr>
+<tr>
+<td>L（LOOP）</td>
+<td>直前の2枠を、同じ順でもう一度実行します。たとえば「→ → L」で4マス進みます。先頭2枠、または直前2枠にLがある場合は使えません。</td>
+</tr>
+</tbody>
+</table></div>
+<p>命令枠は左から右、上から下へ実行します。A・B・Cは10〜12番目の枠です。PROGRAMは使用可能な枠数で、Xの枠は使えません。面によって6〜12枠となり、繰り返しで命令を短くする必要があります。途中で端末に着けば、残りの命令は実行せずクリアです。</p>
+<p>方向キーはキーボードまたはパッド、RETURNはパッドのボタンでも操作できます。SPACEでこの面のやり直し確認を開きます。やり直し確認はNOが初期選択です。A/Dで選び、RETURNで確定、SPACEで取り消します。確認中は進行を止めます。CTRL+CでBASICへ戻ります。</p>
+<p>ロボットは矢印の方向を向き、マスの中間を通って移動します。扉は途中の開き方を挟んで開閉し、弾が前方へ飛びます。装甲敵は1発目で点滅して装甲が外れ、撃破時は4段階で消滅します。各動作にSEがあり、失敗時は原因と該当する命令枠を残して停止します。演出が終わってから次のキーを押してください。</p>
+<p>AMMOは残弾、DIRは射撃する向き、DOORは扉の開閉状態、STEPSは実行した動作数です。Lは1枠で2動作を実行します。編集画面では時間を止めて考えられます。</p>
+<p>レーザーは1動作ごとに点灯・消灯が切り替わります。NEXT LASERは次の動作後の状態で、ON!になる動作ではレーザーのマスに残れません。WAITや射撃も1動作です。2本の光線が点灯中、点だけの床が消灯中のレーザーです。</p>
+<p>警備ロボットは進路を塞ぎ、接触すると停止します。通常の敵は1発、「2」付きの装甲敵は2発で倒せます。向きを変えるにはその方向へ移動するため、射撃位置と残弾を先に考えます。敵をすべて倒す必要はなく、弾が足りないときは迂回も選べます。</p>
+<p>1〜4面は扉と射撃、5〜8面はレーザーの周期、9〜12面は繰り返し、13〜16面は射撃位置と迂回、17〜20面は仕掛けの組み合わせ、21〜24面は命令枠と弾数を使う総合課題です。</p>
+<p><img src="https://raw.githubusercontent.com/wiki/zabaglione/jr100dev/images/iron-script/play-01.png" alt="ゲーム開始時" loading="lazy" decoding="async" /></p>
+<p><img src="https://raw.githubusercontent.com/wiki/zabaglione/jr100dev/images/iron-script/play-02.png" alt="プレイ中の場面" loading="lazy" decoding="async" /></p>
+</article></main>
+  <footer class="wrap"><p><span lang="en" data-language="en">Made for the JR-100 with standard 16 KB RAM. Emulator-tested; real hardware is unverified.</span><span lang="ja" data-language="ja">標準RAM 16KBのJR-100向け。エミュレーターで検証済みです。実機での動作・音声は未確認です。</span></p><a href="https://github.com/zabaglione/jr100dev/wiki">Wiki</a> · <a href="https://github.com/zabaglione/jr100dev/tree/main/games">Source / MIT License</a></footer>
+</body>
+</html>

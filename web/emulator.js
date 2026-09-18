@@ -514,6 +514,8 @@ async function initializeStoredRom() {
       extendedRam.disabled = true;
       element("#game-source").href = game.sourceUrl;
       element("#game-source").hidden = false;
+      element("#game-guide").href = `./guide/${game.id}.html`;
+      element("#game-guide").hidden = false;
       element("#game-launch-status").textContent = `Starting ${game.title}...`;
     }
     storedRom = await readStoredRom();

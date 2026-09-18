@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>FUSE BOX · JR-100 Games</title>
+  <meta name="title-en" content="FUSE BOX · JR-100 Games">
+  <meta name="title-ja" content="FUSE BOX · JR-100 Games">
+  <meta name="description" content="Reconstruct a switchboard by matching row and column totals.">
+  <meta name="description-en" content="Reconstruct a switchboard by matching row and column totals.">
+  <meta name="description-ja" content="行と列の個数を読んで配線図を復元する">
+  <link rel="canonical" href="https://zabaglione.github.io/pyjr100emu/guide/fuse-box.html">
+  <link rel="alternate" hreflang="en" href="https://zabaglione.github.io/pyjr100emu/guide/fuse-box.html?lang=en">
+  <link rel="alternate" hreflang="ja" href="https://zabaglione.github.io/pyjr100emu/guide/fuse-box.html?lang=ja">
+  <link rel="alternate" hreflang="x-default" href="https://zabaglione.github.io/pyjr100emu/guide/fuse-box.html">
+  <script src="language.js"></script>
+  <link rel="stylesheet" href="style.css">
+  <script src="guide.js" defer></script>
+</head>
+<body>
+  <a class="skip" href="#main"><span lang="en" data-language="en">Skip to content</span><span lang="ja" data-language="ja">本文へ</span></a>
+  <header class="wrap masthead">
+    <a class="brand" data-guide-link href="index.html">JR-100 GAMES</a>
+    <nav class="languages" aria-label="Language / 言語">
+      <a data-language-switch href="?lang=en" hreflang="en" lang="en">English</a>
+      <a data-language-switch href="?lang=ja" hreflang="ja" lang="ja">日本語</a>
+    </nav>
+  </header>
+  <div class="wrap"><nav class="utility"><a data-guide-link href="index.html"><span lang="en" data-language="en">All games</span><span lang="ja" data-language="ja">全作品</span></a><a data-guide-link href="controls.html"><span lang="en" data-language="en">Getting started</span><span lang="ja" data-language="ja">操作と起動方法</span></a><a href="../gameplay.html"><span lang="en" data-language="en">Gameplay videos</span><span lang="ja" data-language="ja">プレイ動画</span></a><a href="../"><span lang="en" data-language="en">Emulator</span><span lang="ja" data-language="ja">エミュレーター</span></a></nav></div>
+  <main class="wrap" id="main"><section class="hero">
+      <p class="breadcrumbs"><a data-guide-link href="index.html"><span lang="en" data-language="en">All games</span><span lang="ja" data-language="ja">全作品</span></a> / <span lang="en" data-language="en">Puzzle</span><span lang="ja" data-language="ja">パズル</span></p>
+      <h1>FUSE BOX</h1><div class="intro" data-language="en" lang="en"><p>Turn on the specified number of switches in every row and column. Any arrangement satisfying all totals is correct.</p>
+</div><div class="intro" data-language="ja" lang="ja"><p>行と列に指定された個数だけスイッチを入れます。すべての個数が一致すれば、どの配置でも正解です。</p>
+</div>
+      <nav class="actions"><a class="button primary" href="../?game=fuse-box"><span lang="en" data-language="en">Play this game</span><span lang="ja" data-language="ja">このゲームをプレイ</span></a><a href="https://github.com/zabaglione/jr100dev/tree/main/games/fuse_box"><span lang="en" data-language="en">Source</span><span lang="ja" data-language="ja">ソース</span></a></nav>
+      <p class="note"><span lang="en" data-language="en">To play, set up your own BASIC ROM in the emulator once. Screenshots and videos need no ROM.</span><span lang="ja" data-language="ja">プレイにはエミュレーターで自分のBASIC ROMを一度設定してください。画像と動画の閲覧にはROMは不要です。</span> <a data-guide-link href="controls.html"><span lang="en" data-language="en">Setup and controls</span><span lang="ja" data-language="ja">設定と共通操作</span></a></p>
+    </section>
+    <section class="media" aria-label="Screenshots and video">
+      <div class="shots"><figure><a href="../game-media/fuse-box/demo-start.png"><img src="../game-media/fuse-box/demo-start.png" width="816" height="624" alt="FUSE BOX — At the start" loading="lazy"></a><figcaption><span lang="en" data-language="en">At the start</span><span lang="ja" data-language="ja">開始時の盤面</span></figcaption></figure><figure><a href="../game-media/fuse-box/demo-play.png"><img src="../game-media/fuse-box/demo-play.png" width="816" height="624" alt="FUSE BOX — In play" loading="lazy"></a><figcaption><span lang="en" data-language="en">In play</span><span lang="ja" data-language="ja">プレイ中</span></figcaption></figure><figure><a href="../game-media/fuse-box/demo-clear.png"><img src="../game-media/fuse-box/demo-clear.png" width="816" height="624" alt="FUSE BOX — First goal reached" loading="lazy"></a><figcaption><span lang="en" data-language="en">First goal reached</span><span lang="ja" data-language="ja">最初の目標を達成</span></figcaption></figure></div>
+      <p class="video-link"><a class="button" href="../gameplay.html?game=fuse-box#video"><span lang="en" data-language="en">Watch gameplay with sound (32 seconds)</span><span lang="ja" data-language="ja">音付きプレイ動画を見る（約32秒）</span></a></p>
+      <p class="note"><span lang="en" data-language="en">First stage cleared.</span><span lang="ja" data-language="ja">1ステージのクリアまでを収録。</span></p>
+    </section><article class="manual" data-language="en" lang="en"><h2>Controls and play</h2>
+<p>WASD selects a switch; RETURN toggles it on or off.</p>
+<p>Directions work on the keyboard or pad; the pad button also acts as RETURN. SPACE opens confirmation to restart this stage. NO is selected initially. Choose with A/D, confirm with RETURN, or cancel with SPACE. Play pauses during confirmation. CTRL+C returns to BASIC.</p>
+<p>A tile's face narrows to its edge before the opposite face opens. Both turning on and turning off have intermediate frames and sound. Wait for the animation to finish before pressing again.</p>
+<p>Numbers above the board are column totals; those on the left are row totals. A number is inverted when the number of enabled switches matches it, and returns to normal if the total changes away from the target. These are totals for the whole row or column, not lengths of consecutive groups.</p>
+<p>Start with rows needing more switches. Subtract the switches already on from each column's target to find how many it still needs. Prefer columns with larger remaining counts, choosing nearby cells when counts tie. When a row's number inverts, move on and recalculate column needs. Do not add more switches to a row or column whose target is already satisfied.</p>
+<p>The first-stage video begins where the second row's 3 intersects the leftmost column's 3. Two more switches complete that row; other rows are then filled according to remaining counts. There is no need to start in the center. Different layouts clear if every row and column total matches.</p>
+<h2>More screenshots</h2>
+<p><img src="https://raw.githubusercontent.com/wiki/zabaglione/jr100dev/images/fuse-box/play-01.png" alt="FUSE BOX: play 01" loading="lazy" decoding="async" /></p>
+<p><img src="https://raw.githubusercontent.com/wiki/zabaglione/jr100dev/images/fuse-box/play-02.png" alt="FUSE BOX: play 02" loading="lazy" decoding="async" /></p>
+</article><article class="manual" data-language="ja" lang="ja"><h2>操作と遊び方</h2>
+<p>WASDでスイッチを選び、RETURNで入／切を反転します。</p>
+<p>方向キーはキーボードまたはパッド、RETURNはパッドのボタンでも操作できます。SPACEでこの面のやり直し確認を開きます。やり直し確認はNOが初期選択です。A/Dで選び、RETURNで確定、SPACEで取り消します。確認中は進行を止めます。CTRL+CでBASICへ戻ります。</p>
+<p>マスは面が細くなり、側面を見せてから反対の面が開く順に切り替わります。入／切の両方向に途中の形と効果音があります。演出が終わってから次のキーを押してください。</p>
+<p>上の数字は列、左の数字は行の目標個数です。スイッチの入っている数が目標と一致すると、その数字が白黒反転します。入れ過ぎたりスイッチを切ったりして一致しなくなると通常表示に戻ります。連続したマス数ではなく、行・列それぞれの合計を合わせます。</p>
+<p>攻略では、必要数の多い行から埋めます。上の数字から、その列にすでに入れた数を引き、「あと何個必要か」を数えてください。残り個数の多い列を優先し、同じ個数なら近いマスを選びます。行の数字が反転したら次の行へ移り、列の残り個数を数え直します。反転した行・列には、それ以上入れません。</p>
+<p>1面の動画では、左の「3」がある上から2行目と、上の「3」がある左端の列の交点から始めます。そこから同じ行にあと2個を入れて「3」を反転させ、残り個数を見ながらほかの行を埋めていきます。中央から始める必要はなく、すべての行・列の個数が合えば別の配置でもクリアできます。</p>
+<p><img src="https://raw.githubusercontent.com/wiki/zabaglione/jr100dev/images/fuse-box/play-01.png" alt="ゲーム開始時" loading="lazy" decoding="async" /></p>
+<p><img src="https://raw.githubusercontent.com/wiki/zabaglione/jr100dev/images/fuse-box/play-02.png" alt="プレイ中の場面" loading="lazy" decoding="async" /></p>
+</article></main>
+  <footer class="wrap"><p><span lang="en" data-language="en">Made for the JR-100 with standard 16 KB RAM. Emulator-tested; real hardware is unverified.</span><span lang="ja" data-language="ja">標準RAM 16KBのJR-100向け。エミュレーターで検証済みです。実機での動作・音声は未確認です。</span></p><a href="https://github.com/zabaglione/jr100dev/wiki">Wiki</a> · <a href="https://github.com/zabaglione/jr100dev/tree/main/games">Source / MIT License</a></footer>
+</body>
+</html>

@@ -1,0 +1,157 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>DICE RELIC · JR-100 Games</title>
+  <meta name="title-en" content="DICE RELIC · JR-100 Games">
+  <meta name="title-ja" content="DICE RELIC · JR-100 Games">
+  <meta name="description" content="Assign rolls to battle actions and forge the dice themselves.">
+  <meta name="description-en" content="Assign rolls to battle actions and forge the dice themselves.">
+  <meta name="description-ja" content="出目を使い、ダイスの面そのものを鍛える">
+  <link rel="canonical" href="https://zabaglione.github.io/pyjr100emu/guide/dice-relic.html">
+  <link rel="alternate" hreflang="en" href="https://zabaglione.github.io/pyjr100emu/guide/dice-relic.html?lang=en">
+  <link rel="alternate" hreflang="ja" href="https://zabaglione.github.io/pyjr100emu/guide/dice-relic.html?lang=ja">
+  <link rel="alternate" hreflang="x-default" href="https://zabaglione.github.io/pyjr100emu/guide/dice-relic.html">
+  <script src="language.js"></script>
+  <link rel="stylesheet" href="style.css">
+  <script src="guide.js" defer></script>
+</head>
+<body>
+  <a class="skip" href="#main"><span lang="en" data-language="en">Skip to content</span><span lang="ja" data-language="ja">本文へ</span></a>
+  <header class="wrap masthead">
+    <a class="brand" data-guide-link href="index.html">JR-100 GAMES</a>
+    <nav class="languages" aria-label="Language / 言語">
+      <a data-language-switch href="?lang=en" hreflang="en" lang="en">English</a>
+      <a data-language-switch href="?lang=ja" hreflang="ja" lang="ja">日本語</a>
+    </nav>
+  </header>
+  <div class="wrap"><nav class="utility"><a data-guide-link href="index.html"><span lang="en" data-language="en">All games</span><span lang="ja" data-language="ja">全作品</span></a><a data-guide-link href="controls.html"><span lang="en" data-language="en">Getting started</span><span lang="ja" data-language="ja">操作と起動方法</span></a><a href="../gameplay.html"><span lang="en" data-language="en">Gameplay videos</span><span lang="ja" data-language="ja">プレイ動画</span></a><a href="../"><span lang="en" data-language="en">Emulator</span><span lang="ja" data-language="ja">エミュレーター</span></a></nav></div>
+  <main class="wrap" id="main"><section class="hero">
+      <p class="breadcrumbs"><a data-guide-link href="index.html"><span lang="en" data-language="en">All games</span><span lang="ja" data-language="ja">全作品</span></a> / <span lang="en" data-language="en">Cards &amp; board games</span><span lang="ja" data-language="ja">カード・ボード</span></p>
+      <h1>DICE RELIC</h1><div class="intro" data-language="en" lang="en"><p>Roll three dice and assign their values to attack, defense, or healing. Defeat eight guardians and the final king, using victory rewards to forge the faces of your dice.</p>
+</div><div class="intro" data-language="ja" lang="ja"><p>3個のダイスを振り、その出目を攻撃・防御・回復へ割り当てる、JR-100・標準RAM 16KB向けゲームです。8体の守護者と最後の王を倒し、勝利報酬でダイスの面を作り替えます。</p>
+</div>
+      <nav class="actions"><a class="button primary" href="../?game=dice-relic"><span lang="en" data-language="en">Play this game</span><span lang="ja" data-language="ja">このゲームをプレイ</span></a><a href="https://github.com/zabaglione/jr100dev/tree/main/games/dice_relic"><span lang="en" data-language="en">Source</span><span lang="ja" data-language="ja">ソース</span></a></nav>
+      <p class="note"><span lang="en" data-language="en">To play, set up your own BASIC ROM in the emulator once. Screenshots and videos need no ROM.</span><span lang="ja" data-language="ja">プレイにはエミュレーターで自分のBASIC ROMを一度設定してください。画像と動画の閲覧にはROMは不要です。</span> <a data-guide-link href="controls.html"><span lang="en" data-language="en">Setup and controls</span><span lang="ja" data-language="ja">設定と共通操作</span></a></p>
+    </section>
+    <section class="media" aria-label="Screenshots and video">
+      <div class="shots"><figure><a href="../game-media/dice-relic/demo-start.png"><img src="../game-media/dice-relic/demo-start.png" width="816" height="624" alt="DICE RELIC — At the start" loading="lazy"></a><figcaption><span lang="en" data-language="en">At the start</span><span lang="ja" data-language="ja">開始時の盤面</span></figcaption></figure><figure><a href="../game-media/dice-relic/demo-play.png"><img src="../game-media/dice-relic/demo-play.png" width="816" height="624" alt="DICE RELIC — In play" loading="lazy"></a><figcaption><span lang="en" data-language="en">In play</span><span lang="ja" data-language="ja">プレイ中</span></figcaption></figure><figure><a href="../game-media/dice-relic/demo-clear.png"><img src="../game-media/dice-relic/demo-clear.png" width="816" height="624" alt="DICE RELIC — First goal reached" loading="lazy"></a><figcaption><span lang="en" data-language="en">First goal reached</span><span lang="ja" data-language="ja">最初の目標を達成</span></figcaption></figure></div>
+      <p class="video-link"><a class="button" href="../gameplay.html?game=dice-relic#video"><span lang="en" data-language="en">Watch gameplay with sound (34 seconds)</span><span lang="ja" data-language="ja">音付きプレイ動画を見る（約34秒）</span></a></p>
+      <p class="note"><span lang="en" data-language="en">First battle won.</span><span lang="ja" data-language="ja">最初の戦闘に勝利するまでを収録。</span></p>
+    </section><article class="manual" data-language="en" lang="en"><h2>Controls</h2>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>Action</th>
+<th>Keyboard</th>
+<th>One-button pad</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Select die</td>
+<td>A/D</td>
+<td>Left/right</td>
+</tr>
+<tr>
+<td>Select assignment</td>
+<td>W/S</td>
+<td>Up/down</td>
+</tr>
+<tr>
+<td>Use / confirm</td>
+<td>RETURN</td>
+<td>Button</td>
+</tr>
+<tr>
+<td>Select a face in the workshop</td>
+<td>W/S</td>
+<td>Up/down</td>
+</tr>
+<tr>
+<td>Select a workshop service</td>
+<td>A/D</td>
+<td>Left/right</td>
+</tr>
+<tr>
+<td>Return to BASIC</td>
+<td>CTRL+C</td>
+<td>Use the keyboard</td>
+</tr>
+</tbody>
+</table></div>
+<p>ATTACK deals the die's value in damage; GUARD provides that much defense; HEAL restores that much HP. Under the selected die, <code>&gt;ATTACK</code> or a similar label previews its assignment. After RETURN uses it, the label becomes <code>*ATTACK</code>, <code>*GUARD</code>, or <code>*HEAL</code>. Used dice keep their values and labels so you can see what each one did. Each die may be used once per turn. REROLL rerolls all unused dice once per turn.</p>
+<p>YOU, on the right, is your character. An attack steps forward and launches a light bolt; a hit makes the enemy flash. Defense unfolds a shield, incoming damage makes YOU flash and recoil, and healing sends light upward. BEFORE → AFTER shows changes in HP or defense. BLOCKED shows how much was stopped, with ATTACK → DAMAGE comparing the enemy's strength to the damage you actually take. After the third die, defense, damage, and the next roll resolve in order. Wait for each animation to finish before pressing again.</p>
+<p>After all three dice are used, the enemy attacks. Defense absorbs damage first, then disappears. The enemy's attack increases by 2 every four turns; NEXT shows its current attack value. Maximum HP is 42. Defeating an enemy prevents its retaliation that turn.</p>
+<p><img src="https://raw.githubusercontent.com/wiki/zabaglione/jr100dev/images/dice-relic/battle-01.png" alt="First battle" loading="lazy" decoding="async" /></p>
+<p>Victory restores 2 HP and awards three coins. In the workshop, select a die with left/right and one of its six faces with up/down, then press the button to open the service menu.</p>
+<ul>
+<li>FORGE: pay 3 coins to raise that face by 2, up to 9.</li>
+<li>HEAL: pay 2 coins to restore 6 HP; no purchase is made at full HP.</li>
+<li>NEXT: enter the next battle.</li>
+<li>BACK: return to face selection.</li>
+</ul>
+<p>Forged faces remain improved in later battles. The workshop table shows all 18 faces; the large die below shows the selected value.</p>
+<p><img src="https://raw.githubusercontent.com/wiki/zabaglione/jr100dev/images/dice-relic/workshop.png" alt="Workshop" loading="lazy" decoding="async" />
+<img src="https://raw.githubusercontent.com/wiki/zabaglione/jr100dev/images/dice-relic/battle-09.png" alt="The First King" loading="lazy" decoding="async" /></p>
+</article><article class="manual" data-language="ja" lang="ja"><h2>操作</h2>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>操作</th>
+<th>キーボード</th>
+<th>1ボタンパッド</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>ダイスを選択</td>
+<td>A/D</td>
+<td>左右</td>
+</tr>
+<tr>
+<td>割当先を選択</td>
+<td>W/S</td>
+<td>上下</td>
+</tr>
+<tr>
+<td>使用／決定</td>
+<td>RETURN</td>
+<td>ボタン</td>
+</tr>
+<tr>
+<td>工房で面を選択</td>
+<td>W/S</td>
+<td>上下</td>
+</tr>
+<tr>
+<td>工房のサービスを選択</td>
+<td>A/D</td>
+<td>左右</td>
+</tr>
+<tr>
+<td>BASICへ戻る</td>
+<td>CTRL+C</td>
+<td>キーボードを使用</td>
+</tr>
+</tbody>
+</table></div>
+<p>ATTACKは出目の値だけ攻撃、GUARDは同じ値の防御、HEALは同じ値のHP回復です。選択中のダイスの下には「&gt;ATTACK」のように割当先の候補を表示し、RETURNで使うと「*ATTACK」「*GUARD」「*HEAL」に変わります。使用後も出目と割当先を残すので、どのダイスを何に使ったか確認できます。各ダイスは1ターンに1回だけ使えます。REROLLは未使用のダイスを1ターンに1回だけ振り直します。</p>
+<p>画面右のYOUが主人公です。攻撃では踏み込みと光弾、命中では敵の点滅、防御では盾の展開、被弾では主人公の点滅と後ずさり、回復では上昇する光が入ります。下段のBEFORE → AFTERはHPまたは防御値の変化です。BLOCKEDでは、防いだ量とATTACK → DAMAGE（敵の攻撃値から実際に受けるダメージへの変化）を表示します。3個目の使用、防御、被弾、次のダイスの順に進みます。演出が終わってから次のキーを押してください。</p>
+<p>3個すべてを使うと敵が攻撃します。防御で軽減した残りがHPへ入り、防御は消えます。敵は4ターンごとに攻撃が2増えます。NEXTには今回の攻撃値を表示します。HP上限は42。敵を倒せばそのターンの反撃を受けません。</p>
+<p><img src="https://raw.githubusercontent.com/wiki/zabaglione/jr100dev/images/dice-relic/battle-01.png" alt="First battle" loading="lazy" decoding="async" /></p>
+<p>勝利でHPが2回復し、金貨を3枚得ます。工房では、左右でダイス、上下で6面のどれを作り替えるかを選び、ボタンでサービスメニューを開きます。</p>
+<ul>
+<li>FORGE：金貨3枚で選んだ面の値を2増加。上限9。</li>
+<li>HEAL：金貨2枚でHPを6回復。満タンなら購入しません。</li>
+<li>NEXT：次の戦闘へ。</li>
+<li>BACK：面の選択へ戻る。</li>
+</ul>
+<p>作り替えた面は以後の戦闘でも使われます。工房の表に全18面、下の大きなダイスに選択中の面の値を表示します。</p>
+<p><img src="https://raw.githubusercontent.com/wiki/zabaglione/jr100dev/images/dice-relic/workshop.png" alt="Workshop" loading="lazy" decoding="async" />
+<img src="https://raw.githubusercontent.com/wiki/zabaglione/jr100dev/images/dice-relic/battle-09.png" alt="The First King" loading="lazy" decoding="async" /></p>
+</article></main>
+  <footer class="wrap"><p><span lang="en" data-language="en">Made for the JR-100 with standard 16 KB RAM. Emulator-tested; real hardware is unverified.</span><span lang="ja" data-language="ja">標準RAM 16KBのJR-100向け。エミュレーターで検証済みです。実機での動作・音声は未確認です。</span></p><a href="https://github.com/zabaglione/jr100dev/wiki">Wiki</a> · <a href="https://github.com/zabaglione/jr100dev/tree/main/games">Source / MIT License</a></footer>
+</body>
+</html>

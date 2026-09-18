@@ -72,6 +72,53 @@ def test_modified_artifact_cannot_build(tmp_path):
         build.catalog_files(tmp_path)
 
 
+def fixture_guides(root):
+    fixture_catalog(root)
+    folder = root / "guide"
+    folder.mkdir()
+    names = [
+        "index.html",
+        "controls.html",
+        "test-game.html",
+        "language.js",
+        "guide.js",
+        "style.css",
+        "LICENSE.txt",
+    ]
+    files = {}
+    for name in names:
+        data = f"public guide fixture: {name}".encode()
+        (folder / name).write_bytes(data)
+        files[name] = hashlib.sha256(data).hexdigest()
+    manifest = {"schemaVersion": 1, "games": ["test-game"], "files": files}
+    (folder / "manifest.json").write_text(json.dumps(manifest))
+    return folder, manifest
+
+
+def test_guides_copy_only_manifest_files(tmp_path):
+    folder, _ = fixture_guides(tmp_path)
+    (folder / "notes-private.txt").write_text("not published")
+    paths = build.guide_files(tmp_path)
+    assert len(paths) == 8
+    assert all(path.name != "notes-private.txt" for path in paths)
+
+
+@pytest.mark.parametrize("change", ["hash", "missing", "traversal", "catalog"])
+def test_stale_or_unsafe_guides_cannot_build(tmp_path, change):
+    folder, manifest = fixture_guides(tmp_path)
+    if change == "hash":
+        (folder / "test-game.html").write_text("changed")
+    elif change == "missing":
+        del manifest["files"]["test-game.html"]
+    elif change == "traversal":
+        manifest["files"]["../private.txt"] = "0" * 64
+    else:
+        manifest["games"] = ["another-game"]
+    (folder / "manifest.json").write_text(json.dumps(manifest))
+    with pytest.raises(RuntimeError):
+        build.guide_files(tmp_path)
+
+
 def fixture_media(root, game_id="test-game"):
     _, _, program = fixture_catalog(root, game_id)
     folder = root / f"game-media/{game_id}"

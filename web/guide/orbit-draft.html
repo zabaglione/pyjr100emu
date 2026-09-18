@@ -1,0 +1,144 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>ORBIT DRAFT · JR-100 Games</title>
+  <meta name="title-en" content="ORBIT DRAFT · JR-100 Games">
+  <meta name="title-ja" content="ORBIT DRAFT · JR-100 Games">
+  <meta name="description" content="Draft five kinds of celestial cards onto a 4×4 board. Read two choices and three previews to build endless rotation and falling chains.">
+  <meta name="description-en" content="Draft five kinds of celestial cards onto a 4×4 board. Read two choices and three previews to build endless rotation and falling chains.">
+  <meta name="description-ja" content="4×4・5種類の天体を、候補2枚と次の3枚を読んで揃える。回転と落下連鎖で得点を伸ばすエンドレスパズル">
+  <link rel="canonical" href="https://zabaglione.github.io/pyjr100emu/guide/orbit-draft.html">
+  <link rel="alternate" hreflang="en" href="https://zabaglione.github.io/pyjr100emu/guide/orbit-draft.html?lang=en">
+  <link rel="alternate" hreflang="ja" href="https://zabaglione.github.io/pyjr100emu/guide/orbit-draft.html?lang=ja">
+  <link rel="alternate" hreflang="x-default" href="https://zabaglione.github.io/pyjr100emu/guide/orbit-draft.html">
+  <script src="language.js"></script>
+  <link rel="stylesheet" href="style.css">
+  <script src="guide.js" defer></script>
+</head>
+<body>
+  <a class="skip" href="#main"><span lang="en" data-language="en">Skip to content</span><span lang="ja" data-language="ja">本文へ</span></a>
+  <header class="wrap masthead">
+    <a class="brand" data-guide-link href="index.html">JR-100 GAMES</a>
+    <nav class="languages" aria-label="Language / 言語">
+      <a data-language-switch href="?lang=en" hreflang="en" lang="en">English</a>
+      <a data-language-switch href="?lang=ja" hreflang="ja" lang="ja">日本語</a>
+    </nav>
+  </header>
+  <div class="wrap"><nav class="utility"><a data-guide-link href="index.html"><span lang="en" data-language="en">All games</span><span lang="ja" data-language="ja">全作品</span></a><a data-guide-link href="controls.html"><span lang="en" data-language="en">Getting started</span><span lang="ja" data-language="ja">操作と起動方法</span></a><a href="../gameplay.html"><span lang="en" data-language="en">Gameplay videos</span><span lang="ja" data-language="ja">プレイ動画</span></a><a href="../"><span lang="en" data-language="en">Emulator</span><span lang="ja" data-language="ja">エミュレーター</span></a></nav></div>
+  <main class="wrap" id="main"><section class="hero">
+      <p class="breadcrumbs"><a data-guide-link href="index.html"><span lang="en" data-language="en">All games</span><span lang="ja" data-language="ja">全作品</span></a> / <span lang="en" data-language="en">Cards &amp; board games</span><span lang="ja" data-language="ja">カード・ボード</span></p>
+      <h1>ORBIT DRAFT</h1><div class="intro" data-language="en" lang="en"><p>Choose between two cards and drop them onto a 4×4 orbital board. Read the next three cards and build scores through row/column rotations and falling chains. The deal changes with your starting timing. Board state and score carry forward through as many rounds as you can survive.</p>
+</div><div class="intro" data-language="ja" lang="ja"><p>2枚の候補から札を選び、4×4の軌道盤へ落とすパズルです。次の3枚を読み、行・列の回転と落下連鎖で得点を伸ばします。配札は開始するタイミングで変わり、盤面と得点を引き継いで何ラウンドでも続けられます。</p>
+</div>
+      <nav class="actions"><a class="button primary" href="../?game=orbit-draft"><span lang="en" data-language="en">Play this game</span><span lang="ja" data-language="ja">このゲームをプレイ</span></a><a href="https://github.com/zabaglione/jr100dev/tree/main/games/orbit_draft"><span lang="en" data-language="en">Source</span><span lang="ja" data-language="ja">ソース</span></a></nav>
+      <p class="note"><span lang="en" data-language="en">To play, set up your own BASIC ROM in the emulator once. Screenshots and videos need no ROM.</span><span lang="ja" data-language="ja">プレイにはエミュレーターで自分のBASIC ROMを一度設定してください。画像と動画の閲覧にはROMは不要です。</span> <a data-guide-link href="controls.html"><span lang="en" data-language="en">Setup and controls</span><span lang="ja" data-language="ja">設定と共通操作</span></a></p>
+    </section>
+    <section class="media" aria-label="Screenshots and video">
+      <div class="shots"><figure><a href="../game-media/orbit-draft/demo-start.png"><img src="../game-media/orbit-draft/demo-start.png" width="816" height="624" alt="ORBIT DRAFT — At the start" loading="lazy"></a><figcaption><span lang="en" data-language="en">At the start</span><span lang="ja" data-language="ja">開始時の盤面</span></figcaption></figure><figure><a href="../game-media/orbit-draft/demo-play.png"><img src="../game-media/orbit-draft/demo-play.png" width="816" height="624" alt="ORBIT DRAFT — In play" loading="lazy"></a><figcaption><span lang="en" data-language="en">In play</span><span lang="ja" data-language="ja">プレイ中</span></figcaption></figure><figure><a href="../game-media/orbit-draft/demo-clear.png"><img src="../game-media/orbit-draft/demo-clear.png" width="816" height="624" alt="ORBIT DRAFT — First goal reached" loading="lazy"></a><figcaption><span lang="en" data-language="en">First goal reached</span><span lang="ja" data-language="ja">最初の目標を達成</span></figcaption></figure></div>
+      <p class="video-link"><a class="button" href="../gameplay.html?game=orbit-draft#video"><span lang="en" data-language="en">Watch gameplay with sound (33 seconds)</span><span lang="ja" data-language="ja">音付きプレイ動画を見る（約33秒）</span></a></p>
+      <p class="note"><span lang="en" data-language="en">First stage cleared.</span><span lang="ja" data-language="ja">1ステージのクリアまでを収録。</span></p>
+    </section><article class="manual" data-language="en" lang="en"><h2>Controls and play</h2>
+<ol>
+<li>Choose one of the two candidates at the upper right with A/D, then confirm with RETURN.</li>
+<li>Choose a column with A/D and press RETURN to drop into the empty slot between the arrows. The unused candidate stays; only the used slot is refilled from the left end of NEXT. NEXT previews three cards, from left to right.</li>
+<li>Move below the board with S to select CARD, ROW, or COL. S during candidate selection goes directly to this menu.</li>
+<li>In ROW mode, W/S selects a row and RETURN rotates it one cell right. In COL mode, A/D selects a column and RETURN rotates it one cell down. Cards at the edge wrap to the opposite side.</li>
+<li>ROW and COL remain selected after rotation. To resume placing cards, explicitly choose CARD in the menu and press RETURN.</li>
+</ol>
+<p>Directions work on the keyboard or pad; the pad button also acts as RETURN. SPACE opens a new-game confirmation; confirming resets the board and score. NO is selected initially. Choose with A/D, confirm with RETURN, or cancel with SPACE. Play pauses during confirmation. CTRL+C returns to BASIC.</p>
+<p>Cards visibly fall into empty slots. Rotations show their intermediate positions and wraparound. A match glows through three expanding stages before disappearing with sound. Falling cards that match again form a chain, with a new sound, extra points, and restored rotations. Wait for each animation before pressing again.</p>
+<p>A is a star, B a ringed planet, C a moon, D a comet, and E a satellite. The game begins with four different cards along the bottom row.</p>
+<p>Three or more identical bodies in a horizontal, vertical, or diagonal line disappear. A line of four counts as two overlapping triples; intersecting triples count separately, but a card is never scored twice in the same clear. Matches are checked immediately after a rotation, then gaps are filled downward; further matches create chains.</p>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>Display</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>SCORE</td>
+<td>Total score, capped at 9999</td>
+</tr>
+<tr>
+<td>CHAIN X</td>
+<td>Chain count from the last action</td>
+</tr>
+<tr>
+<td>GOAL</td>
+<td>Points this round / target; points displayed up to 99</td>
+</tr>
+<tr>
+<td>SPIN</td>
+<td>Remaining rotations, up to 4</td>
+</tr>
+<tr>
+<td>RND</td>
+<td>Round number; play continues with the display held at 255 thereafter</td>
+</tr>
+</tbody>
+</table></div>
+<p>Each clear scores: cards removed × 2 × chain count, plus 2 for each simultaneous triple after the first. One triple earns 6 points, a line of four earns 10, and a triple on the second chain earns 12.</p>
+<p>You start with two rotations. Each clear restores one, up to four. Rotating a row/column containing only identical cards or only empty slots costs nothing. A rotation that merely makes cards fall still costs one.</p>
+<p>The first target is 12 points. On reaching it, a jingle and result appear; RETURN continues. Targets rise by 6 to 60 and play continues beyond that. The board, candidates, previews, total score, and remaining rotations carry over; only round points reset. Excess points count toward the total but not the next round's target.</p>
+<p>A full 16-cell board remains playable while rotations remain. A full board without rotations ends the game with FULL BOARD - NO SPINS. RETURN or SPACE opens the new-game confirmation.</p>
+<p>Leave room for upcoming cards. Simply assigning one column per type will not fit five types into four columns. Placing a different body above a group you plan to clear can create horizontal or diagonal chains after it falls. Rotations also move empty slots, so plan their use before filling the board.</p>
+<h2>More screenshots</h2>
+<p><img src="https://raw.githubusercontent.com/wiki/zabaglione/jr100dev/images/orbit-draft/play-01.png" alt="ORBIT DRAFT: play 01" loading="lazy" decoding="async" /></p>
+<p><img src="https://raw.githubusercontent.com/wiki/zabaglione/jr100dev/images/orbit-draft/play-02.png" alt="ORBIT DRAFT: play 02" loading="lazy" decoding="async" /></p>
+</article><article class="manual" data-language="ja" lang="ja"><h2>操作と遊び方</h2>
+<ol>
+<li>右上の2枚をA/Dで選び、RETURNで決定します。</li>
+<li>A/Dで落とす列を選び、RETURNで配置します。矢印で挟まれた空き枠に落ちます。使わなかった候補は残り、使った側だけにNEXTの左端の札が補充されます。NEXTは左から順に次の3枚です。</li>
+<li>盤面の下へSで移動すると、CARD・ROW・COLのメニューを選べます。候補選択中はSで直接メニューへ移れます。</li>
+<li>ROWを選ぶと、W/Sで選んだ行をRETURNで右へ1マス回します。COLではA/Dで選んだ列をRETURNで下へ1マス回します。端の札は反対側へ回り込みます。</li>
+<li>ROW・COLは回転後も選択を維持します。別のモードを明示的に選ぶまで続けて使えます。札の配置へ戻るときはメニューのCARDでRETURNを押します。</li>
+</ol>
+<p>方向キーはキーボードまたはパッド、RETURNはパッドのボタンでも操作できます。SPACEで新しいゲームの確認を開き、承認すると盤面と得点をリセットします。やり直し確認はNOが初期選択です。A/Dで選び、RETURNで確定、SPACEで取り消します。確認中は進行を止めます。CTRL+CでBASICへ戻ります。</p>
+<p>選んだ札は列の空き枠まで落下し、行・列の回転では途中の位置を通って反対側へ回り込みます。三連以上が揃うとセミグラフィックスの光が三段階に広がり、消去音とともに消えます。残った札が落ちて再び揃うと連鎖音が鳴り、得点と回転回数が増えます。演出が終わってから次のキーを押してください。</p>
+<p>Aは星、Bは環のある惑星、Cは月、Dは彗星、Eは人工衛星です。初めは最下段に異なる4枚が並びます。</p>
+<p>同じ天体が縦・横・斜めに3枚以上続くと消えます。4枚の並びは重なった2本の三連、交差した並びはそれぞれの三連として数えますが、同じ札を二重には加点しません。回転直後の並びを判定してから空きを下へ詰め、落下によってまた揃えば連鎖します。</p>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>計器</th>
+<th>意味</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>SCORE</td>
+<td>ゲーム開始からの合計得点。上限9999点</td>
+</tr>
+<tr>
+<td>CHAIN X</td>
+<td>直前の操作で起きた連鎖数</td>
+</tr>
+<tr>
+<td>GOAL</td>
+<td>今ラウンドの得点／目標。得点表示は99まで</td>
+</tr>
+<tr>
+<td>SPIN</td>
+<td>回転の残り回数／最大4回</td>
+</tr>
+<tr>
+<td>RND</td>
+<td>ラウンド番号。255以降は表示を255に保って継続</td>
+</tr>
+</tbody>
+</table></div>
+<p>消去1回の得点は「消した札の枚数×2×連鎖数＋同時に揃えた2本目以降の三連1本につき2点」です。三連1本なら6点、四連なら10点、2連鎖目の三連は12点になります。</p>
+<p>回転は最初に2回使えます。消去が起きるたびに1回補充され、最大4回まで貯められます。すべて同じ札、または空き枠だけの行・列は回数を消費しません。回転だけで空きを詰めた場合も1回消費します。</p>
+<p>最初の目標は12点。達成するとジングルと結果を表示し、RETURNで次のラウンドへ進みます。目標は6点ずつ上がり、60点になった後も続きます。盤面・候補・予告・合計得点・残り回転回数はそのままで、ラウンド内の得点だけが0に戻ります。超過分は合計得点に入り、次ラウンドの目標には繰り越しません。</p>
+<p>16枠が埋まっても回転が残っていれば続けられます。回転を使い切って満杯になると「FULL BOARD - NO SPINS」を表示して終了します。RETURNまたはSPACEで新しいゲームの確認を開けます。</p>
+<p>攻略の手がかりは、予告にある札を使う場所を残すことです。同じ種類ごとに列を分けるだけでは5種類を4列に収めきれません。先に消す列の上に別の天体を置くと、落下後の横・斜めの連鎖も狙えます。回転は空き枠も動かすので、満杯になる前に使い道を考えておきましょう。</p>
+<p><img src="https://raw.githubusercontent.com/wiki/zabaglione/jr100dev/images/orbit-draft/play-01.png" alt="ゲーム開始時" loading="lazy" decoding="async" /></p>
+<p><img src="https://raw.githubusercontent.com/wiki/zabaglione/jr100dev/images/orbit-draft/play-02.png" alt="プレイ中の場面" loading="lazy" decoding="async" /></p>
+</article></main>
+  <footer class="wrap"><p><span lang="en" data-language="en">Made for the JR-100 with standard 16 KB RAM. Emulator-tested; real hardware is unverified.</span><span lang="ja" data-language="ja">標準RAM 16KBのJR-100向け。エミュレーターで検証済みです。実機での動作・音声は未確認です。</span></p><a href="https://github.com/zabaglione/jr100dev/wiki">Wiki</a> · <a href="https://github.com/zabaglione/jr100dev/tree/main/games">Source / MIT License</a></footer>
+</body>
+</html>

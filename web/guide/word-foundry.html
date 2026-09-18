@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>WORD FOUNDRY · JR-100 Games</title>
+  <meta name="title-en" content="WORD FOUNDRY · JR-100 Games">
+  <meta name="title-ja" content="WORD FOUNDRY · JR-100 Games">
+  <meta name="description" content="Follow 16 word ladders through a required checkpoint.">
+  <meta name="description-en" content="Follow 16 word ladders through a required checkpoint.">
+  <meta name="description-ja" content="中継単語を経由して辿る16の単語迷路">
+  <link rel="canonical" href="https://zabaglione.github.io/pyjr100emu/guide/word-foundry.html">
+  <link rel="alternate" hreflang="en" href="https://zabaglione.github.io/pyjr100emu/guide/word-foundry.html?lang=en">
+  <link rel="alternate" hreflang="ja" href="https://zabaglione.github.io/pyjr100emu/guide/word-foundry.html?lang=ja">
+  <link rel="alternate" hreflang="x-default" href="https://zabaglione.github.io/pyjr100emu/guide/word-foundry.html">
+  <script src="language.js"></script>
+  <link rel="stylesheet" href="style.css">
+  <script src="guide.js" defer></script>
+</head>
+<body>
+  <a class="skip" href="#main"><span lang="en" data-language="en">Skip to content</span><span lang="ja" data-language="ja">本文へ</span></a>
+  <header class="wrap masthead">
+    <a class="brand" data-guide-link href="index.html">JR-100 GAMES</a>
+    <nav class="languages" aria-label="Language / 言語">
+      <a data-language-switch href="?lang=en" hreflang="en" lang="en">English</a>
+      <a data-language-switch href="?lang=ja" hreflang="ja" lang="ja">日本語</a>
+    </nav>
+  </header>
+  <div class="wrap"><nav class="utility"><a data-guide-link href="index.html"><span lang="en" data-language="en">All games</span><span lang="ja" data-language="ja">全作品</span></a><a data-guide-link href="controls.html"><span lang="en" data-language="en">Getting started</span><span lang="ja" data-language="ja">操作と起動方法</span></a><a href="../gameplay.html"><span lang="en" data-language="en">Gameplay videos</span><span lang="ja" data-language="ja">プレイ動画</span></a><a href="../"><span lang="en" data-language="en">Emulator</span><span lang="ja" data-language="ja">エミュレーター</span></a></nav></div>
+  <main class="wrap" id="main"><section class="hero">
+      <p class="breadcrumbs"><a data-guide-link href="index.html"><span lang="en" data-language="en">All games</span><span lang="ja" data-language="ja">全作品</span></a> / <span lang="en" data-language="en">Puzzle</span><span lang="ja" data-language="ja">パズル</span></p>
+      <h1>WORD FOUNDRY</h1><div class="intro" data-language="en" lang="en"><p>Change a three-letter word one letter at a time, passing through the VIA checkpoint before reaching TARGET, across 16 puzzles. Minimum routes take 5–9 moves, with two extra moves allowed.</p>
+</div><div class="intro" data-language="ja" lang="ja"><p>3文字の単語を1文字ずつ変え、VIAの中継単語を通ってTARGETへ到達する全16問です。最短5〜9手の経路に、2手の余裕があります。</p>
+</div>
+      <nav class="actions"><a class="button primary" href="../?game=word-foundry"><span lang="en" data-language="en">Play this game</span><span lang="ja" data-language="ja">このゲームをプレイ</span></a><a href="https://github.com/zabaglione/jr100dev/tree/main/games/word_foundry"><span lang="en" data-language="en">Source</span><span lang="ja" data-language="ja">ソース</span></a></nav>
+      <p class="note"><span lang="en" data-language="en">To play, set up your own BASIC ROM in the emulator once. Screenshots and videos need no ROM.</span><span lang="ja" data-language="ja">プレイにはエミュレーターで自分のBASIC ROMを一度設定してください。画像と動画の閲覧にはROMは不要です。</span> <a data-guide-link href="controls.html"><span lang="en" data-language="en">Setup and controls</span><span lang="ja" data-language="ja">設定と共通操作</span></a></p>
+    </section>
+    <section class="media" aria-label="Screenshots and video">
+      <div class="shots"><figure><a href="../game-media/word-foundry/demo-start.png"><img src="../game-media/word-foundry/demo-start.png" width="816" height="624" alt="WORD FOUNDRY — At the start" loading="lazy"></a><figcaption><span lang="en" data-language="en">At the start</span><span lang="ja" data-language="ja">開始時の盤面</span></figcaption></figure><figure><a href="../game-media/word-foundry/demo-play.png"><img src="../game-media/word-foundry/demo-play.png" width="816" height="624" alt="WORD FOUNDRY — In play" loading="lazy"></a><figcaption><span lang="en" data-language="en">In play</span><span lang="ja" data-language="ja">プレイ中</span></figcaption></figure><figure><a href="../game-media/word-foundry/demo-clear.png"><img src="../game-media/word-foundry/demo-clear.png" width="816" height="624" alt="WORD FOUNDRY — First goal reached" loading="lazy"></a><figcaption><span lang="en" data-language="en">First goal reached</span><span lang="ja" data-language="ja">最初の目標を達成</span></figcaption></figure></div>
+      <p class="video-link"><a class="button" href="../gameplay.html?game=word-foundry#video"><span lang="en" data-language="en">Watch gameplay with sound (33 seconds)</span><span lang="ja" data-language="ja">音付きプレイ動画を見る（約33秒）</span></a></p>
+      <p class="note"><span lang="en" data-language="en">First stage cleared.</span><span lang="ja" data-language="ja">1ステージのクリアまでを収録。</span></p>
+    </section><article class="manual" data-language="en" lang="en"><h2>Controls and play</h2>
+<p>Select a word with WASD and change to it with RETURN. Stars mark candidates differing from CURRENT by exactly one letter. Reaching VIA marks it complete; then reaching TARGET clears the puzzle.</p>
+<p>Directions work on the keyboard or pad; the pad button also acts as RETURN. SPACE opens confirmation to restart this stage. NO is selected initially. Choose with A/D, confirm with RETURN, or cancel with SPACE. Play pauses during confirmation. CTRL+C returns to BASIC.</p>
+<p>Words sit on thick tiles, with a changing letter lifting and moving into place. Light and sound mark the checkpoint, while route history records progress. Wait for animations to finish before pressing again.</p>
+<p>CURRENT is the current word, VIA the checkpoint, TARGET the destination, PAR the minimum moves, and LEFT the remaining allowance. The last eight words of your route stay at the bottom.</p>
+<h2>More screenshots</h2>
+<p><img src="https://raw.githubusercontent.com/wiki/zabaglione/jr100dev/images/word-foundry/play-01.png" alt="WORD FOUNDRY: play 01" loading="lazy" decoding="async" /></p>
+<p><img src="https://raw.githubusercontent.com/wiki/zabaglione/jr100dev/images/word-foundry/play-02.png" alt="WORD FOUNDRY: play 02" loading="lazy" decoding="async" /></p>
+</article><article class="manual" data-language="ja" lang="ja"><h2>操作と遊び方</h2>
+<p>WASDで単語を選び、RETURNで変更します。現在の単語と1文字だけ違う候補には星印が付きます。VIAに到達すると印が付き、その後にTARGETへ進めばクリアです。</p>
+<p>方向キーはキーボードまたはパッド、RETURNはパッドのボタンでも操作できます。SPACEでこの面のやり直し確認を開きます。やり直し確認はNOが初期選択です。A/Dで選び、RETURNで確定、SPACEで取り消します。確認中は進行を止めます。CTRL+CでBASICへ戻ります。</p>
+<p>単語を厚みのある札に並べ、差し替わる文字が浮いて移る様子を表示します。中継点の到達音と光、経路の履歴で進行を追えます。演出が終わってから次のキーを押してください。</p>
+<p>CURRENTは現在の単語、VIAは中継点、TARGETは到着点、PARは最短手数、LEFTは残り手数。画面下に直近8語の経路が残ります。</p>
+<p><img src="https://raw.githubusercontent.com/wiki/zabaglione/jr100dev/images/word-foundry/play-01.png" alt="ゲーム開始時" loading="lazy" decoding="async" /></p>
+<p><img src="https://raw.githubusercontent.com/wiki/zabaglione/jr100dev/images/word-foundry/play-02.png" alt="プレイ中の場面" loading="lazy" decoding="async" /></p>
+</article></main>
+  <footer class="wrap"><p><span lang="en" data-language="en">Made for the JR-100 with standard 16 KB RAM. Emulator-tested; real hardware is unverified.</span><span lang="ja" data-language="ja">標準RAM 16KBのJR-100向け。エミュレーターで検証済みです。実機での動作・音声は未確認です。</span></p><a href="https://github.com/zabaglione/jr100dev/wiki">Wiki</a> · <a href="https://github.com/zabaglione/jr100dev/tree/main/games">Source / MIT License</a></footer>
+</body>
+</html>

@@ -1,0 +1,93 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Getting started · JR-100 Games</title>
+  <meta name="title-en" content="Getting started · JR-100 Games">
+  <meta name="title-ja" content="操作と起動方法 · JR-100 Games">
+  <meta name="description" content="Getting started">
+  <meta name="description-en" content="Getting started">
+  <meta name="description-ja" content="操作と起動方法">
+  <link rel="canonical" href="https://zabaglione.github.io/pyjr100emu/guide/controls.html">
+  <link rel="alternate" hreflang="en" href="https://zabaglione.github.io/pyjr100emu/guide/controls.html?lang=en">
+  <link rel="alternate" hreflang="ja" href="https://zabaglione.github.io/pyjr100emu/guide/controls.html?lang=ja">
+  <link rel="alternate" hreflang="x-default" href="https://zabaglione.github.io/pyjr100emu/guide/controls.html">
+  <script src="language.js"></script>
+  <link rel="stylesheet" href="style.css">
+  <script src="guide.js" defer></script>
+</head>
+<body>
+  <a class="skip" href="#main"><span lang="en" data-language="en">Skip to content</span><span lang="ja" data-language="ja">本文へ</span></a>
+  <header class="wrap masthead">
+    <a class="brand" data-guide-link href="index.html">JR-100 GAMES</a>
+    <nav class="languages" aria-label="Language / 言語">
+      <a data-language-switch href="?lang=en" hreflang="en" lang="en">English</a>
+      <a data-language-switch href="?lang=ja" hreflang="ja" lang="ja">日本語</a>
+    </nav>
+  </header>
+  <div class="wrap"><nav class="utility"><a data-guide-link href="index.html"><span lang="en" data-language="en">All games</span><span lang="ja" data-language="ja">全作品</span></a><a data-guide-link href="controls.html"><span lang="en" data-language="en">Getting started</span><span lang="ja" data-language="ja">操作と起動方法</span></a><a href="../gameplay.html"><span lang="en" data-language="en">Gameplay videos</span><span lang="ja" data-language="ja">プレイ動画</span></a><a href="../"><span lang="en" data-language="en">Emulator</span><span lang="ja" data-language="ja">エミュレーター</span></a></nav></div>
+  <main class="wrap" id="main"><section class="hero"><h1><span lang="en" data-language="en">Getting started</span><span lang="ja" data-language="ja">操作と起動方法</span></h1></section><article class="manual" data-language="en" lang="en"><h2>Four-direction controls</h2>
+<pre><code class="language-text">    W
+  A S D
+</code></pre>
+<p>W is up, A left, S down, and D right. RETURN confirms or performs the main action. Some games use F or X for secondary actions. X waits in CHRONO BREACH and ABYSS SIGNAL.</p>
+<h2>Eight directions</h2>
+<p>NIGHT SWARM and RELIC DIVE use this layout:</p>
+<pre><code class="language-text">Q W E
+A   D
+Z X C
+</code></pre>
+<p>Q/E/Z/C are diagonals and X is down. S is not used for movement. In RELIC DIVE, S waits one turn and W/X selects menu entries. A one-button pad also supports diagonal input.</p>
+<h2>Start, restart, and quit</h2>
+<p>Controls and scoring rules are collected on title and help screens. During play, watch the board, your selection, remaining health or score, and upcoming events. Hits, failure reasons, and earned points appear briefly where they happen.</p>
+<p>RETURN or the pad button starts from the title. Each <a href="index.html" data-guide-link="">game guide</a> explains how to open help and use secondary actions. RELIC DIVE selects difficulty with W/X at the title and opens HELP from the RETURN menu during play. SPACE goes back. CTRL+C quits to BASIC.</p>
+<p>Restarting opens REALLY RESET? with NO initially selected. Choose with A/D (pad left/right), confirm with RETURN (button), or cancel with SPACE. Play pauses during confirmation. Actions that discard a partly played board, such as returning to stage selection, also ask first. A single-step undo, LOOP TEN's rewind, and RELIC DIVE's suspend/resume are normal actions. The emulator's Reset button also asks before resetting.</p>
+<p>The main game actions work with a one-button pad. Use the keyboard for help, restarting at an arbitrary time, and returning to BASIC.</p>
+<p>FROST STEPS, MAGNET VAULT, GLYPH SHIFT, and GRAVITY WELL have 40 stages with star ratings. F opens stage selection, WASD selects, RETURN starts, and SPACE returns to the title. All 40 stages are available from the start. On a clear screen, SPACE retries the same stage and RETURN advances. Write down PW on the title or stage-selection screen before quitting; enter it through X next time to restore the stage number and all 40 best ratings.</p>
+<h2>Input during introductions, motion, and results</h2>
+<p>The introduction includes sound and a centered GAME START message. Some games reveal terrain, goals, your character, and enemies in sequence. Wait until it finishes before acting. Timers do not run during the introduction.</p>
+<p>Movement, stone flips, hits, defeats, and stage results include brief pauses before the next input. Damaged characters flash; failure shows its cause and plays a jingle. Release and press again after the result finishes. Some games continue accepting direction or switch commands while trains or enemies move automatically.</p>
+<p>The <a href="https://github.com/zabaglione/jr100dev/wiki/Presentation">motion and sound showcase (Japanese)</a> shows stone flipping and destruction effects.</p>
+<h2>Launch a game from the guide</h2>
+<ol>
+<li>Open the <a href="https://zabaglione.github.io/pyjr100emu/">JR-100 Web Emulator</a> and set up your own BASIC ROM.</li>
+<li>Choose Play this game from a game guide.</li>
+<li>If that browser has the ROM saved, the game boots automatically to its title. No program-file selection or USR command is needed.</li>
+</ol>
+<p>If you remove the ROM or use a different browser, set it up again. The game downloads do not include a BASIC ROM.</p>
+<p>Sound starts automatically if the browser allows it. Otherwise, a notice above the game asks you to click to enable audio. Click the game screen, notice, or Enable sound, tap the screen, or press a key to activate sound and dismiss the notice. A gamepad alone may not unlock browser audio. Your saved mute preference is preserved.</p>
+</article><article class="manual" data-language="ja" lang="ja"><h2>4方向の基本</h2>
+<pre><code class="language-text">    W
+  A S D
+</code></pre>
+<p>W＝上、A＝左、S＝下、D＝右です。決定・主操作はRETURN。作品によりFやXの補助操作があります。CHRONO BREACHとABYSS SIGNALの待機はXです。</p>
+<h2>8方向</h2>
+<p>NIGHT SWARMとRELIC DIVEでは次の配置を使います。</p>
+<pre><code class="language-text">Q W E
+A   D
+Z X C
+</code></pre>
+<p>Q/E/Z/Cが斜め、Xが下です。Sは移動に使いません。RELIC DIVEではSで1ターン待機、W/Xでメニューを選択します。1ボタンパッドでも斜め入力を受け付けます。</p>
+<h2>開始・やり直し・終了</h2>
+<p>操作方法や得点ルールはタイトル・ヘルプにまとめています。本編では盤面、現在の選択、残り体力や得点、次の予告などを確認してください。命中・失敗理由・獲得点は、その場で短く表示します。</p>
+<p>タイトルでRETURNまたはパッドのボタンを押すと開始します。説明画面の開き方やプレイ中の補助操作は<a href="index.html" data-guide-link="">各作品のページ</a>に掲載しています。RELIC DIVEはタイトルでW/Xにより難易度を選び、プレイ中のRETURNメニューからHELPを開きます。SPACEは戻る操作です。CTRL+Cでゲームを終了してBASICへ戻ります。</p>
+<p>やり直しは「REALLY RESET?」で確認します。最初はNOが選ばれ、A/D（パッド左右）で選択、RETURN（ボタン）で確定します。SPACEでも取り消せます。確認中はゲーム進行を止めます。面選択への移動など、途中の盤面を捨てる操作も確認します。1手の取り消し、LOOP TENの巻き戻し、RELIC DIVEの中断・再開は通常操作として扱います。ブラウザのResetボタンも実行前に確認します。</p>
+<p>ゲームは主な操作に1ボタンパッドも使えます。説明の表示、任意のタイミングでのやり直し、BASICへ戻る操作にはキーボードを使用します。</p>
+<p>FROST STEPS、MAGNET VAULT、GLYPH SHIFT、GRAVITY WELLは40面と星評価に対応しています。Fで面選択、WASDで選択、RETURNで開始、SPACEでタイトルへ戻ります。面選択は最初から全40面を選べます。クリア画面のSPACEは同じ面の再挑戦、RETURNは次の面です。終了前にタイトル／面選択のPWを書き留めると、次回Xから面番号と全40面の最高評価を復元できます。</p>
+<h2>開始・移動・結果の演出中の入力</h2>
+<p>開始時はSEと画面中央のGAME STARTを挟みます。作品によっては地形、目標、自分、敵の順に画面が現れます。表示が終わってから操作してください。開始演出中は制限時間を消費しません。</p>
+<p>移動や石返しの途中、被弾・撃破・クリア直後は、次の操作まで少し間があります。被弾時は対象が点滅し、失敗時は原因を表示してジングルを流します。被弾や結果表示が終わってからキーを押し直してください。列車や敵などが自動で動く間は、方向や切替の入力を受け付ける作品もあります。</p>
+<p><a href="https://github.com/zabaglione/jr100dev/wiki/Presentation">動きと音の紹介</a>で、石返しや撃破の様子を確認できます。</p>
+<h2>ガイドから起動する</h2>
+<ol>
+<li><a href="https://zabaglione.github.io/pyjr100emu/">JR-100 Web Emulator</a>で、自分のBASIC ROMを事前に設定します。</li>
+<li>ガイドの作品ページ、ジャンル一覧、または全作品一覧から「プレイ」を押します。</li>
+<li>同じブラウザーにROMが保存されていれば、ゲームのタイトル画面まで自動起動します。ファイル選択やUSR入力は不要です。</li>
+</ol>
+<p>ROMを削除した場合や別のブラウザーでは、ROMの設定が必要です。BASIC ROMはゲーム配布物に含みません。</p>
+<p>ブラウザーが許可していれば音声を自動で開始します。制限されている場合は、ゲーム画面の上に「画面をマウスでクリックして、音声を有効にしてください」と表示します。画面・案内・Enable soundのクリック、画面のタップ、またはキー入力で有効になり、案内が消えます。ゲームパッドだけでは音声制限を解除できないことがあります。保存したミュート設定は維持します。</p>
+</article></main>
+  <footer class="wrap"><p><span lang="en" data-language="en">Made for the JR-100 with standard 16 KB RAM. Emulator-tested; real hardware is unverified.</span><span lang="ja" data-language="ja">標準RAM 16KBのJR-100向け。エミュレーターで検証済みです。実機での動作・音声は未確認です。</span></p><a href="https://github.com/zabaglione/jr100dev/wiki">Wiki</a> · <a href="https://github.com/zabaglione/jr100dev/tree/main/games">Source / MIT License</a></footer>
+</body>
+</html>

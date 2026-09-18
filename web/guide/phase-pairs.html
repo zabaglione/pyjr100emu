@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>PHASE PAIRS · JR-100 Games</title>
+  <meta name="title-en" content="PHASE PAIRS · JR-100 Games">
+  <meta name="title-ja" content="PHASE PAIRS · JR-100 Games">
+  <meta name="description" content="Pair neighboring numbers to make ten and clear the board.">
+  <meta name="description-en" content="Pair neighboring numbers to make ten and clear the board.">
+  <meta name="description-ja" content="隣り合う数を10にして盤面を消す">
+  <link rel="canonical" href="https://zabaglione.github.io/pyjr100emu/guide/phase-pairs.html">
+  <link rel="alternate" hreflang="en" href="https://zabaglione.github.io/pyjr100emu/guide/phase-pairs.html?lang=en">
+  <link rel="alternate" hreflang="ja" href="https://zabaglione.github.io/pyjr100emu/guide/phase-pairs.html?lang=ja">
+  <link rel="alternate" hreflang="x-default" href="https://zabaglione.github.io/pyjr100emu/guide/phase-pairs.html">
+  <script src="language.js"></script>
+  <link rel="stylesheet" href="style.css">
+  <script src="guide.js" defer></script>
+</head>
+<body>
+  <a class="skip" href="#main"><span lang="en" data-language="en">Skip to content</span><span lang="ja" data-language="ja">本文へ</span></a>
+  <header class="wrap masthead">
+    <a class="brand" data-guide-link href="index.html">JR-100 GAMES</a>
+    <nav class="languages" aria-label="Language / 言語">
+      <a data-language-switch href="?lang=en" hreflang="en" lang="en">English</a>
+      <a data-language-switch href="?lang=ja" hreflang="ja" lang="ja">日本語</a>
+    </nav>
+  </header>
+  <div class="wrap"><nav class="utility"><a data-guide-link href="index.html"><span lang="en" data-language="en">All games</span><span lang="ja" data-language="ja">全作品</span></a><a data-guide-link href="controls.html"><span lang="en" data-language="en">Getting started</span><span lang="ja" data-language="ja">操作と起動方法</span></a><a href="../gameplay.html"><span lang="en" data-language="en">Gameplay videos</span><span lang="ja" data-language="ja">プレイ動画</span></a><a href="../"><span lang="en" data-language="en">Emulator</span><span lang="ja" data-language="ja">エミュレーター</span></a></nav></div>
+  <main class="wrap" id="main"><section class="hero">
+      <p class="breadcrumbs"><a data-guide-link href="index.html"><span lang="en" data-language="en">All games</span><span lang="ja" data-language="ja">全作品</span></a> / <span lang="en" data-language="en">Puzzle</span><span lang="ja" data-language="ja">パズル</span></p>
+      <h1>PHASE PAIRS</h1><div class="intro" data-language="en" lang="en"><p>Select two neighboring numbers that sum to 10 and clear all 16 cells. Plan horizontal and vertical pairs so no number is left isolated.</p>
+</div><div class="intro" data-language="ja" lang="ja"><p>隣り合う2つの数を選び、合計10にして16マスをすべて消します。縦横の組み合わせを読み、孤立した数を残さないようにします。</p>
+</div>
+      <nav class="actions"><a class="button primary" href="../?game=phase-pairs"><span lang="en" data-language="en">Play this game</span><span lang="ja" data-language="ja">このゲームをプレイ</span></a><a href="https://github.com/zabaglione/jr100dev/tree/main/games/phase_pairs"><span lang="en" data-language="en">Source</span><span lang="ja" data-language="ja">ソース</span></a></nav>
+      <p class="note"><span lang="en" data-language="en">To play, set up your own BASIC ROM in the emulator once. Screenshots and videos need no ROM.</span><span lang="ja" data-language="ja">プレイにはエミュレーターで自分のBASIC ROMを一度設定してください。画像と動画の閲覧にはROMは不要です。</span> <a data-guide-link href="controls.html"><span lang="en" data-language="en">Setup and controls</span><span lang="ja" data-language="ja">設定と共通操作</span></a></p>
+    </section>
+    <section class="media" aria-label="Screenshots and video">
+      <div class="shots"><figure><a href="../game-media/phase-pairs/demo-start.png"><img src="../game-media/phase-pairs/demo-start.png" width="816" height="624" alt="PHASE PAIRS — At the start" loading="lazy"></a><figcaption><span lang="en" data-language="en">At the start</span><span lang="ja" data-language="ja">開始時の盤面</span></figcaption></figure><figure><a href="../game-media/phase-pairs/demo-play.png"><img src="../game-media/phase-pairs/demo-play.png" width="816" height="624" alt="PHASE PAIRS — In play" loading="lazy"></a><figcaption><span lang="en" data-language="en">In play</span><span lang="ja" data-language="ja">プレイ中</span></figcaption></figure><figure><a href="../game-media/phase-pairs/demo-clear.png"><img src="../game-media/phase-pairs/demo-clear.png" width="816" height="624" alt="PHASE PAIRS — First goal reached" loading="lazy"></a><figcaption><span lang="en" data-language="en">First goal reached</span><span lang="ja" data-language="ja">最初の目標を達成</span></figcaption></figure></div>
+      <p class="video-link"><a class="button" href="../gameplay.html?game=phase-pairs#video"><span lang="en" data-language="en">Watch gameplay with sound (34 seconds)</span><span lang="ja" data-language="ja">音付きプレイ動画を見る（約34秒）</span></a></p>
+      <p class="note"><span lang="en" data-language="en">First stage cleared.</span><span lang="ja" data-language="ja">1ステージのクリアまでを収録。</span></p>
+    </section><article class="manual" data-language="en" lang="en"><h2>Controls and play</h2>
+<p>WASD selects a number. RETURN chooses the first and second tiles. The first gets a mark along its top edge and its value appears under PAIR. Every adjacent tile that makes 10 has a flashing frame. Move to one of these and press RETURN for the second choice. Diagonal pairs and pairing a tile with itself are invalid. Six mistakes cause failure.</p>
+<p>Directions work on the keyboard or pad; the pad button also acts as RETURN. SPACE opens confirmation to restart this stage. NO is selected initially. Choose with A/D, confirm with RETURN, or cancel with SPACE. Play pauses during confirmation. CTRL+C returns to BASIC.</p>
+<p>Flashing candidate frames keep their numbers readable. A valid pair moves together into the center, forms a large 10, scatters light, and disappears. Selection and merge sounds confirm each pair. Invalid pairs leave the board visible and explain whether the tiles were not adjacent or did not sum to 10. Wait for the animation to finish before pressing again.</p>
+<p>MAKE 10 is the target sum, PAIR shows selected values, LEFT counts remaining tiles, and MISS counts mistakes up to six. The eight indicators below the board light up for completed pairs. NEIGHBORS ONLY means a nonadjacent pair; SUM MUST BE 10 means a wrong total.</p>
+<h2>More screenshots</h2>
+<p><img src="https://raw.githubusercontent.com/wiki/zabaglione/jr100dev/images/phase-pairs/play-01.png" alt="PHASE PAIRS: play 01" loading="lazy" decoding="async" /></p>
+<p><img src="https://raw.githubusercontent.com/wiki/zabaglione/jr100dev/images/phase-pairs/play-02.png" alt="PHASE PAIRS: play 02" loading="lazy" decoding="async" /></p>
+</article><article class="manual" data-language="ja" lang="ja"><h2>操作と遊び方</h2>
+<p>WASDで数を選び、RETURNで1個目と2個目を指定します。1個目の駒には上辺に印が付き、右側のPAIRに選んだ数を表示します。隣接して合計10になる候補は、すべて枠が点滅します。点滅する駒へ移動し、RETURNで2個目を決めます。斜めと同じ駒は組にできません。6回誤ると失敗です。</p>
+<p>方向キーはキーボードまたはパッド、RETURNはパッドのボタンでも操作できます。SPACEでこの面のやり直し確認を開きます。やり直し確認はNOが初期選択です。A/Dで選び、RETURNで確定、SPACEで取り消します。確認中は進行を止めます。CTRL+CでBASICへ戻ります。</p>
+<p>1枚目を選ぶと、隣接して合計10になる候補の枠がすべて点滅します。数字を読める状態で次の選択先を示します。合計10になる2枚は中央へ寄り合い、大きな「10」に合体してから光を散らして消えます。選択音と合体音で一組ずつの成立を確認できます。誤った組は盤面を残し、隣接していないのか、合計が10ではないのかを表示します。演出が終わってから次のキーを押してください。</p>
+<p>MAKE 10は目標の合計、PAIRは選択中の2数、LEFTは残る駒、MISSは6回までのミス数です。盤面下の8個のゲージは、消した組の数だけ点灯します。NEIGHBORS ONLYは隣接していない組、SUM MUST BE 10は合計が10ではない組を選んだ印です。</p>
+<p><img src="https://raw.githubusercontent.com/wiki/zabaglione/jr100dev/images/phase-pairs/play-01.png" alt="ゲーム開始時" loading="lazy" decoding="async" /></p>
+<p><img src="https://raw.githubusercontent.com/wiki/zabaglione/jr100dev/images/phase-pairs/play-02.png" alt="プレイ中の場面" loading="lazy" decoding="async" /></p>
+</article></main>
+  <footer class="wrap"><p><span lang="en" data-language="en">Made for the JR-100 with standard 16 KB RAM. Emulator-tested; real hardware is unverified.</span><span lang="ja" data-language="ja">標準RAM 16KBのJR-100向け。エミュレーターで検証済みです。実機での動作・音声は未確認です。</span></p><a href="https://github.com/zabaglione/jr100dev/wiki">Wiki</a> · <a href="https://github.com/zabaglione/jr100dev/tree/main/games">Source / MIT License</a></footer>
+</body>
+</html>
