@@ -547,24 +547,24 @@
       "genre": "tabletop",
       "edited": false,
       "outcome": "first stage cleared",
-      "prg_sha256": "e9be1c5c15eb33c177ae519032f624ac4378f661adaf30bb0ad49eaf1b97e187",
-      "seconds": 33.567,
+      "prg_sha256": "559a27103b2d069af8bbe3c60e0cba1838328172afefc0e93f90338b09184ca4",
+      "seconds": 32.533,
       "video": {
         "path": "game-media/orbit-draft/play.mp4",
-        "sha256": "5d8ce551c81a42f5587cb6c620b2d4736696cf87c1f1bc4e03c6782c04cc77b4"
+        "sha256": "eef1f575c5a5f275f371a8134886617214eccf958bdd35ffc3b5fa8fa39246a3"
       },
       "images": [
         {
           "path": "game-media/orbit-draft/demo-start.png",
-          "sha256": "dcae08bab3e4066fe32ebdd312ae2b0da62c6d7a19292e3226e8a4277b2469b5"
+          "sha256": "aad5d5597db24027db06b3a88c79ef67062518edd58d5307789968e032793e4e"
         },
         {
           "path": "game-media/orbit-draft/demo-play.png",
-          "sha256": "c1532a298aa2da58f5a1ac8d823a5a7686d6eda1300685b79bdda39a63c6142b"
+          "sha256": "9e7484c7be56c47fadc2620578de0d6754656247406d739cbc2beeefb968aec3"
         },
         {
           "path": "game-media/orbit-draft/demo-clear.png",
-          "sha256": "813a57505a235428e049f67b63333344cb09e08d95e87a6a212fe77e619503bf"
+          "sha256": "2cbd6d10c57fa572ffe1833de37aff6ec6ca773fca966be34b91a7ea8cd6b2a2"
         }
       ]
     },

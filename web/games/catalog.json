@@ -204,12 +204,12 @@
     {
       "id": "orbit-draft",
       "title": "ORBIT DRAFT",
-      "version": "1.6.0",
+      "version": "2.0.0",
       "ramKiB": 16,
       "entry": 768,
-      "path": "games/orbit-draft/1.6.0/orbit-draft.prg",
-      "sha256": "e9be1c5c15eb33c177ae519032f624ac4378f661adaf30bb0ad49eaf1b97e187",
-      "sourceUrl": "https://github.com/zabaglione/jr100dev/tree/bc4886d497d88c3941e5df96743322ccb653175a/games/orbit_draft"
+      "path": "games/orbit-draft/2.0.0/orbit-draft.prg",
+      "sha256": "559a27103b2d069af8bbe3c60e0cba1838328172afefc0e93f90338b09184ca4",
+      "sourceUrl": "https://github.com/zabaglione/jr100dev/tree/1aa9fe3c1bf0ad264a10ecfcec8b7e6f7f16970d/games/orbit_draft"
     },
     {
       "id": "five-forge",
