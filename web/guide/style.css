@@ -16,6 +16,10 @@ html[lang="en"] .languages a[hreflang="en"], html[lang="ja"] .languages a[hrefla
 .utility { font-size: .9rem; padding: 16px 0; }
 .breadcrumbs { font-size: .9rem; color: var(--muted); margin-bottom: 14px; }
 .hero { padding: 40px 0 32px; }
+.library-hero { padding: 20px 0 16px; }
+.library-hero h1 { font-size: clamp(2rem, 4vw, 2.8rem); margin-bottom: 12px; }
+.library-hero .actions { margin: 12px 0; }
+.library-hero .note { margin: 0; }
 .eyebrow { color: var(--accent); font-size: .82rem; letter-spacing: .14em; margin: 0 0 8px; }
 h1 { font-size: clamp(2rem, 5vw, 3.5rem); line-height: 1.15; letter-spacing: -.035em; margin: 0 0 20px; overflow-wrap: anywhere; }
 h2 { font-size: 1.45rem; line-height: 1.4; margin: 38px 0 16px; }
@@ -39,6 +43,16 @@ img { display: block; max-width: 100%; height: auto; image-rendering: pixelated;
 .card-body h2 { font-size: 1.1rem; margin: 5px 0 12px; letter-spacing: .03em; }
 .card-body h2 a { text-decoration: none; color: var(--text); }
 .card-body p { font-size: .95rem; color: var(--muted); }
+.card-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 18px; font-size: .85rem; }
+.card-actions .button { width: 100%; text-align: center; }
+.quickstart { padding: 20px 24px; margin-bottom: 28px; border: 1px solid var(--line); border-left: 4px solid var(--accent); border-radius: 4px; background: var(--panel); }
+.quickstart h2 { margin: 0 0 12px; font-size: 1.1rem; }
+.quickstart ol { margin: 0 0 14px; padding-left: 24px; }
+.quickstart li { margin-bottom: 4px; font-size: .95rem; }
+.quickstart p { margin: 0; }
+.quickstart-fold { margin-bottom: 24px; }
+.quickstart-fold summary { cursor: pointer; color: var(--accent); }
+.quickstart-fold .quickstart { margin-top: 14px; }
 .genre { color: var(--accent); font-size: .78rem; }
 .shots { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; }
 figure { margin: 0; }

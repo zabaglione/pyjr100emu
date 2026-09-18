@@ -1,0 +1,120 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Play on MiSTer FPGA · JR-100 Games</title>
+  <meta name="title-en" content="Play on MiSTer FPGA · JR-100 Games">
+  <meta name="title-ja" content="MiSTer FPGAで遊ぶ · JR-100 Games">
+  <meta name="description" content="Play on MiSTer FPGA">
+  <meta name="description-en" content="Play on MiSTer FPGA">
+  <meta name="description-ja" content="MiSTer FPGAで遊ぶ">
+  <link rel="canonical" href="https://zabaglione.github.io/pyjr100emu/guide/mister.html">
+  <link rel="alternate" hreflang="en" href="https://zabaglione.github.io/pyjr100emu/guide/mister.html?lang=en">
+  <link rel="alternate" hreflang="ja" href="https://zabaglione.github.io/pyjr100emu/guide/mister.html?lang=ja">
+  <link rel="alternate" hreflang="x-default" href="https://zabaglione.github.io/pyjr100emu/guide/mister.html">
+  <script src="language.js"></script>
+  <link rel="stylesheet" href="style.css?v=15c1eb775b89">
+  <script src="guide.js" defer></script>
+</head>
+<body>
+  <a class="skip" href="#main"><span lang="en" data-language="en">Skip to content</span><span lang="ja" data-language="ja">本文へ</span></a>
+  <header class="wrap masthead">
+    <a class="brand" data-guide-link href="index.html">JR-100 GAMES</a>
+    <nav class="languages" aria-label="Language / 言語">
+      <a data-language-switch href="?lang=en" hreflang="en" lang="en">English</a>
+      <a data-language-switch href="?lang=ja" hreflang="ja" lang="ja">日本語</a>
+    </nav>
+  </header>
+  <div class="wrap"><nav class="utility"><a data-guide-link href="index.html"><span lang="en" data-language="en">All games</span><span lang="ja" data-language="ja">全作品</span></a><a data-guide-link href="mister.html">MiSTer FPGA</a><a data-guide-link href="controls.html"><span lang="en" data-language="en">Getting started</span><span lang="ja" data-language="ja">操作と起動方法</span></a><a href="../gameplay.html"><span lang="en" data-language="en">Gameplay videos</span><span lang="ja" data-language="ja">プレイ動画</span></a><a href="../"><span lang="en" data-language="en">Emulator</span><span lang="ja" data-language="ja">エミュレーター</span></a></nav></div>
+  <main class="wrap" id="main"><section class="hero"><h1><span lang="en" data-language="en">Play on MiSTer FPGA</span><span lang="ja" data-language="ja">MiSTer FPGAで遊ぶ</span></h1><nav class="actions"><a class="button primary" href="downloads/jr100-games-mister.zip" download="jr100-games-mister.zip"><span lang="en" data-language="en">Download all 51 games (.zip)</span><span lang="ja" data-language="ja">全51作品をまとめて保存（ZIP）</span></a></nav></section><section class="quickstart" aria-labelledby="mister-start">
+      <h2 id="mister-start"><span lang="en" data-language="en">Start on MiSTer</span><span lang="ja" data-language="ja">MiSTerで起動</span></h2>
+      <ol><li><span lang="en" data-language="en">Copy the .prg into games/JR100/ on your SD card.</span><span lang="ja" data-language="ja">.prgをSDカードのgames/JR100/へコピーします。</span></li><li><span lang="en" data-language="en">In the JR-100 core menu, set Autostart loaded program to Yes.</span><span lang="ja" data-language="ja">JR-100コアのメニューでAutostart loaded programをYesにします。</span></li><li><span lang="en" data-language="en">Choose Load PRG, select the game, then press RETURN at its title.</span><span lang="ja" data-language="ja">Load PRGでゲームを選び、タイトル画面でRETURNを押します。</span></li></ol>
+      <p class="note"><span lang="en" data-language="en">Still at READY? Type</span><span lang="ja" data-language="ja">READYで止まる場合は</span> <code>A=USR($0300)</code> <span lang="en" data-language="en">and press RETURN.</span><span lang="ja" data-language="ja">を入力してRETURN。</span>
+      <a data-guide-link href="mister.html"><span lang="en" data-language="en">First-time setup / SuperStation One</span><span lang="ja" data-language="ja">初回設定・SuperStation Oneの手順</span></a></p>
+    </section><article class="manual" data-language="en" lang="en"><h2>Choose one game or take the whole collection</h2>
+<p>Every card in <a href="index.html" data-guide-link="">All games</a> has a <strong>Download .prg (MiSTer)</strong> button. It saves the game directly; no source checkout or build is needed.</p>
+<p>For all 51 games, download the ZIP above and extract it. Copy its <strong>JR100</strong> folder into <strong>games/</strong> on your MiSTer's SD card. The individual downloads and the ZIP contain the same games, with autostart hints already included. The ZIP also includes these instructions and the MIT license.</p>
+<h2>First-time setup</h2>
+<p>Use the <a href="https://github.com/MiSTer-devel/JR100_MiSTer">JR-100 core</a> and your own BASIC ROM. The core's <a href="https://github.com/MiSTer-devel/JR100_MiSTer#rom">ROM setup instructions</a> explain how to prepare <strong>games/JR100/boot.rom</strong>. The game downloads include neither the ROM nor a core binary.</p>
+<p>Start the JR-100 core and wait for <strong>READY</strong>. In its on-screen menu, set <strong>Autostart loaded program</strong> to <strong>Yes</strong>, then choose <strong>Load PRG</strong> and select a downloaded game. It starts at its title; press <strong>RETURN</strong> to play. The games use standard 16 KB RAM, so leave <strong>Extended RAM (reset)</strong> off.</p>
+<p>If autostart is off or the machine remains at READY after loading, type <code>A=USR($0300)</code> and press RETURN. You do not need <code>RUN</code> for these machine-code games. Use the current core if automatic typing is incomplete.</p>
+<h2>SuperStation One and USB storage</h2>
+<p>Put the files in the <strong>games/JR100/</strong> folder on the storage device MiSTer is actually using. On SuperStation One this may be USB storage rather than the SD card.</p>
+<p>The steps above use the JR-100 core's own <strong>Load PRG</strong> menu. SuperStation One's <strong>Console Mode → Load Game</strong> needs an MGL launcher; a plain .prg is not that launcher. Follow the core's <a href="https://github.com/MiSTer-devel/JR100_MiSTer/blob/main/docs/SS1_FW12_CONSOLE_MODE.md">Console Mode setup guide</a> for that interface.</p>
+<h2>Controls, credits, and verification</h2>
+<p>See each game's guide for its rules and <a href="controls.html" data-guide-link="">Getting started</a> for keyboard and pad controls.</p>
+<p>RELIC DIVE is co-developed with <strong>JR-800 Web Emulator contributors</strong>. Their credit is retained in the collection's <a href="LICENSE.txt">MIT license</a>.</p>
+<p>Tested on MiSTer (SuperStation One) on 18 September 2026, using <code>JR100_20260801.rbf</code>. With standard 16 KB RAM, the four downloads below autostarted and reached gameplay. Their checks cover:</p>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>Game</th>
+<th>Confirmed on SS1</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>FROST STEPS</td>
+<td>Starting, movement, and collecting a crystal</td>
+</tr>
+<tr>
+<td>GATE RUNNER</td>
+<td>Starting, obstacle progression, and the pit-failure display</td>
+</tr>
+<tr>
+<td>STAR LANCE</td>
+<td>Starting, movement, and normal/heavy shots</td>
+</tr>
+<tr>
+<td>NIGHT SWARM</td>
+<td>Starting, movement, and pulse attacks</td>
+</tr>
+</tbody>
+</table></div>
+<p>The device owner also confirmed STAR LANCE's physical pad controls and sound effects. Sound and physical pad input for the other three games, all stages, and the remaining 47 games have not been tested on SS1. Original JR-100 hardware remains untested.</p>
+</article><article class="manual" data-language="ja" lang="ja"><h2>1作品ずつ、または全作品をまとめて保存</h2>
+<p><a href="index.html" data-guide-link="">全作品一覧</a>の各カードにある「MiSTer用 .prgを保存」から、その作品を直接ダウンロードできます。ソースの取得やビルドは不要です。</p>
+<p>全51作品を入れる場合は、上のZIPをダウンロードして展開します。中の<code>JR100</code>フォルダーを、MiSTerのSDカードの<code>games/</code>へコピーしてください。個別配布とZIPには同じゲームが入っており、自動起動用のヒントも付いています。ZIPには起動手順とMITライセンスも同梱しています。</p>
+<h2>初回の設定</h2>
+<p><a href="https://github.com/MiSTer-devel/JR100_MiSTer">JR-100コア</a>と、自分で用意したBASIC ROMを使用します。<strong>games/JR100/boot.rom</strong>の用意は、コアの<a href="https://github.com/MiSTer-devel/JR100_MiSTer#rom">ROM設定手順</a>を参照してください。ゲームの配布物にはROMやコア本体は含みません。</p>
+<p>JR-100コアを起動して<strong>READY</strong>を待ちます。画面上のメニューで<strong>Autostart loaded program</strong>を<strong>Yes</strong>にし、<strong>Load PRG</strong>からダウンロードしたゲームを選びます。タイトル画面が出たら<strong>RETURN</strong>で開始します。ゲームは標準RAM 16KB用なので、<code>Extended RAM (reset)</code>はOffのままで使えます。</p>
+<p>自動起動を無効にしている場合や、読み込み後もREADYのままの場合は、<code>A=USR($0300)</code>を入力してRETURNを押してください。この配布のゲームは機械語なので、<code>RUN</code>は不要です。自動入力の先頭が欠ける場合は、コアを最新版に更新してください。</p>
+<h2>SuperStation One・USBストレージの場合</h2>
+<p>ファイルは、MiSTerが実際に使用しているストレージの<code>games/JR100/</code>へ置きます。SuperStation Oneでは、SDカードではなくUSBストレージが選ばれている場合があります。</p>
+<p>上の手順はJR-100コア自身の<strong>Load PRG</strong>メニューを使います。SuperStation Oneの<strong>Console Mode → Load Game</strong>にはMGLランチャーが必要で、.prgだけでは登録できません。この画面から起動したい場合は、コアの<a href="https://github.com/MiSTer-devel/JR100_MiSTer/blob/main/docs/SS1_FW12_CONSOLE_MODE.md">Console Mode設定手順</a>を参照してください。</p>
+<h2>操作・クレジット・確認状況</h2>
+<p>各ゲームのルールは作品別のガイド、キーボードとパッドの操作は<a href="controls.html" data-guide-link="">操作と起動方法</a>を参照してください。</p>
+<p>RELIC DIVEは<strong>JR-800 Web Emulator contributors</strong>との共同制作です。配布物の<a href="LICENSE.txt">MITライセンス</a>にもクレジットを記載しています。</p>
+<p>2026年9月18日、SuperStation One実機と<code>JR100_20260801.rbf</code>で確認しました。標準RAM 16KBの設定で、以下の4作品が配布PRGから自動起動し、本編に進むことを確認しています。</p>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>作品</th>
+<th>SS1で確認した内容</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>FROST STEPS</td>
+<td>開始・移動・クリスタル取得</td>
+</tr>
+<tr>
+<td>GATE RUNNER</td>
+<td>開始・障害物の進行・穴に落ちた際の失敗表示</td>
+</tr>
+<tr>
+<td>STAR LANCE</td>
+<td>開始・移動・通常弾と重い弾の発射</td>
+</tr>
+<tr>
+<td>NIGHT SWARM</td>
+<td>開始・移動・パルス攻撃</td>
+</tr>
+</tbody>
+</table></div>
+<p>STAR LANCEは、実機所有者による物理パッド操作と効果音の確認も済んでいます。他の3作品の音声・物理パッド操作、全ステージ、残り47作品のSS1動作は未確認です。オリジナルのJR-100実機でも未確認です。</p>
+</article></main>
+  <footer class="wrap"><p><span lang="en" data-language="en">Made for the JR-100 with standard 16 KB RAM. See MiSTer FPGA for hardware test coverage.</span><span lang="ja" data-language="ja">標準RAM 16KBのJR-100向け。SS1実機での確認範囲はMiSTer FPGAのページに掲載しています。</span> <a data-guide-link href="mister.html">MiSTer FPGA</a></p><p><span lang="en" data-language="en">RELIC DIVE co-developed with JR-800 Web Emulator contributors.</span><span lang="ja" data-language="ja">RELIC DIVEはJR-800 Web Emulator contributorsとの共同制作です。</span></p><a href="https://github.com/zabaglione/jr100dev/wiki">Wiki</a> · <a href="LICENSE.txt">MIT License</a> · <a href="https://github.com/zabaglione/jr100dev/tree/main/games">Source</a></footer>
+</body>
+</html>

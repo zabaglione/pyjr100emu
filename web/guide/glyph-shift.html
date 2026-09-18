@@ -14,7 +14,7 @@
   <link rel="alternate" hreflang="ja" href="https://zabaglione.github.io/pyjr100emu/guide/glyph-shift.html?lang=ja">
   <link rel="alternate" hreflang="x-default" href="https://zabaglione.github.io/pyjr100emu/guide/glyph-shift.html">
   <script src="language.js"></script>
-  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="style.css?v=15c1eb775b89">
   <script src="guide.js" defer></script>
 </head>
 <body>
@@ -26,14 +26,19 @@
       <a data-language-switch href="?lang=ja" hreflang="ja" lang="ja">日本語</a>
     </nav>
   </header>
-  <div class="wrap"><nav class="utility"><a data-guide-link href="index.html"><span lang="en" data-language="en">All games</span><span lang="ja" data-language="ja">全作品</span></a><a data-guide-link href="controls.html"><span lang="en" data-language="en">Getting started</span><span lang="ja" data-language="ja">操作と起動方法</span></a><a href="../gameplay.html"><span lang="en" data-language="en">Gameplay videos</span><span lang="ja" data-language="ja">プレイ動画</span></a><a href="../"><span lang="en" data-language="en">Emulator</span><span lang="ja" data-language="ja">エミュレーター</span></a></nav></div>
+  <div class="wrap"><nav class="utility"><a data-guide-link href="index.html"><span lang="en" data-language="en">All games</span><span lang="ja" data-language="ja">全作品</span></a><a data-guide-link href="mister.html">MiSTer FPGA</a><a data-guide-link href="controls.html"><span lang="en" data-language="en">Getting started</span><span lang="ja" data-language="ja">操作と起動方法</span></a><a href="../gameplay.html"><span lang="en" data-language="en">Gameplay videos</span><span lang="ja" data-language="ja">プレイ動画</span></a><a href="../"><span lang="en" data-language="en">Emulator</span><span lang="ja" data-language="ja">エミュレーター</span></a></nav></div>
   <main class="wrap" id="main"><section class="hero">
       <p class="breadcrumbs"><a data-guide-link href="index.html"><span lang="en" data-language="en">All games</span><span lang="ja" data-language="ja">全作品</span></a> / <span lang="en" data-language="en">Puzzle</span><span lang="ja" data-language="ja">パズル</span></p>
       <h1>GLYPH SHIFT</h1><div class="intro" data-language="en" lang="en"><p>Switch between “crates are walls” and “enemies are walls” to reach the diamond exit across 40 puzzles. Later rooms combine rule-switching positions with the order in which you visit branches. Detours for circular runes are optional.</p>
 </div><div class="intro" data-language="ja" lang="ja"><p>「箱が壁」「敵が壁」という通行ルールを切り替え、菱形の出口を目指す40面のパズルです。後半はルールの切替位置と分岐の巡回順を組み合わせて考えます。丸いルーンを回収する寄り道はクリアに必須ではありません。</p>
 </div>
-      <nav class="actions"><a class="button primary" href="../?game=glyph-shift"><span lang="en" data-language="en">Play this game</span><span lang="ja" data-language="ja">このゲームをプレイ</span></a><a href="https://github.com/zabaglione/jr100dev/tree/main/games/glyph_shift"><span lang="en" data-language="en">Source</span><span lang="ja" data-language="ja">ソース</span></a></nav>
-      <p class="note"><span lang="en" data-language="en">To play, set up your own BASIC ROM in the emulator once. Screenshots and videos need no ROM.</span><span lang="ja" data-language="ja">プレイにはエミュレーターで自分のBASIC ROMを一度設定してください。画像と動画の閲覧にはROMは不要です。</span> <a data-guide-link href="controls.html"><span lang="en" data-language="en">Setup and controls</span><span lang="ja" data-language="ja">設定と共通操作</span></a></p>
+      <nav class="actions"><a class="button primary" href="downloads/glyph-shift.prg" download="glyph-shift.prg"><span lang="en" data-language="en">Download .prg (MiSTer)</span><span lang="ja" data-language="ja">MiSTer用 .prgを保存</span></a><a class="button" href="../?game=glyph-shift"><span lang="en" data-language="en">Play in browser</span><span lang="ja" data-language="ja">ブラウザーで遊ぶ</span></a></nav>
+      <p class="note"><code>glyph-shift.prg</code> · v1.6.1 · 10.7 KiB · 16 KB RAM · <span lang="en" data-language="en">Autostart ready</span><span lang="ja" data-language="ja">自動起動対応</span></p>
+    </section><section class="quickstart" aria-labelledby="mister-start">
+      <h2 id="mister-start"><span lang="en" data-language="en">Start on MiSTer</span><span lang="ja" data-language="ja">MiSTerで起動</span></h2>
+      <ol><li><span lang="en" data-language="en">Copy the .prg into games/JR100/ on your SD card.</span><span lang="ja" data-language="ja">.prgをSDカードのgames/JR100/へコピーします。</span></li><li><span lang="en" data-language="en">In the JR-100 core menu, set Autostart loaded program to Yes.</span><span lang="ja" data-language="ja">JR-100コアのメニューでAutostart loaded programをYesにします。</span></li><li><span lang="en" data-language="en">Choose Load PRG, select the game, then press RETURN at its title.</span><span lang="ja" data-language="ja">Load PRGでゲームを選び、タイトル画面でRETURNを押します。</span></li></ol>
+      <p class="note"><span lang="en" data-language="en">Still at READY? Type</span><span lang="ja" data-language="ja">READYで止まる場合は</span> <code>A=USR($0300)</code> <span lang="en" data-language="en">and press RETURN.</span><span lang="ja" data-language="ja">を入力してRETURN。</span>
+      <a data-guide-link href="mister.html"><span lang="en" data-language="en">First-time setup / SuperStation One</span><span lang="ja" data-language="ja">初回設定・SuperStation Oneの手順</span></a></p>
     </section>
     <section class="media" aria-label="Screenshots and video">
       <div class="shots"><figure><a href="../game-media/glyph-shift/demo-start.png"><img src="../game-media/glyph-shift/demo-start.png" width="816" height="624" alt="GLYPH SHIFT — At the start" loading="lazy"></a><figcaption><span lang="en" data-language="en">At the start</span><span lang="ja" data-language="ja">開始時の盤面</span></figcaption></figure><figure><a href="../game-media/glyph-shift/demo-play.png"><img src="../game-media/glyph-shift/demo-play.png" width="816" height="624" alt="GLYPH SHIFT — In play" loading="lazy"></a><figcaption><span lang="en" data-language="en">In play</span><span lang="ja" data-language="ja">プレイ中</span></figcaption></figure><figure><a href="../game-media/glyph-shift/demo-clear.png"><img src="../game-media/glyph-shift/demo-clear.png" width="816" height="624" alt="GLYPH SHIFT — First goal reached" loading="lazy"></a><figcaption><span lang="en" data-language="en">First goal reached</span><span lang="ja" data-language="ja">最初の目標を達成</span></figcaption></figure></div>
@@ -213,6 +218,6 @@
 <p><img src="https://raw.githubusercontent.com/wiki/zabaglione/jr100dev/images/glyph-shift/password-entry.png" alt="パスワード入力" loading="lazy" decoding="async" /></p>
 <p><img src="https://raw.githubusercontent.com/wiki/zabaglione/jr100dev/images/glyph-shift/password-restored.png" alt="再起動後の記録復元" loading="lazy" decoding="async" /></p>
 </article></main>
-  <footer class="wrap"><p><span lang="en" data-language="en">Made for the JR-100 with standard 16 KB RAM. Emulator-tested; real hardware is unverified.</span><span lang="ja" data-language="ja">標準RAM 16KBのJR-100向け。エミュレーターで検証済みです。実機での動作・音声は未確認です。</span></p><a href="https://github.com/zabaglione/jr100dev/wiki">Wiki</a> · <a href="https://github.com/zabaglione/jr100dev/tree/main/games">Source / MIT License</a></footer>
+  <footer class="wrap"><p><span lang="en" data-language="en">Made for the JR-100 with standard 16 KB RAM. See MiSTer FPGA for hardware test coverage.</span><span lang="ja" data-language="ja">標準RAM 16KBのJR-100向け。SS1実機での確認範囲はMiSTer FPGAのページに掲載しています。</span> <a data-guide-link href="mister.html">MiSTer FPGA</a></p><p><span lang="en" data-language="en">RELIC DIVE co-developed with JR-800 Web Emulator contributors.</span><span lang="ja" data-language="ja">RELIC DIVEはJR-800 Web Emulator contributorsとの共同制作です。</span></p><a href="https://github.com/zabaglione/jr100dev/wiki">Wiki</a> · <a href="LICENSE.txt">MIT License</a> · <a href="https://github.com/zabaglione/jr100dev/tree/main/games">Source</a></footer>
 </body>
 </html>

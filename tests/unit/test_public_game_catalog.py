@@ -3,6 +3,7 @@
 import hashlib
 import importlib.util
 import json
+import zipfile
 from pathlib import Path
 
 import pytest
@@ -73,24 +74,46 @@ def test_modified_artifact_cannot_build(tmp_path):
 
 
 def fixture_guides(root):
-    fixture_catalog(root)
+    _, _, program = fixture_catalog(root)
     folder = root / "guide"
     folder.mkdir()
     names = [
         "index.html",
         "controls.html",
+        "mister.html",
         "test-game.html",
         "language.js",
         "guide.js",
         "style.css",
         "LICENSE.txt",
+        "downloads/test-game.prg",
+        "downloads/README-en.txt",
+        "downloads/README-ja.txt",
     ]
     files = {}
     for name in names:
         data = f"public guide fixture: {name}".encode()
+        (folder / name).parent.mkdir(parents=True, exist_ok=True)
         (folder / name).write_bytes(data)
         files[name] = hashlib.sha256(data).hexdigest()
-    manifest = {"schemaVersion": 1, "games": ["test-game"], "files": files}
+    bundle = folder / "downloads/jr100-games-mister.zip"
+    with zipfile.ZipFile(bundle, "w") as archive:
+        for name in ("test-game.prg", "README-en.txt", "README-ja.txt"):
+            archive.writestr(
+                "JR100/" + name, (folder / "downloads" / name).read_bytes()
+            )
+        archive.writestr("JR100/LICENSE.txt", (folder / "LICENSE.txt").read_bytes())
+    files["downloads/jr100-games-mister.zip"] = hashlib.sha256(
+        bundle.read_bytes()
+    ).hexdigest()
+    manifest = {
+        "schemaVersion": 1,
+        "games": ["test-game"],
+        "files": files,
+        "sourcePrograms": [
+            {k: program[k] for k in ("id", "path", "version", "entry", "sha256")}
+        ],
+    }
     (folder / "manifest.json").write_text(json.dumps(manifest))
     return folder, manifest
 
@@ -99,11 +122,13 @@ def test_guides_copy_only_manifest_files(tmp_path):
     folder, _ = fixture_guides(tmp_path)
     (folder / "notes-private.txt").write_text("not published")
     paths = build.guide_files(tmp_path)
-    assert len(paths) == 8
+    assert len(paths) == 13
     assert all(path.name != "notes-private.txt" for path in paths)
 
 
-@pytest.mark.parametrize("change", ["hash", "missing", "traversal", "catalog"])
+@pytest.mark.parametrize(
+    "change", ["hash", "missing", "traversal", "catalog", "source"]
+)
 def test_stale_or_unsafe_guides_cannot_build(tmp_path, change):
     folder, manifest = fixture_guides(tmp_path)
     if change == "hash":
@@ -112,10 +137,36 @@ def test_stale_or_unsafe_guides_cannot_build(tmp_path, change):
         del manifest["files"]["test-game.html"]
     elif change == "traversal":
         manifest["files"]["../private.txt"] = "0" * 64
-    else:
+    elif change == "catalog":
         manifest["games"] = ["another-game"]
+    else:
+        manifest["sourcePrograms"][0]["sha256"] = "0" * 64
     (folder / "manifest.json").write_text(json.dumps(manifest))
     with pytest.raises(RuntimeError):
+        build.guide_files(tmp_path)
+
+
+@pytest.mark.parametrize("change", ["extra", "stale"])
+def test_bundle_cannot_include_unlisted_or_different_programs(tmp_path, change):
+    folder, manifest = fixture_guides(tmp_path)
+    bundle = folder / "downloads/jr100-games-mister.zip"
+    if change == "extra":
+        with zipfile.ZipFile(bundle, "a") as archive:
+            archive.writestr("JR100/boot.rom", b"unlisted private fixture")
+    else:
+        with zipfile.ZipFile(bundle, "w") as archive:
+            for name in (
+                "test-game.prg",
+                "README-en.txt",
+                "README-ja.txt",
+                "LICENSE.txt",
+            ):
+                archive.writestr("JR100/" + name, b"stale data")
+    manifest["files"]["downloads/jr100-games-mister.zip"] = hashlib.sha256(
+        bundle.read_bytes()
+    ).hexdigest()
+    (folder / "manifest.json").write_text(json.dumps(manifest))
+    with pytest.raises(RuntimeError, match="bundle"):
         build.guide_files(tmp_path)
 
 

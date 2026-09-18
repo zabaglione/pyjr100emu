@@ -55,61 +55,475 @@
   ],
   "files": {
     "LICENSE.txt": "eb066d0b8b7ab2ae1da387a2dfd4aaabf15b47ffe11f4fefd72093e32a12cd16",
-    "abyss-signal.html": "57e07f073a1344e987ac99aac8908097c3f52983924076b4ae2d01fed7704f6b",
-    "auction-house.html": "ca4ef5a3f0c10b1e7a40fa42e2610954e4963806c81ef6b32a40ecc22118baec",
-    "brick-pulse.html": "c6d6362d1bb2c960c884a72fd1e14a2c30742cd3b3d61035c0331c60d1328e4f",
-    "cargo-balance.html": "3c9a6b74d9647a8bd6b439085264f5faa4b7430322541b5925474126c66cba97",
-    "chain-suit.html": "6fb40a29a83334d45ef899538da3543c07f5dc5ecf7df7b01304d868d69f583d",
-    "chrono-breach.html": "92aabb496b4e1a7e98a6bb6d534b95460e861e3abbfeedaa9d29b4c4d9aa2e45",
-    "circuit-works.html": "2805922c444e0ad9f33b380ad6771d72ff001659fe935fc54ea80c0ae72b021c",
-    "compass-rose.html": "329c7eef500454b5c58663020a3d33b36f28242573093d45f5f3dfbedf2bf7ad",
-    "controls.html": "3da7b8d8d97dda01c29e26cf248abdd873d9670ad4832f651e151975f7a21ef6",
-    "corner-crown.html": "ac65353d66c7fe72ddd542fecbba006b38b7b98fb10e98d321944ab3ea113e59",
-    "dice-relic.html": "9434020d8537ad1842ec7bab15882afc1e59b46587ed1cafa01d09a8f1281409",
-    "echo-parry.html": "c45f674ff8f9b32399808c3e11bb1ee202bd533885cfb8b38a22a2d2b70392a4",
-    "five-forge.html": "7c4fffedc619e1e6e05e3943104863110b93223a3e5d9d5ba3cd85401de8f641",
-    "frost-steps.html": "06736da044a06d15c6928370d318238bce8197b3a7cd25494f95a4edc4326dec",
-    "fuse-box.html": "f4d66c27961aaae6e899e2fc97447801677c0886c93c39b8b961a029451f3a29",
-    "gate-runner.html": "2d64e6ce5cbde537fd31370dd6353e8c223a88159320711cf742c9a74a7421b2",
-    "glyph-shift.html": "0f9246f1106162d72d4b57118ab392f0c13e5ecabaed5e133d4200c4eb9b42ea",
-    "gravity-well.html": "aff5d7f1d2d45a0a321846edf3a314dd0606ba03c0a75fa98f07cacc5881f89b",
+    "abyss-signal.html": "b09372a1c54435922fd03db078b551309ae7b1ee8ad24fc02dc13f31ae4461d1",
+    "auction-house.html": "d277624300649eb06df3384851c7f3294f0d5c52589c5798297e7978c8fb535d",
+    "brick-pulse.html": "2c7bf0309f6f8af741e3090979e0ce5d2ea45126040bf85803672645276314b4",
+    "cargo-balance.html": "97853f6491bec95eb545b6f09e98e80d22cb6bd9111a7f4e7c5cbf8322d9ef49",
+    "chain-suit.html": "b685a0dad7fe8d4f8aa6f9e280471cca4786f09c0e2f7da9e5c67050668477a8",
+    "chrono-breach.html": "95e0120f113acadb085b14f89f3fad19f8590a7ff7cd1e7333e493d4794d73b9",
+    "circuit-works.html": "ce38b0d7c9dce6d9a602ba5513af8504710be2339dc10bf04e86782decc72a7c",
+    "compass-rose.html": "caeb71c41fa65fe861ada84c55376c523413adf217118ec96672236227105edb",
+    "controls.html": "61c042161f80e6dfe3d2ffba1f0f8bb1d78176827112cc26985f1baaaba4f607",
+    "corner-crown.html": "c21ecbdacdf2ada4cc034cb7b56858869566425a159072f922298ec5e80af67f",
+    "dice-relic.html": "666e5fd2cf211d02a5ca40813893f09b8ad9f83aaf6214a56b5325760e45f16f",
+    "downloads/README-en.txt": "cc0916ba910c360f9c39e6e83ea6616d93f316255cf8462b8fcde6854c85ac40",
+    "downloads/README-ja.txt": "3508123c02f869af1e72960a2af2929995a52c93e223654177c4909147939714",
+    "downloads/abyss-signal.prg": "e9ac4aafe2c62cf7cc47b4ee1db90727a5295e0d02682c9ef48c8102518e8356",
+    "downloads/auction-house.prg": "d1a4e7950d9cadb2f934334a264a36461ecd2b0bb66549c8ed2c47abaa404b22",
+    "downloads/brick-pulse.prg": "af89fefc5059f371e8ffe5d5840b0cdc5f87c7ce02b5d57a90b4dc6518d36799",
+    "downloads/cargo-balance.prg": "96ab62d979e5c5a908c8bc30b71eef03f3d7c1784951254ff0ccc5d8a20bc535",
+    "downloads/chain-suit.prg": "356052f795732dcc97dce5c379657e40c6557933a2b3baa799de20565731fb30",
+    "downloads/chrono-breach.prg": "755bac5f3584c519fe117ec0ea5b8df84a3282ee7f449e7884528011f3160e58",
+    "downloads/circuit-works.prg": "fd02d662b10bb2c3c337bdb97a20c9190b16f80e5b693d083f0ff7cf043344ef",
+    "downloads/compass-rose.prg": "850eb5b0a0e35f99d6c7e995142f371192825a6ef1a1da727c5e0ae69ca20917",
+    "downloads/corner-crown.prg": "ee35ddce93ae8072fd80535b1599052cfa417ec330a90a48413d133c6a9da2b2",
+    "downloads/dice-relic.prg": "7e80821bcbe03cd81be76037c5fb7ee1a20184dc9fb72cb03ec5a83a56b54c04",
+    "downloads/echo-parry.prg": "a764ec2a27707d9923bb417439d810006e485bf8d2b2a34b97a68ef6528c2920",
+    "downloads/five-forge.prg": "7cc46929ef135023fad54450792d3a08bf1c8c04c93811483b125bdac3d6195c",
+    "downloads/frost-steps.prg": "c326bc76b02b74a940604bdd386f6d46e501bb8758b34299daa3c13120591da0",
+    "downloads/fuse-box.prg": "245b1e43b641ce8c57f848d7c6b0e9d9d9d49d750e0ae835a0cff8cad7d8f150",
+    "downloads/gate-runner.prg": "62d51e28290bcb3f38ec27507cf1f7a6c86a525656d328e8c71c1cea0fa2f5f3",
+    "downloads/glyph-shift.prg": "14fc8641066a88fb869b31d16f42649e58b0310c1c572683c06351a3a068317f",
+    "downloads/gravity-well.prg": "22d4a315166ce5db9a88879da4c650627916d19a6f4fc554a7eb17c629c56a69",
+    "downloads/hearth-zero.prg": "7385ae94ece06737c52fe1870c0e25fb51043ac0f0ff47d422919b02628b36f8",
+    "downloads/iron-script.prg": "170ec8089e9c879366c9fdc19e2df3eb4ae8b96522d9ebac4a504f8c86a02c35",
+    "downloads/jr100-games-mister.zip": "98c46f1cc1dfc0958475d25100c11b7d1bdd57ae4a6475878381e7fe1e741be0",
+    "downloads/loop-ten.prg": "7c3e3d0fa5da36fbe5cfa2c21fb7b901e2a549c2ed2e2ab3f756950eddc8401f",
+    "downloads/lumen-cross.prg": "ba2c48d120f76247a7adb442363ad4da593f9ccb30e3b98c40660860ffe931e3",
+    "downloads/lunar-touchdown.prg": "80879268d48ddce4d24fbaeb9a05ee247e9295ab12908b9451bb38ce8dd29a56",
+    "downloads/magnet-vault.prg": "4c0354b29cfea4ac8488ea101b19db4d0e6eb0b7562884ebf670c17f2a05c087",
+    "downloads/memory-mosaic.prg": "d5357ec0df4cd1c789a4a854dd7c36550f5ccb37eeeb89b92479251947713057",
+    "downloads/metro-weave.prg": "2393c574429c53df2a6868659818649cda446127dd9c45d91ad25388e603c11e",
+    "downloads/mirror-relic.prg": "040911e89151b9681e359a012c6aea1ae72e9fe23fe60acf71690bcd1793529a",
+    "downloads/night-swarm.prg": "55aa68cab7d710dfcf5a43657b2e6531cbeeac91aa5686d271f3426fc0b678b6",
+    "downloads/number-vault.prg": "8bb046d570e597bdc9e871b1ef7839415d5e6e15042a5e466080071cf9244521",
+    "downloads/orbit-dodge.prg": "e4fae2392310ad8445b6183a381fa28ecd5b7eba16ff468d7f855ea48876833c",
+    "downloads/orbit-draft.prg": "604c2307bd1f29d5b1eb99eaec8798783a1d47e978d620d6e0a2452c260b651c",
+    "downloads/orchard-days.prg": "77005e2d44a4077082e4c33472e280c903c61330d4e079bec0101d59858ea6c1",
+    "downloads/peg-garden.prg": "12d648d12f69814398b94b0195f3c67fef26ff50a716c3d508eedd7d503f9547",
+    "downloads/pendulum-port.prg": "604f89b2820ef36b4e0d1d04c9c6efeabcdc4cd2c5b43c0764ff6ee4f2502a4b",
+    "downloads/phase-pairs.prg": "deae3e936190cbf4388820f2b8f8f90b0ad3dcd3e96d03f6f82e0254b1af503c",
+    "downloads/potion-path.prg": "2155fe851b877914eeca9c99742158758c54a4b113f0bcf22069b05c922a1e7d",
+    "downloads/prism-trace.prg": "b7a3981fd61f798b5a5c7ffb4a971a4b2c8ae480cbcc7307b572208ca862ebe4",
+    "downloads/quiet-route.prg": "40af03b59eafc682a8cf51b323ccf13aab58bb2006104667ca54274857329b7e",
+    "downloads/relic-dive.prg": "1b2fe3dd3bb5ff89c96533615ea015774d35a944ef74b9745bfbc17d37b02bf6",
+    "downloads/ribbon-snake.prg": "eeb264d90457b4b6b654073f24ca883218031f71d7232128fbec92cf5b3acc7e",
+    "downloads/ruin-lexicon.prg": "435117e41c5292f6f593f24df4be6fe6e1dfcd43e2e85ac26f6418b99b0a781f",
+    "downloads/sand-rescue.prg": "10187603ca8025f5fcb4608ead67d23b4edc4c6a3ea4ce8c6abeda44645c41ab",
+    "downloads/seed-merge.prg": "3afd1792707f3022e722d8933708e2387f585ed3949bba65bf9e5552828ac83b",
+    "downloads/shadow-archive.prg": "f4dcbcffc64f23d24d8ec06057dca90e02c590a339a8bc15190e4ef93506dde6",
+    "downloads/sigil-deck.prg": "2b6e87a9cc3f06735a2dc8f40d88bdccf0bb60d58f8a730455efd9431ffb3403",
+    "downloads/star-lance.prg": "11579a7f89c9139c1c0cf4529e3570bb73cede59dbdb957d94eb9756ee58d9e6",
+    "downloads/stone-balance.prg": "a41ef4f339eba94f7826bed7a39d4ffbb7163ceefb59fc3da233c0c9fcc56e32",
+    "downloads/tidal-nets.prg": "058676204abbfe20938ed1df6baa458b7fc7b3aa3c16386764ce82ea20a5e6e0",
+    "downloads/tide-bridge.prg": "da671cc4faec5b5eb2f1fdee842042fd037cf5537282ecbc54eda51ddfc08120",
+    "downloads/trace-blade.prg": "01f016a9be145289c5d072248e9cf4aa22b181a848103269dfdd4b000e7569d7",
+    "downloads/twenty-one.prg": "3fd3dc1e176caf5a2daafd049f951312704696e5b5239e39ae55be8a271c871e",
+    "downloads/word-foundry.prg": "21038b67373a7957a164eac44281508e78a4708c71ef1ce88b1ea11b85d2bf64",
+    "echo-parry.html": "7cf73496caffc6a47eb722c794ec2068b3b01f797d61be25d1ad8414c8da00da",
+    "five-forge.html": "1605d387130307b0df893ac6a78a242aae79dc380c74d05ba58ed5657a69af7b",
+    "frost-steps.html": "601e76d1e5189698259e4b546515b88763e1dde31681c44fc35cb1d5f1a460c5",
+    "fuse-box.html": "6d32c78cbe204637ef0d252e528edfdfd092c8f00edfc01c6c16ca9186931d4d",
+    "gate-runner.html": "80bc3a706d1a51a224fad1fed420cfa8b1d980bda08d1f3854cbfe9255bba181",
+    "glyph-shift.html": "ac58b304cb043f52d0f624c83dc6d0bf08e90479e8b96eeb41998244d131d69f",
+    "gravity-well.html": "0897caa3b19b01ca97ac33f73c53a3e9f63c6dda0c897f928f755065e60ff908",
     "guide.js": "da426c0495be04a5030d3e39b0164831bfba236050a9fc48515a9b233039267e",
-    "hearth-zero.html": "846d9aa135d64a5827b5fbf8aca0a52b940a6b78950e5fe8a6c11b8f920532d2",
-    "index.html": "5e21de558e9e19b287b33c061becbdcbed66952ca3ac4e50422fa505c9aceb17",
-    "iron-script.html": "35fa89be7fdf9bd75bbf348adaaf719a42f862bafde2e708a85903c5b2fff36a",
+    "hearth-zero.html": "c25a5d63824f06fa033899285202f35c11f221c223edc204101fdfa3b7ee0809",
+    "index.html": "2b85a96df9e128381244608c11e597c9b9de06bf05ee4eef222ef0ef4250ec12",
+    "iron-script.html": "740ec0b1f30831f1f91f61f29b0711479078b1320397d9030ac1f18db395e1f9",
     "language.js": "3d66733528ec93df480245cc858ecc0279e3c431f12ff43dbd0054d767d0387f",
-    "loop-ten.html": "841ef6bafbd777c29d431280376e1a839789755eeed809815d40bc4bde1dd202",
-    "lumen-cross.html": "ecbfd7b4241ba80244180f8151ffe99a61d7574c4cf836940ef6fc29f826c53e",
-    "lunar-touchdown.html": "5f7b84f3117b0536fe1a9f57390e7f2c284ed7bc67a9d83939f34e96ede45eef",
-    "magnet-vault.html": "a049cb9f892a2557b0c9b76da2f31c6b04d618691cbfd053ee01ec6c06396387",
-    "memory-mosaic.html": "1b35ce781453150902d4947ce3c04b69696f6a0776105c8d50d962e9a3757277",
-    "metro-weave.html": "3e0d1919527d3446a509c34c10f7c022646241c9c7a5530594d4be2c07dfe4ad",
-    "mirror-relic.html": "d4338c07e1b1ee8de8bced6141fe8ce7f2df2e9df3308f4a9c3547439b12dca9",
-    "night-swarm.html": "e175408c7888e478d53830ba78e4d6373489d15689d585f6398005ebcba9c5c4",
-    "number-vault.html": "095dca26d787574f4dcee3c4b8585f148ce31f441c4c6da63684b63cf1166a2d",
-    "orbit-dodge.html": "5abe1f27c946403348fd11c338f34d6cb1797326e28c4acfeb3a31ac74148a97",
-    "orbit-draft.html": "f46d2d0b145ca85b998f1f28b7b4f1a8f0d85b9de1379e2aa48ff4fd0c51f293",
-    "orchard-days.html": "cb30296ba5eb341476f6d48dd3ddce60c2703f5cff7de63ecb31d970e79fcb04",
-    "peg-garden.html": "60fbc015d3fc3a621d41ad6be1be2c11085eb53c943a8d0a73a31cf285d475de",
-    "pendulum-port.html": "603f452026dca1c0720a7542db0e0e737a7327dd1451ff7ac89562403c026de3",
-    "phase-pairs.html": "3c93d86b1ced966c75c711af0432b50a36018539496b237bf6a3aa8b7f325148",
-    "potion-path.html": "b6978a06fdd0e5ddf70fc59b698a18fd6013364ef77ecf3ddd232f2549513a0c",
-    "prism-trace.html": "84e2f594959c3ecd347c5ff1e442711c7475cbe7d8cf3624a2ac2ae6cd29c113",
-    "quiet-route.html": "863847b90389a599059e4786f93238f4125238401d4915800cbd05b7e648837a",
-    "relic-dive.html": "5aa93716457fdabdb2fc6fb66545a5fe2ef9846d7aa4e7e2f4eb36c51fa25bc5",
-    "ribbon-snake.html": "896e27caf3e6a5d2db1d1d1eced534c0a0bb84efd46d3dc6c6e175b963973e01",
-    "ruin-lexicon.html": "44f53e50663eb11918de0328b2c6a1a43afa3fd1e04550f26ca6e07b93fc745b",
-    "sand-rescue.html": "7427c0ad55b5889d7ef7c8b7d71ab934ffbcd9a854add2f1363a2ab9f90e1ddd",
-    "seed-merge.html": "3d6cb2c477d53ac8064295c1261ea26dcddebbfa2d110c0ade1bb35d33ac423d",
-    "shadow-archive.html": "8d90daa0d07e3f0ddecccea4ea3794ba77a4e8a7839602a4975f63ac4fd77876",
-    "sigil-deck.html": "e336bdfdc9bfdc50b4dbd331654a1603e35228fa3470b20f8769fd07947ce95f",
-    "star-lance.html": "fafc209a42cfb14a4e4f863af9326b3fbcc8edb0243a27c8c1ac9440d1c80c52",
-    "stone-balance.html": "92fae172770a3e808adaa76e427ef3c65cb6c4238fe3b406121a91efb1c601fc",
-    "style.css": "0b39aaaecd7ea5058b988c4a905fc7d369a24bae8df8460908822cb5c48fafac",
-    "tidal-nets.html": "6f252b5950ea4d510f876f55cff9a3f2256654120dd0a843ce90990b9dc9dce2",
-    "tide-bridge.html": "7c03d2f0dfa90603b6d69223fa5a5ba0929fc7570454100441a7fe3daedc7937",
-    "trace-blade.html": "45a9530b7427ecea141dce417c5ef85f147c3b0b4eb5fa4a1985c9d312bfcaf7",
-    "twenty-one.html": "fefeafeb2eb91f3fabbda65c23ed3648226baf9655871fa6ed53db7175d45ab9",
-    "word-foundry.html": "bc160ebce2f2cb3aba7ecc327d54a7cc23cdf5ca3bcf490b60e20c465efab35a"
-  }
+    "loop-ten.html": "1e281626966590eec20b7a7dd8f0d0ea757226d7bfc16cd1fca363215061c427",
+    "lumen-cross.html": "faeb833ff70cec206ebcaeb135990db4d0bef481cd73949c94a041661478cf2e",
+    "lunar-touchdown.html": "87180089c598276b3f6850ddacd08b2351f357518bccdce75d74de5ac24d9e36",
+    "magnet-vault.html": "5c6e153a02202db3a9e2c81410b6ded0b4d2c7e39b5df4d1cbf3cff8ff67fbed",
+    "memory-mosaic.html": "79dc2067532d1c2a447f89830ca267126fa485bd2a112c1e9dad0dbf6861bf85",
+    "metro-weave.html": "34ae5c18224237a7e8c3cf269131415643e740b5ba349a2576c663e6608c97a3",
+    "mirror-relic.html": "095614fc57a8c516ba55e9c107810a07cfe2a8a772ace08a537544a0ee61e6d9",
+    "mister.html": "05e9a6a6488fd486687d4175da841bf685288441abdc3f82084fbbeae43f825b",
+    "night-swarm.html": "35345ca3d5403a7dddec863d838958ecd1616cbd0baa9d84bdbb7cda6b445c8f",
+    "number-vault.html": "2f35a3c5f0b9f507c99e7d063fcfc1b1802b18efcc41b1d486a5a0081e10cdda",
+    "orbit-dodge.html": "a606dc646bb7ada16456139f0f2b3fec0a6e945b518bbb014bbf5d56f836c76b",
+    "orbit-draft.html": "2857db9cbc3216f92a4eaa19c4521cfffd9bb7e9922f9bbb8fb5c4fc37f3a768",
+    "orchard-days.html": "162dba3ae0ed298559c29f2b8152627f67624a0f06d1131683f1df9d5f480427",
+    "peg-garden.html": "fae5b31aea1ec16b54a7952c6f9e6ee6dfe4efd907fe189006bf1194fcf2d226",
+    "pendulum-port.html": "994a6135cf085189cb0eb3db3e666b46b286ac719bdd7d7985d15dddc1fbd872",
+    "phase-pairs.html": "2e1f8add9c8970506af8642d492192a11f4ce98b132efa1e1c6d358aead13394",
+    "potion-path.html": "5bbdc1f52254def5e24f1634d5be42e5ff81f5d0e0ff0b035a76b647f7617bc8",
+    "prism-trace.html": "849c47a6bbe2576795504c3bafa4fb4952734aba97c3b8b36ec57c5cc214e6d6",
+    "quiet-route.html": "537ee547f1226fac8eb84da10286234ee072bee4e6a7781ae32a8293a06f8d9d",
+    "relic-dive.html": "bcbaf9ea70ba1db8b2b74f90baf624e4fb00bbdef1c7d22b2d6443d14563a6b2",
+    "ribbon-snake.html": "0c71d73b5bb7ddace35422cb66c1e1d726977f9e039f8814ae9753efbe1886f1",
+    "ruin-lexicon.html": "d330a546f1c2afe8f635f2debc71520ad1993df707223c180a09d54a30faa699",
+    "sand-rescue.html": "283af14826192611f79df18d819f2abe9ef2c7b5d4a666195fe2521e5b9487b5",
+    "seed-merge.html": "5c3c52c081116b4b3f304f5b3a92484baec882953a71714941473ecdd120cf63",
+    "shadow-archive.html": "ecbd0c3894a7da78f53c9a4c1253173b783a82f9802d02f21d9af7c36141174e",
+    "sigil-deck.html": "a9b69f435581059707c9cc89d81d45b35b023096fdec8caa4e0d38046dec5dd2",
+    "star-lance.html": "e1d75d650fcd346af8580860e801bb6b9ea005cb4c4972784cda1729618f1239",
+    "stone-balance.html": "8394e37a3a55133c4b795bed2fb75e0f9745ab8bce4db8dd0dec2b662d0b6a86",
+    "style.css": "15c1eb775b8975597fb63f04c0d7c715d060027b933ee20ad2a6a8ea9da748be",
+    "tidal-nets.html": "d94a7c875733c0e3e9b4457670345302611aada1713dd248268c2b31f9bee968",
+    "tide-bridge.html": "1bbdd45951a54212d99a5a7054e4ac2507f5c5e8df5cfb89ce94552102f5307e",
+    "trace-blade.html": "067814abd2c7feb4fee5c91577a2cb33a30ede210c3839381b4878c5ea036209",
+    "twenty-one.html": "cb74359e0dad877cd9535a6ecdf07ac7e272ea9649bb0e312cd00a9286c1fe57",
+    "word-foundry.html": "fb4bbf60eed1719f74c3f08d87b4cf28a61d47d18fc2fa5005bd94cfb00de5b8"
+  },
+  "sourcePrograms": [
+    {
+      "id": "abyss-signal",
+      "path": "games/abyss-signal/1.6.1/abyss-signal.prg",
+      "version": "1.6.1",
+      "entry": 768,
+      "sha256": "77bde7ec1a2483bd981528f1e12193c29d9035bd1f2c285c711add9f014ec992"
+    },
+    {
+      "id": "auction-house",
+      "path": "games/auction-house/3.0.0/auction-house.prg",
+      "version": "3.0.0",
+      "entry": 768,
+      "sha256": "d38164c9f670e5b8e0cd5813b670491277091c96c38829a277a5e31d2dda0e2e"
+    },
+    {
+      "id": "brick-pulse",
+      "path": "games/brick-pulse/2.3.1/brick-pulse.prg",
+      "version": "2.3.1",
+      "entry": 768,
+      "sha256": "ec2cbf028a834b0c4d67be82ab2f304569eb857c63be8b9e759b83bea62fb351"
+    },
+    {
+      "id": "cargo-balance",
+      "path": "games/cargo-balance/2.0.0/cargo-balance.prg",
+      "version": "2.0.0",
+      "entry": 768,
+      "sha256": "72eaaf966346212c9b722dfa058f21999e825351e88b5c0c20e378384e8c63fa"
+    },
+    {
+      "id": "chain-suit",
+      "path": "games/chain-suit/1.6.1/chain-suit.prg",
+      "version": "1.6.1",
+      "entry": 768,
+      "sha256": "24f1f25d2702ce92e37c997f6ce36794531e90030c0c8de79987803387283298"
+    },
+    {
+      "id": "chrono-breach",
+      "path": "games/chrono-breach/1.6.1/chrono-breach.prg",
+      "version": "1.6.1",
+      "entry": 768,
+      "sha256": "55e2970e472906dedfc284bf80f22519272f352d2b48b171eac00d1826322b3f"
+    },
+    {
+      "id": "circuit-works",
+      "path": "games/circuit-works/2.1.0/circuit-works.prg",
+      "version": "2.1.0",
+      "entry": 768,
+      "sha256": "7da0f6b2ad7cfc55a90cacd9ec15a686f88f363b587175feea5354205a99c4a8"
+    },
+    {
+      "id": "compass-rose",
+      "path": "games/compass-rose/3.0.0/compass-rose.prg",
+      "version": "3.0.0",
+      "entry": 768,
+      "sha256": "d8005041e4e39afbf7fe39dd494386afd7560a3d3c98f2085b194ebdb15a5dff"
+    },
+    {
+      "id": "corner-crown",
+      "path": "games/corner-crown/1.5.1/corner-crown.prg",
+      "version": "1.5.1",
+      "entry": 768,
+      "sha256": "9f509c6ba52b217d61629177d89e367ef2c8b5be262565fbb526361498e106be"
+    },
+    {
+      "id": "dice-relic",
+      "path": "games/dice-relic/1.7.1/dice-relic.prg",
+      "version": "1.7.1",
+      "entry": 768,
+      "sha256": "9c791a4d6e9cbacb41d38bda0f0c1b4203a26e449eeb5550b773d4f1f004a535"
+    },
+    {
+      "id": "echo-parry",
+      "path": "games/echo-parry/2.0.0/echo-parry.prg",
+      "version": "2.0.0",
+      "entry": 768,
+      "sha256": "8629cf3b5b913667e2e97c0f70042fa03393efef84316c603d2369fa62f77e04"
+    },
+    {
+      "id": "five-forge",
+      "path": "games/five-forge/1.6.1/five-forge.prg",
+      "version": "1.6.1",
+      "entry": 768,
+      "sha256": "a6835862f36da71d2754fcc63f7afceaed4fa30ea128e02a334f77096fcd98a9"
+    },
+    {
+      "id": "frost-steps",
+      "path": "games/frost-steps/1.7.2/frost-steps.prg",
+      "version": "1.7.2",
+      "entry": 768,
+      "sha256": "fbbfb2e08c0bb7a958b4218a32725f92c4b84a87a633815124008479ca7dc608"
+    },
+    {
+      "id": "fuse-box",
+      "path": "games/fuse-box/1.6.1/fuse-box.prg",
+      "version": "1.6.1",
+      "entry": 768,
+      "sha256": "a0b1d6d4806f5e263d46b025dca453b27cc81dc50bdb85e882eba367ecf3ed13"
+    },
+    {
+      "id": "gate-runner",
+      "path": "games/gate-runner/3.0.0/gate-runner.prg",
+      "version": "3.0.0",
+      "entry": 768,
+      "sha256": "525c316658deb8d6ed2f7dbbc7adefdee14f062ec813eb0f7b0a431e3168998b"
+    },
+    {
+      "id": "glyph-shift",
+      "path": "games/glyph-shift/1.6.1/glyph-shift.prg",
+      "version": "1.6.1",
+      "entry": 768,
+      "sha256": "f97f8191b5121c260214ab74461cebc562847cc898b1ddc3c723deab5006217d"
+    },
+    {
+      "id": "gravity-well",
+      "path": "games/gravity-well/1.7.1/gravity-well.prg",
+      "version": "1.7.1",
+      "entry": 768,
+      "sha256": "1fa88b0690a0e9207e942cbccef2a616192e9b407c50fc53872229fc55eb0272"
+    },
+    {
+      "id": "hearth-zero",
+      "path": "games/hearth-zero/2.1.0/hearth-zero.prg",
+      "version": "2.1.0",
+      "entry": 768,
+      "sha256": "31d5f591da388f1ed1ad0311b36285f0776429c99947ef6d1c89f933258132b2"
+    },
+    {
+      "id": "iron-script",
+      "path": "games/iron-script/2.0.1/iron-script.prg",
+      "version": "2.0.1",
+      "entry": 768,
+      "sha256": "438ef8bd1d089cf1b7c20ce6edd10c72398097fb5c6ff4c56f90a1662760d44d"
+    },
+    {
+      "id": "loop-ten",
+      "path": "games/loop-ten/1.6.1/loop-ten.prg",
+      "version": "1.6.1",
+      "entry": 768,
+      "sha256": "56c450b20db56f031200f468bf615610f89a1da4137e7954bbb2c3451fe6d788"
+    },
+    {
+      "id": "lumen-cross",
+      "path": "games/lumen-cross/2.0.0/lumen-cross.prg",
+      "version": "2.0.0",
+      "entry": 768,
+      "sha256": "b5c5873483fa02743f976f79bd95279eabb1ba74bf04b08451c6e167e508a355"
+    },
+    {
+      "id": "lunar-touchdown",
+      "path": "games/lunar-touchdown/2.0.0/lunar-touchdown.prg",
+      "version": "2.0.0",
+      "entry": 768,
+      "sha256": "5144bf8b1ef6e8c161c39e89c522c6ae8d638a01da2c01e2e4cc3ba73f294821"
+    },
+    {
+      "id": "magnet-vault",
+      "path": "games/magnet-vault/1.6.1/magnet-vault.prg",
+      "version": "1.6.1",
+      "entry": 768,
+      "sha256": "c2b26be70f4fcd0350c49c4a6e907d7d312ea97119e53f753a46d5a06751a229"
+    },
+    {
+      "id": "memory-mosaic",
+      "path": "games/memory-mosaic/3.0.0/memory-mosaic.prg",
+      "version": "3.0.0",
+      "entry": 768,
+      "sha256": "ffa2808c825ff6c14970453e2a93afb7e13254be4f8e7c3f22fbbdfef492678a"
+    },
+    {
+      "id": "metro-weave",
+      "path": "games/metro-weave/2.0.0/metro-weave.prg",
+      "version": "2.0.0",
+      "entry": 768,
+      "sha256": "abc84976b3251b741c731315d5b77d211b2061c1a378fcd029d2c40ba293c729"
+    },
+    {
+      "id": "mirror-relic",
+      "path": "games/mirror-relic/3.0.0/mirror-relic.prg",
+      "version": "3.0.0",
+      "entry": 768,
+      "sha256": "057112eec7e77be156d38cfa841b663660a1f997dd91fb8b528739e6788108f5"
+    },
+    {
+      "id": "night-swarm",
+      "path": "games/night-swarm/3.0.0/night-swarm.prg",
+      "version": "3.0.0",
+      "entry": 768,
+      "sha256": "40cb9ca4ff0580b2d32bd557edcb3123401e824dfedffd724dfde1a210746502"
+    },
+    {
+      "id": "number-vault",
+      "path": "games/number-vault/2.1.0/number-vault.prg",
+      "version": "2.1.0",
+      "entry": 768,
+      "sha256": "f892fb2e8fb35b59e17ecf05680e7ac27c96be7fff2412074f229697a6c10316"
+    },
+    {
+      "id": "orbit-dodge",
+      "path": "games/orbit-dodge/3.0.0/orbit-dodge.prg",
+      "version": "3.0.0",
+      "entry": 768,
+      "sha256": "fce07e92125abad909d0b76691c5e8b743cf336de883111c386a0a0de63198a2"
+    },
+    {
+      "id": "orbit-draft",
+      "path": "games/orbit-draft/3.0.1/orbit-draft.prg",
+      "version": "3.0.1",
+      "entry": 768,
+      "sha256": "5574dfa5f1b4fd421e64d9a916817a538838f257d715ae915f0f248ed4053844"
+    },
+    {
+      "id": "orchard-days",
+      "path": "games/orchard-days/2.0.0/orchard-days.prg",
+      "version": "2.0.0",
+      "entry": 768,
+      "sha256": "848fad3a1a41436919a99cf2a9c3a34428c426cab20bc3c46f41e78581cc3a15"
+    },
+    {
+      "id": "peg-garden",
+      "path": "games/peg-garden/1.5.1/peg-garden.prg",
+      "version": "1.5.1",
+      "entry": 768,
+      "sha256": "178a4c3b503c800badb473bb98e97d2554426143c2c73c1476af98406893fca7"
+    },
+    {
+      "id": "pendulum-port",
+      "path": "games/pendulum-port/2.0.0/pendulum-port.prg",
+      "version": "2.0.0",
+      "entry": 768,
+      "sha256": "3319d05a1fcef531db4a2277fa3dc8ff884ed31bc9bec1d175158757c30b948c"
+    },
+    {
+      "id": "phase-pairs",
+      "path": "games/phase-pairs/1.6.1/phase-pairs.prg",
+      "version": "1.6.1",
+      "entry": 768,
+      "sha256": "dbd73d047f4a0fd10717ae89fac47e665458b123c13e5281e974862aa7546a0e"
+    },
+    {
+      "id": "potion-path",
+      "path": "games/potion-path/3.0.0/potion-path.prg",
+      "version": "3.0.0",
+      "entry": 768,
+      "sha256": "a58d8175df2783a19a9bdab51158439ef0eb0edc173ed388379973a520a315d5"
+    },
+    {
+      "id": "prism-trace",
+      "path": "games/prism-trace/1.6.1/prism-trace.prg",
+      "version": "1.6.1",
+      "entry": 768,
+      "sha256": "302062d1a9cb59e1f4be806e33177e7eb5429c1894588b1ae5146c0343b2c41e"
+    },
+    {
+      "id": "quiet-route",
+      "path": "games/quiet-route/2.0.0/quiet-route.prg",
+      "version": "2.0.0",
+      "entry": 768,
+      "sha256": "bfc3f67e27da723a83808cebe91fd5a6d80d6dc8996c8533eff42614a63a21a0"
+    },
+    {
+      "id": "relic-dive",
+      "path": "games/relic-dive/1.6.1/relic-dive.prg",
+      "version": "1.6.1",
+      "entry": 768,
+      "sha256": "d069370610d7cdd247ea8b2f63a719e5ebd01b7528ed8dd00d16e1c8c97edcf1"
+    },
+    {
+      "id": "ribbon-snake",
+      "path": "games/ribbon-snake/2.0.0/ribbon-snake.prg",
+      "version": "2.0.0",
+      "entry": 768,
+      "sha256": "8a9da74f8ddcc83e8bfc5447e0db63911baa7706dc39ed28f420d8e7b884afc8"
+    },
+    {
+      "id": "ruin-lexicon",
+      "path": "games/ruin-lexicon/2.1.0/ruin-lexicon.prg",
+      "version": "2.1.0",
+      "entry": 768,
+      "sha256": "18b4047ab33328275c6791fe7112f67d1cb3edd97fae3122998065da789ae7b5"
+    },
+    {
+      "id": "sand-rescue",
+      "path": "games/sand-rescue/2.0.0/sand-rescue.prg",
+      "version": "2.0.0",
+      "entry": 768,
+      "sha256": "b70e042958dc4fa54e9bea376b1e9877733c76c5da11307c73015ce1fcfd1f4b"
+    },
+    {
+      "id": "seed-merge",
+      "path": "games/seed-merge/1.5.1/seed-merge.prg",
+      "version": "1.5.1",
+      "entry": 768,
+      "sha256": "223831c867ed56626aa5a2785cdaac6c966961776ef8af214ae35d5d50aef632"
+    },
+    {
+      "id": "shadow-archive",
+      "path": "games/shadow-archive/2.1.0/shadow-archive.prg",
+      "version": "2.1.0",
+      "entry": 768,
+      "sha256": "79dc901f5db03e50196986ca143f1bd788f461219795b76be159cef4143b7a27"
+    },
+    {
+      "id": "sigil-deck",
+      "path": "games/sigil-deck/1.6.1/sigil-deck.prg",
+      "version": "1.6.1",
+      "entry": 768,
+      "sha256": "b014ff3b60e45ba3807f2e01b94b01cdaa63aab26638cf586c588f5fcf0037a2"
+    },
+    {
+      "id": "star-lance",
+      "path": "games/star-lance/3.0.0/star-lance.prg",
+      "version": "3.0.0",
+      "entry": 768,
+      "sha256": "28c94c9cad22fd2a8c126d7680a8aa6c24966d8ec62f780be6dd32410739ce72"
+    },
+    {
+      "id": "stone-balance",
+      "path": "games/stone-balance/2.0.0/stone-balance.prg",
+      "version": "2.0.0",
+      "entry": 768,
+      "sha256": "db29f7342001fdec8448b8046e0473cc4fc53dbd166b0d29b4a58deb94d6b61a"
+    },
+    {
+      "id": "tidal-nets",
+      "path": "games/tidal-nets/3.0.0/tidal-nets.prg",
+      "version": "3.0.0",
+      "entry": 768,
+      "sha256": "506986c60e3420ec161fc25b60b97c26082eb1dd7a6f115f6db869aa81b794bd"
+    },
+    {
+      "id": "tide-bridge",
+      "path": "games/tide-bridge/1.6.1/tide-bridge.prg",
+      "version": "1.6.1",
+      "entry": 768,
+      "sha256": "e0ca3a726108cf01bb818187bc89523ed85f25be8d46d67e2d21bbb48f545259"
+    },
+    {
+      "id": "trace-blade",
+      "path": "games/trace-blade/1.6.1/trace-blade.prg",
+      "version": "1.6.1",
+      "entry": 768,
+      "sha256": "2404b3e6f0b2935b83411242e167c3aa0edef871c0366af68547ae4e715b3acb"
+    },
+    {
+      "id": "twenty-one",
+      "path": "games/twenty-one/2.0.0/twenty-one.prg",
+      "version": "2.0.0",
+      "entry": 768,
+      "sha256": "04e5edaaaec9f240f0e5c41aa78a7eaa9b7345f6ae2e8442e30aeb4475c0c4f7"
+    },
+    {
+      "id": "word-foundry",
+      "path": "games/word-foundry/2.0.0/word-foundry.prg",
+      "version": "2.0.0",
+      "entry": 768,
+      "sha256": "dfc2170bff1ccc14f12cc7b0678e5b8f4cc7076a944e8f345a13cf24c1e5f8e7"
+    }
+  ]
 }

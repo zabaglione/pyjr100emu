@@ -9,6 +9,7 @@ import json
 import re
 import shutil
 import subprocess
+import zipfile
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -146,17 +147,30 @@ def guide_files(web_root: Path) -> list[Path]:
     data = json.loads(manifest.read_text(encoding="utf-8"))
     catalog = json.loads((web_root / "games/catalog.json").read_text())
     ids = sorted(game["id"] for game in catalog["games"])
-    expected = {f"{gid}.html" for gid in ids} | {
-        "index.html",
-        "controls.html",
-        "language.js",
-        "guide.js",
-        "style.css",
-        "LICENSE.txt",
-    }
+    expected = (
+        {f"{gid}.html" for gid in ids}
+        | {f"downloads/{gid}.prg" for gid in ids}
+        | {
+            "index.html",
+            "controls.html",
+            "mister.html",
+            "language.js",
+            "guide.js",
+            "style.css",
+            "LICENSE.txt",
+            "downloads/jr100-games-mister.zip",
+            "downloads/README-en.txt",
+            "downloads/README-ja.txt",
+        }
+    )
+    sources = [
+        {k: game[k] for k in ("id", "path", "version", "entry", "sha256")}
+        for game in sorted(catalog["games"], key=lambda game: game["id"])
+    ]
     if (
         data.get("schemaVersion") != 1
         or data.get("games") != ids
+        or data.get("sourcePrograms") != sources
         or not isinstance(data.get("files"), dict)
         or set(data["files"]) != expected
     ):
@@ -164,7 +178,11 @@ def guide_files(web_root: Path) -> list[Path]:
     paths = [manifest]
     for name, digest in data["files"].items():
         path = folder / name
-        if path.is_symlink() or not path.is_file():
+        if (
+            path.is_symlink()
+            or not path.is_file()
+            or not path.resolve().is_relative_to(folder.resolve())
+        ):
             raise RuntimeError("invalid public guide file")
         content = path.read_bytes()
         if not 1 <= len(content) <= 1_000_000:
@@ -172,6 +190,23 @@ def guide_files(web_root: Path) -> list[Path]:
         if hashlib.sha256(content).hexdigest() != digest:
             raise RuntimeError("public guide hash mismatch")
         paths.append(path)
+    bundle = {f"JR100/{gid}.prg": folder / "downloads" / f"{gid}.prg" for gid in ids}
+    bundle |= {
+        f"JR100/README-{lang}.txt": folder / "downloads" / f"README-{lang}.txt"
+        for lang in ("en", "ja")
+    }
+    bundle["JR100/LICENSE.txt"] = folder / "LICENSE.txt"
+    try:
+        with zipfile.ZipFile(folder / "downloads/jr100-games-mister.zip") as archive:
+            if set(archive.namelist()) != set(bundle) or len(archive.namelist()) != len(
+                bundle
+            ):
+                raise RuntimeError("Unlisted file in public game bundle")
+            for name, original in bundle.items():
+                if archive.read(name) != original.read_bytes():
+                    raise RuntimeError("Stale file in public game bundle")
+    except zipfile.BadZipFile as error:
+        raise RuntimeError("Invalid public game bundle") from error
     return paths
 
 

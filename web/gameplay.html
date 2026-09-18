@@ -39,8 +39,8 @@
     <p><a id="watch" href="#video">Watch gameplay video</a></p>
     <video id="video" controls playsinline preload="metadata" width="816" height="624"></video>
     <p id="description"></p>
-    <nav><a id="play">Play this game</a><a id="guide">How to play</a><a id="download" download>Download video</a></nav>
-    <p class="muted">No ROM is needed to watch. Playing requires your own BASIC ROM.</p>
+    <nav><a id="prg-download" download>Download .prg (MiSTer)</a><a id="play">Play in browser</a><a id="guide">How to play</a><a id="download" download>Download video</a></nav>
+    <p class="muted">No ROM is needed to watch. Browser play requires your own BASIC ROM. <a href="./guide/mister.html">MiSTer setup</a></p>
   </section>
   <label for="search">Find a game</label>
   <input id="search" type="search" placeholder="Search by title" autocomplete="off">
@@ -61,6 +61,8 @@
       byId("description").textContent = `${Math.round(game.seconds)} seconds · ${game.outcome}. ${game.edited ? 'Digest: middle sections omitted; cuts are marked LATER.' : 'Continuous play from the title to the result.'}`;
       byId("play").href = `./?game=${game.id}`;
       byId("guide").href = `./guide/${game.id}.html`;
+      byId("prg-download").href = `./guide/downloads/${game.id}.prg`;
+      byId("prg-download").download = `${game.id}.prg`;
       byId("download").href = game.video.path;
       byId("shots").replaceChildren(...game.images.map((asset, i) => {
         const link = document.createElement("a");
