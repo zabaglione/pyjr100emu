@@ -21,14 +21,12 @@ https://github.com/MiSTer-devel/JR100_MiSTer
 Console ModeのLoad GameにはMGLランチャーが必要です。このPRGはJR-100コアの
 Load PRGから読み込みます。Console Modeのランチャーではありません。
 
-2026年9月18日、SS1実機とJR100_20260801.rbf、標準RAM 16KBで確認しました。
-FROST STEPS 1.7.2・GATE RUNNER 3.0.0・STAR LANCE 3.0.0・NIGHT SWARM 3.0.0の
-自動起動と本編開始、各作品の移動・取得、障害物の進行、射撃、パルス攻撃を
-確認しています。上記4作品の記載した版は、実機所有者による物理パッド操作と
-SEの確認も済んでいます。改修後のSTAR LANCE 4.0.0はエミュレーターで検証しており、
-SS1での再確認は未実施です。各作品の全ステージを通した確認と、残り47作品の
-SS1動作確認は未実施です。
-オリジナルのJR-100実機でも未確認です。
+STAR LANCE 4.0.0を含む全51作品を、MiSTer（SuperStation One）実機で確認済みです。
+2026年9月18日、実機所有者がJR100_20260801.rbfを使用し、全作品の起動・
+物理パッド操作・音を確認しました。確認範囲は起動・操作・音で、全ステージの
+踏破を示すものではありません。オリジナルのJR-100実機では未確認です。
+確認した版の一覧:
+https://github.com/zabaglione/jr100dev/blob/main/docs/guide/ss1-verification-2026-09-18.md
 
 Copyright (c) 2026 zabaglione
 RELIC DIVEはJR-800 Web Emulator contributorsとの共同制作です。
