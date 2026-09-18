@@ -6,9 +6,9 @@
   <title>STAR LANCE · JR-100 Games</title>
   <meta name="title-en" content="STAR LANCE · JR-100 Games">
   <meta name="title-ja" content="STAR LANCE · JR-100 Games">
-  <meta name="description" content="Manage heat and heavy shots against armored formations over six waves.">
-  <meta name="description-en" content="Manage heat and heavy shots against armored formations over six waves.">
-  <meta name="description-ja" content="装甲・追尾射撃・熱管理に挑む6波の宇宙戦">
+  <meta name="description" content="Interrupt flashing attackers to cool your weapons; dodge aimed volleys across six waves.">
+  <meta name="description-en" content="Interrupt flashing attackers to cool your weapons; dodge aimed volleys across six waves.">
+  <meta name="description-ja" content="攻撃予告を撃ち落として冷却。回避と熱管理で突破する6波の宇宙戦">
   <link rel="canonical" href="https://zabaglione.github.io/pyjr100emu/guide/star-lance.html">
   <link rel="alternate" hreflang="en" href="https://zabaglione.github.io/pyjr100emu/guide/star-lance.html?lang=en">
   <link rel="alternate" hreflang="ja" href="https://zabaglione.github.io/pyjr100emu/guide/star-lance.html?lang=ja">
@@ -29,11 +29,11 @@
   <div class="wrap"><nav class="utility"><a data-guide-link href="index.html"><span lang="en" data-language="en">All games</span><span lang="ja" data-language="ja">全作品</span></a><a data-guide-link href="mister.html">MiSTer FPGA</a><a data-guide-link href="controls.html"><span lang="en" data-language="en">Getting started</span><span lang="ja" data-language="ja">操作と起動方法</span></a><a href="../gameplay.html"><span lang="en" data-language="en">Gameplay videos</span><span lang="ja" data-language="ja">プレイ動画</span></a><a href="../"><span lang="en" data-language="en">Emulator</span><span lang="ja" data-language="ja">エミュレーター</span></a></nav></div>
   <main class="wrap" id="main"><section class="hero">
       <p class="breadcrumbs"><a data-guide-link href="index.html"><span lang="en" data-language="en">All games</span><span lang="ja" data-language="ja">全作品</span></a> / <span lang="en" data-language="en">Action</span><span lang="ja" data-language="ja">アクション</span></p>
-      <h1>STAR LANCE</h1><div class="intro" data-language="en" lang="en"><p>Defeat moving formations of 18 ships across six waves. Armored ships have 2 HP; later waves add armored rows and more shots aimed at your ship.</p>
-</div><div class="intro" data-language="ja" lang="ja"><p>移動する18機の編隊を倒す全6波のシューティング。装甲機は耐久力2、後半は装甲列が増え、自機を狙う弾も増えます。</p>
+      <h1>STAR LANCE</h1><div class="intro" data-language="en" lang="en"><p>Defeat 18 ships in each of six waves. Read the flashing attack warning, interrupt the attacker, or move away from its incoming shots. Later waves shorten the warning, add three-way fire, and strengthen the armored rows.</p>
+</div><div class="intro" data-language="ja" lang="ja"><p>攻撃予告を見て、撃ち落として反撃を止めるか、弾を避けて冷やすかを選ぶ全6波のシューティング。1波18機、後半は三方向弾と装甲列が増えます。</p>
 </div>
       <nav class="actions"><a class="button primary" href="downloads/star-lance.prg" download="star-lance.prg"><span lang="en" data-language="en">Download .prg (MiSTer)</span><span lang="ja" data-language="ja">MiSTer用 .prgを保存</span></a><a class="button" href="../?game=star-lance"><span lang="en" data-language="en">Play in browser</span><span lang="ja" data-language="ja">ブラウザーで遊ぶ</span></a></nav>
-      <p class="note"><code>star-lance.prg</code> · v3.0.0 · 8.2 KiB · 16 KB RAM · <span lang="en" data-language="en">Autostart ready</span><span lang="ja" data-language="ja">自動起動対応</span></p>
+      <p class="note"><code>star-lance.prg</code> · v4.0.0 · 9.6 KiB · 16 KB RAM · <span lang="en" data-language="en">Autostart ready</span><span lang="ja" data-language="ja">自動起動対応</span></p>
     </section><section class="quickstart" aria-labelledby="mister-start">
       <h2 id="mister-start"><span lang="en" data-language="en">Start on MiSTer</span><span lang="ja" data-language="ja">MiSTerで起動</span></h2>
       <ol><li><span lang="en" data-language="en">Copy the .prg into games/JR100/ on your SD card.</span><span lang="ja" data-language="ja">.prgをSDカードのgames/JR100/へコピーします。</span></li><li><span lang="en" data-language="en">In the JR-100 core menu, set Autostart loaded program to Yes.</span><span lang="ja" data-language="ja">JR-100コアのメニューでAutostart loaded programをYesにします。</span></li><li><span lang="en" data-language="en">Choose Load PRG, select the game, then press RETURN at its title.</span><span lang="ja" data-language="ja">Load PRGでゲームを選び、タイトル画面でRETURNを押します。</span></li></ol>
@@ -42,21 +42,23 @@
     </section>
     <section class="media" aria-label="Screenshots and video">
       <div class="shots"><figure><a href="../game-media/star-lance/demo-start.png"><img src="../game-media/star-lance/demo-start.png" width="816" height="624" alt="STAR LANCE — At the start" loading="lazy"></a><figcaption><span lang="en" data-language="en">At the start</span><span lang="ja" data-language="ja">開始時の盤面</span></figcaption></figure><figure><a href="../game-media/star-lance/demo-play.png"><img src="../game-media/star-lance/demo-play.png" width="816" height="624" alt="STAR LANCE — In play" loading="lazy"></a><figcaption><span lang="en" data-language="en">In play</span><span lang="ja" data-language="ja">プレイ中</span></figcaption></figure><figure><a href="../game-media/star-lance/demo-clear.png"><img src="../game-media/star-lance/demo-clear.png" width="816" height="624" alt="STAR LANCE — First goal reached" loading="lazy"></a><figcaption><span lang="en" data-language="en">First goal reached</span><span lang="ja" data-language="ja">最初の目標を達成</span></figcaption></figure></div>
-      <p class="video-link"><a class="button" href="../gameplay.html?game=star-lance#video"><span lang="en" data-language="en">Watch gameplay with sound (52 seconds)</span><span lang="ja" data-language="ja">音付きプレイ動画を見る（約52秒）</span></a></p>
+      <p class="video-link"><a class="button" href="../gameplay.html?game=star-lance#video"><span lang="en" data-language="en">Watch gameplay with sound (31 seconds)</span><span lang="ja" data-language="ja">音付きプレイ動画を見る（約31秒）</span></a></p>
       <p class="note"><span lang="en" data-language="en">First stage cleared.</span><span lang="ja" data-language="ja">1ステージのクリアまでを収録。</span></p>
     </section><article class="manual" data-language="en" lang="en"><h2>Controls and play</h2>
-<p>A/D moves horizontally. RETURN fires a normal shot; W fires a heavy shot. Normal shots deal 1 damage and add 2 heat; heavy shots deal 2 damage and add 4 heat. Heat caps at 8 and dissipates over time.</p>
+<p>Hold A/D or left/right on the pad to move continuously, one character at a time. Hold RETURN or the pad button to fire normal shots; W or pad up fires heavy shots. You can move and fire together.</p>
+<p>Normal shots deal 1 damage and add 3 heat. Heavy shots deal 2 damage and add 5 heat, with a longer firing interval. At 12 heat, the weapon locks temporarily and COOLING appears. You can still move. Release fire to cool before committing to another burst.</p>
 <p>Directions work on the keyboard or pad; the pad button also acts as RETURN. SPACE opens confirmation to restart this stage. NO is selected initially. Choose with A/D, confirm with RETURN, or cancel with SPACE. Play pauses during confirmation. CTRL+C returns to BASIC.</p>
-<p>Stars, normal shots, thick heavy shots, and enemy bullets fill the scene. Armor breaking has its own flash, distinct from the light and debris of a destroyed ship. Overheating and taking damage also have warning sounds. Wait for animations to finish before pressing again.</p>
-<p>HULL is health, ENEMIES counts ships remaining, and HEAT is firing heat. Choose between destroying armor with one heavy shot or keeping heat low to sustain fire. Zero hull or an escaped formation causes failure.</p>
+<p>A flashing enemy is preparing to fire. Destroy it before it shoots to cancel that attack and remove 4 heat; COOL +4 confirms the reward. Armored enemies need two normal hits or one heavy hit. Enemy bolts keep the aim chosen at launch, so moving after the shot is released lets you evade them.</p>
+<p>Shots travel across the screen while the battle continues. Damaged armor flashes, and destroyed ships burst into light and debris before disappearing. A hit on your ship briefly pauses the scene with a sound, then gives you a short flashing recovery period.</p>
+<p>The bottom two rows show HULL (three hits per wave), ENEMIES, and HEAT. The formation gradually descends. You lose when hull reaches zero or the fleet breaks through. Clear all six waves; later waves fire more often, waves 3–6 use three-way shots, and waves 4–6 add a second armored row.</p>
 <h2>More screenshots</h2>
 <p><img src="https://raw.githubusercontent.com/wiki/zabaglione/jr100dev/images/star-lance/play-01.png" alt="STAR LANCE: play 01" loading="lazy" decoding="async" /></p>
 <p><img src="https://raw.githubusercontent.com/wiki/zabaglione/jr100dev/images/star-lance/play-02.png" alt="STAR LANCE: play 02" loading="lazy" decoding="async" /></p>
 </article><article class="manual" data-language="ja" lang="ja"><h2>操作と遊び方</h2>
-<p>A/Dで横移動、RETURNで通常弾、Wで重い弾を撃ちます。通常弾は1ダメージ・熱2、重い弾は2ダメージ・熱4。熱の上限は8で、時間とともに冷えます。</p>
+<p>A/Dまたはパッド左右の長押しで1文字ずつ連続移動します。RETURNまたはパッドのボタンで通常弾、Wまたはパッド上で重い弾。押し続けると連射でき、移動と射撃を同時に行えます。通常弾は1ダメージ・熱3、重い弾は2ダメージ・熱5で、発射間隔も長くなります。熱が12に達するとCOOLINGが表示され、一定時間撃てなくなります。移動は続けられます。撃つのを休み、冷えてから次の攻撃に備えます。</p>
 <p>方向キーはキーボードまたはパッド、RETURNはパッドのボタンでも操作できます。SPACEでこの面のやり直し確認を開きます。やり直し確認はNOが初期選択です。A/Dで選び、RETURNで確定、SPACEで取り消します。確認中は進行を止めます。CTRL+CでBASICへ戻ります。</p>
-<p>星の遠景、飛ぶ通常弾と太い重弾、敵の弾を表示します。装甲が剥がれる点滅と、撃破時の発光・破片を別にし、過熱と被弾も音で知らせます。演出が終わってから次のキーを押してください。</p>
-<p>HULLは体力、ENEMIESは残りの敵、HEATは発射熱。重い弾で装甲を一撃で倒すか、熱を抑えて続けて撃つかを選びます。体力0、または編隊が逃げ切ると失敗です。</p>
+<p>編隊は1文字ずつ移動し、自弾・敵弾の飛翔中も戦闘が進みます。装甲への命中は点滅、撃破は発光・破片・散開・消失の順に表示します。攻撃予告、発射、命中、冷却成功、過熱を異なるSEで知らせます。自機の被弾時は短く止まり、その後しばらく点滅して連続被弾を防ぎます。射撃・命中・撃破の演出中も移動と射撃を続けられます。</p>
+<p>点滅する敵は攻撃の準備中です。発射前に倒すとその攻撃を止め、熱が4下がってCOOL +4を表示します。装甲機は通常弾2発、重い弾1発で撃破できます。敵弾は発射時に狙った方向へ進むので、発射を見て横へ避けましょう。画面下端のHULLは体力3、ENEMIESは残敵、HEATは発射熱です。体力0、または徐々に降下する編隊が突破すると失敗。3波目から三方向弾、4波目から2列目にも装甲が付き、攻撃間隔と予告時間も短くなります。</p>
 <p><img src="https://raw.githubusercontent.com/wiki/zabaglione/jr100dev/images/star-lance/play-01.png" alt="ゲーム開始時" loading="lazy" decoding="async" /></p>
 <p><img src="https://raw.githubusercontent.com/wiki/zabaglione/jr100dev/images/star-lance/play-02.png" alt="プレイ中の場面" loading="lazy" decoding="async" /></p>
 </article></main>

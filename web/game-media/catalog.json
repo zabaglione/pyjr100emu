@@ -790,24 +790,24 @@
       "genre": "action",
       "edited": false,
       "outcome": "first stage cleared",
-      "prg_sha256": "28c94c9cad22fd2a8c126d7680a8aa6c24966d8ec62f780be6dd32410739ce72",
-      "seconds": 52.267,
+      "prg_sha256": "a423f5025d3cafefaf4364e8118ea2e9e6d8ba6d3cde4eda3bda3470ef512f83",
+      "seconds": 31.1,
       "video": {
         "path": "game-media/star-lance/play.mp4",
-        "sha256": "011a1d5114fb5a5457e2ebefe36aef5a2c289b525bf183575011e39342f7f028"
+        "sha256": "8f3b9c2eedc92ec83647ae4bac9a83b5c7987816b4a4c214db83c0b59f4d41f9"
       },
       "images": [
         {
           "path": "game-media/star-lance/demo-start.png",
-          "sha256": "134509c2ff7c830bd9204739f59e8977ae406f9c0523e68edee8c4ffb3a49ade"
+          "sha256": "36126ea9dc4be1716bb29e4fcc96a3353fc603c334f46fc66d70efb1f5868b1f"
         },
         {
           "path": "game-media/star-lance/demo-play.png",
-          "sha256": "8ca6380fd62907a974921f2ea739efc55fc6570cf43a8b986eef1206c978b6b0"
+          "sha256": "0e8e153f8a0f581721b06b75670b7d9577b6c632758e6114fbe2813f762a7c01"
         },
         {
           "path": "game-media/star-lance/demo-clear.png",
-          "sha256": "29b920214cc6049aa6d55dac15025b62cd781ba73246a928f13df77809fdef8d"
+          "sha256": "67b78d17500e26f97f56ece6c7d5c9fd4109f8dd81d898451d5c4d004bfbca44"
         }
       ]
     },
