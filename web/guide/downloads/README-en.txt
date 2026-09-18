@@ -26,11 +26,11 @@ Tested on MiSTer (SuperStation One), 18 September 2026, JR100_20260801.rbf:
 FROST STEPS 1.7.2, GATE RUNNER 3.0.0, STAR LANCE 3.0.0, and NIGHT SWARM 3.0.0
 autostarted and reached gameplay with standard 16 KB RAM. Movement/collection,
 obstacle progression, shooting, and pulse attacks were checked respectively.
-The device owner also confirmed STAR LANCE 3.0.0's physical pad controls and SE.
+The device owner also confirmed physical pad controls and SE for all four
+versions listed above.
 The updated STAR LANCE 4.0.0 has been tested in the emulator; its SS1 check is
-still pending. The other three games' sound/pad input, all stages, and the
-remaining 47 games have not been tested on SS1. Original JR-100 hardware
-remains untested.
+still pending. The remaining 47 games have not been tested on SS1, and the
+checks above do not cover every stage. Original JR-100 hardware remains untested.
 
 Copyright (c) 2026 zabaglione
 RELIC DIVE co-developed with JR-800 Web Emulator contributors.
