@@ -139,7 +139,11 @@ def test_incomplete_or_unsafe_media_cannot_build(tmp_path, patch):
         ("seed-merge", 90, False, True),
         ("seed-merge", 30, True, False),
         ("seed-merge", 55.6, True, False),
-        ("test-game", 44.533, False, False),
+        ("test-game", 44.533, False, True),
+        ("test-game", 44.533, True, False),
+        ("test-game", 30, True, True),
+        ("memory-mosaic", 84.533, False, True),
+        ("abyss-signal", 102.6, False, True),
     ],
 )
 def test_full_length_game_media(tmp_path, game_id, seconds, edited, allowed):
