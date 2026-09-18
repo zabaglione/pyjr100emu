@@ -23,12 +23,14 @@ Console Mode's Load Game needs an MGL launcher. These .prg files load through
 the JR-100 core's Load PRG menu; they are not Console Mode launchers.
 
 Tested on MiSTer (SuperStation One), 18 September 2026, JR100_20260801.rbf:
-FROST STEPS, GATE RUNNER, STAR LANCE, and NIGHT SWARM autostarted and reached
-gameplay with standard 16 KB RAM. Movement/collection, obstacle progression,
-shooting, and pulse attacks were checked in the respective games.
-The device owner also confirmed STAR LANCE's physical pad controls and SE.
-The other games' sound/pad input, all stages, and the remaining 47 games
-have not been tested on SS1. Original JR-100 hardware remains untested.
+FROST STEPS 1.7.2, GATE RUNNER 3.0.0, STAR LANCE 3.0.0, and NIGHT SWARM 3.0.0
+autostarted and reached gameplay with standard 16 KB RAM. Movement/collection,
+obstacle progression, shooting, and pulse attacks were checked respectively.
+The device owner also confirmed STAR LANCE 3.0.0's physical pad controls and SE.
+The updated STAR LANCE 4.0.0 has been tested in the emulator; its SS1 check is
+still pending. The other three games' sound/pad input, all stages, and the
+remaining 47 games have not been tested on SS1. Original JR-100 hardware
+remains untested.
 
 Copyright (c) 2026 zabaglione
 RELIC DIVE co-developed with JR-800 Web Emulator contributors.

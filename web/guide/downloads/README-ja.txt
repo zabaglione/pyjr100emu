@@ -22,10 +22,12 @@ Console ModeのLoad GameにはMGLランチャーが必要です。このPRGはJR
 Load PRGから読み込みます。Console Modeのランチャーではありません。
 
 2026年9月18日、SS1実機とJR100_20260801.rbf、標準RAM 16KBで確認しました。
-FROST STEPS・GATE RUNNER・STAR LANCE・NIGHT SWARMの自動起動と本編開始、
-各作品の移動・取得、障害物の進行、射撃、パルス攻撃を確認しています。
-STAR LANCEは実機所有者による物理パッド操作とSEの確認も済んでいます。
-他の作品の音声・物理パッド、全ステージ、残り47作品のSS1動作は未確認です。
+FROST STEPS 1.7.2・GATE RUNNER 3.0.0・STAR LANCE 3.0.0・NIGHT SWARM 3.0.0の
+自動起動と本編開始、各作品の移動・取得、障害物の進行、射撃、パルス攻撃を
+確認しています。STAR LANCE 3.0.0は実機所有者による物理パッド操作とSEの
+確認も済んでいます。改修後のSTAR LANCE 4.0.0はエミュレーターで検証しており、
+SS1での再確認は未実施です。他の3作品の音声・物理パッド、全ステージ、
+残り47作品のSS1動作は未確認です。
 オリジナルのJR-100実機でも未確認です。
 
 Copyright (c) 2026 zabaglione
