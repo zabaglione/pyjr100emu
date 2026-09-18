@@ -204,22 +204,22 @@
     {
       "id": "orbit-draft",
       "title": "ORBIT DRAFT",
-      "version": "1.5.0",
+      "version": "1.6.0",
       "ramKiB": 16,
       "entry": 768,
-      "path": "games/orbit-draft/1.5.0/orbit-draft.prg",
-      "sha256": "3785f40ce535ac1cbed55ad8c4a597f00a7a1f20d9db9284cce43de69f0fdb97",
-      "sourceUrl": "https://github.com/zabaglione/jr100dev/tree/c26ab733372948a4fb53841d8e80bf00a2d0fbc5/games/orbit_draft"
+      "path": "games/orbit-draft/1.6.0/orbit-draft.prg",
+      "sha256": "e9be1c5c15eb33c177ae519032f624ac4378f661adaf30bb0ad49eaf1b97e187",
+      "sourceUrl": "https://github.com/zabaglione/jr100dev/tree/bc4886d497d88c3941e5df96743322ccb653175a/games/orbit_draft"
     },
     {
       "id": "five-forge",
       "title": "FIVE FORGE",
-      "version": "1.5.0",
+      "version": "1.6.0",
       "ramKiB": 16,
       "entry": 768,
-      "path": "games/five-forge/1.5.0/five-forge.prg",
-      "sha256": "45b44e495ca137b240b3ffec276d7be3708ee7e350a203244fe022b6e02b4cae",
-      "sourceUrl": "https://github.com/zabaglione/jr100dev/tree/c26ab733372948a4fb53841d8e80bf00a2d0fbc5/games/five_forge"
+      "path": "games/five-forge/1.6.0/five-forge.prg",
+      "sha256": "3a71df249c01cb579519af19253cc6cc2f4bdd380b39dfa299b4443af29e9798",
+      "sourceUrl": "https://github.com/zabaglione/jr100dev/tree/bc4886d497d88c3941e5df96743322ccb653175a/games/five_forge"
     },
     {
       "id": "corner-crown",

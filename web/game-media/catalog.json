@@ -547,24 +547,24 @@
       "genre": "tabletop",
       "edited": false,
       "outcome": "first stage cleared",
-      "prg_sha256": "3785f40ce535ac1cbed55ad8c4a597f00a7a1f20d9db9284cce43de69f0fdb97",
-      "seconds": 31.767,
+      "prg_sha256": "e9be1c5c15eb33c177ae519032f624ac4378f661adaf30bb0ad49eaf1b97e187",
+      "seconds": 33.567,
       "video": {
         "path": "game-media/orbit-draft/play.mp4",
-        "sha256": "e1ad49576264d22a660b92dd6647bbd119b37c71bf5626c5f400faafdc793570"
+        "sha256": "5d8ce551c81a42f5587cb6c620b2d4736696cf87c1f1bc4e03c6782c04cc77b4"
       },
       "images": [
         {
           "path": "game-media/orbit-draft/demo-start.png",
-          "sha256": "a40136688ca36ad28326cf86c30429925f76327a46b01c83c1cd80cf512451ea"
+          "sha256": "dcae08bab3e4066fe32ebdd312ae2b0da62c6d7a19292e3226e8a4277b2469b5"
         },
         {
           "path": "game-media/orbit-draft/demo-play.png",
-          "sha256": "8da95ac26d062921ac200ea2f83730981c109c6cbb4c1f5bba61d109c17728cc"
+          "sha256": "c1532a298aa2da58f5a1ac8d823a5a7686d6eda1300685b79bdda39a63c6142b"
         },
         {
           "path": "game-media/orbit-draft/demo-clear.png",
-          "sha256": "00a83da67c5499687a7cccb5e31f08cc54480f52ae85409e953492c17983b18f"
+          "sha256": "813a57505a235428e049f67b63333344cb09e08d95e87a6a212fe77e619503bf"
         }
       ]
     },
@@ -572,26 +572,26 @@
       "id": "five-forge",
       "title": "FIVE FORGE",
       "genre": "tabletop",
-      "edited": true,
+      "edited": false,
       "outcome": "first stage cleared",
-      "prg_sha256": "45b44e495ca137b240b3ffec276d7be3708ee7e350a203244fe022b6e02b4cae",
-      "seconds": 30.0,
+      "prg_sha256": "3a71df249c01cb579519af19253cc6cc2f4bdd380b39dfa299b4443af29e9798",
+      "seconds": 34.767,
       "video": {
         "path": "game-media/five-forge/play.mp4",
-        "sha256": "cceb39b75e0f6d891fcab772a8175ca646a97870bd3784a0422f18474b95c4e0"
+        "sha256": "3b57cc9dba3127c0aae693a0b1edf05a74b4480e4b1fbd5a47ae37929bf715b6"
       },
       "images": [
         {
           "path": "game-media/five-forge/demo-start.png",
-          "sha256": "6e57aea2bdc81641f9e6c0abbec0150cc639a04332bd2eedb68a838ec1f5b9c1"
+          "sha256": "753bd35573af8fa807c2b732f1a2b0939c3e3820578dfbc2909548c16edd171b"
         },
         {
           "path": "game-media/five-forge/demo-play.png",
-          "sha256": "5406d824a7988c6e772452cd1d15dee8413a240f763a5fa2131e35cf5304c178"
+          "sha256": "6bdb8ea84c2b6aead3cde31ca7879ebf68e6250d5cf555fc6004551b7eddf816"
         },
         {
           "path": "game-media/five-forge/demo-clear.png",
-          "sha256": "95e9955c7f63a1459e2617452f2e811ef43e9d62e437c4a99e720e74ad12d113"
+          "sha256": "593d2a44533abb80e1c93f5ee8a121078835cc147027ccac5a84914cd9277b9b"
         }
       ]
     },
