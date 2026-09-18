@@ -736,24 +736,24 @@
       "genre": "action",
       "edited": false,
       "outcome": "first stage cleared",
-      "prg_sha256": "194840b2a3edd9069c50e0bd977a390a7cca5f63d15c7a37f38405a39ae2dfb9",
-      "seconds": 45.0,
+      "prg_sha256": "525c316658deb8d6ed2f7dbbc7adefdee14f062ec813eb0f7b0a431e3168998b",
+      "seconds": 36.933,
       "video": {
         "path": "game-media/gate-runner/play.mp4",
-        "sha256": "f3ebd55b9611f9ab73080cd5befcf00077e8227496a52ab9989e48a701bbfade"
+        "sha256": "a385398d416ab1bfa7e931cb23ab2e803ddd073e5556612891a8f671b41dc429"
       },
       "images": [
         {
           "path": "game-media/gate-runner/demo-start.png",
-          "sha256": "71b94603f6455a18e253f877d74d1547533319c195bf3ee4ef631260b2819202"
+          "sha256": "5d2ddc41e1d270c383aa83440188f3f78ebb372bc0759e5c1f85cc8ef332e70a"
         },
         {
           "path": "game-media/gate-runner/demo-play.png",
-          "sha256": "38bb0dadd367bfe6600948a6997081484f5d76352aa35074cc9f1c4fb57e6968"
+          "sha256": "24a9350ca64fb8cd0936215618c2d2389ca438283c4de35a41ed1288dc67fe3a"
         },
         {
           "path": "game-media/gate-runner/demo-clear.png",
-          "sha256": "d8a601743951dd1cafce3a0d3099a56cce601801915833b76f2cbc520a9d6cd2"
+          "sha256": "652fc0704e8d9d5e7aad557a064b436380f95734bc6c46288496aa4f921b2154"
         }
       ]
     },
@@ -1303,24 +1303,24 @@
       "genre": "tactics",
       "edited": false,
       "outcome": "first stage cleared",
-      "prg_sha256": "be2205a548b3f08d5dad62e3e7af3e77ace63b6af1e0b8e4ff1ef2b8dfc91376",
-      "seconds": 43.1,
+      "prg_sha256": "b70e042958dc4fa54e9bea376b1e9877733c76c5da11307c73015ce1fcfd1f4b",
+      "seconds": 30.2,
       "video": {
         "path": "game-media/sand-rescue/play.mp4",
-        "sha256": "7e265d3541fa3bfad219e37873664541f0ff9b2d5c83d2cef9648a1e3e4e3ff7"
+        "sha256": "d5482e1861cb87c150ac725437794a6abbe0e1896580665537fcc345a511a46a"
       },
       "images": [
         {
           "path": "game-media/sand-rescue/demo-start.png",
-          "sha256": "3fb199f5748a7e67b31d191a8031c384bf11c11a68db87e25ad02dd50cec46c5"
+          "sha256": "0dfcc0c26fac345f020faef35521253d685d0006785d0f0777b814f6c8fad32c"
         },
         {
           "path": "game-media/sand-rescue/demo-play.png",
-          "sha256": "cca0d5f5435e99e54267318cfc52e8b420fdf77e60cbcf53bc50f8d3945ce8a0"
+          "sha256": "e247ebe0cec4d70d0a37de3bd200265e15bb510a8cf546db315f8981491e0bc4"
         },
         {
           "path": "game-media/sand-rescue/demo-clear.png",
-          "sha256": "495ad915b22b8d2eeaed8770b144c4931eb26cb9360fab4e7488ff26d915911c"
+          "sha256": "2119c9edff06756ad0855b0e26888093f80c721df2628d4ed9fdeab427df8f67"
         }
       ]
     },
