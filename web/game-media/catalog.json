@@ -115,20 +115,20 @@
       "genre": "tabletop",
       "edited": false,
       "outcome": "first battle won",
-      "prg_sha256": "6e2d508dc949f54fce17bacbf7389dd09756e78886279ee3fba6176c1a75df0b",
-      "seconds": 30.0,
+      "prg_sha256": "586ee896961c0d811ace35a846832e176bf06c022e7e860a64c92de942b2c87f",
+      "seconds": 34.367,
       "video": {
         "path": "game-media/dice-relic/play.mp4",
-        "sha256": "829e68ec8dce72e35e92ee550aac762c36fe915708a396eb345f374b67ad4146"
+        "sha256": "3239e041a4dbc3df015d01b6232452999e7c9b33362ae309b8547f54f76e1e8d"
       },
       "images": [
         {
           "path": "game-media/dice-relic/demo-start.png",
-          "sha256": "9e28c2f5e9fe2f9c43f3984985c68ed0de21e9552d7db559ce2b5dfa019a5588"
+          "sha256": "483e1117b21abe92432020f97d7f0d05af70bb1b5453e5a92e618d211e7f7b57"
         },
         {
           "path": "game-media/dice-relic/demo-play.png",
-          "sha256": "d7aff58b2c2481c0eb858a773763439f4f385982812105d294ff7080b5de7f90"
+          "sha256": "b855ffdacb350a990dfe9b50ac725e6d516bb0eb69838f9061f20a4648ebb09e"
         },
         {
           "path": "game-media/dice-relic/demo-clear.png",

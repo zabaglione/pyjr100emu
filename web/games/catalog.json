@@ -44,12 +44,12 @@
     {
       "id": "dice-relic",
       "title": "DICE RELIC",
-      "version": "1.6.0",
+      "version": "1.7.0",
       "ramKiB": 16,
       "entry": 768,
-      "path": "games/dice-relic/1.6.0/dice-relic.prg",
-      "sha256": "6e2d508dc949f54fce17bacbf7389dd09756e78886279ee3fba6176c1a75df0b",
-      "sourceUrl": "https://github.com/zabaglione/jr100dev/tree/c26ab733372948a4fb53841d8e80bf00a2d0fbc5/games/dice_relic"
+      "path": "games/dice-relic/1.7.0/dice-relic.prg",
+      "sha256": "586ee896961c0d811ace35a846832e176bf06c022e7e860a64c92de942b2c87f",
+      "sourceUrl": "https://github.com/zabaglione/jr100dev/tree/1527ed25b3100a5df67a877f5c54392451ac2a24/games/dice_relic"
     },
     {
       "id": "loop-ten",
